@@ -5,6 +5,14 @@
 #include "Globals.h"
 #include "Module.h"
 
+#include "imgui-1.72b/imgui.h"
+
+#include "imgui-1.72b/examples/imgui_impl_sdl.h"
+#include "imgui-1.72b/examples/imgui_impl_opengl2.h"
+//#include "imgui-1.72b/examples/libs/glfw/include/GLFW/glfw3.h"
+//#include "imgui-1.72b/examples/libs/glfw/include/GLFW/glfw3native.h"
+
+
 class ModuleEngineGUI : public Module
 {
 public:
