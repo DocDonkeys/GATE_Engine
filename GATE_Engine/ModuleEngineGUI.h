@@ -9,6 +9,8 @@
 
 #include "imgui-1.72b/examples/imgui_impl_sdl.h"
 #include "imgui-1.72b/examples/imgui_impl_opengl2.h"
+
+#include "glut/glut.h"
 //#include "imgui-1.72b/examples/libs/glfw/include/GLFW/glfw3.h"
 //#include "imgui-1.72b/examples/libs/glfw/include/GLFW/glfw3native.h"
 
@@ -25,6 +27,10 @@ public:
 	bool Init();
 	bool Start();
 	update_status Update(float dt);
+
+
+private:
+	ImGuiIO* io = nullptr;
 
 };
 
