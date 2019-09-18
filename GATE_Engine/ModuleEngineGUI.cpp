@@ -44,7 +44,7 @@ update_status ModuleEngineGUI::Update(float dt)
 {
 	bool show_demo_window = true;
 	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f);
 	// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
 		// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
@@ -106,7 +106,7 @@ update_status ModuleEngineGUI::Update(float dt)
 	glClear(GL_COLOR_BUFFER_BIT);
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-	SDL_GL_SwapWindow(App->window->window);
+	//SDL_GL_SwapWindow(App->window->window);
 
 	return UPDATE_CONTINUE;
 }
