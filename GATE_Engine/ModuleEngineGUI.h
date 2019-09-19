@@ -18,9 +18,7 @@
 class ModuleEngineGUI : public Module
 {
 public:
-	// CONSTRUCTOR
 	ModuleEngineGUI(Application* app, bool start_enabled = true);
-	//DESTRUCTOR
 	~ModuleEngineGUI();
 
 public:

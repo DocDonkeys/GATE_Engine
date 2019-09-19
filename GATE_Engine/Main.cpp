@@ -6,11 +6,6 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
-#include "MathGeoLib/include/MathGeoLib.h"
-
-#pragma comment( lib, "SDL/libx86/SDL2main.lib" )
-#pragma comment( lib, "SDL/libx86/SDL2main.lib" )
-
 enum main_states
 {
 	MAIN_CREATION,
