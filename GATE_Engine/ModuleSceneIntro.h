@@ -1,7 +1,6 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "Primitive.h"
 #include "p2Point.h"
 
 struct PhysBody3D;

@@ -4,11 +4,9 @@ Application::Application()
 {
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	audio = new ModuleAudio(this, true);
 	scene_intro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
-	physics = new ModulePhysics3D(this);
 	engineGUI = new ModuleEngineGUI(this);
 
 	// The order of calls is very important!
@@ -19,8 +17,6 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(audio);
-	AddModule(physics);
 
 	//"Scene" (Currently the axis + white grid plane)
 	AddModule(scene_intro);

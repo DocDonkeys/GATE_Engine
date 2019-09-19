@@ -1,8 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
-#include "Primitive.h"
-#include "PhysBody3D.h"
 #include <math.h>
 #include <ctime>
 
@@ -40,10 +38,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
-	//Ground Render
-	Plane p(0, 1, 0, 0);
+	//Ground Render	(Used the Primitives Container)
+	/*Plane p(0, 1, 0, 0);
 	p.axis = true;
-	p.Render();
+	p.Render();*/
 
 	return UPDATE_CONTINUE;
 }
