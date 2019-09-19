@@ -26,17 +26,15 @@ bool ModuleEngineGUI::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL2_Init();
 
-	
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	
-
 	return true;
 }
 
 bool ModuleEngineGUI::Start()
 {
-	
+
 	return true;
 }
 
@@ -58,6 +56,26 @@ update_status ModuleEngineGUI::Update(float dt)
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
+
+	//Main toolbar
+	if (ImGui::BeginMainMenuBar()) {
+
+		if (ImGui::BeginMenu("File", true)) {
+
+			if (ImGui::MenuItem("Exit", "(Esc)", false, true)) {
+
+				return update_status::UPDATE_STOP;
+			}
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Tools", true)) {
+
+			ImGui::EndMenu();
+		}
+	}
+	ImGui::EndMainMenuBar();
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window)
