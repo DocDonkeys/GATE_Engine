@@ -57,6 +57,9 @@
     <ClCompile Include="ModulePhysics.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="pcg.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -135,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="ModulePhysics.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg.h">
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
