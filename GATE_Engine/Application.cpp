@@ -21,10 +21,12 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 	AddModule(physics);
-	AddModule(engineGUI);
-	
-	// Scene
+
+	//"Scene" (Currently the axis + white grid plane)
 	AddModule(scene_intro);
+	
+	//Engine UI
+	AddModule(engineGUI);
 
 	// Renderer last!
 	AddModule(renderer3D);
