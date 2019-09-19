@@ -28,6 +28,8 @@ public:
 	bool Start();
 	update_status Update(float dt);
 
+	bool show_demo_window = true;
+	bool show_another_window = false;
 
 private:
 	ImGuiIO* io = nullptr;
