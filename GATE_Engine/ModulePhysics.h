@@ -3,7 +3,7 @@
 
 #include "MathGeoLib/include/MathGeoLib.h"	//Namespace "math::" for lib usage
 #ifdef _DEBUG
-#pragma comment (lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib")
+//#pragma comment (lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib")
 #else
 #pragma comment (lib, "MathGeoLib/libx86/Release/MathGeoLib.lib")
 #endif
