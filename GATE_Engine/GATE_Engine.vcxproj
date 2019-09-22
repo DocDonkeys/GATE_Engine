@@ -80,9 +80,13 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="libs\glew\include\GL\glew.h" />
+    <ClInclude Include="libs\imgui-1.72b\examples\libs\glfw\include\GLFW\glfw3.h" />
+    <ClInclude Include="libs\imgui-1.72b\examples\libs\glfw\include\GLFW\glfw3native.h" />
     <ClInclude Include="libs\imgui-1.72b\imconfig.h" />
     <ClInclude Include="libs\imgui-1.72b\imgui.h" />
     <ClInclude Include="libs\imgui-1.72b\imgui_impl_opengl2.h" />
+    <ClInclude Include="libs\imgui-1.72b\imgui_impl_opengl3.h" />
     <ClInclude Include="libs\imgui-1.72b\imgui_impl_sdl.h" />
     <ClInclude Include="libs\imgui-1.72b\imgui_internal.h" />
     <ClInclude Include="libs\imgui-1.72b\imstb_rectpack.h" />
@@ -109,10 +113,12 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="libs\glew\src\glew.c" />
     <ClCompile Include="libs\imgui-1.72b\imgui.cpp" />
     <ClCompile Include="libs\imgui-1.72b\imgui_demo.cpp" />
     <ClCompile Include="libs\imgui-1.72b\imgui_draw.cpp" />
     <ClCompile Include="libs\imgui-1.72b\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="libs\imgui-1.72b\imgui_impl_opengl3.cpp" />
     <ClCompile Include="libs\imgui-1.72b\imgui_impl_sdl.cpp" />
     <ClCompile Include="libs\imgui-1.72b\imgui_widgets.cpp" />
     <ClCompile Include="Light.cpp" />

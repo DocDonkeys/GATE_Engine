@@ -36,6 +36,9 @@ bool ModuleRenderer3D::Init()
 		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
+		//Init OpenGL wth Glew
+		glewInit();
+
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();

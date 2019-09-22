@@ -60,6 +60,12 @@
     <ClCompile Include="libs\imgui-1.72b\imgui_widgets.cpp">
       <Filter>Sources\Tools\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="libs\imgui-1.72b\imgui_impl_opengl3.cpp">
+      <Filter>Sources\Tools\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\glew\src\glew.c">
+      <Filter>Sources\Tools\ImGui\glew</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -142,6 +148,18 @@
     <ClInclude Include="libs\imgui-1.72b\imstb_truetype.h">
       <Filter>Sources\Tools\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="libs\imgui-1.72b\imgui_impl_opengl3.h">
+      <Filter>Sources\Tools\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui-1.72b\examples\libs\glfw\include\GLFW\glfw3.h">
+      <Filter>Sources\Tools\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui-1.72b\examples\libs\glfw\include\GLFW\glfw3native.h">
+      <Filter>Sources\Tools\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\glew\include\GL\glew.h">
+      <Filter>Sources\Tools\ImGui\glew</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -164,6 +182,9 @@
     </Filter>
     <Filter Include="Sources\Tools\ImGui">
       <UniqueIdentifier>{5b9ae843-4d6b-4b37-ad4c-7ed445fba370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\ImGui\glew">
+      <UniqueIdentifier>{238f8e61-acd8-478e-8135-657e40efcc66}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
