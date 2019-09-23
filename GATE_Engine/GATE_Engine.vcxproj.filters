@@ -82,9 +82,6 @@
     <ClInclude Include="p2DynArray.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="p2List.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="p2Point.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>

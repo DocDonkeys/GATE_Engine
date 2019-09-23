@@ -98,7 +98,6 @@
     <ClInclude Include="ModuleEngineGUI.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="p2Defs.h" />
-    <ClInclude Include="p2List.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleSceneIntro.h" />
