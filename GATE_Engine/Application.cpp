@@ -90,7 +90,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		(*item)->PreUpdate(dt);
+		ret = (*item)->PreUpdate(dt);
 		item++;
 	}
 
@@ -98,7 +98,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		(*item)->Update(dt);
+		ret = (*item)->Update(dt);
 		item++;
 	}
 
@@ -106,7 +106,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		(*item)->PostUpdate(dt);
+		ret = (*item)->PostUpdate(dt);
 		item++;
 	}
 
