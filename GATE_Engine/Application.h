@@ -55,11 +55,10 @@ public:
 	bool Start();
 	bool CleanUp();
 
+	// App update loop
 	void PrepareUpdate();
 	update_status Update();
 	void FinishUpdate();
-
-	
 
 public:
 	// Exposing some properties for reading
@@ -70,13 +69,9 @@ public:
 	float GetDT() const;*/
 
 private:
-	// Call modules before each loop iteration
+	// Call module cycle phases in order on App Update() phase
 	update_status PreUpdateModules();
-
-	// Call modules on each loop iteration
 	update_status UpdateModules();
-
-	// Call modules after each loop iteration
 	update_status PostUpdateModules();
 
 	void AddModule(Module* mod);
