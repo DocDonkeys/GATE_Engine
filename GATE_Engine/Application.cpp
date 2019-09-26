@@ -55,6 +55,16 @@ bool Application::Init()
 		item++;
 	}
 
+	//Collect hardware info
+	hardware.CPU_logic_cores = SDL_GetCPUCount();
+	hardware.RAM = (float)SDL_GetSystemRAM() / 1024;
+	SDL_GetVersion(&hardware.sdl_version);
+
+	//GPU
+	hardware.GPU.vendor = (unsigned char*)glGetString(GL_VENDOR);
+	hardware.GPU.renderer = (unsigned char*)glGetString(GL_RENDERER);
+	hardware.GPU.version = (unsigned char*)glGetString(GL_VERSION);
+
 	return ret;
 }
 
@@ -77,17 +87,6 @@ bool Application::Start()
 	}
 	
 	frame_time.Start();
-
-	//TODO DIDAC: Check if this should go on Start or on Init
-	//Collect hardware info
-	hardware.CPU_logic_cores = SDL_GetCPUCount();
-	hardware.RAM = (float)SDL_GetSystemRAM() / 1024;
-	SDL_GetVersion(&hardware.sdl_version);
-
-	//GPU
-	hardware.GPU.vendor = (unsigned char*)glGetString(GL_VENDOR);
-	hardware.GPU.renderer = (unsigned char*)glGetString(GL_RENDERER);
-	hardware.GPU.version = (unsigned char*)glGetString(GL_VERSION);
 
 	return ret;
 }
