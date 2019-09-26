@@ -1,8 +1,8 @@
-#ifndef __TIMER_H__
-#define __TIMER_H__
+#ifndef TIMER_H
+#define TIMER_H
 
 #include "Globals.h"
-#include "SDL\include\SDL.h"
+#include "libs/SDL/include/SDL.h"
 
 class Timer
 {
@@ -23,4 +23,4 @@ private:
 	Uint32	stopped_at;
 };
 
-#endif //__TIMER_H__
+#endif //TIMER_H

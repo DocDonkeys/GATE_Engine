@@ -15,8 +15,8 @@
 #include "ModuleEngineGUI.h"
 #include "ModulePhysics.h"
 
-#include "SDL\include\SDL.h"
-#include "SDL\include\SDL_version.h"
+#include "libs/SDL/include/SDL.h"
+#include "libs/SDL/include/SDL_version.h"
 
 struct GPU_info
 {
