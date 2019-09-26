@@ -55,6 +55,7 @@ int main(int argc, char ** argv)
 
 		case MAIN_UPDATE:
 		{
+			BROFILER_FRAME("MainLoop");
 			int update_return = App->Update();
 
 			if (update_return == UPDATE_ERROR)

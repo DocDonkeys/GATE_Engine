@@ -110,6 +110,8 @@ bool Application::CleanUp()
 // Called before each update
 void Application::PrepareUpdate()
 {
+	BROFILER_CATEGORY("App Prepare Update", Profiler::Color::DarkRed);
+
 	frame_count++;
 	last_sec_frame_count++;
 
@@ -132,26 +134,20 @@ void Application::PrepareUpdate()
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
-	
-	BROFILER_CATEGORY("App Prepare Update", Profiler::Color::DarkRed);
 	PrepareUpdate();
 
-	BROFILER_CATEGORY("App Pre-Update", Profiler::Color::DarkRed);
 	if (ret == true)
 		ret = PreUpdateModules();
 
-	BROFILER_CATEGORY("App Update", Profiler::Color::Red);
 	if (ret == true)
 		ret = UpdateModules();
 
-	BROFILER_CATEGORY("App Post-Update", Profiler::Color::OrangeRed);
 	if (ret == true)
 		ret = PostUpdateModules();
 
 	if (input->GetWindowEvent(WE_QUIT) == true || mustShutDown)
 		ret = UPDATE_STOP;
-	
-	BROFILER_CATEGORY("App Finish Update", Profiler::Color::OrangeRed);
+
 	FinishUpdate();
 
 	return ret;
@@ -160,6 +156,8 @@ update_status Application::Update()
 // Called after each update
 void Application::FinishUpdate()
 {
+	BROFILER_CATEGORY("App Finish Update", Profiler::Color::IndianRed);
+
 	//Framerate Calcs
 	if (last_sec_frame_time.Read() > 1000) {
 
@@ -174,7 +172,7 @@ void Application::FinishUpdate()
 	Uint32 last_frame_ms = frame_time.Read();
 	Uint32 frames_on_last_update = prev_last_sec_frame_count;
 
-	BROFILER_CATEGORY("App Delay", Profiler::Color::OrangeRed);
+	BROFILER_CATEGORY("App Delay", Profiler::Color::Gray);
 
 	if (capped_ms > 0 && last_frame_ms < capped_ms)
 		SDL_Delay(capped_ms - last_frame_ms);
@@ -190,6 +188,8 @@ void Application::FinishUpdate()
 // PreUpdate all modules in App
 update_status Application::PreUpdateModules()
 {
+	BROFILER_CATEGORY("Modules Pre-Update", Profiler::Color::PaleVioletRed);
+
 	update_status ret = UPDATE_CONTINUE;
 	Module* pModule = NULL;
 	std::list<Module*>::iterator item = list_modules.begin();
@@ -209,6 +209,8 @@ update_status Application::PreUpdateModules()
 // Update all modules in App
 update_status Application::UpdateModules()
 {
+	BROFILER_CATEGORY("Modules Update", Profiler::Color::OrangeRed);
+
 	update_status ret = UPDATE_CONTINUE;
 	Module* pModule = NULL;
 
@@ -228,6 +230,8 @@ update_status Application::UpdateModules()
 // PostUpdate all modules in App
 update_status Application::PostUpdateModules()
 {
+	BROFILER_CATEGORY("Modules Post-Update", Profiler::Color::MediumVioletRed);
+
 	update_status ret = UPDATE_CONTINUE;
 	Module* pModule = NULL;
 	std::list<Module*>::iterator item = list_modules.begin();
