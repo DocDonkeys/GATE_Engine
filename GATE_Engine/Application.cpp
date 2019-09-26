@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "libs/Brofiler/Brofiler.h"
 
 Application::Application()
 {

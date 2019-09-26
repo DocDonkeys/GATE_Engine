@@ -6,6 +6,9 @@
 #pragma comment( lib, "libs/SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "libs/SDL/libx86/SDL2main.lib" )
 
+#include "libs/Brofiler/Brofiler.h"
+#pragma comment( lib, "libs/Brofiler/ProfilerCore32.lib" )
+
 enum main_states
 {
 	MAIN_CREATION,
