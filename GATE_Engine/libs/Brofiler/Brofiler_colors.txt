@@ -1,0 +1,16 @@
+---interface:
+-PreUpdate: pink
+-Update: deeppink
+-Draw(): HotPink
+-PostUpdate: lightPink
+
+---Unit.cpp
+-Update: DarkGreen
+-UpdateBlitOrder: Yellow
+-UnitWorkflow: Green
+
+---Map
+-Draw: Black
+
+---Player:
+Update: Blue
