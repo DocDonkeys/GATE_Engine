@@ -63,6 +63,9 @@
     <ClCompile Include="libs\glew\src\glew.c">
       <Filter>Sources\Tools\ImGui\glew</Filter>
     </ClCompile>
+    <ClCompile Include="RNGenerator.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -141,6 +144,9 @@
     </ClInclude>
     <ClInclude Include="libs\glew\include\GL\glew.h">
       <Filter>Sources\Tools\ImGui\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="RNGenerator.h">
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
