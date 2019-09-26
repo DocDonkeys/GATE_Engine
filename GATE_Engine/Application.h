@@ -1,9 +1,11 @@
-#pragma once
+#ifndef APP_H
+#define APP_H
 
 #include <list>
 #include <string>
 #include "Globals.h"
 #include "Timer.h"
+#include "RNGenerator.h"
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -43,24 +45,6 @@ struct hardware_info  //Struct to keep data more organized and not add a lot of 
 class Application
 {
 public:
-	ModuleWindow* window;
-	ModuleInput* input;
-	ModuleSceneIntro* scene_intro;
-	ModuleRenderer3D* renderer3D;
-	ModuleCamera3D* camera;
-	ModuleEngineGUI* engineGUI;
-	ModulePhysics* physics;
-
-	hardware_info hardware;
-private:
-
-	Timer	ms_timer;
-	float	dt;
-
-	std::list <Module*> list_modules;
-
-public:
-
 	Application();
 	~Application();
 
@@ -69,8 +53,30 @@ public:
 	bool CleanUp();
 
 private:
-
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+
+public:
+	//Modules
+	ModuleWindow* window;
+	ModuleInput* input;
+	ModuleSceneIntro* scene_intro;
+	ModuleRenderer3D* renderer3D;
+	ModuleCamera3D* camera;
+	ModuleEngineGUI* engineGUI;
+	ModulePhysics* physics;
+
+	//App members
+	hardware_info hardware;
+	RNGenerator rng;
+
+private:
+	Timer	ms_timer;
+	float	dt;
+
+	std::list <Module*> list_modules;
+
 };
+
+#endif //APP_H
