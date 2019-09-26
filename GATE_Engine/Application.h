@@ -48,14 +48,38 @@ public:
 	Application();
 	~Application();
 
+	// Called once on object creation
 	bool Init();
-	update_status Update();
+
+	// When starting and quitting App
+	bool Start();
 	bool CleanUp();
 
-private:
-	void AddModule(Module* mod);
 	void PrepareUpdate();
+	update_status Update();
 	void FinishUpdate();
+
+	
+
+public:
+	// Exposing some properties for reading
+	/*int GetArgc() const;
+	const char* GetArgv(int index) const;
+	const char* GetTitle() const;
+	const char* GetOrganization() const;
+	float GetDT() const;*/
+
+private:
+	// Call modules before each loop iteration
+	update_status PreUpdateModules();
+
+	// Call modules on each loop iteration
+	update_status UpdateModules();
+
+	// Call modules after each loop iteration
+	update_status PostUpdateModules();
+
+	void AddModule(Module* mod);
 
 public:
 	//Modules
@@ -70,10 +94,19 @@ public:
 	//App members
 	hardware_info hardware;
 	RNGenerator rng;
+	bool mustShutDown = false;
 
 private:
-	Timer	ms_timer;
-	float	dt;
+	//Framerate
+	uint				frame_count = 0;
+	Timer				time_since_start;
+	Timer				frame_time;
+	Timer				last_sec_frame_time;
+
+	Uint32				last_sec_frame_count = 0;
+	Uint32				prev_last_sec_frame_count = 0;
+	float				dt = 0.0f;
+	int					capped_ms = -1;
 
 	std::list <Module*> list_modules;
 

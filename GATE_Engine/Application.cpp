@@ -46,7 +46,7 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	// Call Init() in all modules
+	//Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
 	while (item != list_modules.end())
@@ -55,7 +55,18 @@ bool Application::Init()
 		item++;
 	}
 
-	// After all Init calls we call Start() in all modules
+	return ret;
+}
+
+// ---------------------------------------------
+
+bool Application::Start()
+{
+	bool ret = true;
+
+	std::list<Module*>::iterator item = list_modules.begin();
+
+	//Call Start() in all modules
 	LOG("Application Start --------------");
 	item = list_modules.begin();
 
@@ -65,8 +76,9 @@ bool Application::Init()
 		item++;
 	}
 	
-	ms_timer.Start();
+	frame_time.Start();
 
+	//TODO DIDAC: Check if this should go on Start or on Init
 	//Collect hardware info
 	hardware.CPU_logic_cores = SDL_GetCPUCount();
 	hardware.RAM = (float)SDL_GetSystemRAM() / 1024;
@@ -77,67 +89,6 @@ bool Application::Init()
 	hardware.GPU.renderer = (unsigned char*)glGetString(GL_RENDERER);
 	hardware.GPU.version = (unsigned char*)glGetString(GL_VERSION);
 
-	
-
-	return ret;
-}
-
-// ---------------------------------------------
-void Application::PrepareUpdate()
-{
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
-
-	//Update Hardware info such as VRAM usage
-	GLint nTotalMemoryInKB = 0;
-	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &hardware.GPU.VRAM.available); // Total Available Memory in KB
-	//hardware.GPU.VRAM.available / 1024; // Convert to MB
-
-	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTION_COUNT_NVX, &hardware.GPU.VRAM.usage); // Dedicated VRAM in KB
-	//hardware.GPU.VRAM.usage /= 1024; // Convert to MB
-
-	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &hardware.GPU.VRAM.budget); // Total VRAM Memory in KB
-	//hardware.GPU.VRAM.budget /= 1024; // Convert to MB
-
-	
-}
-
-// ---------------------------------------------
-void Application::FinishUpdate()
-{
-}
-
-// Call PreUpdate, Update and PostUpdate on all modules
-update_status Application::Update()
-{
-	update_status ret = UPDATE_CONTINUE;
-	PrepareUpdate();
-	
-	std::list<Module*>::iterator item = list_modules.begin();
-
-	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
-	{
-		ret = (*item)->PreUpdate(dt);
-		item++;
-	}
-
-	item = list_modules.begin();
-
-	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
-	{
-		ret = (*item)->Update(dt);
-		item++;
-	}
-
-	item = list_modules.begin();
-
-	while (item != list_modules.end() && ret == UPDATE_CONTINUE)
-	{
-		ret = (*item)->PostUpdate(dt);
-		item++;
-	}
-
-	FinishUpdate();
 	return ret;
 }
 
@@ -154,6 +105,148 @@ bool Application::CleanUp()
 	return ret;
 }
 
+// ---------------------------------------------
+
+// Called before each update
+void Application::PrepareUpdate()
+{
+	BROFILER_CATEGORY("App Prepare Update", Profiler::Color::DarkRed);
+
+	frame_count++;
+	last_sec_frame_count++;
+
+	dt = (float)frame_time.ReadSec();
+	frame_time.Start();
+
+	//Update Hardware info such as VRAM usage
+	GLint nTotalMemoryInKB = 0;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &hardware.GPU.VRAM.available); // Total Available Memory in KB
+	//hardware.GPU.VRAM.available / 1024; // Convert to MB
+
+	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTION_COUNT_NVX, &hardware.GPU.VRAM.usage); // Dedicated VRAM in KB
+	//hardware.GPU.VRAM.usage /= 1024; // Convert to MB
+
+	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &hardware.GPU.VRAM.budget); // Total VRAM Memory in KB
+	//hardware.GPU.VRAM.budget /= 1024; // Convert to MB
+}
+
+// Called each loop iteration
+update_status Application::Update()
+{
+	update_status ret = UPDATE_CONTINUE;
+	PrepareUpdate();
+
+	if (ret == true)
+		ret = PreUpdateModules();
+
+	if (ret == true)
+		ret = UpdateModules();
+
+	if (ret == true)
+		ret = PostUpdateModules();
+
+	if (input->GetWindowEvent(WE_QUIT) == true || mustShutDown)
+		ret = UPDATE_STOP;
+
+	FinishUpdate();
+
+	return ret;
+}
+
+// Called after each update
+void Application::FinishUpdate()
+{
+	BROFILER_CATEGORY("App Delay", Profiler::Color::OrangeRed);
+
+	//Framerate Calcs
+	if (last_sec_frame_time.Read() > 1000) {
+
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
+
+	//For performance information purposes
+	float avg_fps = float(frame_count) / time_since_start.ReadSec();
+	float secs_since_start = time_since_start.ReadSec();
+	Uint32 last_frame_ms = frame_time.Read();
+	Uint32 frames_on_last_update = prev_last_sec_frame_count;
+
+	if (capped_ms > 0 && last_frame_ms < capped_ms)
+		SDL_Delay(capped_ms - last_frame_ms);
+
+	/*if (map->mapDebugDraw) {
+		std::string tmp = std::to_string(prev_last_sec_frame_count);
+		gui->fpsText->ChangeString(tmp);
+	}*/
+}
+
+// ---------------------------------------------
+
+// PreUpdate all modules in App
+update_status Application::PreUpdateModules()
+{
+	BROFILER_CATEGORY("App Pre-Update", Profiler::Color::DarkRed);
+
+	update_status ret = UPDATE_CONTINUE;
+	Module* pModule = NULL;
+	std::list<Module*>::iterator item = list_modules.begin();
+
+	for (; item != list_modules.end() && ret == UPDATE_CONTINUE; item = next(item)) {
+
+		pModule = (*item);
+		if (pModule->active == false)
+			continue;
+
+		ret = (*item)->PreUpdate(dt);
+	}
+
+	return ret;
+}
+
+// Update all modules in App
+update_status Application::UpdateModules()
+{
+	BROFILER_CATEGORY("App Update", Profiler::Color::Red);
+
+	update_status ret = UPDATE_CONTINUE;
+	Module* pModule = NULL;
+
+	std::list<Module*>::iterator item = list_modules.begin();
+	for (; item != list_modules.end() && ret == UPDATE_CONTINUE; item = next(item)) {
+
+		pModule = *item;
+		if (pModule->active == false)
+			continue;
+
+		ret = (*item)->Update(dt);
+	}
+
+	return ret;
+}
+
+// PostUpdate all modules in App
+update_status Application::PostUpdateModules()
+{
+	BROFILER_CATEGORY("App Post-Update", Profiler::Color::OrangeRed);
+
+	update_status ret = UPDATE_CONTINUE;
+	Module* pModule = NULL;
+	std::list<Module*>::iterator item = list_modules.begin();
+
+	for (; item != list_modules.end() && ret == UPDATE_CONTINUE; item = next(item)) {
+
+		pModule = *item;
+		if (pModule->active == false)
+			continue;
+
+		ret = (*item)->PostUpdate(dt);
+	}
+
+	return ret;
+}
+
+//Adding a module
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);

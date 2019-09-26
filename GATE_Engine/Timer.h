@@ -13,8 +13,10 @@ public:
 
 	void Start();
 	void Stop();
+	void StartFrom(Uint32 secs);
 
-	Uint32 Read();
+	Uint32 Read() const;
+	float ReadSec() const;
 
 private:
 

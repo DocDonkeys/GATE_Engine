@@ -10,7 +10,7 @@ private :
 public:
 	Application* App;
 
-	Module(Application* parent, bool start_enabled = true) : App(parent)
+	Module(Application* parent, bool start_enabled = true) : App(parent), active(start_enabled)
 	{}
 
 	virtual ~Module()
@@ -18,6 +18,7 @@ public:
 
 	virtual bool Init() 
 	{
+		active = true;
 		return true; 
 	}
 
@@ -45,4 +46,7 @@ public:
 	{ 
 		return true; 
 	}
+
+public:
+	bool active;
 };
