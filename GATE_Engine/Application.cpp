@@ -65,6 +65,19 @@ bool Application::Init()
 	}
 	
 	ms_timer.Start();
+
+	//Collect hardware info
+	hardware.CPU_logic_cores = SDL_GetCPUCount();
+	hardware.RAM = (float)SDL_GetSystemRAM() / 1024;
+	SDL_GetVersion(&hardware.sdl_version);
+
+	//GPU
+	hardware.GPU.vendor = (unsigned char*)glGetString(GL_VENDOR);
+	hardware.GPU.renderer = (unsigned char*)glGetString(GL_RENDERER);
+	hardware.GPU.version = (unsigned char*)glGetString(GL_VERSION);
+
+	
+
 	return ret;
 }
 
@@ -73,6 +86,11 @@ void Application::PrepareUpdate()
 {
 	dt = (float)ms_timer.Read() / 1000.0f;
 	ms_timer.Start();
+
+	//Update Hardware info such as VRAM usage
+	GLint nTotalMemoryInKB = 0;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &hardware.GPU.VRAM.available); // Total Memory in KB
+	glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &hardware.GPU.VRAM.usage);
 }
 
 // ---------------------------------------------

@@ -6,6 +6,7 @@
 #include "Module.h"
 
 #include "libs/imgui-1.72b/imgui.h"
+#include "libs/imgui-1.72b/imgui_internal.h"
 
 #include "libs/imgui-1.72b/examples/imgui_impl_sdl.h"
 #include "libs/imgui-1.72b/examples/imgui_impl_opengl3.h"

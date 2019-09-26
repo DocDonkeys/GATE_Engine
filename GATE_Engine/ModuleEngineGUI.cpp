@@ -74,6 +74,29 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 	ImGui::EndMainMenuBar();
 
+	//Hardware Menu TEST
+
+	ImGui::Begin("Hardware");
+
+	ImGui::Text("SDL Version: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
+	
+	ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
+	ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
+
+	ImGui::NewLine();
+	
+	ImGui::Text("GPU: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
+	
+	ImGui::Text("Brand: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
+
+	ImGui::End();
+
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
