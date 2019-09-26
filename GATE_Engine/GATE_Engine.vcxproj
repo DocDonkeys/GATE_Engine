@@ -102,7 +102,6 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleSceneIntro.h" />
     <ClInclude Include="ModuleWindow.h" />
-    <ClInclude Include="p2Point.h" />
     <ClInclude Include="pcg.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
