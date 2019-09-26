@@ -7,26 +7,27 @@ class RNGenerator
 {
 public:
 	RNGenerator();
+	RNGenerator(unsigned seed);
 	~RNGenerator();
 
 public:
 	int RandInt();
 	int RangedRandInt(int min, int max);
-	int RandIntList(int num);
-	int RangedRandIntList(int min, int max, int num);
+	std::vector<int> RandIntList(int num);
+	std::vector<int> RangedRandIntList(int min, int max, int num);
 
 	template <class T>
 	T Rand()
 	{
 		std::uniform_real_distribution<T> dist;
-		return dist(randGenerator);
+		return dist(randEngine);
 	}
 
 	template <class T>
 	T RangedRand(T min, T max)
 	{
-		std::uniform_real_distribution<T> dist(T min, T max);
-		return dist(randGenerator);
+		std::uniform_real_distribution<T> dist(min, max);
+		return dist(randEngine);
 	}
 
 	template <class T>
@@ -36,7 +37,7 @@ public:
 		std::uniform_real_distribution<T> dist;
 
 		for (int i = 0; i < size; i++) {
-			vec.push_back(dist(randGenerator));
+			vec.push_back(dist(randEngine));
 		}
 		
 		return vec;
@@ -49,15 +50,15 @@ public:
 		std::uniform_real_distribution<T> dist(min, max);
 
 		for (int i = 0; i < size; i++) {
-			vec.push_back(dist(randGenerator));
+			vec.push_back(dist(randEngine));
 		}
 
 		return vec;
 	}
 
 private:
-	std::default_random_engine randGenerator;
-	std::uniform_int_distribution<int> intDis;
+	std::default_random_engine randEngine;
+	std::uniform_int_distribution<int> intDist;
 };
 
 #endif //RNGENERATOR_H
