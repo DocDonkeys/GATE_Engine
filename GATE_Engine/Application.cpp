@@ -89,8 +89,16 @@ void Application::PrepareUpdate()
 
 	//Update Hardware info such as VRAM usage
 	GLint nTotalMemoryInKB = 0;
-	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &hardware.GPU.VRAM.available); // Total Memory in KB
-	glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &hardware.GPU.VRAM.usage);
+	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &hardware.GPU.VRAM.available); // Total Available Memory in KB
+	//hardware.GPU.VRAM.available / 1024; // Convert to MB
+
+	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTION_COUNT_NVX, &hardware.GPU.VRAM.usage); // Dedicated VRAM in KB
+	//hardware.GPU.VRAM.usage /= 1024; // Convert to MB
+
+	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &hardware.GPU.VRAM.budget); // Total VRAM Memory in KB
+	//hardware.GPU.VRAM.budget /= 1024; // Convert to MB
+
+	
 }
 
 // ---------------------------------------------

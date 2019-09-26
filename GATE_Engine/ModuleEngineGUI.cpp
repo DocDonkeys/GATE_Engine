@@ -95,6 +95,22 @@ update_status ModuleEngineGUI::Update(float dt)
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
 
+	ImGui::NewLine();
+
+	ImGui::Text("VRAM Budget: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.budget);
+
+	ImGui::Text("VRAM Usage: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.usage);
+
+	ImGui::Text("VRAM Available: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
+
+	ImGui::Text("VRAM Reserved: ");
+
 	ImGui::End();
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
