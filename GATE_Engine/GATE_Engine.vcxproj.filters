@@ -79,9 +79,6 @@
     <ClInclude Include="glmath.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="p2DynArray.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="p2Point.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
@@ -105,9 +102,6 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="p2SString.h">
-      <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="p2Defs.h">
       <Filter>Sources\Containers</Filter>
