@@ -39,9 +39,6 @@
     <ClCompile Include="ModulePhysics.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="pcg.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="libs\imgui-1.72b\imgui.cpp">
       <Filter>Sources\Tools\ImGui</Filter>
     </ClCompile>
@@ -108,9 +105,6 @@
     </ClInclude>
     <ClInclude Include="ModulePhysics.h">
       <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="pcg.h">
-      <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui-1.72b\imconfig.h">
       <Filter>Sources\Tools\ImGui</Filter>
