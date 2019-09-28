@@ -9,6 +9,10 @@
 #include "libs/Brofiler/Brofiler.h"
 #pragma comment( lib, "libs/Brofiler/ProfilerCore32.lib" )
 
+////VS Memory Leak Detector
+//#define _CRTDBG_MAP_ALLOC
+//#include <crtdbg.h>
+
 enum main_states
 {
 	MAIN_CREATION,
@@ -87,6 +91,8 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
-	LOG("Exiting game '%s'...\n", TITLE);
+	LOG("Exiting '%s'...\n", TITLE);
+
+	//_CrtDumpMemoryLeaks();	//VS Memory Leak Detector
 	return main_return;
 }
