@@ -173,6 +173,25 @@ void Application::FinishUpdate()
 
 	BROFILER_CATEGORY("App Delay", Profiler::Color::Gray);
 
+	// Update the fps Log
+	fps_log.push_back(prev_last_sec_frame_count);
+	if (fps_log.size() > 100)
+	{
+		fps_log.erase(fps_log.begin());
+	}
+
+	// Update the ms Log
+	ms_log.push_back(last_frame_ms);
+	if (ms_log.size() > 100)
+	{
+		ms_log.erase(ms_log.begin());
+	}
+
+	if (max_FPS > 0)
+		capped_ms = 1000 / max_FPS;
+	else
+		capped_ms = -1;
+
 	if (capped_ms > 0 && last_frame_ms < capped_ms)
 		SDL_Delay(capped_ms - last_frame_ms);
 

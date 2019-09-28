@@ -74,42 +74,71 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 	ImGui::EndMainMenuBar();
 
-	//Hardware Menu TEST
+	//CONFIGURATION MENU	
+	ImGui::Begin("Configuration");
 
-	ImGui::Begin("Hardware");
+	if (ImGui::CollapsingHeader("Application"))
+	{
+		static char str0[128] = "Add name and functions!";
+		ImGui::InputText("App Name", str0, IM_ARRAYSIZE(str0));
 
-	ImGui::Text("SDL Version: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
-	
-	ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
-	ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
+		static char str1[128] = "Add organization and functions!";
+		ImGui::InputText("Organization", str1, IM_ARRAYSIZE(str1));
 
-	ImGui::NewLine();
-	
-	ImGui::Text("GPU: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
-	
-	ImGui::Text("Brand: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
+		ImGui::SliderInt("MAX FPS", &App->max_FPS, -1, 120);
+		
+		//Plotting FPS and ms
+		char title[25];
+		sprintf_s(title, 25, "Framerate %.1f",App->fps_log[App->fps_log.size() - 1]);
+		ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 140.0f, ImVec2(310, 100));
+		sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
+		ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+	}
 
-	ImGui::NewLine();
+	if (ImGui::CollapsingHeader("Window"))
+	{
+	}
 
-	ImGui::Text("VRAM Budget: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.budget);
+	if (ImGui::CollapsingHeader("Input"))
+	{
+	}
 
-	ImGui::Text("VRAM Usage: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.usage);
+	if (ImGui::CollapsingHeader("Hardware"))
+	{
+		ImGui::Text("SDL Version: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
 
-	ImGui::Text("VRAM Available: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
+		ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
+		ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
 
-	ImGui::Text("VRAM Reserved: ");
+		ImGui::NewLine();
+
+		ImGui::Text("GPU: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
+
+		ImGui::Text("Brand: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
+
+		ImGui::NewLine();
+
+		ImGui::Text("VRAM Budget: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.budget);
+
+		ImGui::Text("VRAM Usage: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.usage);
+
+		ImGui::Text("VRAM Available: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
+
+		ImGui::Text("VRAM Reserved: ");
+	}
+
 
 	ImGui::End();
 

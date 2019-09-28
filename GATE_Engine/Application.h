@@ -3,6 +3,7 @@
 
 #include <list>
 #include <string>
+#include <vector>
 #include "Globals.h"
 #include "Timer.h"
 #include "RNGenerator.h"
@@ -91,6 +92,9 @@ public:
 	RNGenerator rng;
 	bool mustShutDown = false;
 
+	std::vector<float> ms_log;
+	std::vector<float> fps_log;
+	int max_FPS = -1;
 private:
 	//Framerate
 	uint				frame_count = 0;
