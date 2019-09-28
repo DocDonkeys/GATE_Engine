@@ -203,6 +203,11 @@ void Application::FinishUpdate()
 
 // ---------------------------------------------
 
+void Application::RequestBrowser(const char* link)
+{
+	ShellExecuteA(NULL, "open", link, NULL, NULL, SW_SHOWNORMAL);
+}
+
 // PreUpdate all modules in App
 update_status Application::PreUpdateModules()
 {

@@ -3,7 +3,6 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 
-
 ModuleEngineGUI::ModuleEngineGUI(Application * app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -71,11 +70,37 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			ImGui::EndMenu();
 		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			//if (ImGui::MenuItem("Gui Demo"))
+
+			if (ImGui::MenuItem("Documentation"))
+				App->RequestBrowser("https://github.com/DocDonkeys/GATE/wiki");
+
+			if (ImGui::MenuItem("Download latest"))
+				App->RequestBrowser("https://github.com/DocDonkeys/GATE/releases");
+
+			if (ImGui::MenuItem("Report a Bug / Suggest an improvement"))
+				App->RequestBrowser("https://github.com/DocDonkeys/GATE/issues");
+
+			//if (ImGui::MenuItem("About"))
+			ImGui::EndMenu();
+		}
 	}
 	ImGui::EndMainMenuBar();
 
 	//CONFIGURATION MENU	
-	ImGui::Begin("Configuration");
+	ImGui::Begin("Configuration", open_configuration);
+
+	if (ImGui::BeginMenu("Options"))
+	{
+		ImGui::MenuItem("Set Defaults");
+		ImGui::MenuItem("Save");
+		ImGui::MenuItem("Load");
+
+		ImGui::EndMenu();
+	}
 
 	if (ImGui::CollapsingHeader("Application"))
 	{
@@ -97,6 +122,8 @@ update_status ModuleEngineGUI::Update(float dt)
 
 	if (ImGui::CollapsingHeader("Window"))
 	{
+		ImGui::Text("Icon:");
+		//ImGui::Checkbox();
 	}
 
 	if (ImGui::CollapsingHeader("Input"))

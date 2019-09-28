@@ -24,8 +24,10 @@ public:
 	bool Start();
 	update_status Update(float dt);
 
+	// Bools to show / hide or open / close windows
 	bool show_demo_window = true;
 	bool show_another_window = false;
+	bool* open_configuration = nullptr;
 
 private:
 	ImGuiIO* io = nullptr;

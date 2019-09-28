@@ -69,6 +69,7 @@ public:
 	const char* GetOrganization() const;
 	float GetDT() const;*/
 
+	void RequestBrowser(const char* link);
 private:
 	// Call module cycle phases in order on App Update() phase
 	update_status PreUpdateModules();
