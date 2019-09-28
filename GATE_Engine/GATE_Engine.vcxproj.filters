@@ -66,6 +66,9 @@
     <ClCompile Include="RNGenerator.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="libs\mmgr\mmgr.cpp">
+      <Filter>Sources\Tools\mmgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -148,6 +151,12 @@
     <ClInclude Include="RNGenerator.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="libs\mmgr\mmgr.h">
+      <Filter>Sources\Tools\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\mmgr\nommgr.h">
+      <Filter>Sources\Tools\mmgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -173,6 +182,9 @@
     </Filter>
     <Filter Include="Sources\Tools\ImGui\glew">
       <UniqueIdentifier>{238f8e61-acd8-478e-8135-657e40efcc66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\mmgr">
+      <UniqueIdentifier>{60846bfd-1b9f-4fc4-ada3-13f0ed061bd1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

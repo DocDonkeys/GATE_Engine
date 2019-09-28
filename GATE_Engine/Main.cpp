@@ -2,16 +2,24 @@
 #include "Application.h"
 #include "Globals.h"
 
-#include "libs/SDL/include/SDL.h"
-#pragma comment( lib, "libs/SDL/libx86/SDL2.lib" )
-#pragma comment( lib, "libs/SDL/libx86/SDL2main.lib" )
-
-#include "libs/Brofiler/Brofiler.h"
-#pragma comment( lib, "libs/Brofiler/ProfilerCore32.lib" )
+// Old school memory leak detector (mmgr)
+#ifdef _DEBUG
+	//#define TEST_MEMORY_MANAGER
+	#include "libs/mmgr/mmgr.h"
+#endif
 
 ////VS Memory Leak Detector
 //#define _CRTDBG_MAP_ALLOC
 //#include <crtdbg.h>
+
+// We need to include this here because SDL overwrites main()
+#include "libs/SDL/include/SDL.h"
+#pragma comment( lib, "libs/SDL/libx86/SDL2.lib" )
+#pragma comment( lib, "libs/SDL/libx86/SDL2main.lib" )
+
+//Profiler
+#include "libs/Brofiler/Brofiler.h"
+#pragma comment( lib, "libs/Brofiler/ProfilerCore32.lib" )
 
 enum main_states
 {
@@ -93,6 +101,14 @@ int main(int argc, char ** argv)
 	delete App;
 	LOG("Exiting '%s'...\n", TITLE);
 
-	//_CrtDumpMemoryLeaks();	//VS Memory Leak Detector
+	//mmgr Mem Leak Detector
+#ifdef _DEBUG
+	int leaks = MAX(0, m_getMemoryStatistics().totalAllocUnitCount - 23);
+	LOG("With %d memory leaks!\n", (leaks > 0) ? leaks : 0);
+#endif
+
+	//VS Mem Leak Detector
+	//_CrtDumpMemoryLeaks();	
+
 	return main_return;
 }

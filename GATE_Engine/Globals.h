@@ -1,11 +1,17 @@
 #pragma once
 
+#include <windows.h>
+#include <stdio.h>
+
 // Warning disabled ---
 #pragma warning( disable : 4577 ) // Warning that exceptions are disabled
 #pragma warning( disable : 4530 )
 
-#include <windows.h>
-#include <stdio.h>
+// Disable STL exceptions
+//#ifndef _HAS_EXCEPTIONS
+//#define _HAS_EXCEPTIONS 0
+//#endif
+//#define _STATIC_CPPLIB
 
 //LOG
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
@@ -16,7 +22,6 @@ void log(const char file[], int line, const char* format, ...);
 //#undef NULL
 //#endif
 //#define NULL  0
-//#define NULLRECT {0,0,0,0}
 
 // Deletes a buffer
 #define RELEASE( x ) \
