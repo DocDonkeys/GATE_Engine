@@ -27,14 +27,17 @@ bool ModuleRenderer3D::Init()
 	if(context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		SDL_TriggerBreakpoint();
 		ret = false;
 	}
-	
+
 	if(ret == true)
 	{
 		//Use Vsync
-		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0) {
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+			SDL_TriggerBreakpoint();
+		}
 
 		//Init OpenGL wth Glew
 		glewInit();
@@ -48,6 +51,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			SDL_TriggerBreakpoint();
 			ret = false;
 		}
 
@@ -60,6 +64,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			SDL_TriggerBreakpoint();
 			ret = false;
 		}
 		
@@ -74,6 +79,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			SDL_TriggerBreakpoint();
 			ret = false;
 		}
 		
