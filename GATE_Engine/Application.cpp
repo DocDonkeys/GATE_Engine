@@ -153,10 +153,22 @@ update_status Application::Update()
 }
 
 // Called after each update
-void Application::FinishUpdate()
+void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Framerate Calculations, Hardware display update)
 {
 	BROFILER_CATEGORY("App Finish Update", Profiler::Color::IndianRed);
 
+	//Save
+	if (want_to_save == true) {
+		SaveFile();
+		want_to_save = false;
+	}
+
+	//Load
+	if (want_to_load == true) {
+		LoadFile();
+		want_to_load = false;
+	}
+	
 	//Framerate Calcs
 	if (last_sec_frame_time.Read() > 1000) {
 
@@ -271,8 +283,182 @@ update_status Application::PostUpdateModules()
 	return ret;
 }
 
-//Adding a module
+// Adding a module
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
+}
+
+// Get App data
+//int Application::GetArgc() const
+//{
+//	return argc;
+//}
+//
+//const char* Application::GetArgv(int index) const
+//{
+//	if (index < argc)
+//		return args[index];
+//	else
+//		return NULL;
+//}
+//
+//const char* Application::GetTitle() const
+//{
+//	return title.data();
+//}
+//
+//const char* Application::GetOrganization() const
+//{
+//	return organization.data();
+//
+//}
+//
+//// ---------------------------------------
+//float Application::GetDT() const
+//{
+//	return dt;
+//}
+
+// Save / Load
+
+void Application::RequestLoad()
+{
+	// we should be checking if that file actually exist
+	// from the "GetSaveGames" list
+	want_to_load = true;
+}
+
+void Application::RequestSave() const
+{
+	// we should be checking if that file actually exist
+	// from the "GetSaveGames" list ... should we overwrite ?
+	want_to_save = true;
+}
+
+//Example
+/*
+void persistence_example(void) {
+	JSON_Value *schema = json_parse_string("{\"name\":\"\"}");
+	JSON_Value *user_data = json_parse_file("user_data.json");
+	char buf[256];
+	const char *name = NULL;
+	if (user_data == NULL || json_validate(schema, user_data) != JSONSuccess) {
+		puts("Enter your name:");
+		scanf("%s", buf);
+		user_data = json_value_init_object();
+		json_object_set_string(json_object(user_data), "name", buf);
+		json_serialize_to_file(user_data, "user_data.json");
+	}
+	name = json_object_get_string(json_object(user_data), "name");
+	printf("Hello, %s.", name);
+	json_value_free(schema);
+	json_value_free(user_data);
+	return;
+}
+*/
+
+bool Application::LoadFile()
+{
+	bool ret = false;
+
+	//////////////////Testing
+	JSON_Value *schema = json_parse_string("{\"name\":\"\"}");
+	JSON_Value *config = json_parse_file("config.json");
+	char buf[256] = "potato";
+	const char *name = NULL;
+	if (config == NULL || json_validate(schema, config) != JSONSuccess) {
+		config = json_value_init_object();
+		json_object_set_string(json_object(config), "name", buf);
+		json_serialize_to_file(config, "config.json");
+	}
+	name = json_object_get_string(json_object(config), "name");
+	//printf("Hello, %s.", name);
+	json_value_free(schema);
+	json_value_free(config);
+	/////////////////////////////////////////
+
+
+	//pugi::xml_document data;
+	//pugi::xml_node root;
+
+	//load_game = save_game;	// @Carles
+
+	//pugi::xml_parse_result result = data.load_file(load_game.c_str());
+
+	//if (result != NULL)
+	//{
+	//	LOG("Loading new Game State from %s...", load_game.c_str());
+
+	//	root = data.child("game_state");
+
+	//	std::list<Module*>::iterator item = modules.begin();
+	//	ret = true;
+
+	//	for (item; item != modules.end() && ret == true; item = next(item))
+	//	{
+	//		ret = (*item)->Load(root.child((*item)->name.c_str()));
+	//	}
+
+	//	data.reset();
+	//	if (ret == true)
+	//		LOG("...finished loading");
+	//	else
+	//		LOG("...loading process interrupted with error on module %s", (*item != NULL) ? (*item)->name.c_str() : "unknown");
+	//}
+	//else
+	//	LOG("Could not parse game state xml file %s. pugi error: %s", load_game.c_str(), result.description());
+
+	////Alternate Start Game that loads game after reading data
+	//myApp->gui->DeactivateScreen(myApp->gui->Main_Menu_Elements);
+	//myApp->gui->ActivateScreen(myApp->gui->InGame_Elements);
+
+	//myApp->gui->hordeNumber_Label->ChangeString(std::to_string(myApp->hordes->roundNumber));
+	//myApp->gui->MainMenuTemp_Image->Deactivate();
+
+	//myApp->gui->Current_Screen = Screen_Type::SCREEN_INGAME;
+	//myApp->scene->SwitchMusic(Screen_Type::SCREEN_INGAME);
+	//Mix_Resume(-1);
+	//myApp->scene->ActivateGameOverMusic = true;
+	//myApp->gui->OnPause = false;
+	//myApp->gui->WinIcon->Deactivate();
+	//myApp->gui->LoseIcon->Deactivate();
+
+	//myApp->video->StopVideo();
+
+	return ret;
+}
+
+bool Application::SaveFile() const
+{
+	bool ret = true;
+
+	//std::string save_game_file = save_game.c_str();	// @Carles, IMPROVE: Could work with a list of saved files instead of having just one
+
+	//LOG("Saving Game State to %s...", save_game_file.c_str());
+
+	//// xml object were we will store all data
+	//pugi::xml_document data;
+	//pugi::xml_node root;
+
+	//root = data.append_child("game_state");
+
+	//std::list<Module*>::iterator item = modules.begin();
+	//ret = true;
+
+	//for (item; item != modules.end() && ret == true; item = next(item))
+	//{
+	//	ret = (*item)->Save(root.append_child((*item)->name.c_str()));
+	//}
+
+	//if (ret == true)
+	//{
+	//	data.save_file(save_game_file.c_str());
+	//	LOG("... finished saving", );
+	//}
+	//else
+	//	LOG("Save process halted from an error in module %s", (*item != NULL) ? (*item)->name.c_str() : "unknown");
+
+	//data.reset();
+	return ret;
 }

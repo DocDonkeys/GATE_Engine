@@ -1,9 +1,12 @@
 #ifndef APP_H
 #define APP_H
 
+// Libraries
 #include <list>
 #include <string>
 #include <vector>
+
+// Headers
 #include "Globals.h"
 #include "Timer.h"
 #include "RNGenerator.h"
@@ -16,8 +19,12 @@
 #include "ModuleEngineGUI.h"
 #include "ModulePhysics.h"
 
+// SDL
 #include "libs/SDL/include/SDL.h"
 #include "libs/SDL/include/SDL_version.h"
+
+// JSON
+#include "libs/parson/parson.h"
 
 struct GPU_info
 {
@@ -63,13 +70,18 @@ public:
 
 public:
 	// Exposing some properties for reading
-	/*int GetArgc() const;
+	int GetArgc() const;
 	const char* GetArgv(int index) const;
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
-	float GetDT() const;*/
+	float GetDT() const;
+
+	// Load / Save Requests
+	void RequestLoad();
+	void RequestSave() const;
 
 	void RequestBrowser(const char* link);
+
 private:
 	// Call module cycle phases in order on App Update() phase
 	update_status PreUpdateModules();
@@ -78,24 +90,29 @@ private:
 
 	void AddModule(Module* mod);
 
+	// Load / Save Operations
+	bool LoadFile();
+	bool SaveFile() const;
+
 public:
 	//Modules
-	ModuleWindow* window;
-	ModuleInput* input;
-	ModuleSceneIntro* scene_intro;
-	ModuleRenderer3D* renderer3D;
-	ModuleCamera3D* camera;
-	ModuleEngineGUI* engineGUI;
-	ModulePhysics* physics;
+	ModuleWindow*		window;
+	ModuleInput*		input;
+	ModuleSceneIntro*	scene_intro;
+	ModuleRenderer3D*	renderer3D;
+	ModuleCamera3D*		camera;
+	ModuleEngineGUI*	engineGUI;
+	ModulePhysics*		physics;
 
 	//App members
-	hardware_info hardware;
-	RNGenerator rng;
-	bool mustShutDown = false;
+	hardware_info		hardware;
+	RNGenerator			rng;
+	bool				mustShutDown = false;
 
-	std::vector<float> ms_log;
-	std::vector<float> fps_log;
-	int max_FPS = -1;
+	std::vector<float>	ms_log;
+	std::vector<float>	fps_log;
+	int					max_FPS = -1;
+
 private:
 	//Framerate
 	uint				frame_count = 0;
@@ -108,6 +125,18 @@ private:
 	float				dt = 0.0f;
 	int					capped_ms = -1;
 
+	//App data
+	//int					argc;
+	//char**				args;
+
+	std::string			title;
+	std::string			organization;
+
+	//Save & Load
+	mutable bool		want_to_save;
+	bool				want_to_load;
+
+	//Modules
 	std::list <Module*> list_modules;
 
 };

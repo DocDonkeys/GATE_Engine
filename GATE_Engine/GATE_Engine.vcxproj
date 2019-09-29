@@ -94,6 +94,7 @@
     <ClInclude Include="libs\imgui-1.72b\imstb_truetype.h" />
     <ClInclude Include="libs\mmgr\mmgr.h" />
     <ClInclude Include="libs\mmgr\nommgr.h" />
+    <ClInclude Include="libs\parson\parson.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="ModulePhysics.h" />
     <ClInclude Include="ModuleCamera3D.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="libs\imgui-1.72b\imgui_impl_sdl.cpp" />
     <ClCompile Include="libs\imgui-1.72b\imgui_widgets.cpp" />
     <ClCompile Include="libs\mmgr\mmgr.cpp" />
+    <ClCompile Include="libs\parson\parson.c" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
