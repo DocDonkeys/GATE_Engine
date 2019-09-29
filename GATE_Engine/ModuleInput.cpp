@@ -45,15 +45,30 @@ update_status ModuleInput::PreUpdate(float dt)
 	{
 		if(keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			if (keyboard[i] == KEY_IDLE)
+			{
 				keyboard[i] = KEY_DOWN;
+				input_log.push_back(i);
+				input_type_log.push_back(key_down);
+			}
 			else
+			{
 				keyboard[i] = KEY_REPEAT;
+				if (input_type_log.back() != key_repeat)
+				{
+					input_log.push_back(i);
+					input_type_log.push_back(key_repeat);
+				}
+			}
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			{
 				keyboard[i] = KEY_UP;
+				input_log.push_back(i);
+				input_type_log.push_back(key_up);
+			}
 			else
 				keyboard[i] = KEY_IDLE;
 		}

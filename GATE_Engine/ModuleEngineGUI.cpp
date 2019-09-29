@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
 
 ModuleEngineGUI::ModuleEngineGUI(Application * app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -158,6 +159,46 @@ update_status ModuleEngineGUI::Update(float dt)
 
 	if (ImGui::CollapsingHeader("Input"))
 	{
+		ImGui::Text("Mouse Position: "); ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255.0f,255.0f,0.0f,255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
+
+		ImGui::Text("Mouse Motion: "); ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+
+		ImGui::Text("Mouse Wheel: "); ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d", App->input->GetMouseZ());
+
+		ImGui::Text("Input Log");
+
+		// Scrollbar TEST
+		static bool disable_mouse_wheel = false;
+		static bool disable_menu = false;
+		ImGui::Checkbox("Disable Mouse Wheel", &disable_mouse_wheel);
+		ImGui::Checkbox("Disable Menu", &disable_menu);
+
+		static int line = 50;
+		bool goto_line = ImGui::Button("Goto");
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(100);
+		goto_line |= ImGui::InputInt("##Line", &line, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue);
+		
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar | (disable_mouse_wheel ? ImGuiWindowFlags_NoScrollWithMouse : 0);
+		ImGui::BeginChild("Child1", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 260), false, window_flags);
+		if (App->input->input_log.size() > 0)
+		{
+			int i = 0;
+			while (i != App->input->input_log.size())
+			{
+				//ImGui::Text("%04d: scrollable region", i);
+				ImGui::Text("Key: %d %s", App->input->input_log[i], App->input->input_type_log[i]);
+				if (goto_line && line == i)
+					ImGui::SetScrollHereY();
+				++i;
+			}
+			if (goto_line && line >= 100)
+				ImGui::SetScrollHereY();
+		}
+		ImGui::EndChild();
 	}
 
 	if (ImGui::CollapsingHeader("Hardware"))

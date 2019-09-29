@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include <vector>
 
 #define MAX_MOUSE_BUTTONS 5
 
@@ -71,6 +72,10 @@ public:
 		return windowEvents[ev];
 	}
 
+public:
+	std::vector<unsigned char> input_log;
+	std::vector<unsigned char*> input_type_log;
+
 private:
 	bool windowEvents[WE_COUNT];
 	KEY_STATE* keyboard;
@@ -81,4 +86,8 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
+
+	unsigned char key_down[5] = "DOWN";
+	unsigned char key_repeat[7] = "REPEAT";
+	unsigned char key_up[3] = "UP";
 };
