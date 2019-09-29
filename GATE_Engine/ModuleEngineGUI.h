@@ -29,8 +29,20 @@ public:
 	bool show_another_window = false;
 	bool* open_configuration = nullptr;
 
+	
+
 private:
 	ImGuiIO* io = nullptr;
+
+	int window_width = 1280; // TEST
+	int window_height = 1920; // TEST
+
+	float window_brightness = 1.0f;
+
+	bool window_fullscreen = false;
+	bool window_resizable = true;
+	bool window_borderless = false;
+	bool window_full_desktop = false;
 
 };
 

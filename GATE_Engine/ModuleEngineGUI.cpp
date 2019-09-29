@@ -123,7 +123,37 @@ update_status ModuleEngineGUI::Update(float dt)
 	if (ImGui::CollapsingHeader("Window"))
 	{
 		ImGui::Text("Icon:");
-		//ImGui::Checkbox();
+
+		if (ImGui::SliderFloat("Brightness", &window_brightness, 0.000f, 1.000f))
+			App->window->ChangeWindowBrightnessTo(window_brightness);
+
+		if (ImGui::SliderInt("Width", &window_width, 256, 4096))
+			App->window->ResizeWindow(window_width,window_height);
+
+		if (ImGui::SliderInt("Height", &window_height, 144, 2160))
+			App->window->ResizeWindow(window_width, window_height);
+
+		ImGui::Text("Refresh rate: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%.1f", App->fps_log[App->fps_log.size() - 1]);
+
+
+		//Fullscreen
+		if (ImGui::Checkbox("Fullscreen", &window_fullscreen))
+			App->window->WindowSetFullscreen(window_fullscreen);
+
+		ImGui::SameLine();
+
+		if (ImGui::Checkbox("Resizable", &window_resizable))
+			App->window->WindowSetResizable(window_resizable);
+
+		if (ImGui::Checkbox("Borderless", &window_borderless))
+			App->window->WindowSetBorderless(window_borderless);
+
+		ImGui::SameLine();
+
+		if(ImGui::Checkbox("Full Desktop", &window_full_desktop))
+			App->window->WindowSetFullscreenDesktop(window_full_desktop);
 	}
 
 	if (ImGui::CollapsingHeader("Input"))

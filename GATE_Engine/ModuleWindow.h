@@ -21,6 +21,16 @@ public:
 	void SetTitle(const char* title);
 
 public:
+
+	void ResizeWindow(const uint& width, const uint& height);
+	void ChangeWindowBrightnessTo(float brightness);
+	void WindowSetFullscreen(const bool& fullscreen);
+	void WindowSetResizable(const bool& resizable);
+	void WindowSetBorderless(const bool& borderless);
+	void WindowSetFullscreenDesktop(const bool& fullscreen_desktop);
+	
+
+public:
 	//The window we'll be rendering to
 	SDL_Window* window;
 
