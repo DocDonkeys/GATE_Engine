@@ -55,6 +55,10 @@ bool Application::Init()
 		item++;
 	}
 
+	//App data	//TODO: SAVE/LOAD
+	title.append(TITLE);
+	organization.append("DocDonkeys");
+
 	//Collect hardware info
 	hardware.CPU_logic_cores = SDL_GetCPUCount();
 	hardware.RAM = (float)SDL_GetSystemRAM() / 1024;
@@ -290,38 +294,23 @@ void Application::AddModule(Module* mod)
 }
 
 // Get App data
-//int Application::GetArgc() const
-//{
-//	return argc;
-//}
-//
-//const char* Application::GetArgv(int index) const
-//{
-//	if (index < argc)
-//		return args[index];
-//	else
-//		return NULL;
-//}
-//
-//const char* Application::GetTitle() const
-//{
-//	return title.data();
-//}
-//
-//const char* Application::GetOrganization() const
-//{
-//	return organization.data();
-//
-//}
-//
-//// ---------------------------------------
-//float Application::GetDT() const
-//{
-//	return dt;
-//}
+const char* Application::GetTitle() const
+{
+	return title.data();
+}
+
+const char* Application::GetOrganization() const
+{
+	return organization.data();
+}
+
+// ---------------------------------------
+float Application::GetDT() const
+{
+	return dt;
+}
 
 // Save / Load
-
 void Application::RequestLoad()
 {
 	// we should be checking if that file actually exist

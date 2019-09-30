@@ -126,9 +126,6 @@ private:
 	int					capped_ms = -1;
 
 	//App data
-	//int					argc;
-	//char**				args;
-
 	std::string			title;
 	std::string			organization;
 
