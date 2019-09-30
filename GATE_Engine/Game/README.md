@@ -1,30 +1,24 @@
-﻿# Crazy Taxi by Doc Donkeys
-This is a university project made by CITM (https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we make a physics-based Crazy Taxi tribute in C & C++. We primarly used the Bullet (https://github.com/bulletphysics/bullet3), OPEN GL and SDL (https://www.libsdl.org/) libraries.
+﻿# GATE by Doc Donkeys
+This is a university project made by CITM (https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we made a 3D Game Engine in C & C++ during our 3rd year of Game Development Bachelor's Degree.
 
-Crazy Taxi (our version) is a physics-based racing game where you have to transport passangers to randomly located points in a randomly generated city full of obstacles.
-To win, reach all the flags marked by the cylinder above you, which will guide you to them. Each time you drop a passenger in a flag, he/she will thank you, and 30 extra seconds
-will be rewarded to you.
-
-When you reach the last flag destination to leave the last passenger, the flag will become blue and a disctinctive sound will sound.
-If you don't reach all destinations in time you will lose.
-
-The cylinder above your car is your best ally, it will show you the way to the next flag. It also changes color depending on how close you are to the destination.
-If you are far from the flag, the cylinder will turn green, as you get closer to the flag it will turn red, this will help you know which end
-of the cylinder you must follow.
-
-When you reach a flag you must STOP completely right next to the flag, you need top be very close to drop the passenger and get directions for the next flag!
-
-Feel free to visit our Webpage: https://docdonkeys.github.io/Crazy-Taxi/
+## Libraries Used
+* [STL](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
+* [OPEN GL](https://www.opengl.org/)
+* [SDL](https://www.libsdl.org/)
+* [JSON for Modern C++](https://github.com/nlohmann/json)
+* [MathGeoLib](https://github.com/juj/MathGeoLib)
+* [Brofiler](http://www.brofiler.com/)
 
 ## Installation
-No previous installations is required to play the game, just download and execute the .exe file *Crazy Taxi* from releases.
+No previous installations is required to use the engine, just download and execute the .exe file *GATE_Engine* from releases.
 
+/////OVERWRITE BELOW!
 ## Usage
 ### General Controls
 * ESC: Exit Game
 * R: Restart Game
 
-### Player Controls
+### Controls
 * Move: Up/Down/Left/Right
 * Handbrake: Spacebar
 * E: Flip vehicle
@@ -41,6 +35,7 @@ No previous installations is required to play the game, just download and execut
 * SHIFT to move faster
 
 * Right click to look around
+/////
 
 ## Contributing
 1. Fork it!
@@ -59,16 +54,7 @@ feature'`
   * Role: Code
   * Github: DídacRomero (https://github.com/DidacRomero)
 
-* Repository: https://github.com/DocDonkeys/Crazy-Taxi
-
-## Disclosure
-We do not own any of the audio used for the game. Authors credited below.
-
-* Music:
-	* Yellow Line - James Shimoji: https://www.youtube.com/watch?v=Ok2369YY2P8
-
-* Sfx:
-	* Royalty Free Sfx
+* Repository: https://github.com/DocDonkeys/GATE_Engine
 
 ## License & Copyright 
 
