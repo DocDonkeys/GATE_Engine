@@ -1,5 +1,4 @@
 #include "Application.h"
-#include "libs/Brofiler/Brofiler.h"
 
 Application::Application()
 {
@@ -248,7 +247,7 @@ update_status Application::PreUpdateModules()
 // Update all modules in App
 update_status Application::UpdateModules()
 {
-	BROFILER_CATEGORY("Modules Update", Profiler::Color::OrangeRed);
+	BROFILER_CATEGORY("Modules Update", Profiler::Color::Crimson);
 
 	update_status ret = UPDATE_CONTINUE;
 	Module* pModule = NULL;

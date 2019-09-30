@@ -1,0 +1,12 @@
+Red: Application
+Orange: Renderer, Input
+Yellow:
+Green: GUI
+Cyan:
+Blue:
+Pink:
+Purple:
+Brown:
+White:
+Grey:
+Black:

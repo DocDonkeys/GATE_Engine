@@ -26,6 +26,9 @@
 // JSON
 #include "libs/parson/parson.h"
 
+//Brofiler
+#include "libs/Brofiler/Brofiler.h"
+
 struct GPU_info
 {
 	struct VRAM_info
