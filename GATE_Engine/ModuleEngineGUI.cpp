@@ -37,6 +37,8 @@ bool ModuleEngineGUI::Start()
 
 update_status ModuleEngineGUI::Update(float dt)
 {
+	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::Green);
+
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f);
 	// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
