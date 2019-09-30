@@ -45,20 +45,18 @@ feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request and we might look into it. :D
 
-## The Team: Doc Donkeys (https://github.com/DocDonkeys)
+## The Team: [Doc Donkeys](https://github.com/DocDonkeys)
 * Carles Homs 
   * Role: Code
-  * Github: ch0m5 (https://github.com/ch0m5)
+  * Github: [ch0m5](https://github.com/ch0m5)
 
 * Dídac Romero
   * Role: Code
-  * Github: DídacRomero (https://github.com/DidacRomero)
-
-* Repository: https://github.com/DocDonkeys/GATE_Engine
+  * Github: [DídacRomero](https://github.com/DidacRomero)
 
 ## License & Copyright 
 
-MIT License
+[MIT License](https://github.com/DocDonkeys/GATE/blob/master/LICENSE)
 
 Copyright (c) 2018 DocDonkeys
 
