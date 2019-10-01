@@ -68,6 +68,41 @@ bool Application::Init()
 	hardware.GPU.renderer = (unsigned char*)glGetString(GL_RENDERER);
 	hardware.GPU.version = (unsigned char*)glGetString(GL_VERSION);
 
+	// Get all CPU features
+	if (SDL_Has3DNow())
+		CPU_features.push_back("3DNow");
+
+	if (SDL_HasAVX())
+		CPU_features.push_back("AVX");
+
+	if (SDL_HasAVX2())
+		CPU_features.push_back("AVX2");
+
+	if (SDL_HasAltiVec())
+		CPU_features.push_back("AltiVec");
+
+	if (SDL_HasMMX())
+		CPU_features.push_back("MMX");
+
+	if (SDL_HasRDTSC())
+		CPU_features.push_back("RDTSC");
+
+	if (SDL_HasSSE())
+		CPU_features.push_back("SSE");
+
+	if (SDL_HasSSE2())
+		CPU_features.push_back("SSE2");
+
+	if (SDL_HasSSE3())
+		CPU_features.push_back("SSE3");
+
+	if (SDL_HasSSE41())
+		CPU_features.push_back("SSE41");
+
+	if (SDL_HasSSE42())
+		CPU_features.push_back("SSE42");
+	// Finished collecting CPU features
+
 	return ret;
 }
 
