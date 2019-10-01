@@ -350,23 +350,6 @@ bool Application::LoadFile()
 {
 	bool ret = false;
 
-	//////////////////Testing
-	JSON_Value *schema = json_parse_string("{\"name\":\"\"}");
-	JSON_Value *config = json_parse_file("config.json");
-	char buf[256] = "potato";
-	const char *name = NULL;
-	if (config == NULL || json_validate(schema, config) != JSONSuccess) {
-		config = json_value_init_object();
-		json_object_set_string(json_object(config), "name", buf);
-		json_serialize_to_file(config, "config.json");
-	}
-	name = json_object_get_string(json_object(config), "name");
-	//printf("Hello, %s.", name);
-	json_value_free(schema);
-	json_value_free(config);
-	/////////////////////////////////////////
-
-
 	//pugi::xml_document data;
 	//pugi::xml_node root;
 
