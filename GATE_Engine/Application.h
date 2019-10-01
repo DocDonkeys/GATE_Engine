@@ -24,7 +24,7 @@
 #include "libs/SDL/include/SDL_version.h"
 
 // JSON
-#include "libs/parson/parson.h"
+#include "libs/nlohmann/json.hpp"
 
 //Brofiler
 #include "libs/Brofiler/Brofiler.h"

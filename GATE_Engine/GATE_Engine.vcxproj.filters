@@ -69,9 +69,6 @@
     <ClCompile Include="libs\mmgr\mmgr.cpp">
       <Filter>Sources\Tools\mmgr</Filter>
     </ClCompile>
-    <ClCompile Include="libs\parson\parson.c">
-      <Filter>Sources\Tools\parson</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -160,9 +157,6 @@
     <ClInclude Include="libs\mmgr\nommgr.h">
       <Filter>Sources\Tools\mmgr</Filter>
     </ClInclude>
-    <ClInclude Include="libs\parson\parson.h">
-      <Filter>Sources\Tools\parson</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -191,9 +185,6 @@
     </Filter>
     <Filter Include="Sources\Tools\mmgr">
       <UniqueIdentifier>{60846bfd-1b9f-4fc4-ada3-13f0ed061bd1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools\parson">
-      <UniqueIdentifier>{c05472f7-6e40-42c2-910c-d8b3a7c0cd12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
