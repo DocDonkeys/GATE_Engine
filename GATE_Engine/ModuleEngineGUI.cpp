@@ -212,7 +212,15 @@ update_status ModuleEngineGUI::Update(float dt)
 		ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
 		ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
 
-		ImGui::NewLine();
+		ImGui::Text("CPU has Features: ");
+		for (int i = 0; i < App->CPU_features.size(); ++i)
+		{
+			ImGui::TextColored(ImVec4(255.0f,255.0f,0.0f,255.0f), "%s,", App->CPU_features[i].data());
+			if ( i == 0 || (float)(i % 4) != 0.0f)
+				ImGui::SameLine();
+		}
+
+		ImGui::Separator();
 
 		ImGui::Text("GPU: ");
 		ImGui::SameLine();
@@ -222,7 +230,7 @@ update_status ModuleEngineGUI::Update(float dt)
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
 
-		ImGui::NewLine();
+		ImGui::Separator();
 
 		ImGui::Text("VRAM Budget: ");
 		ImGui::SameLine();
