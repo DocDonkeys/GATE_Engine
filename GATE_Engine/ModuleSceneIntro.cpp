@@ -3,6 +3,7 @@
 #include "ModuleSceneIntro.h"
 #include <math.h>
 #include <ctime>
+#include "Application.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -14,7 +15,8 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	LOG("Loading Intro assets");
+	//LOG("Loading Intro assets");
+	App->ConsoleLOG("Loading Intro assets");
 	bool ret = true;
 
 	//Rand seed based on current time
@@ -30,7 +32,7 @@ bool ModuleSceneIntro::Start()
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
-	LOG("Unloading Intro scene");
+	App->ConsoleLOG("Unloading Intro scene");
 
 	return true;
 }
