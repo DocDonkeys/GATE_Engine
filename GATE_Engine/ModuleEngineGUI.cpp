@@ -39,6 +39,16 @@ update_status ModuleEngineGUI::Update(float dt)
 {
 	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::Green);
 
+	//Before we start with ImGui menus & stuff, we check for windows and menus that can be opened or closed with keyboard keys
+
+
+	//Console 1
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		show_console_window = !show_console_window;
+	//Configuration 4
+	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+		show_configuration_window = !show_configuration_window;
+
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f);
 	// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -74,6 +84,16 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("View", true)) {
+
+			if (ImGui::MenuItem("Console 1"))
+				show_console_window = !show_console_window;
+
+			if (ImGui::MenuItem("Configuration 4"))
+				show_configuration_window = !show_configuration_window;
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Help"))
 		{
 			//if (ImGui::MenuItem("Gui Demo"))
@@ -94,9 +114,9 @@ update_status ModuleEngineGUI::Update(float dt)
 	ImGui::EndMainMenuBar();
 
 	//CONSOLE MENU
-	if (show_console)
+	if (show_console_window)
 	{
-		ImGui::Begin("Console",&show_console);
+		ImGui::Begin("Console",&show_console_window);
 
 		for (int i = 0; i < App->console_LOG.size(); ++i)
 			ImGui::Text(App->console_LOG[i].data());
@@ -106,188 +126,168 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 
 	//CONFIGURATION MENU	
-	ImGui::Begin("Configuration", open_configuration);
-
-	if (ImGui::BeginMenu("Options"))
+	if (show_configuration_window)
 	{
-		ImGui::MenuItem("Set Defaults");
-		ImGui::MenuItem("Save");
-		ImGui::MenuItem("Load");
+		ImGui::Begin("Configuration", &show_configuration_window);
 
-		ImGui::EndMenu();
-	}
-
-	if (ImGui::CollapsingHeader("Application"))
-	{
-		static char str0[128] = "Add name and functions!";
-		ImGui::InputText("App Name", str0, IM_ARRAYSIZE(str0));
-
-		static char str1[128] = "Add organization and functions!";
-		ImGui::InputText("Organization", str1, IM_ARRAYSIZE(str1));
-
-		ImGui::SliderInt("MAX FPS", &App->max_FPS, -1, 120);
-		
-		//Plotting FPS and ms
-		char title[25];
-		sprintf_s(title, 25, "Framerate %.1f",App->fps_log[App->fps_log.size() - 1]);
-		ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 140.0f, ImVec2(310, 100));
-		sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
-		ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
-	}
-
-	if (ImGui::CollapsingHeader("Window"))
-	{
-		ImGui::Text("Icon:");
-
-		if (ImGui::SliderFloat("Brightness", &window_brightness, 0.000f, 1.000f))
-			App->window->ChangeWindowBrightnessTo(window_brightness);
-
-		if (ImGui::SliderInt("Width", &window_width, 256, 4096))
-			App->window->ResizeWindow(window_width,window_height);
-
-		if (ImGui::SliderInt("Height", &window_height, 144, 2160))
-			App->window->ResizeWindow(window_width, window_height);
-
-		ImGui::Text("Refresh rate: ");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%.1f", App->fps_log[App->fps_log.size() - 1]);
-
-
-		//Fullscreen
-		if (ImGui::Checkbox("Fullscreen", &window_fullscreen))
-			App->window->WindowSetFullscreen(window_fullscreen);
-
-		ImGui::SameLine();
-
-		if (ImGui::Checkbox("Resizable", &window_resizable))
-			App->window->WindowSetResizable(window_resizable);
-
-		if (ImGui::Checkbox("Borderless", &window_borderless))
-			App->window->WindowSetBorderless(window_borderless);
-
-		ImGui::SameLine();
-
-		if(ImGui::Checkbox("Full Desktop", &window_full_desktop))
-			App->window->WindowSetFullscreenDesktop(window_full_desktop);
-	}
-
-	if (ImGui::CollapsingHeader("Input"))
-	{
-		ImGui::Text("Mouse Position: "); ImGui::SameLine();
-		ImGui::TextColored(ImVec4(255.0f,255.0f,0.0f,255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
-
-		ImGui::Text("Mouse Motion: "); ImGui::SameLine();
-		ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
-
-		ImGui::Text("Mouse Wheel: "); ImGui::SameLine();
-		ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d", App->input->GetMouseZ());
-
-		ImGui::Text("Input Log");
-
-		// Scrollbar TEST
-		static bool disable_mouse_wheel = false;
-		static bool disable_menu = false;
-		ImGui::Checkbox("Disable Mouse Wheel", &disable_mouse_wheel);
-		ImGui::Checkbox("Disable Menu", &disable_menu);
-
-		static int line = 50;
-		bool goto_line = ImGui::Button("Goto");
-		ImGui::SameLine();
-		ImGui::SetNextItemWidth(100);
-		goto_line |= ImGui::InputInt("##Line", &line, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue);
-		
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar | (disable_mouse_wheel ? ImGuiWindowFlags_NoScrollWithMouse : 0);
-		ImGui::BeginChild("Child1", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 260), false, window_flags);
-		if (App->input->input_log.size() > 0)
+		if (ImGui::BeginMenu("Options"))
 		{
-			int i = 0;
-			while (i != App->input->input_log.size())
+			ImGui::MenuItem("Set Defaults");
+			ImGui::MenuItem("Save");
+			ImGui::MenuItem("Load");
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::CollapsingHeader("Application"))
+		{
+			static char str0[128] = "Add name and functions!";
+			ImGui::InputText("App Name", str0, IM_ARRAYSIZE(str0));
+
+			static char str1[128] = "Add organization and functions!";
+			ImGui::InputText("Organization", str1, IM_ARRAYSIZE(str1));
+
+			ImGui::SliderInt("MAX FPS", &App->max_FPS, -1, 120);
+
+			//Plotting FPS and ms
+			char title[25];
+			sprintf_s(title, 25, "Framerate %.1f", App->fps_log[App->fps_log.size() - 1]);
+			ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 140.0f, ImVec2(310, 100));
+			sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
+			ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+		}
+
+		if (ImGui::CollapsingHeader("Window"))
+		{
+			ImGui::Text("Icon:");
+
+			if (ImGui::SliderFloat("Brightness", &window_brightness, 0.000f, 1.000f))
+				App->window->ChangeWindowBrightnessTo(window_brightness);
+
+			if (ImGui::SliderInt("Width", &window_width, 256, 4096))
+				App->window->ResizeWindow(window_width, window_height);
+
+			if (ImGui::SliderInt("Height", &window_height, 144, 2160))
+				App->window->ResizeWindow(window_width, window_height);
+
+			ImGui::Text("Refresh rate: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%.1f", App->fps_log[App->fps_log.size() - 1]);
+
+
+			//Fullscreen
+			if (ImGui::Checkbox("Fullscreen", &window_fullscreen))
+				App->window->WindowSetFullscreen(window_fullscreen);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Resizable", &window_resizable))
+				App->window->WindowSetResizable(window_resizable);
+
+			if (ImGui::Checkbox("Borderless", &window_borderless))
+				App->window->WindowSetBorderless(window_borderless);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Full Desktop", &window_full_desktop))
+				App->window->WindowSetFullscreenDesktop(window_full_desktop);
+		}
+
+		if (ImGui::CollapsingHeader("Input"))
+		{
+			ImGui::Text("Mouse Position: "); ImGui::SameLine();
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
+
+			ImGui::Text("Mouse Motion: "); ImGui::SameLine();
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+
+			ImGui::Text("Mouse Wheel: "); ImGui::SameLine();
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d", App->input->GetMouseZ());
+
+			ImGui::Text("Input Log");
+
+			// Scrollbar TEST
+			static bool disable_mouse_wheel = false;
+			static bool disable_menu = false;
+			ImGui::Checkbox("Disable Mouse Wheel", &disable_mouse_wheel);
+			ImGui::Checkbox("Disable Menu", &disable_menu);
+
+			static int line = 50;
+			bool goto_line = ImGui::Button("Goto");
+			ImGui::SameLine();
+			ImGui::SetNextItemWidth(100);
+			goto_line |= ImGui::InputInt("##Line", &line, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue);
+
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar | (disable_mouse_wheel ? ImGuiWindowFlags_NoScrollWithMouse : 0);
+			ImGui::BeginChild("Child1", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 260), false, window_flags);
+			if (App->input->input_log.size() > 0)
 			{
-				//ImGui::Text("%04d: scrollable region", i);
-				ImGui::Text("Key: %d %s", App->input->input_log[i], App->input->input_type_log[i]);
-				if (goto_line && line == i)
+				int i = 0;
+				while (i != App->input->input_log.size())
+				{
+					//ImGui::Text("%04d: scrollable region", i);
+					ImGui::Text("Key: %d %s", App->input->input_log[i], App->input->input_type_log[i]);
+					if (goto_line && line == i)
+						ImGui::SetScrollHereY();
+					++i;
+				}
+				if (goto_line && line >= 100)
 					ImGui::SetScrollHereY();
-				++i;
 			}
-			if (goto_line && line >= 100)
-				ImGui::SetScrollHereY();
+			ImGui::EndChild();
 		}
-		ImGui::EndChild();
-	}
 
-	if (ImGui::CollapsingHeader("Hardware"))
-	{
-		ImGui::Text("SDL Version: ");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
-
-		ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
-		ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
-
-		ImGui::Text("CPU has Features: ");
-		for (int i = 0; i < App->CPU_features.size(); ++i)
+		if (ImGui::CollapsingHeader("Hardware"))
 		{
-			ImGui::TextColored(ImVec4(255.0f,255.0f,0.0f,255.0f), "%s,", App->CPU_features[i].data());
-			if ( i == 0 || (float)(i % 4) != 0.0f)
-				ImGui::SameLine();
+			ImGui::Text("SDL Version: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
+
+			ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
+			ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
+
+			ImGui::Text("CPU has Features: ");
+			for (int i = 0; i < App->CPU_features.size(); ++i)
+			{
+				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%s,", App->CPU_features[i].data());
+				if (i == 0 || (float)(i % 4) != 0.0f)
+					ImGui::SameLine();
+			}
+
+			ImGui::Separator();
+
+			ImGui::Text("GPU: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
+
+			ImGui::Text("Brand: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
+
+			ImGui::Separator();
+
+			ImGui::Text("VRAM Budget: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.budget);
+
+			ImGui::Text("VRAM Usage: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.usage);
+
+			ImGui::Text("VRAM Available: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
+
+			ImGui::Text("VRAM Reserved: ");
 		}
 
-		ImGui::Separator();
 
-		ImGui::Text("GPU: ");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
-
-		ImGui::Text("Brand: ");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
-
-		ImGui::Separator();
-
-		ImGui::Text("VRAM Budget: ");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.budget);
-
-		ImGui::Text("VRAM Usage: ");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.usage);
-
-		ImGui::Text("VRAM Available: ");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
-
-		ImGui::Text("VRAM Reserved: ");
+		ImGui::End();
 	}
-
-
-	ImGui::End();
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
-
-	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-	{
-		static float f = 0.0f;
-		static int counter = 0;
-
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-		ImGui::Checkbox("Another Window", &show_another_window);
-
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
-
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
-	}
 
 	// 3. Show another simple window.
 	if (show_another_window)
