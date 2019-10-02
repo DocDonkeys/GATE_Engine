@@ -24,8 +24,7 @@
 #include "libs/SDL/include/SDL_version.h"
 
 // JSON
-#include "libs/json/json.hpp"
-using json = nlohmann::json;
+#include "JsonLoader.h"
 
 // Brofiler
 #include "libs/Brofiler/Brofiler.h"

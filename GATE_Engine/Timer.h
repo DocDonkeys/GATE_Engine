@@ -13,16 +13,16 @@ public:
 
 	void Start();
 	void Stop();
-	void StartFrom(Uint32 secs);
+	void StartFrom(uint secs);
 
-	Uint32 Read() const;
+	uint Read() const;
 	float ReadSec() const;
 
 private:
 
 	bool	running;
-	Uint32	started_at;
-	Uint32	stopped_at;
+	uint	started_at;
+	uint	stopped_at;
 };
 
 #endif //TIMER_H

@@ -30,7 +30,7 @@ bool ModuleInput::Init()
 		SDL_TriggerBreakpoint();
 		ret = false;
 	}
-
+	
 	return ret;
 }
 

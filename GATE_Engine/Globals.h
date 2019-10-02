@@ -63,7 +63,15 @@ const char* returned_log(const char file[], int line, const char* format, ...);
 //https://wiki.libsdl.org/CategoryAssertions
 //#define SDL_ASSERT_LEVEL 1
 
-typedef unsigned int uint;
+// Typedefs
+typedef signed char			int8;
+typedef signed short		int16;
+typedef signed int			int32;
+typedef signed __int64		int64;
+typedef unsigned char		uchar;
+typedef unsigned short		ushort;
+typedef unsigned int		uint;
+typedef unsigned __int64	ulong;
 
 enum update_status
 {

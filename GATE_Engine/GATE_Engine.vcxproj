@@ -80,6 +80,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="JsonLoader.h" />
     <ClInclude Include="libs\glew\include\GL\glew.h" />
     <ClInclude Include="libs\imgui-1.72b\examples\libs\glfw\include\GLFW\glfw3.h" />
     <ClInclude Include="libs\imgui-1.72b\examples\libs\glfw\include\GLFW\glfw3native.h" />
@@ -104,6 +105,7 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleSceneIntro.h" />
     <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="RNGenerator.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
@@ -111,6 +113,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="JsonLoader.cpp" />
     <ClCompile Include="libs\glew\src\glew.c" />
     <ClCompile Include="libs\imgui-1.72b\imgui.cpp" />
     <ClCompile Include="libs\imgui-1.72b\imgui_demo.cpp" />
@@ -130,6 +133,7 @@
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="RNGenerator.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>

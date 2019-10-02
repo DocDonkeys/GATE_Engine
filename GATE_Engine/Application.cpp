@@ -380,82 +380,9 @@ void Application::RequestSave() const
 	want_to_save = true;
 }
 
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <istream>
-
 bool Application::LoadFile()
 {
 	bool ret = false;
-
-	//JSON TESTING
-
-	json j2 = {
-	  {"pi", 3.141},
-	  {"happy", true},
-	  {"name", "Niels"},
-	  {"nothing", nullptr},
-	  {"answer", {
-		{"everything", 42}
-	  }},
-	  {"list", {1, 0, 2}},
-	  {"object", {
-		{"currency", "USD"},
-		{"value", 42.99}
-	  }}
-	};
-
-	//////////////
-
-	//// deserialize from standard input
-	//json j;
-	//std::cin >> j;
-
-	//// serialize to standard output
-	//std::cout << j;
-
-	//// the setw manipulator was overloaded to set the indentation for pretty printing
-	//std::cout << std::setw(4) << j << std::endl;
-
-	// read a JSON file
-	/*std::ifstream i("config.json");
-	json j;
-	i >> j;*/
-
-	// write prettified JSON to another file
-	std::fstream o("config.json");
-	o << std::setw(4) << j2 << std::endl;
-
-	////////////////JSON TESTING END
-
-	//std::ofstream data("config.json");
-	//json::iterator it;
-
-	//pugi::xml_parse_result result = data.load_file(load_game.c_str());
-
-	//if (result != NULL)
-	//{
-	//	LOG("Loading new Game State from %s...", load_game.c_str());
-
-	//	root = data.child("game_state");
-
-	//	std::list<Module*>::iterator item = modules.begin();
-	//	ret = true;
-
-	//	for (item; item != modules.end() && ret == true; item = next(item))
-	//	{
-	//		ret = (*item)->Load(root.child((*item)->name.c_str()));
-	//	}
-
-	//	data.reset();
-	//	if (ret == true)
-	//		LOG("...finished loading");
-	//	else
-	//		LOG("...loading process interrupted with error on module %s", (*item != NULL) ? (*item)->name.c_str() : "unknown");
-	//}
-	//else
-	//	LOG("Could not parse game state xml file %s. pugi error: %s", load_game.c_str(), result.description());
 
 	return ret;
 }
