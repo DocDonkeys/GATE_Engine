@@ -17,9 +17,6 @@
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 void log(const char file[], int line, const char* format, ...);
 
-#define RETURNED_LOG(format, ...) returned_log(__FILE__, __LINE__, format, __VA_ARGS__);
-const char* returned_log(const char file[], int line, const char* format, ...);
-
 
 ////Redefines NULL (Careful!)
 //#ifdef NULL
