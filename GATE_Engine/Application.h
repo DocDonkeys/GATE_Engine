@@ -24,9 +24,10 @@
 #include "libs/SDL/include/SDL_version.h"
 
 // JSON
-#include "libs/nlohmann/json.hpp"
+#include "libs/json/json.hpp"
+using json = nlohmann::json;
 
-//Brofiler
+// Brofiler
 #include "libs/Brofiler/Brofiler.h"
 
 struct GPU_info

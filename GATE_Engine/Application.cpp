@@ -359,36 +359,57 @@ void Application::RequestSave() const
 	want_to_save = true;
 }
 
-//Example
-/*
-void persistence_example(void) {
-	JSON_Value *schema = json_parse_string("{\"name\":\"\"}");
-	JSON_Value *user_data = json_parse_file("user_data.json");
-	char buf[256];
-	const char *name = NULL;
-	if (user_data == NULL || json_validate(schema, user_data) != JSONSuccess) {
-		puts("Enter your name:");
-		scanf("%s", buf);
-		user_data = json_value_init_object();
-		json_object_set_string(json_object(user_data), "name", buf);
-		json_serialize_to_file(user_data, "user_data.json");
-	}
-	name = json_object_get_string(json_object(user_data), "name");
-	printf("Hello, %s.", name);
-	json_value_free(schema);
-	json_value_free(user_data);
-	return;
-}
-*/
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <istream>
 
 bool Application::LoadFile()
 {
 	bool ret = false;
 
-	//pugi::xml_document data;
-	//pugi::xml_node root;
+	//JSON TESTING
 
-	//load_game = save_game;	// @Carles
+	json j2 = {
+	  {"pi", 3.141},
+	  {"happy", true},
+	  {"name", "Niels"},
+	  {"nothing", nullptr},
+	  {"answer", {
+		{"everything", 42}
+	  }},
+	  {"list", {1, 0, 2}},
+	  {"object", {
+		{"currency", "USD"},
+		{"value", 42.99}
+	  }}
+	};
+
+	//////////////
+
+	//// deserialize from standard input
+	//json j;
+	//std::cin >> j;
+
+	//// serialize to standard output
+	//std::cout << j;
+
+	//// the setw manipulator was overloaded to set the indentation for pretty printing
+	//std::cout << std::setw(4) << j << std::endl;
+
+	// read a JSON file
+	/*std::ifstream i("config.json");
+	json j;
+	i >> j;*/
+
+	// write prettified JSON to another file
+	std::fstream o("config.json");
+	o << std::setw(4) << j2 << std::endl;
+
+	////////////////JSON TESTING END
+
+	//std::ofstream data("config.json");
+	//json::iterator it;
 
 	//pugi::xml_parse_result result = data.load_file(load_game.c_str());
 
@@ -414,23 +435,6 @@ bool Application::LoadFile()
 	//}
 	//else
 	//	LOG("Could not parse game state xml file %s. pugi error: %s", load_game.c_str(), result.description());
-
-	////Alternate Start Game that loads game after reading data
-	//myApp->gui->DeactivateScreen(myApp->gui->Main_Menu_Elements);
-	//myApp->gui->ActivateScreen(myApp->gui->InGame_Elements);
-
-	//myApp->gui->hordeNumber_Label->ChangeString(std::to_string(myApp->hordes->roundNumber));
-	//myApp->gui->MainMenuTemp_Image->Deactivate();
-
-	//myApp->gui->Current_Screen = Screen_Type::SCREEN_INGAME;
-	//myApp->scene->SwitchMusic(Screen_Type::SCREEN_INGAME);
-	//Mix_Resume(-1);
-	//myApp->scene->ActivateGameOverMusic = true;
-	//myApp->gui->OnPause = false;
-	//myApp->gui->WinIcon->Deactivate();
-	//myApp->gui->LoseIcon->Deactivate();
-
-	//myApp->video->StopVideo();
 
 	return ret;
 }
