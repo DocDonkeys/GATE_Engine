@@ -28,6 +28,7 @@ public:
 	bool show_demo_window = true;
 	bool show_another_window = false;
 	bool* open_configuration = nullptr;
+	bool show_console = true;
 
 	
 

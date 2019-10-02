@@ -93,6 +93,18 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 	ImGui::EndMainMenuBar();
 
+	//CONSOLE MENU
+	if (show_console)
+	{
+		ImGui::Begin("Console",&show_console);
+
+		for (int i = 0; i < App->console_LOG.size(); ++i)
+			ImGui::Text(App->console_LOG[i].data());
+
+		ImGui::End();
+
+	}
+
 	//CONFIGURATION MENU	
 	ImGui::Begin("Configuration", open_configuration);
 

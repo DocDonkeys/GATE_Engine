@@ -115,7 +115,7 @@ bool Application::Start()
 	std::list<Module*>::iterator item = list_modules.begin();
 
 	//Call Start() in all modules
-	LOG("Application Start --------------");
+	ConsoleLOG("Application Start --------------");
 	item = list_modules.begin();
 
 	while (item != list_modules.end())
@@ -256,6 +256,27 @@ void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Frame
 void Application::RequestBrowser(const char* link)
 {
 	ShellExecuteA(NULL, "open", link, NULL, NULL, SW_SHOWNORMAL);
+}
+
+void Application::ConsoleLOG(const char * format, ...)
+{
+
+	static char tmp_string[4096];
+	static char tmp_string2[4096];
+	static va_list  ap;
+
+	// Construct the string from variable arguments
+	va_start(ap, format);
+	vsprintf_s(tmp_string, 4096, format, ap);
+	va_end(ap);
+	sprintf_s(tmp_string2, 4096, "%s", tmp_string);
+	OutputDebugString(tmp_string2);
+	// First we do  a normal LOG to VS using a modified LOG that just returns the LOG message
+	std::string str = tmp_string2;
+	
+	
+	//Now we can pass the string to the vector
+	console_LOG.push_back(str);
 }
 
 // PreUpdate all modules in App
