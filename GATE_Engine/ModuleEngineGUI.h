@@ -25,10 +25,10 @@ public:
 	update_status Update(float dt);
 
 	// Bools to show / hide or open / close windows
-	bool show_demo_window = true;
+	bool show_demo_window = false;
 	bool show_another_window = false;
-	bool* open_configuration = nullptr;
-	bool show_console = true;
+	bool show_configuration_window = true;
+	bool show_console_window = true;
 
 	
 
