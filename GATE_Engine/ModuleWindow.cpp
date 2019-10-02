@@ -33,8 +33,13 @@ bool ModuleWindow::Init()
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+		//
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); // type of GL context (Core, Compatibility, ES). See SDL_GLprofile
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); //whether the output is single or double buffered;
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); //the minimum number of bits in the depth buffer; defaults to 16
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8); //the minimum number of bits in the stencil buffer; defaults to 0
 
 		if(WIN_FULLSCREEN == true)
 		{

@@ -23,6 +23,9 @@ public:
 	bool Init();
 	bool Start();
 	update_status Update(float dt);
+	void RenderGUI();
+
+public: // Vars
 
 	// Bools to show / hide or open / close windows
 	bool show_demo_window = false;
@@ -34,6 +37,7 @@ public:
 
 private:
 	ImGuiIO* io = nullptr;
+	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f); //Black
 
 	int window_width = 1280; // TEST
 	int window_height = 1920; // TEST

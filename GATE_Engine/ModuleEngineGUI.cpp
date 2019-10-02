@@ -24,7 +24,6 @@ bool ModuleEngineGUI::Init()
 	ImGui_ImplOpenGL3_Init();
 
 	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	
 	return true;
 }
@@ -49,7 +48,6 @@ update_status ModuleEngineGUI::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
 		show_configuration_window = !show_configuration_window;
 
-	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f);
 	// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
 		// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
@@ -96,7 +94,8 @@ update_status ModuleEngineGUI::Update(float dt)
 
 		if (ImGui::BeginMenu("Help"))
 		{
-			//if (ImGui::MenuItem("Gui Demo"))
+			if (ImGui::MenuItem("Gui Demo"))
+				show_demo_window = true;
 
 			if (ImGui::MenuItem("Documentation"))
 				App->RequestBrowser("https://github.com/DocDonkeys/GATE/wiki");
@@ -299,6 +298,11 @@ update_status ModuleEngineGUI::Update(float dt)
 		ImGui::End();
 	}
 
+	return UPDATE_CONTINUE;
+}
+
+void ModuleEngineGUI::RenderGUI()
+{
 	ImGuiIO& test_io = *io;
 	// Rendering
 	ImGui::Render();
@@ -307,7 +311,4 @@ update_status ModuleEngineGUI::Update(float dt)
 	//glClear(GL_COLOR_BUFFER_BIT);	//DIDAC/CARLES: This line renders a plain color over the axis + grid plane of SceneIntro Module
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	//SDL_GL_SwapWindow(App->window->window);
-
-	return UPDATE_CONTINUE;
 }

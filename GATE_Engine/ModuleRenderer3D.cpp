@@ -1,6 +1,8 @@
-#include "Globals.h"
+﻿#include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
+#include "libs/glew/include/GL/glew.h"
 #include "libs/SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -40,7 +42,25 @@ bool ModuleRenderer3D::Init()
 		}
 
 		//Init OpenGL wth Glew
-		glewInit();
+		GLenum err = glewInit();
+
+		if (err != GLEW_OK) // glewInit error
+		{
+			App->ConsoleLOG("Could not Initialize Glew, %s", glewGetErrorString(err));
+			return false;
+		}
+		else // Success! 
+		{
+			App->ConsoleLOG("Succesfully initialized Glew!");
+			App->ConsoleLOG("Using Glew %s", glewGetString(GLEW_VERSION));
+
+			//LOG Hardware
+			App->ConsoleLOG("Vendor: %s", glGetString(GL_VENDOR)); 
+			App->ConsoleLOG("Renderer: %s", glGetString(GL_RENDERER));
+			App->ConsoleLOG("OpenGL version supported %s", glGetString(GL_VERSION));
+			App->ConsoleLOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		}
+			
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -97,12 +117,18 @@ bool ModuleRenderer3D::Init()
 
 		GLfloat MaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
+
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
+		glClearDepth(1.0f); 
+		glClearColor(0.f, 0.f, 0.f, 1.f); 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST); //ASK Marc
+		glEnable(GL_CULL_FACE); //ASK Marc
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_TEXTURE_2D); // ASK Marc
 	}
 
 	// Projection matrix for
@@ -115,7 +141,7 @@ bool ModuleRenderer3D::Init()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::Orange);
-
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -128,15 +154,66 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
+	//Change some options GL_DEPTH_TEST,GL_CULL_FACE,GL_LIGHTING ○ GL_COLOR_MATERIAL,GL_TEXTURE_2D + two other
+	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
+	{
+		if (glIsEnabled(GL_DEPTH_TEST))
+			glDisable(GL_DEPTH_TEST);
+		else
+			glEnable(GL_DEPTH_TEST);
+	}
+		
+
+	if (App->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
+	{
+		if (glIsEnabled(GL_CULL_FACE))
+			glDisable(GL_CULL_FACE);
+		else
+			glEnable(GL_CULL_FACE);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
+	{
+		if (glIsEnabled(GL_LIGHTING))
+			glDisable(GL_LIGHTING);
+		else
+			glEnable(GL_LIGHTING);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
+	{
+		if (glIsEnabled(GL_COLOR_MATERIAL))
+			glDisable(GL_COLOR_MATERIAL);
+		else
+			glEnable(GL_COLOR_MATERIAL);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
+	{
+		if (glIsEnabled(GL_TEXTURE_2D))
+			glDisable(GL_TEXTURE_2D);
+		else
+			glEnable(GL_TEXTURE_2D);
+	}
+
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::DarkOrange);
+	BROFILER_CATEGORY("Renderer post-Update", Profiler::Color::DarkOrange);
 
+	//Render
+
+	//Debug Draw (Render)
+
+	//Render GUI
+	App->engineGUI->RenderGUI();
+
+	//Swap Window
 	SDL_GL_SwapWindow(App->window->window);
+
 	return UPDATE_CONTINUE;
 }
 
