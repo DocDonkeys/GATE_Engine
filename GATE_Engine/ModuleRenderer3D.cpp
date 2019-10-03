@@ -204,6 +204,74 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer post-Update", Profiler::Color::DarkOrange);
 
+	//TEST
+	glLineWidth(2.0f);
+
+	glBegin(GL_LINES);
+	//PLANE
+	for (float i = 0; i < 10; ++i)
+	{
+		glVertex3f(i, 0.f, 0.f);
+		glVertex3f(i, 0, 10.f);
+
+		glVertex3f(0.f, 0.f, i);
+		glVertex3f(10.f, 0, i);
+	}
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	float size = 1;
+
+	//1st face
+	glVertex3f(0, size, 0.f);
+	glVertex3f(0, 0.f, 0.f);
+	glVertex3f(0, 0.f, size);
+
+	glVertex3f(0, size, 0.f);
+	glVertex3f(0, 0.f, size);
+	glVertex3f(0, size, size);
+
+	//2nd face
+	glVertex3f(0.f,size,size);
+	glVertex3f(0.f,0.f,size);
+	glVertex3f(size,0.f,size);
+
+	glVertex3f(0.f,size,size);
+	glVertex3f(size,0.f,size);
+	glVertex3f(size, size, size);
+
+	//3rd face
+	glVertex3f(0, size, 0.f);
+	glVertex3f(0, size, size);
+	glVertex3f(size, size, size);
+
+	glVertex3f(0, size, 0.f);
+	glVertex3f(size, size, size);
+	glVertex3f(size, size, 0);
+
+	//4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal, and then we displace it by size in the direction we need
+
+	//4th face
+	glVertex3f(size, 0.f, size);
+	glVertex3f(size, 0.f, 0.f);
+	glVertex3f(size, size, 0.f);
+	
+	glVertex3f(size, size, size);
+	glVertex3f(size, 0.f, size);
+	glVertex3f(size, size, 0.f);
+	
+	//For now the size of the buffer is the size of the cube
+	int cube_buffer_size = 6 * 6;
+
+	uint my_id = 0; 
+	glGenBuffers(1, (GLuint*) &(my_id)); 
+	glBindBuffer(GL_ARRAY_BUFFER, my_id); 
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float)* cube_buffer_size * 3, vertices, GL_STATIC_DRAW);
+	
+
+	glEnd();
+
+	glLineWidth(1.0f);
 	//Render
 
 	//Debug Draw (Render)
