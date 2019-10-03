@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 
-ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleWindow::ModuleWindow(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 	window = NULL;
 	screen_surface = NULL;
@@ -28,8 +28,8 @@ bool ModuleWindow::Init()
 	else
 	{
 		//Create window
-		int width = SCREEN_WIDTH * SCREEN_SIZE;
-		int height = SCREEN_HEIGHT * SCREEN_SIZE;
+		int width = App->engineGUI->GetWinWidth() * App->engineGUI->GetWinScale();
+		int height = App->engineGUI->GetWinHeight() * App->engineGUI->GetWinScale();
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -41,27 +41,27 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); //the minimum number of bits in the depth buffer; defaults to 16
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8); //the minimum number of bits in the stencil buffer; defaults to 0
 
-		if(WIN_FULLSCREEN == true)
+		if(App->engineGUI->IsFullscreen() == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(WIN_RESIZABLE == true)
+		if(App->engineGUI->IsResizable() == true)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(WIN_BORDERLESS == true)
+		if(App->engineGUI->IsBorderless() == true)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(WIN_FULLSCREEN_DESKTOP == true)
+		if(App->engineGUI->IsFullDesktop() == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(App->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		if(window == NULL)
 		{

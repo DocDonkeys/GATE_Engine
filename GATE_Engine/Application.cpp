@@ -2,13 +2,13 @@
 
 Application::Application()
 {
-	window = new ModuleWindow(this);
-	input = new ModuleInput(this);
-	scene_intro = new ModuleSceneIntro(this);
-	renderer3D = new ModuleRenderer3D(this);
-	camera = new ModuleCamera3D(this);
-	engineGUI = new ModuleEngineGUI(this);
-	physics = new ModulePhysics(this);
+	window = new ModuleWindow(this, "Window");
+	input = new ModuleInput(this, "Input");
+	scene_intro = new ModuleSceneIntro(this, "Scene");
+	renderer3D = new ModuleRenderer3D(this, "Renderer");
+	camera = new ModuleCamera3D(this, "Camera");
+	engineGUI = new ModuleEngineGUI(this, "EngineUI");
+	physics = new ModulePhysics(this, "Physics");
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -48,15 +48,14 @@ bool Application::Init()
 	//Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
+	//Load Configuration before initializing modules
+	LoadConfig();
+
 	while (item != list_modules.end())
 	{
 		(*item)->Init();
 		item++;
 	}
-
-	//App data	//TODO: SAVE/LOAD
-	title.append(TITLE);
-	organization.append("DocDonkeys");
 
 	//Collect hardware info
 	hardware.CPU_logic_cores = SDL_GetCPUCount();
@@ -197,13 +196,13 @@ void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Frame
 
 	//Save
 	if (want_to_save == true) {
-		SaveFile();
+		SaveConfig();
 		want_to_save = false;
 	}
 
 	//Load
 	if (want_to_load == true) {
-		LoadFile();
+		LoadConfig();
 		want_to_load = false;
 	}
 	
@@ -380,43 +379,81 @@ void Application::RequestSave() const
 	want_to_save = true;
 }
 
-bool Application::LoadFile()
+bool Application::LoadConfig()
 {
-	bool ret = false;
+	bool ret = true;
 
 	return ret;
 }
 
-bool Application::SaveFile() const
+bool Application::SaveConfig() const
 {
 	bool ret = true;
 
-	//std::string save_game_file = save_game.c_str();	// @Carles, IMPROVE: Could work with a list of saved files instead of having just one
+	//// --- Create Config with default values ---
+	//json pop = {
+	//	{"Application", {
+	//		{"Title", "GATE"},
+	//		{"Organization", "DocDonkeys (CITM)"}
+	//	}},
 
-	//LOG("Saving Game State to %s...", save_game_file.c_str());
+	//	{"GUI", {
+	//		{"Inspector", true},
+	//		{"About", false},
+	//		{"Settings", false},
+	//	}},
 
-	//// xml object were we will store all data
-	//pugi::xml_document data;
-	//pugi::xml_node root;
+	//	{"Window", {
+	//		{"width", 1024},
+	//		{"height", 720},
+	//		{"fullscreen", false},
+	//		{"resizable", true},
+	//		{"borderless", false},
+	//		{"fullscreenDesktop", false}
+	//	}},
 
-	//root = data.append_child("game_state");
+	//	{"Input", {
 
-	//std::list<Module*>::iterator item = modules.begin();
-	//ret = true;
+	//	}},
 
-	//for (item; item != modules.end() && ret == true; item = next(item))
+	//	{"Renderer3D", {
+	//		{"VSync", true}
+	//	}},
+	//};
+
+	//ModuleWindow*		window;
+	//ModuleInput*		input;
+	//ModuleSceneIntro*	scene_intro;
+	//ModuleRenderer3D*	renderer3D;
+	//ModuleCamera3D*		camera;
+	//ModuleEngineGUI*	engineGUI;
+	//ModulePhysics*		physics;
+
+	//json config;
+
+	//config[window->name.c_str()] = 3.141;
+	//config[input->name.c_str()] = 3.141;
+	//config[scene_intro->name.c_str()] = 3.141;
+	//config[renderer3D->name.c_str()] = 3.141;
+	//config[camera->name.c_str()] = 3.141;
+	//config[engineGUI->name.c_str()] = 3.141;
+	//config[physics->name.c_str()] = 3.141;
+
+	//std::string tmp = appName;
+	//config["Application"]["Title"] = tmp;
+	//std::string tmp2 = orgName;
+	//config["Application"]["Organization"] = tmp2;
+
+
+	//std::list<Module*>::const_iterator item = list_modules.begin();
+
+	//while (item != list_modules.end())
 	//{
-	//	ret = (*item)->Save(root.append_child((*item)->name.c_str()));
+	//	(*item)->SaveStatus(config);
+	//	item++;
 	//}
 
-	//if (ret == true)
-	//{
-	//	data.save_file(save_game_file.c_str());
-	//	LOG("... finished saving", );
-	//}
-	//else
-	//	LOG("Save process halted from an error in module %s", (*item != NULL) ? (*item)->name.c_str() : "unknown");
+	//JLoader.Save("Settings/EditorConfig.json", config);
 
-	//data.reset();
 	return ret;
 }

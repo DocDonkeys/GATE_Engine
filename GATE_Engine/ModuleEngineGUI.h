@@ -16,7 +16,7 @@
 class ModuleEngineGUI : public Module
 {
 public:
-	ModuleEngineGUI(Application* app, bool start_enabled = true);
+	ModuleEngineGUI(Application* app, const char* name = "null", bool start_enabled = true);
 	~ModuleEngineGUI();
 
 public:
@@ -24,6 +24,16 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	void RenderGUI();
+
+public:
+	int GetWinWidth() const;
+	int GetWinHeight() const;
+	int GetWinScale() const;
+
+	bool IsFullscreen() const;
+	bool IsResizable() const;
+	bool IsBorderless() const;
+	bool IsFullDesktop() const;
 
 public: // Vars
 
@@ -33,14 +43,13 @@ public: // Vars
 	bool show_configuration_window = true;
 	bool show_console_window = true;
 
-	
-
 private:
 	ImGuiIO* io = nullptr;
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f); //Black
 
-	int window_width = 1280; // TEST
-	int window_height = 1920; // TEST
+	int window_width = 1280;	//TODO: Save/Load
+	int window_height = 1024;
+	int window_scale = 1;
 
 	float window_brightness = 1.0f;
 

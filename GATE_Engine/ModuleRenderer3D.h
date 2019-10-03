@@ -9,7 +9,7 @@
 class ModuleRenderer3D : public Module
 {
 public:
-	ModuleRenderer3D(Application* app, bool start_enabled = true);
+	ModuleRenderer3D(Application* app, const char* name = "null", bool start_enabled = true);
 	~ModuleRenderer3D();
 
 	bool Init();
@@ -17,12 +17,18 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+public:
 	void OnResize(int width, int height);
 
-public:
+	bool IsVSynced() const;
 
+public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+
+private:
+	bool vSync = true;	//TODO: Save/Load
+
 };

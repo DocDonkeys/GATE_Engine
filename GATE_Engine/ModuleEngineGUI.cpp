@@ -4,7 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
 
-ModuleEngineGUI::ModuleEngineGUI(Application * app, bool start_enabled) : Module(app, start_enabled)
+ModuleEngineGUI::ModuleEngineGUI(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 }
 
@@ -311,4 +311,41 @@ void ModuleEngineGUI::RenderGUI()
 	//glClear(GL_COLOR_BUFFER_BIT);	//DIDAC/CARLES: This line renders a plain color over the axis + grid plane of SceneIntro Module
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+// Gets
+int ModuleEngineGUI::GetWinWidth() const
+{
+	return window_width;
+}
+
+int ModuleEngineGUI::GetWinHeight() const
+{
+	return window_height;
+}
+
+int ModuleEngineGUI::GetWinScale() const
+{
+	return window_scale;
+}
+
+// Checks
+bool ModuleEngineGUI::IsFullscreen() const
+{
+	return window_fullscreen;
+}
+
+bool ModuleEngineGUI::IsResizable() const
+{
+	return window_resizable;
+}
+
+bool ModuleEngineGUI::IsBorderless() const
+{
+	return window_borderless;
+}
+
+bool ModuleEngineGUI::IsFullDesktop() const
+{
+	return window_full_desktop;
 }

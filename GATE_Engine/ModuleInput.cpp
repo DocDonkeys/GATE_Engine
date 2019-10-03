@@ -1,10 +1,11 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleEngineGUI.h"
 
 #define MAX_KEYS 300
 
-ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleInput::ModuleInput(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
@@ -78,8 +79,8 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-	mouse_x /= SCREEN_SIZE;
-	mouse_y /= SCREEN_SIZE;
+	mouse_x /= App->engineGUI->GetWinScale();
+	mouse_y /= App->engineGUI->GetWinScale();
 	mouse_z = 0;
 
 	for(int i = 0; i < 5; ++i)
@@ -113,11 +114,11 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / SCREEN_SIZE;
-			mouse_y = e.motion.y / SCREEN_SIZE;
+			mouse_x = e.motion.x / App->engineGUI->GetWinScale();
+			mouse_y = e.motion.y / App->engineGUI->GetWinScale();
 
-			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			mouse_x_motion = e.motion.xrel / App->engineGUI->GetWinScale();
+			mouse_y_motion = e.motion.yrel / App->engineGUI->GetWinScale();
 			break;
 
 			case SDL_QUIT:

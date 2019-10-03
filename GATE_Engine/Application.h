@@ -3,7 +3,6 @@
 
 // Libraries
 #include <list>
-#include <string>
 #include <vector>
 
 // Headers
@@ -94,8 +93,8 @@ private:
 	void AddModule(Module* mod);
 
 	// Load / Save Operations
-	bool LoadFile();
-	bool SaveFile() const;
+	bool LoadConfig();
+	bool SaveConfig() const;
 
 public:
 	//Modules

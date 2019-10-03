@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "ModulePhysics.h"
 
-ModulePhysics::ModulePhysics(Application * app, bool start_enabled) : Module(app, start_enabled)
+ModulePhysics::ModulePhysics(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 }
 
