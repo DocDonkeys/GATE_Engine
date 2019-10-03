@@ -14,7 +14,7 @@
 class ModulePhysics : public Module
 {
 public:
-	ModulePhysics(Application* app, bool start_enabled = true);
+	ModulePhysics(Application* app, const char* name = "null", bool start_enabled = true);
 	~ModulePhysics();
 
 public:

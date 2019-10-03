@@ -1,4 +1,7 @@
-#pragma once
+#ifndef MODULE_H
+#define MODULE_H
+
+#include <string>
 
 class Application;
 
@@ -10,7 +13,7 @@ private :
 public:
 	Application* App;
 
-	Module(Application* parent, bool start_enabled = true) : App(parent), active(start_enabled)
+	Module(Application* parent, const char* name = "null", bool start_enabled = true) : App(parent), name(name), active(start_enabled)
 	{}
 
 	virtual ~Module()
@@ -18,7 +21,6 @@ public:
 
 	virtual bool Init() 
 	{
-		active = true;
 		return true; 
 	}
 
@@ -48,5 +50,8 @@ public:
 	}
 
 public:
+	std::string name;
 	bool active;
 };
+
+#endif //MODULE_H

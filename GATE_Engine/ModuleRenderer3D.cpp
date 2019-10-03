@@ -10,7 +10,7 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleRenderer3D::ModuleRenderer3D(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 }
 
@@ -36,7 +36,7 @@ bool ModuleRenderer3D::Init()
 	if(ret == true)
 	{
 		//Use Vsync
-		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0) {
+		if (App->renderer3D->IsVSynced() && SDL_GL_SetSwapInterval(1) < 0) {
 			App->ConsoleLOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 			SDL_TriggerBreakpoint();
 		}
@@ -132,7 +132,7 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->engineGUI->GetWinWidth(), App->engineGUI->GetWinHeight());
 
 	return ret;
 }
@@ -227,7 +227,6 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -239,4 +238,9 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+bool ModuleRenderer3D::IsVSynced() const
+{
+	return vSync;
 }
