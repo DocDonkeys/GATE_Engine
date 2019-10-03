@@ -123,16 +123,69 @@ bool ModuleRenderer3D::Init()
 		glClearColor(0.f, 0.f, 0.f, 1.f); 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		glEnable(GL_DEPTH_TEST); //ASK Marc
-		glEnable(GL_CULL_FACE); //ASK Marc
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE); 
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_TEXTURE_2D); // ASK Marc
+		glEnable(GL_TEXTURE_2D); 
 	}
 
 	// Projection matrix for
 	OnResize(App->engineGUI->GetWinWidth(), App->engineGUI->GetWinHeight());
+
+	return ret;
+}
+
+bool ModuleRenderer3D::Start()
+{
+	bool ret = true;
+
+	//This code must be reestructured after next week class 08/10/19
+	float size = 1.0f;
+
+	float vertex_array_wduplication[108] = { //Vertex array for 1st example of frame buffers, vertices duplicated
+	0.f, 1.f, 0.f,
+	0.f, 0.f, 0.f,
+	0.f, 0.f, 1.f,
+	0.f, 1.f, 0.f,
+	0.f, 0.f, 1.f,
+	0.f, 1.f, 1.f,
+	0.f, 1.f, 1.f,
+	0.f, 0.f, 1.f,
+	1.f, 0.f, 1.f,
+	0.f, 1.f, 1.f,
+	1.f, 0.f, 1.f,
+	1.f, 1.f, 1.f,
+	0.f, 1.f, 0.f,
+	0.f, 1.f, 1.f,
+	1.f, 1.f, 1.f,
+	0.f, 1.f, 0.f,
+	1.f, 1.f, 1.f,
+	1.f, 1.f, 0.f,
+	1.f, 0.f, 1.f,
+	1.f, 0.f, 0.f,
+	1.f, 1.f, 0.f,
+	1.f, 1.f, 1.f,
+	1.f, 0.f, 1.f,
+	1.f, 1.f, 0.f,
+	1.f, 0.f, 0.f,
+	0.f, 0.f, 0.f,
+	0.f, 1.f, 0.f,
+	1.f, 1.f, 0.f,
+	1.f, 0.f, 0.f,
+	0.f, 1.f, 0.f,
+	1.f, 0.f, 1.f,
+	0.f, 0.f, 1.f,
+	0.f, 0.f, 0.f,
+	1.f, 0.f, 0.f,
+	1.f, 0.f, 1.f,
+	0.f, 0.f, 0.f};
+
+	//Prepare Buffers to be sent to VRAM
+	glGenBuffers(1, (GLuint*) &(vertex_array_id));
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 108, vertex_array_wduplication, GL_STATIC_DRAW);
 
 	return ret;
 }
@@ -204,7 +257,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer post-Update", Profiler::Color::DarkOrange);
 
-	//TEST
+	//DIRECT MODE Rendering
 	glLineWidth(2.0f);
 
 	glBegin(GL_LINES);
@@ -220,58 +273,120 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glEnd();
 
 	glBegin(GL_TRIANGLES);
-	float size = 1;
+	//float size = 1;
 
-	//1st face
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, 0.f, 0.f);
-	glVertex3f(0, 0.f, size);
+	////1st face
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, 0.f, 0.f);
+	//glVertex3f(0, 0.f, size);
 
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, 0.f, size);
-	glVertex3f(0, size, size);
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, 0.f, size);
+	//glVertex3f(0, size, size);
 
-	//2nd face
-	glVertex3f(0.f,size,size);
-	glVertex3f(0.f,0.f,size);
-	glVertex3f(size,0.f,size);
+	////2nd face
+	//glVertex3f(0.f,size,size);
+	//glVertex3f(0.f,0.f,size);
+	//glVertex3f(size,0.f,size);
 
-	glVertex3f(0.f,size,size);
-	glVertex3f(size,0.f,size);
-	glVertex3f(size, size, size);
+	//glVertex3f(0.f,size,size);
+	//glVertex3f(size,0.f,size);
+	//glVertex3f(size, size, size);
 
-	//3rd face
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, size, size);
-	glVertex3f(size, size, size);
+	////3rd face
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, size, size);
+	//glVertex3f(size, size, size);
 
-	glVertex3f(0, size, 0.f);
-	glVertex3f(size, size, size);
-	glVertex3f(size, size, 0);
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(size, size, size);
+	//glVertex3f(size, size, 0);
 
-	//4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal, and then we displace it by size in the direction we need
+	////4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal, 
+	//// and then we displace it by size in the direction we need
 
-	//4th face
-	glVertex3f(size, 0.f, size);
-	glVertex3f(size, 0.f, 0.f);
-	glVertex3f(size, size, 0.f);
-	
-	glVertex3f(size, size, size);
-	glVertex3f(size, 0.f, size);
-	glVertex3f(size, size, 0.f);
-	
-	//For now the size of the buffer is the size of the cube
-	int cube_buffer_size = 6 * 6;
+	////4th face
+	//glVertex3f(size, 0.f, size);
+	//glVertex3f(size, 0.f, 0.f);
+	//glVertex3f(size, size, 0.f);
+	//
+	//glVertex3f(size, size, size);
+	//glVertex3f(size, 0.f, size);
+	//glVertex3f(size, size, 0.f);
 
-	uint my_id = 0; 
-	glGenBuffers(1, (GLuint*) &(my_id)); 
-	glBindBuffer(GL_ARRAY_BUFFER, my_id); 
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float)* cube_buffer_size * 3, vertices, GL_STATIC_DRAW);
-	
+	////5th face
+	//glVertex3f(size, 0.f, 0);
+	//glVertex3f(0.f, 0.f, 0);
+	//glVertex3f(0.f, size, 0);
+
+	//glVertex3f(size, size, 0);
+	//glVertex3f(size, 0.f, 0);
+	//glVertex3f(0.f, size, 0);
+
+	////6th face
+	//glVertex3f(size, 0, size);
+	//glVertex3f(0, 0, size);
+	//glVertex3f(0, 0, 0.f);
+
+	//glVertex3f(size, 0, 0);
+	//glVertex3f(size, 0, size);
+	//glVertex3f(0, 0, 0.f);
 
 	glEnd();
 
 	glLineWidth(1.0f);
+
+	//END of DIRECT MODE rendering
+
+	//START FRAME BUFFER Rendering
+
+	float vertex_array_wduplication[108] = { //Vertex array for 1st example of frame buffers, vertices duplicated
+	0.f, 1.f, 0.f,
+	0.f, 0.f, 0.f,
+	0.f, 0.f, 1.f,
+	0.f, 1.f, 0.f,
+	0.f, 0.f, 1.f,
+	0.f, 1.f, 1.f,
+	0.f, 1.f, 1.f,
+	0.f, 0.f, 1.f,
+	1.f, 0.f, 1.f,
+	0.f, 1.f, 1.f,
+	1.f, 0.f, 1.f,
+	1.f, 1.f, 1.f,
+	0.f, 1.f, 0.f,
+	0.f, 1.f, 1.f,
+	1.f, 1.f, 1.f,
+	0.f, 1.f, 0.f,
+	1.f, 1.f, 1.f,
+	1.f, 1.f, 0.f,
+	1.f, 0.f, 1.f,
+	1.f, 0.f, 0.f,
+	1.f, 1.f, 0.f,
+	1.f, 1.f, 1.f,
+	1.f, 0.f, 1.f,
+	1.f, 1.f, 0.f,
+	1.f, 0.f, 0.f,
+	0.f, 0.f, 0.f,
+	0.f, 1.f, 0.f,
+	1.f, 1.f, 0.f,
+	1.f, 0.f, 0.f,
+	0.f, 1.f, 0.f,
+	1.f, 0.f, 1.f,
+	0.f, 0.f, 1.f,
+	0.f, 0.f, 0.f,
+	1.f, 0.f, 0.f,
+	1.f, 0.f, 1.f,
+	0.f, 0.f, 0.f };
+
+	
+
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDisableClientState(GL_VERTEX_ARRAY);
 	//Render
 
 	//Debug Draw (Render)

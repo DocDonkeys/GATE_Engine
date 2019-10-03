@@ -40,8 +40,8 @@ public: // Vars
 	// Bools to show / hide or open / close windows
 	bool show_demo_window = false;
 	bool show_another_window = false;
-	bool show_configuration_window = true;
-	bool show_console_window = true;
+	bool show_configuration_window = false;
+	bool show_console_window = false;
 
 private:
 	ImGuiIO* io = nullptr;

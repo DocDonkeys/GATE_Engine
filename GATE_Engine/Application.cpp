@@ -102,6 +102,7 @@ bool Application::Init()
 		CPU_features.push_back("SSE42");
 	// Finished collecting CPU features
 
+	Start();
 	return ret;
 }
 

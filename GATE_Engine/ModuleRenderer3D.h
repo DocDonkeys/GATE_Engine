@@ -13,6 +13,7 @@ public:
 	~ModuleRenderer3D();
 
 	bool Init();
+	bool Start();
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
@@ -30,5 +31,7 @@ public:
 
 private:
 	bool vSync = true;	//TODO: Save/Load
+
+	uint vertex_array_id = 0; // vertex array ID for example 1 of drawing with vertex buffers
 
 };
