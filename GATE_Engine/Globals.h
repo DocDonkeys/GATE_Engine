@@ -77,3 +77,6 @@ enum update_status
 	UPDATE_STOP,
 	UPDATE_ERROR
 };
+
+//Only arbitrary value that can't be saved by JSON
+#define CONFIG_FILENAME "settings/config.json"

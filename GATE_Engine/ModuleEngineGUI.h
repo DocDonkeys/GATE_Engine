@@ -25,16 +25,6 @@ public:
 	update_status Update(float dt);
 	void RenderGUI();
 
-public:
-	int GetWinWidth() const;
-	int GetWinHeight() const;
-	int GetWinScale() const;
-
-	bool IsFullscreen() const;
-	bool IsResizable() const;
-	bool IsBorderless() const;
-	bool IsFullDesktop() const;
-
 public: // Vars
 
 	// Bools to show / hide or open / close windows
@@ -46,17 +36,6 @@ public: // Vars
 private:
 	ImGuiIO* io = nullptr;
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f); //Black
-
-	int window_width = 1280;	//TODO: Save/Load
-	int window_height = 1024;
-	int window_scale = 1;
-
-	float window_brightness = 1.0f;
-
-	bool window_fullscreen = false;
-	bool window_resizable = true;
-	bool window_borderless = false;
-	bool window_full_desktop = false;
 
 };
 

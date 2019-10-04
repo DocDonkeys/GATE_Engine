@@ -11,7 +11,7 @@ public:
 	// Constructor
 	JsonLoader() {};
 
-	bool Save(json obj, const char* file);
+	bool Save(json obj, const char* file) const;
 	json Load(const char* file) const;
 };
 

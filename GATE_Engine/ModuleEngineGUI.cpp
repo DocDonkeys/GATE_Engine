@@ -67,9 +67,51 @@ update_status ModuleEngineGUI::Update(float dt)
 	//Main toolbar
 	if (ImGui::BeginMainMenuBar()) {
 
+		// File: Options for file and App management
 		if (ImGui::BeginMenu("File", true)) {
 
-			if (ImGui::MenuItem("Exit", "(Esc)", false, true)) {
+			if (ImGui::BeginMenu("New Scene", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Open Scene", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::BeginMenu("Save", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Save As...", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::BeginMenu("New Project", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Open Project", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Save Project", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Exit", "(Alt+F4)", false, true)) {
 
 				return update_status::UPDATE_STOP;
 			}
@@ -77,34 +119,56 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Tools", true)) {
+		// Edit: Tools for easier edition
+		if (ImGui::BeginMenu("Edit", true)) {
+
+			ImGui::EndMenu();
+		}
+		
+		// Assets: Create premade objects and primitives
+		if (ImGui::BeginMenu("Assets", true)) {
 
 			ImGui::EndMenu();
 		}
 
+		// View: Display options
 		if (ImGui::BeginMenu("View", true)) {
 
-			if (ImGui::MenuItem("Console 1"))
+			if (ImGui::MenuItem("Show Console", "1"))
 				show_console_window = !show_console_window;
 
-			if (ImGui::MenuItem("Configuration 4"))
+			if (ImGui::MenuItem("Show Configuration", "4"))
 				show_configuration_window = !show_configuration_window;
 			ImGui::EndMenu();
 		}
 
+		// Help: Information & Documentation
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("Gui Demo"))
+			if (ImGui::MenuItem("Show UI Demo"))
 				show_demo_window = true;
+
+			if (ImGui::MenuItem("Generate Random Game"))
+				App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
+			ImGui::Separator();
 
 			if (ImGui::MenuItem("Documentation"))
 				App->RequestBrowser("https://github.com/DocDonkeys/GATE/wiki");
 
-			if (ImGui::MenuItem("Download latest"))
+			if (ImGui::MenuItem("Download Latest Version"))
 				App->RequestBrowser("https://github.com/DocDonkeys/GATE/releases");
 
-			if (ImGui::MenuItem("Report a Bug / Suggest an improvement"))
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Report Bug / Suggest Feature"))
 				App->RequestBrowser("https://github.com/DocDonkeys/GATE/issues");
+
+			if (ImGui::MenuItem("Give us Feedback!"))
+				App->RequestBrowser("https://www.youtube.com/watch?v=8o6c1UuoMwI");
+
+			if (ImGui::MenuItem("Contact us!"))
+				App->RequestBrowser("https://github.com/DocDonkeys/");
 
 			//if (ImGui::MenuItem("About"))
 			ImGui::EndMenu();
@@ -160,14 +224,14 @@ update_status ModuleEngineGUI::Update(float dt)
 		{
 			ImGui::Text("Icon:");
 
-			if (ImGui::SliderFloat("Brightness", &window_brightness, 0.000f, 1.000f))
-				App->window->ChangeWindowBrightnessTo(window_brightness);
+			if (ImGui::SliderFloat("Brightness", &App->window->window_brightness, 0.000f, 1.000f))
+				App->window->ChangeWindowBrightnessTo(App->window->window_brightness);
 
-			if (ImGui::SliderInt("Width", &window_width, 256, 4096))
-				App->window->ResizeWindow(window_width, window_height);
+			if (ImGui::SliderInt("Width", &App->window->window_width, 256, 4096))
+				App->window->ResizeWindow(App->window->window_width, App->window->window_height);
 
-			if (ImGui::SliderInt("Height", &window_height, 144, 2160))
-				App->window->ResizeWindow(window_width, window_height);
+			if (ImGui::SliderInt("Height", &App->window->window_height, 144, 2160))
+				App->window->ResizeWindow(App->window->window_width, App->window->window_height);
 
 			ImGui::Text("Refresh rate: ");
 			ImGui::SameLine();
@@ -175,21 +239,21 @@ update_status ModuleEngineGUI::Update(float dt)
 
 
 			//Fullscreen
-			if (ImGui::Checkbox("Fullscreen", &window_fullscreen))
-				App->window->WindowSetFullscreen(window_fullscreen);
+			if (ImGui::Checkbox("Fullscreen", &App->window->window_fullscreen))
+				App->window->WindowSetFullscreen(App->window->window_fullscreen);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Resizable", &window_resizable))
-				App->window->WindowSetResizable(window_resizable);
+			if (ImGui::Checkbox("Resizable", &App->window->window_resizable))
+				App->window->WindowSetResizable(App->window->window_resizable);
 
-			if (ImGui::Checkbox("Borderless", &window_borderless))
-				App->window->WindowSetBorderless(window_borderless);
+			if (ImGui::Checkbox("Borderless", &App->window->window_borderless))
+				App->window->WindowSetBorderless(App->window->window_borderless);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Full Desktop", &window_full_desktop))
-				App->window->WindowSetFullscreenDesktop(window_full_desktop);
+			if (ImGui::Checkbox("Full Desktop", &App->window->window_full_desktop))
+				App->window->WindowSetFullscreenDesktop(App->window->window_full_desktop);
 		}
 
 		if (ImGui::CollapsingHeader("Input"))
@@ -311,41 +375,4 @@ void ModuleEngineGUI::RenderGUI()
 	//glClear(GL_COLOR_BUFFER_BIT);	//DIDAC/CARLES: This line renders a plain color over the axis + grid plane of SceneIntro Module
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-// Gets
-int ModuleEngineGUI::GetWinWidth() const
-{
-	return window_width;
-}
-
-int ModuleEngineGUI::GetWinHeight() const
-{
-	return window_height;
-}
-
-int ModuleEngineGUI::GetWinScale() const
-{
-	return window_scale;
-}
-
-// Checks
-bool ModuleEngineGUI::IsFullscreen() const
-{
-	return window_fullscreen;
-}
-
-bool ModuleEngineGUI::IsResizable() const
-{
-	return window_resizable;
-}
-
-bool ModuleEngineGUI::IsBorderless() const
-{
-	return window_borderless;
-}
-
-bool ModuleEngineGUI::IsFullDesktop() const
-{
-	return window_full_desktop;
 }
