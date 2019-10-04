@@ -182,10 +182,37 @@ bool ModuleRenderer3D::Start()
 	1.f, 0.f, 1.f,
 	0.f, 0.f, 0.f};
 
+	float vertex_array_findexing[24] = {
+		0.f,1.f,0.f,
+		0.f,0.f,0.f,
+		0.f,0.f,1.f,
+		0.f, 1.f, 1.f,
+		1.f,1.f,0.f,
+		1.f,0.f,0.f,
+		1.f,0.f,1.f,
+		1.f, 1.f, 1.f,
+	};
+
+	GLubyte indices[] = { 
+		0,1,2, 2,3,0,   
+		0,3,4, 4,5,0,
+		0,5,6, 6,1,0,
+		1,6,7, 7,2,1,
+		7,4,3, 3,2,7,
+		4,7,6, 6,5,4 };
+
 	//Prepare Buffers to be sent to VRAM
 	glGenBuffers(1, (GLuint*) &(vertex_array_id));
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 108, vertex_array_wduplication, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*) &(vertex_optimized_array_id));
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_optimized_array_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 108, vertex_array_findexing, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*) &(indices_id));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 108, indices, GL_STATIC_DRAW);
 
 	return ret;
 }
@@ -339,54 +366,26 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//END of DIRECT MODE rendering
 
 	//START FRAME BUFFER Rendering
-
-	float vertex_array_wduplication[108] = { //Vertex array for 1st example of frame buffers, vertices duplicated
-	0.f, 1.f, 0.f,
-	0.f, 0.f, 0.f,
-	0.f, 0.f, 1.f,
-	0.f, 1.f, 0.f,
-	0.f, 0.f, 1.f,
-	0.f, 1.f, 1.f,
-	0.f, 1.f, 1.f,
-	0.f, 0.f, 1.f,
-	1.f, 0.f, 1.f,
-	0.f, 1.f, 1.f,
-	1.f, 0.f, 1.f,
-	1.f, 1.f, 1.f,
-	0.f, 1.f, 0.f,
-	0.f, 1.f, 1.f,
-	1.f, 1.f, 1.f,
-	0.f, 1.f, 0.f,
-	1.f, 1.f, 1.f,
-	1.f, 1.f, 0.f,
-	1.f, 0.f, 1.f,
-	1.f, 0.f, 0.f,
-	1.f, 1.f, 0.f,
-	1.f, 1.f, 1.f,
-	1.f, 0.f, 1.f,
-	1.f, 1.f, 0.f,
-	1.f, 0.f, 0.f,
-	0.f, 0.f, 0.f,
-	0.f, 1.f, 0.f,
-	1.f, 1.f, 0.f,
-	1.f, 0.f, 0.f,
-	0.f, 1.f, 0.f,
-	1.f, 0.f, 1.f,
-	0.f, 0.f, 1.f,
-	0.f, 0.f, 0.f,
-	1.f, 0.f, 0.f,
-	1.f, 0.f, 1.f,
-	0.f, 0.f, 0.f };
-
-	
-
-
-	glEnableClientState(GL_VERTEX_ARRAY);
+	/*glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDisableClientState(GL_VERTEX_ARRAY);*/
+	//END FRAME BUFFER Rendering
+
+	//START VERTICES & INDICES BUFFER Rendering
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_optimized_array_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
+	
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//glVertexPointer(1, GL_FLOAT, 0, NULL);
+
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, &indices_id);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
+
 	//Render
 
 	//Debug Draw (Render)

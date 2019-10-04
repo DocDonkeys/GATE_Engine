@@ -33,5 +33,7 @@ private:
 	bool vSync = true;	//TODO: Save/Load
 
 	uint vertex_array_id = 0; // vertex array ID for example 1 of drawing with vertex buffers
+	uint vertex_optimized_array_id = 0;
+	uint indices_id = 0;
 
 };
