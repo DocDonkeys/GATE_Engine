@@ -412,6 +412,32 @@ bool Application::LoadConfig()
 {
 	bool ret = true;
 
+	// --- Load App data from JSON files ---
+	json config = jLoad.Load("Settings/config.json");
+
+	//App
+	title = config["App"]["Title"].value;
+	organization = config["App"]["Organization"].value;
+
+	//Window
+	window->window_width = config["Window"]["Width"].value;
+	window->window_height = config["Window"]["Height"].value;
+	window->window_fullscreen = config["Window"]["Fullscreen"].value;
+	window->window_resizable = config["Window"]["Resizable"].value;
+	window->window_borderless = config["Window"]["Borderless"].value;
+	window->window_full_desktop = config["Window"]["FullscreenDesktop"].value;
+
+	//Input
+
+	//Renderer
+	renderer3D->vSync = config["Renderer3D"]["VSync"].value;
+
+	//GUI
+	engineGUI->show_demo_window = config["GUI"]["DemoWindow"].value;
+	engineGUI->show_another_window = config["GUI"]["AnotherWindow"].value;
+	engineGUI->show_configuration_window = config["GUI"]["ConfigurationWindow"].value;
+	engineGUI->show_console_window = config["GUI"]["ConsoleWindow"].value;
+
 	return ret;
 }
 
@@ -427,12 +453,12 @@ bool Application::SaveConfig() const
 		}},
 
 		{"Window", {
-			{"width", window->window_width},
-			{"height", window->window_height},
-			{"fullscreen", window->window_fullscreen},
-			{"resizable", window->window_resizable},
-			{"borderless", window->window_borderless},
-			{"fullscreenDesktop", window->window_full_desktop}
+			{"Width", window->window_width},
+			{"Height", window->window_height},
+			{"Fullscreen", window->window_fullscreen},
+			{"Resizable", window->window_resizable},
+			{"Borderless", window->window_borderless},
+			{"FullscreenDesktop", window->window_full_desktop}
 		}},
 
 		{"Input", {
