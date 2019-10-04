@@ -9,6 +9,8 @@
 #include "Globals.h"
 #include "Timer.h"
 #include "RNGenerator.h"
+
+// Modules
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
