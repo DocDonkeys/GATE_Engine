@@ -160,14 +160,14 @@ update_status ModuleEngineGUI::Update(float dt)
 		{
 			ImGui::Text("Icon:");
 
-			if (ImGui::SliderFloat("Brightness", &window_brightness, 0.000f, 1.000f))
-				App->window->ChangeWindowBrightnessTo(window_brightness);
+			if (ImGui::SliderFloat("Brightness", &App->window->window_brightness, 0.000f, 1.000f))
+				App->window->ChangeWindowBrightnessTo(App->window->window_brightness);
 
-			if (ImGui::SliderInt("Width", &window_width, 256, 4096))
-				App->window->ResizeWindow(window_width, window_height);
+			if (ImGui::SliderInt("Width", &App->window->window_width, 256, 4096))
+				App->window->ResizeWindow(App->window->window_width, App->window->window_height);
 
-			if (ImGui::SliderInt("Height", &window_height, 144, 2160))
-				App->window->ResizeWindow(window_width, window_height);
+			if (ImGui::SliderInt("Height", &App->window->window_height, 144, 2160))
+				App->window->ResizeWindow(App->window->window_width, App->window->window_height);
 
 			ImGui::Text("Refresh rate: ");
 			ImGui::SameLine();
@@ -175,21 +175,21 @@ update_status ModuleEngineGUI::Update(float dt)
 
 
 			//Fullscreen
-			if (ImGui::Checkbox("Fullscreen", &window_fullscreen))
-				App->window->WindowSetFullscreen(window_fullscreen);
+			if (ImGui::Checkbox("Fullscreen", &App->window->window_fullscreen))
+				App->window->WindowSetFullscreen(App->window->window_fullscreen);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Resizable", &window_resizable))
-				App->window->WindowSetResizable(window_resizable);
+			if (ImGui::Checkbox("Resizable", &App->window->window_resizable))
+				App->window->WindowSetResizable(App->window->window_resizable);
 
-			if (ImGui::Checkbox("Borderless", &window_borderless))
-				App->window->WindowSetBorderless(window_borderless);
+			if (ImGui::Checkbox("Borderless", &App->window->window_borderless))
+				App->window->WindowSetBorderless(App->window->window_borderless);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Full Desktop", &window_full_desktop))
-				App->window->WindowSetFullscreenDesktop(window_full_desktop);
+			if (ImGui::Checkbox("Full Desktop", &App->window->window_full_desktop))
+				App->window->WindowSetFullscreenDesktop(App->window->window_full_desktop);
 		}
 
 		if (ImGui::CollapsingHeader("Input"))
@@ -311,41 +311,4 @@ void ModuleEngineGUI::RenderGUI()
 	//glClear(GL_COLOR_BUFFER_BIT);	//DIDAC/CARLES: This line renders a plain color over the axis + grid plane of SceneIntro Module
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-// Gets
-int ModuleEngineGUI::GetWinWidth() const
-{
-	return window_width;
-}
-
-int ModuleEngineGUI::GetWinHeight() const
-{
-	return window_height;
-}
-
-int ModuleEngineGUI::GetWinScale() const
-{
-	return window_scale;
-}
-
-// Checks
-bool ModuleEngineGUI::IsFullscreen() const
-{
-	return window_fullscreen;
-}
-
-bool ModuleEngineGUI::IsResizable() const
-{
-	return window_resizable;
-}
-
-bool ModuleEngineGUI::IsBorderless() const
-{
-	return window_borderless;
-}
-
-bool ModuleEngineGUI::IsFullDesktop() const
-{
-	return window_full_desktop;
 }

@@ -1,9 +1,12 @@
 ﻿#include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleWindow.h"
 #include "ModuleInput.h"
+
 #include "libs/glew/include/GL/glew.h"
 #include "libs/SDL/include/SDL_opengl.h"
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -36,11 +39,13 @@ bool ModuleRenderer3D::Init()
 	if(ret == true)
 	{
 		//Use Vsync
-		if (App->renderer3D->IsVSynced() && SDL_GL_SetSwapInterval(1) < 0) {
-			App->ConsoleLOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-			SDL_TriggerBreakpoint();
+		if (App->renderer3D->vSync) {
+			if (SDL_GL_SetSwapInterval(1) < 0) {
+				App->ConsoleLOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+				SDL_TriggerBreakpoint();
+			}
 		}
-
+			
 		//Init OpenGL wth Glew
 		GLenum err = glewInit();
 
@@ -132,7 +137,7 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(App->engineGUI->GetWinWidth(), App->engineGUI->GetWinHeight());
+	OnResize(App->window->window_width, App->window->window_height);
 
 	return ret;
 }
@@ -238,9 +243,4 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-}
-
-bool ModuleRenderer3D::IsVSynced() const
-{
-	return vSync;
 }

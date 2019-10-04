@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleEngineGUI.h"
 
@@ -79,8 +80,8 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-	mouse_x /= App->engineGUI->GetWinScale();
-	mouse_y /= App->engineGUI->GetWinScale();
+	mouse_x /= App->window->window_scale;
+	mouse_y /= App->window->window_scale;
 	mouse_z = 0;
 
 	for(int i = 0; i < 5; ++i)
@@ -114,11 +115,11 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / App->engineGUI->GetWinScale();
-			mouse_y = e.motion.y / App->engineGUI->GetWinScale();
+			mouse_x = e.motion.x / App->window->window_scale;
+			mouse_y = e.motion.y / App->window->window_scale;
 
-			mouse_x_motion = e.motion.xrel / App->engineGUI->GetWinScale();
-			mouse_y_motion = e.motion.yrel / App->engineGUI->GetWinScale();
+			mouse_x_motion = e.motion.xrel / App->window->window_scale;
+			mouse_y_motion = e.motion.yrel / App->window->window_scale;
 			break;
 
 			case SDL_QUIT:

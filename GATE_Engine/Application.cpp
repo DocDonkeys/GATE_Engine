@@ -45,11 +45,12 @@ bool Application::Init()
 {
 	bool ret = true;
 
+	//Load Settings before initializing modules
+	configName.assign("settings/config.json");	//TODO: If config is deleted code breaks, add failsave method that creates new config with default values
+	LoadConfig();
+
 	//Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
-
-	//Load Configuration before initializing modules
-	LoadConfig();
 
 	while (item != list_modules.end())
 	{
@@ -195,15 +196,15 @@ void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Frame
 	BROFILER_CATEGORY("App Finish Update", Profiler::Color::IndianRed);
 
 	//Save
-	if (want_to_save == true) {
+	if (config_save == true) {
 		SaveConfig();
-		want_to_save = false;
+		config_save = false;
 	}
 
 	//Load
-	if (want_to_load == true) {
+	if (config_load == true) {
 		LoadConfig();
-		want_to_load = false;
+		config_load = false;
 	}
 	
 	//Framerate Calcs
@@ -364,19 +365,46 @@ float Application::GetDT() const
 	return dt;
 }
 
-// Save / Load
-void Application::RequestLoad()
+// Save / Load Requests
+void Application::RequestLoad(const char* file)
 {
 	// we should be checking if that file actually exist
 	// from the "GetSaveGames" list
+	projFilename.assign(file);
 	want_to_load = true;
 }
 
-void Application::RequestSave() const
+void Application::RequestSave(const char* file) const
 {
 	// we should be checking if that file actually exist
 	// from the "GetSaveGames" list ... should we overwrite ?
+	projFilename.assign(file);
 	want_to_save = true;
+}
+
+void Application::RequestConfigLoad()
+{
+	config_load = true;
+}
+
+void Application::RequestConfigSave() const
+{
+	config_save = true;
+}
+
+// Save / Load Operations
+bool Application::LoadProject(const char* file)
+{
+	bool ret = true;
+
+	return ret;
+}
+
+bool Application::SaveProject(const char* file) const
+{
+	bool ret = true;
+
+	return ret;
 }
 
 bool Application::LoadConfig()
@@ -390,70 +418,39 @@ bool Application::SaveConfig() const
 {
 	bool ret = true;
 
-	//// --- Create Config with default values ---
-	//json pop = {
-	//	{"Application", {
-	//		{"Title", "GATE"},
-	//		{"Organization", "DocDonkeys (CITM)"}
-	//	}},
+	//Create JSON obj with imported values
+	json config = {
+		{"App", {
+			{"Title", title.c_str()},
+			{"Organization", organization.c_str()}
+		}},
 
-	//	{"GUI", {
-	//		{"Inspector", true},
-	//		{"About", false},
-	//		{"Settings", false},
-	//	}},
+		{"Window", {
+			{"width", window->window_width},
+			{"height", window->window_height},
+			{"fullscreen", window->window_fullscreen},
+			{"resizable", window->window_resizable},
+			{"borderless", window->window_borderless},
+			{"fullscreenDesktop", window->window_full_desktop}
+		}},
 
-	//	{"Window", {
-	//		{"width", 1024},
-	//		{"height", 720},
-	//		{"fullscreen", false},
-	//		{"resizable", true},
-	//		{"borderless", false},
-	//		{"fullscreenDesktop", false}
-	//	}},
+		{"Input", {
 
-	//	{"Input", {
+		}},
 
-	//	}},
+		{"Renderer3D", {
+			{"VSync", renderer3D->vSync}
+		}},
 
-	//	{"Renderer3D", {
-	//		{"VSync", true}
-	//	}},
-	//};
+		{"GUI", {
+			{"DemoWindow", engineGUI->show_demo_window},
+			{"AnotherWindow", engineGUI->show_another_window},
+			{"ConfigurationWindow", engineGUI->show_configuration_window},
+			{"ConsoleWindow", engineGUI->show_console_window},
+		}},
+	};
 
-	//ModuleWindow*		window;
-	//ModuleInput*		input;
-	//ModuleSceneIntro*	scene_intro;
-	//ModuleRenderer3D*	renderer3D;
-	//ModuleCamera3D*		camera;
-	//ModuleEngineGUI*	engineGUI;
-	//ModulePhysics*		physics;
-
-	//json config;
-
-	//config[window->name.c_str()] = 3.141;
-	//config[input->name.c_str()] = 3.141;
-	//config[scene_intro->name.c_str()] = 3.141;
-	//config[renderer3D->name.c_str()] = 3.141;
-	//config[camera->name.c_str()] = 3.141;
-	//config[engineGUI->name.c_str()] = 3.141;
-	//config[physics->name.c_str()] = 3.141;
-
-	//std::string tmp = appName;
-	//config["Application"]["Title"] = tmp;
-	//std::string tmp2 = orgName;
-	//config["Application"]["Organization"] = tmp2;
-
-
-	//std::list<Module*>::const_iterator item = list_modules.begin();
-
-	//while (item != list_modules.end())
-	//{
-	//	(*item)->SaveStatus(config);
-	//	item++;
-	//}
-
-	//JLoader.Save("Settings/EditorConfig.json", config);
+	jLoad.Save(config, configName.c_str());
 
 	return ret;
 }

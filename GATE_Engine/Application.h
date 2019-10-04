@@ -72,18 +72,21 @@ public:
 
 public:
 	// Exposing some properties for reading
-	int GetArgc() const;
-	const char* GetArgv(int index) const;
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
 	float GetDT() const;
 
 	// Load / Save Requests
-	void RequestLoad();
-	void RequestSave() const;
+	void RequestLoad(const char* file);
+	void RequestSave(const char* file) const;
 
+	void RequestConfigLoad();
+	void RequestConfigSave() const;
+
+	//TODO: Didac, title these functions with a comment just like the ones above
 	void RequestBrowser(const char* link);
 	void ConsoleLOG(const char* format,...);
+
 private:
 	// Call module cycle phases in order on App Update() phase
 	update_status PreUpdateModules();
@@ -96,7 +99,14 @@ private:
 	bool LoadConfig();
 	bool SaveConfig() const;
 
+	bool LoadProject(const char* file);
+	bool SaveProject(const char* file) const;
+
 public:
+	//JSON
+	const JsonLoader jLoad;
+	std::string configName;
+
 	//Modules
 	ModuleWindow*		window;
 	ModuleInput*		input;
@@ -111,11 +121,11 @@ public:
 	RNGenerator			rng;
 	bool				mustShutDown = false;
 
-	std::vector<float>	ms_log;
-	std::vector<float>	fps_log;
-	std::vector<std::string> console_LOG;
-	std::vector<std::string> CPU_features;
-	int					max_FPS = -1;
+	std::vector<float>			ms_log;
+	std::vector<float>			fps_log;
+	std::vector<std::string>	console_LOG;
+	std::vector<std::string>	CPU_features;
+	int							max_FPS = -1;
 
 private:
 	//Framerate
@@ -134,8 +144,12 @@ private:
 	std::string			organization;
 
 	//Save & Load
+	mutable std::string	projFilename;
 	mutable bool		want_to_save;
 	bool				want_to_load;
+	
+	mutable bool		config_save;
+	bool				config_load;
 
 	//Modules
 	std::list <Module*> list_modules;

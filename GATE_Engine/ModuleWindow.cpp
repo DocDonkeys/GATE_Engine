@@ -28,8 +28,8 @@ bool ModuleWindow::Init()
 	else
 	{
 		//Create window
-		int width = App->engineGUI->GetWinWidth() * App->engineGUI->GetWinScale();
-		int height = App->engineGUI->GetWinHeight() * App->engineGUI->GetWinScale();
+		int width = App->window->window_width * App->window->window_scale;
+		int height = App->window->window_height * App->window->window_scale;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -41,22 +41,22 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); //the minimum number of bits in the depth buffer; defaults to 16
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8); //the minimum number of bits in the stencil buffer; defaults to 0
 
-		if(App->engineGUI->IsFullscreen() == true)
+		if(App->window->window_fullscreen == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(App->engineGUI->IsResizable() == true)
+		if(App->window->window_resizable == true)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(App->engineGUI->IsBorderless() == true)
+		if(App->window->window_borderless == true)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(App->engineGUI->IsFullDesktop() == true)
+		if(App->window->window_full_desktop == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}

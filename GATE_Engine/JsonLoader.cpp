@@ -6,7 +6,7 @@
 #include <fstream>
 #include <iomanip>
 
-bool JsonLoader::Save(json obj, const char* file)
+bool JsonLoader::Save(json obj, const char* file) const
 {
 	bool ret = true;
 
@@ -14,7 +14,7 @@ bool JsonLoader::Save(json obj, const char* file)
 		SDL_TriggerBreakpoint();	//TODO: Prompt a "Save As" UI
 	}
 	else {
-		std::ofstream stream(file);
+		std::ofstream stream(file, std::ofstream::out);
 		SDL_assert(stream.is_open());
 
 		stream << std::setw(4) << obj << std::endl;
@@ -29,7 +29,7 @@ json JsonLoader::Load(const char* file) const
 	SDL_assert(file != nullptr);
 
 	json obj;
-	std::ifstream stream(file);
+	std::ifstream stream(file, std::ifstream::in);
 	SDL_assert(stream.is_open());
 
 	try {
