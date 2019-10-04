@@ -17,7 +17,7 @@ bool JsonLoader::Save(json obj, const char* file) const
 		std::ofstream stream(file, std::ofstream::out);
 		SDL_assert(stream.is_open());
 
-		stream << std::setw(4) << obj << std::endl;
+		stream << std::setw(2) << obj << std::endl;
 		stream.close();
 	}
 	
