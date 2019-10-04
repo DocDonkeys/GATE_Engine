@@ -148,6 +148,9 @@ update_status ModuleEngineGUI::Update(float dt)
 			if (ImGui::MenuItem("Show UI Demo"))
 				show_demo_window = true;
 
+			if (ImGui::MenuItem("Generate Random Game"))
+				App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
 			ImGui::Separator();
 
 			if (ImGui::MenuItem("Documentation"))
@@ -160,6 +163,9 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			if (ImGui::MenuItem("Report Bug / Suggest Feature"))
 				App->RequestBrowser("https://github.com/DocDonkeys/GATE/issues");
+
+			if (ImGui::MenuItem("Give us Feedback!"))
+				App->RequestBrowser("https://www.youtube.com/watch?v=8o6c1UuoMwI");
 
 			if (ImGui::MenuItem("Contact us!"))
 				App->RequestBrowser("https://github.com/DocDonkeys/");
