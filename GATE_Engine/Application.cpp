@@ -46,8 +46,8 @@ bool Application::Init()
 	bool ret = true;
 
 	//Load Settings before initializing modules
-	configName.assign("settings/config.json");	//TODO: If config is deleted code breaks, add failsave method that creates new config with default values
-	LoadConfig();
+	configName.assign(CONFIG_FILENAME);
+	LoadConfig();	//TODO: If config is deleted code breaks, add failsave method that creates new config with default values inside settings folder
 
 	//Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
@@ -413,30 +413,30 @@ bool Application::LoadConfig()
 	bool ret = true;
 
 	// --- Load App data from JSON files ---
-	//json config = jLoad.Load("settings/config.json");
+	json config = jLoad.Load(configName.c_str());
 
 	//App
-	//title.assign(config["App"]["Title"].get<std::string>());
-	//organization = config["App"]["Organization"].value;
+	title = config["App"]["Title"].get<std::string>();
+	organization = config["App"]["Organization"].get<std::string>();
 
-	////Window
-	//window->window_width = config["Window"]["Width"].value;
-	//window->window_height = config["Window"]["Height"].value;
-	//window->window_fullscreen = config["Window"]["Fullscreen"].value;
-	//window->window_resizable = config["Window"]["Resizable"].value;
-	//window->window_borderless = config["Window"]["Borderless"].value;
-	//window->window_full_desktop = config["Window"]["FullscreenDesktop"].value;
+	//Window
+	window->window_width = config["Window"]["Width"].get<int>();
+	window->window_height = config["Window"]["Height"].get<int>();
+	window->window_fullscreen = config["Window"]["Fullscreen"].get<bool>();
+	window->window_resizable = config["Window"]["Resizable"].get<bool>();
+	window->window_borderless = config["Window"]["Borderless"].get<bool>();
+	window->window_full_desktop = config["Window"]["FullscreenDesktop"].get<bool>();
 
-	////Input
+	//Input
 
-	////Renderer
-	//renderer3D->vSync = config["Renderer3D"]["VSync"].value;
+	//Renderer
+	renderer3D->vSync = config["Renderer3D"]["VSync"].get<bool>();
 
-	////GUI
-	//engineGUI->show_demo_window = config["GUI"]["DemoWindow"].value;
-	//engineGUI->show_another_window = config["GUI"]["AnotherWindow"].value;
-	//engineGUI->show_configuration_window = config["GUI"]["ConfigurationWindow"].value;
-	//engineGUI->show_console_window = config["GUI"]["ConsoleWindow"].value;
+	//GUI
+	engineGUI->show_demo_window = config["GUI"]["DemoWindow"].get<bool>();
+	engineGUI->show_another_window = config["GUI"]["AnotherWindow"].get<bool>();
+	engineGUI->show_configuration_window = config["GUI"]["ConfigurationWindow"].get<bool>();
+	engineGUI->show_console_window = config["GUI"]["ConsoleWindow"].get<bool>();
 
 	return ret;
 }

@@ -1,0 +1,24 @@
+{
+    "App": {
+        "Organization": "DocDonkeys (CITM)",
+        "Title": "GATE Engine"
+    },
+    "GUI": {
+        "AnotherWindow": false,
+        "ConfigurationWindow": false,
+        "ConsoleWindow": false,
+        "DemoWindow": false
+    },
+    "Input": null,
+    "Renderer3D": {
+        "VSync": true
+    },
+    "Window": {
+        "Borderless": false,
+        "Fullscreen": false,
+        "FullscreenDesktop": false,
+        "Height": 1024,
+        "Resizable": true,
+        "Width": 1280
+    }
+}
