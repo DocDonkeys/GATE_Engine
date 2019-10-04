@@ -67,9 +67,51 @@ update_status ModuleEngineGUI::Update(float dt)
 	//Main toolbar
 	if (ImGui::BeginMainMenuBar()) {
 
+		// File: Options for file and App management
 		if (ImGui::BeginMenu("File", true)) {
 
-			if (ImGui::MenuItem("Exit", "(Esc)", false, true)) {
+			if (ImGui::BeginMenu("New Scene", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Open Scene", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::BeginMenu("Save", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Save As...", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::BeginMenu("New Project", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Open Project", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Save Project", true)) {
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Exit", "(Alt+F4)", false, true)) {
 
 				return update_status::UPDATE_STOP;
 			}
@@ -77,34 +119,50 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Tools", true)) {
+		// Edit: Tools for easier edition
+		if (ImGui::BeginMenu("Edit", true)) {
+
+			ImGui::EndMenu();
+		}
+		
+		// Assets: Create premade objects and primitives
+		if (ImGui::BeginMenu("Assets", true)) {
 
 			ImGui::EndMenu();
 		}
 
+		// View: Display options
 		if (ImGui::BeginMenu("View", true)) {
 
-			if (ImGui::MenuItem("Console 1"))
+			if (ImGui::MenuItem("Show Console", "1"))
 				show_console_window = !show_console_window;
 
-			if (ImGui::MenuItem("Configuration 4"))
+			if (ImGui::MenuItem("Show Configuration", "4"))
 				show_configuration_window = !show_configuration_window;
 			ImGui::EndMenu();
 		}
 
+		// Help: Information & Documentation
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("Gui Demo"))
+			if (ImGui::MenuItem("Show UI Demo"))
 				show_demo_window = true;
+
+			ImGui::Separator();
 
 			if (ImGui::MenuItem("Documentation"))
 				App->RequestBrowser("https://github.com/DocDonkeys/GATE/wiki");
 
-			if (ImGui::MenuItem("Download latest"))
+			if (ImGui::MenuItem("Download Latest Version"))
 				App->RequestBrowser("https://github.com/DocDonkeys/GATE/releases");
 
-			if (ImGui::MenuItem("Report a Bug / Suggest an improvement"))
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Report Bug / Suggest Feature"))
 				App->RequestBrowser("https://github.com/DocDonkeys/GATE/issues");
+
+			if (ImGui::MenuItem("Contact us!"))
+				App->RequestBrowser("https://github.com/DocDonkeys/");
 
 			//if (ImGui::MenuItem("About"))
 			ImGui::EndMenu();
