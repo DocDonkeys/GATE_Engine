@@ -30,7 +30,7 @@ bool ModuleEngineGUI::Init()
 
 bool ModuleEngineGUI::Start()
 {
-
+	
 	return true;
 }
 
@@ -175,6 +175,10 @@ update_status ModuleEngineGUI::Update(float dt)
 		}
 	}
 	ImGui::EndMainMenuBar();
+
+	//TEST IMGUI CONSOLE
+	if(show_imgui_console)
+	console.Draw("GATE Console",&show_imgui_console);
 
 	//CONSOLE MENU
 	if (show_console_window)

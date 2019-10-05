@@ -13,6 +13,8 @@
 
 #include "libs/glew/include/GL/glew.h"
 
+#include "Console.h"
+
 class ModuleEngineGUI : public Module
 {
 public:
@@ -32,6 +34,9 @@ public: // Vars
 	bool show_another_window = false;
 	bool show_configuration_window = false;
 	bool show_console_window = false;
+	bool show_imgui_console = true;
+
+	AppConsole console;
 
 private:
 	ImGuiIO* io = nullptr;

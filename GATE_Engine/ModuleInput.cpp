@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleEngineGUI.h"
+#include "libs/imgui-1.72b/imgui_impl_sdl.h"
 
 #define MAX_KEYS 300
 
@@ -149,6 +150,9 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 				break;
 		}
+
+		//Pass the event to IMGUI for input and scrolling purposes
+		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 
 	return UPDATE_CONTINUE;

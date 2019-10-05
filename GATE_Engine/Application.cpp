@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "ModuleEngineGUI.h"
 
 Application::Application()
 {
@@ -273,11 +274,12 @@ void Application::ConsoleLOG(const char * format, ...)
 	sprintf_s(tmp_string2, 4096, "%s", tmp_string);
 	OutputDebugString(tmp_string2);
 	// First we do  a normal LOG to VS using a modified LOG that just returns the LOG message
-	std::string str = tmp_string2;
+	const char* str = tmp_string2;
 	
 	
 	//Now we can pass the string to the vector
 	console_LOG.push_back(str);
+	engineGUI->console.AddLog(str);
 }
 
 // PreUpdate all modules in App

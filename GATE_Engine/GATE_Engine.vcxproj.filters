@@ -30,9 +30,6 @@
     <ClCompile Include="log.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleEngineGUI.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="ModulePhysics.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
@@ -75,6 +72,9 @@
     <ClCompile Include="PerfTimer.cpp">
       <Filter>Sources\Tools\Timers</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleEngineGUI.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -108,9 +108,6 @@
     </ClInclude>
     <ClInclude Include="p2Defs.h">
       <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleEngineGUI.h">
-      <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModulePhysics.h">
       <Filter>Sources\Modules</Filter>
@@ -169,6 +166,12 @@
     <ClInclude Include="PerfTimer.h">
       <Filter>Sources\Tools\Timers</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleEngineGUI.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Sources\Modules\GUI\GUI_Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -200,6 +203,12 @@
     </Filter>
     <Filter Include="Sources\Tools\Timers">
       <UniqueIdentifier>{61bea379-fbac-400a-b9cb-23c2a43f70b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\GUI">
+      <UniqueIdentifier>{61858fd1-2fe6-4273-ba32-d55dfc1409bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\GUI\GUI_Elements">
+      <UniqueIdentifier>{96d80fa6-dbf7-46f2-8521-2803950057db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
