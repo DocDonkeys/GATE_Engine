@@ -33,4 +33,8 @@ public:
 	uint vertex_optimized_array_id = 0;
 	uint indices_id = 0;
 
+	//JUST TO SHOW THE SQUARES ROTATE, MUST BE REMOVED WHEN NO LONGER REQUIRED
+	float x_rot, y_rot, z_rot = 1.f;
+	float angle_rot = 0.0f;
+
 };
