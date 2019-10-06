@@ -354,15 +354,24 @@ void Application::AddModule(Module* mod)
 // Get App data
 const char* Application::GetTitle() const
 {
-	return title.data();
+	return title.c_str();
 }
 
 const char* Application::GetOrganization() const
 {
-	return organization.data();
+	return organization.c_str();
 }
 
-// ---------------------------------------
+const char* Application::GetLicense() const
+{
+	return license.c_str();
+}
+
+const char* Application::GetAuthors() const
+{
+	return authors.c_str();
+}
+
 float Application::GetDT() const
 {
 	return dt;
@@ -420,6 +429,8 @@ bool Application::LoadConfig()
 	//App
 	title = config["App"]["Title"].get<std::string>();
 	organization = config["App"]["Organization"].get<std::string>();
+	authors = config["App"]["Authors"].get<std::string>();
+	license = config["App"]["License"].get<std::string>();
 
 	//Window
 	window->window_width = config["Window"]["Width"].get<int>();
@@ -451,7 +462,9 @@ bool Application::SaveConfig() const
 	json config = {
 		{"App", {
 			{"Title", title.c_str()},
-			{"Organization", organization.c_str()}
+			{"Organization", organization.c_str()},
+			{"Authors", authors.c_str()},
+			{"License", license.c_str()}
 		}},
 
 		{"Window", {

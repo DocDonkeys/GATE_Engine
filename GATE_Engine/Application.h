@@ -76,6 +76,8 @@ public:
 	// Exposing some properties for reading
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
+	const char* GetAuthors() const;
+	const char* GetLicense() const;
 	float GetDT() const;
 
 	// Load / Save Requests
@@ -144,6 +146,8 @@ private:
 	//App data
 	std::string			title;
 	std::string			organization;
+	std::string			authors;
+	std::string			license;
 
 	//Save & Load
 	mutable std::string	projFilename;

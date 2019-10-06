@@ -29,12 +29,13 @@ public:
 
 public: // Vars
 
-	// Bools to show / hide or open / close windows
+	// Bools to show / hide or open / close windows	//TODO: Should all of them be public? There's probably going to be a lot of flags which shouldn't be able to be triggered outside it's context
 	bool show_demo_window = false;
 	bool show_another_window = false;
 	bool show_configuration_window = false;
 	bool show_console_window = false;
 	bool show_imgui_console = true;
+	bool show_about_window = true;
 
 	AppConsole console;
 

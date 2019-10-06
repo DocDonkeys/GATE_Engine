@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include "Application.h"
 #include "Globals.h"
+#include "Application.h"
 
 // Old school memory leak detector (mmgr)
 #ifdef _DEBUG

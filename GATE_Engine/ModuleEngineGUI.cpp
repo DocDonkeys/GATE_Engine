@@ -139,17 +139,77 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			if (ImGui::MenuItem("Show Configuration", "4"))
 				show_configuration_window = !show_configuration_window;
+
+			if (ImGui::BeginMenu("DevTools")) {
+				if (ImGui::MenuItem("Show UI Demo"))
+					show_demo_window = !show_demo_window;
+
+				if (ImGui::MenuItem("Generate Random Game"))
+					App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenu();
 		}
 
 		// Help: Information & Documentation
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("Show UI Demo"))
-				show_demo_window = true;
+			if (ImGui::Button("About GATE...")) {
+				show_about_window = true;
+				ImGui::OpenPopup("About this engine...");
+			}
 
-			if (ImGui::MenuItem("Generate Random Game"))
-				App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+			if (ImGui::BeginPopupModal("About this engine...", &show_about_window, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::Text("%s\nA simple engine for 3D game development.\nBy %s, %s", App->GetTitle(), App->GetAuthors(), App->GetOrganization());
+				ImGui::Separator();
+
+				ImGui::Text("3rd Party Libraries used:\n");
+				ImGui::Bullet();
+				if (ImGui::SmallButton("STL (C++11)")) {
+					App->RequestBrowser("https://www.geeksforgeeks.org/the-c-standard-template-library-stl/");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("SDL (v2.0)")) {
+					App->RequestBrowser("https://www.libsdl.org/");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("OpenGL (v3.1.0)")) {
+					App->RequestBrowser("https://www.opengl.org/");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("Brofiler (v1.1.2)")) {
+					App->RequestBrowser("http://www.brofiler.com/");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("Dear ImGui (v1.72b)")) {
+					App->RequestBrowser("https://github.com/ocornut/imgui");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("JSON for Modern C++ (v3.7.0)")) {
+					App->RequestBrowser("https://github.com/nlohmann/json");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("MathGeoLib (v1.5)")) {
+					App->RequestBrowser("https://github.com/juj/MathGeoLib");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("glew (v2.0)")) {
+					App->RequestBrowser("http://glew.sourceforge.net/");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("mmgr")) {
+					App->RequestBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
+				}
+
+				ImGui::Separator();
+
+				ImGui::Text(App->GetLicense());
+
+				ImGui::EndPopup();
+			}
 
 			ImGui::Separator();
 
@@ -169,11 +229,13 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			if (ImGui::MenuItem("Contact us!"))
 				App->RequestBrowser("https://github.com/DocDonkeys/");
+	
+			
 
-			//if (ImGui::MenuItem("About"))
 			ImGui::EndMenu();
 		}
 	}
+
 	ImGui::EndMainMenuBar();
 
 	//TEST IMGUI CONSOLE
