@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "libs/par/par_shapes.h"
 
 #include "libs/glew/include/GL/glew.h"
 #include "libs/SDL/include/SDL_opengl.h"
@@ -219,7 +220,7 @@ bool ModuleRenderer3D::Start()
 
 	glGenBuffers(1, (GLuint*) &(vertex_optimized_array_id));
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_optimized_array_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 108, vertex_array_findexing, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, vertex_array_findexing, GL_STATIC_DRAW);
 
 	glGenBuffers(1, (GLuint*) &(indices_id));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
@@ -380,14 +381,15 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glLineWidth(1.0f);
 
 	//END of DIRECT MODE rendering
-	//glRotatef(angle_rot, 0, 1, 0);
-	////START FRAME BUFFER Rendering
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	//glDrawArrays(GL_TRIANGLES, 0, 36);
-	//glDisableClientState(GL_VERTEX_ARRAY);
+	glRotatef(angle_rot, 0, 1, 0);
+	//START FRAME BUFFER Rendering
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDisableClientState(GL_VERTEX_ARRAY);
 	//END FRAME BUFFER Rendering
 
 	glRotatef(angle_rot, 0, 1, 0);
