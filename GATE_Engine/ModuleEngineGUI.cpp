@@ -206,7 +206,9 @@ update_status ModuleEngineGUI::Update(float dt)
 
 				ImGui::Separator();
 
+				ImGui::PushTextWrapPos(600.0f);
 				ImGui::Text(App->GetLicense());
+				ImGui::PopTextWrapPos();
 
 				ImGui::EndPopup();
 			}

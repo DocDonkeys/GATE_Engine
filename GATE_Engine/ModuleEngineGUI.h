@@ -39,6 +39,9 @@ public: // Vars
 
 	AppConsole console;
 
+	//UI values
+	float max_text_width = 600.0f;	//TODO: Should this exist? Do we have a "saveguard" threshold forbiden to overbound or do we go on a case by case basis with no predefined limit?
+
 private:
 	ImGuiIO* io = nullptr;
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f); //Black
