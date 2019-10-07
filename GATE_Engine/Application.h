@@ -84,8 +84,9 @@ public:
 	void RequestLoad(const char* file);
 	void RequestSave(const char* file) const;
 
-	void RequestConfigLoad();
 	void RequestConfigSave() const;
+	void RequestConfigLoad();
+	void RequestConfigReset();
 
 	//TODO: Didac, title these functions with a comment just like the ones above
 	void RequestBrowser(const char* link);
@@ -99,8 +100,15 @@ private:
 
 	void AddModule(Module* mod);
 
+	// Grouped Operations
+	void CheckFileEditRequests();
+	void FramerateLogic();
+
 	// Load / Save Operations
-	bool LoadConfig();
+	bool LoadDefaultConfig();
+	bool LoadUserConfig();
+	
+	bool LoadConfig(json& obj);
 	bool SaveConfig() const;
 
 	bool LoadProject(const char* file);
@@ -109,7 +117,8 @@ private:
 public:
 	//JSON
 	const JsonLoader jLoad;
-	std::string configName;
+	std::string defaultConfig;
+	std::string editableConfig;
 
 	//Modules
 	ModuleWindow*		window;
@@ -144,10 +153,10 @@ private:
 	int					capped_ms = -1;
 
 	//App data
-	std::string			title;
-	std::string			organization;
-	std::string			authors;
-	std::string			license;
+	std::string	title;
+	std::string	organization;
+	std::string	authors;
+	std::string	license;
 
 	//Save & Load
 	mutable std::string	projFilename;
@@ -156,6 +165,7 @@ private:
 	
 	mutable bool		config_save;
 	bool				config_load;
+	bool				config_reset;
 
 	//Modules
 	std::list <Module*> list_modules;

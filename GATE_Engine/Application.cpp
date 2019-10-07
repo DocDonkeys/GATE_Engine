@@ -47,8 +47,9 @@ bool Application::Init()
 	bool ret = true;
 
 	//Load Settings before initializing modules
-	configName.assign(CONFIG_FILENAME);
-	LoadConfig();	//TODO: If config is deleted code breaks, add failsave method that creates new config with default values inside settings folder
+	editableConfig.assign(CONFIG_FILENAME);
+	defaultConfig.assign(DEFAULT_CONFIG_FILENAME);
+	LoadUserConfig();	//TODO: If config is deleted code breaks, add failsave method that creates new config with default values inside settings folder
 
 	//Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
@@ -197,56 +198,13 @@ void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Frame
 {
 	BROFILER_CATEGORY("App Finish Update", Profiler::Color::IndianRed);
 
-	//Save
-	if (config_save == true) {
-		SaveConfig();
-		config_save = false;
-	}
-
-	//Load
-	if (config_load == true) {
-		LoadConfig();
-		config_load = false;
-	}
+	//Process Save&Load
+	CheckFileEditRequests();
 	
-	//Framerate Calcs
-	if (last_sec_frame_time.Read() > 1000) {
+	//Framerate Calculations
+	FramerateLogic();
 
-		last_sec_frame_time.Start();
-		prev_last_sec_frame_count = last_sec_frame_count;
-		last_sec_frame_count = 0;
-	}
-
-	//For performance information purposes
-	float avg_fps = float(frame_count) / time_since_start.ReadSec();
-	float secs_since_start = time_since_start.ReadSec();
-	Uint32 last_frame_ms = frame_time.Read();
-	Uint32 frames_on_last_update = prev_last_sec_frame_count;
-
-	BROFILER_CATEGORY("App Delay", Profiler::Color::Gray);
-
-	// Update the fps Log
-	fps_log.push_back(prev_last_sec_frame_count);
-	if (fps_log.size() > 100)
-	{
-		fps_log.erase(fps_log.begin());
-	}
-
-	// Update the ms Log
-	ms_log.push_back(last_frame_ms);
-	if (ms_log.size() > 100)
-	{
-		ms_log.erase(ms_log.begin());
-	}
-
-	if (max_FPS > 0)
-		capped_ms = 1000 / max_FPS;
-	else
-		capped_ms = -1;
-
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
-		SDL_Delay(capped_ms - last_frame_ms);
-
+	//CHANGE/FIX: Put corner FPS number
 	/*if (map->mapDebugDraw) {
 		std::string tmp = std::to_string(prev_last_sec_frame_count);
 		gui->fpsText->ChangeString(tmp);
@@ -262,7 +220,6 @@ void Application::RequestBrowser(const char* link)
 
 void Application::ConsoleLOG(const char * format, ...)
 {
-
 	static char tmp_string[4096];
 	static char tmp_string2[4096];
 	static va_list  ap;
@@ -275,7 +232,6 @@ void Application::ConsoleLOG(const char * format, ...)
 	OutputDebugString(tmp_string2);
 	// First we do  a normal LOG to VS using a modified LOG that just returns the LOG message
 	const char* str = tmp_string2;
-	
 	
 	//Now we can pass the string to the vector
 	console_LOG.push_back(str);
@@ -351,6 +307,69 @@ void Application::AddModule(Module* mod)
 	list_modules.push_back(mod);
 }
 
+// Grouped Operations
+void Application::CheckFileEditRequests()
+{
+	//Save
+	if (config_save == true) {
+		SaveConfig();
+		config_save = false;
+	}
+
+	//Load
+	if (config_load == true) {
+		LoadUserConfig();
+		config_load = false;
+	}
+
+	//Reset
+	if (config_reset == true) {
+		LoadDefaultConfig();
+		config_reset = false;
+	}
+}
+
+void Application::FramerateLogic()
+{
+	//Framerate Calcs
+	if (last_sec_frame_time.Read() > 1000) {
+
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
+
+	//For performance information purposes
+	float avg_fps = float(frame_count) / time_since_start.ReadSec();
+	float secs_since_start = time_since_start.ReadSec();
+	Uint32 last_frame_ms = frame_time.Read();
+	Uint32 frames_on_last_update = prev_last_sec_frame_count;
+
+	BROFILER_CATEGORY("App Delay", Profiler::Color::Gray);
+
+	// Update the fps Log
+	fps_log.push_back(prev_last_sec_frame_count);
+	if (fps_log.size() > 100)
+	{
+		fps_log.erase(fps_log.begin());
+	}
+
+	// Update the ms Log
+	ms_log.push_back(last_frame_ms);
+	if (ms_log.size() > 100)
+	{
+		ms_log.erase(ms_log.begin());
+	}
+
+	if (max_FPS > 0)
+		capped_ms = 1000 / max_FPS;
+	else
+		capped_ms = -1;
+
+	if (capped_ms > 0 && last_frame_ms < capped_ms)
+		SDL_Delay(capped_ms - last_frame_ms);
+}
+
 // Get App data
 const char* Application::GetTitle() const
 {
@@ -394,14 +413,19 @@ void Application::RequestSave(const char* file) const
 	want_to_save = true;
 }
 
+void Application::RequestConfigSave() const
+{
+	config_save = true;
+}
+
 void Application::RequestConfigLoad()
 {
 	config_load = true;
 }
 
-void Application::RequestConfigSave() const
+void Application::RequestConfigReset()
 {
-	config_save = true;
+	config_reset = true;
 }
 
 // Save / Load Operations
@@ -419,37 +443,42 @@ bool Application::SaveProject(const char* file) const
 	return ret;
 }
 
-bool Application::LoadConfig()
+bool Application::LoadDefaultConfig()
+{
+	json config = jLoad.Load(defaultConfig.c_str());
+	return LoadConfig(config);
+}
+
+bool Application::LoadUserConfig()
+{
+	json config = jLoad.Load(editableConfig.c_str());
+	return LoadConfig(config);
+}
+
+bool Application::LoadConfig(json& obj)
 {
 	bool ret = true;
 
-	// --- Load App data from JSON files ---
-	json config = jLoad.Load(configName.c_str());
-
 	//App
-	title = config["App"]["Title"].get<std::string>();
-	organization = config["App"]["Organization"].get<std::string>();
-	authors = config["App"]["Authors"].get<std::string>();
-	license = config["App"]["License"].get<std::string>();
+	title = obj["App"]["Title"].get<std::string>();
+	organization = obj["App"]["Organization"].get<std::string>();
+	authors = obj["App"]["Authors"].get<std::string>();
+	license = obj["App"]["License"].get<std::string>();
 
 	//Window
-	window->window_width = config["Window"]["Width"].get<int>();
-	window->window_height = config["Window"]["Height"].get<int>();
-	window->window_fullscreen = config["Window"]["Fullscreen"].get<bool>();
-	window->window_resizable = config["Window"]["Resizable"].get<bool>();
-	window->window_borderless = config["Window"]["Borderless"].get<bool>();
-	window->window_full_desktop = config["Window"]["FullscreenDesktop"].get<bool>();
+	window->window_width = obj["Window"]["Width"].get<int>();
+	window->window_height = obj["Window"]["Height"].get<int>();
+	window->window_fullscreen = obj["Window"]["Fullscreen"].get<bool>();
+	window->window_resizable = obj["Window"]["Resizable"].get<bool>();
+	window->window_borderless = obj["Window"]["Borderless"].get<bool>();
+	window->window_full_desktop = obj["Window"]["FullscreenDesktop"].get<bool>();
 
 	//Input
 
 	//Renderer
-	renderer3D->vSync = config["Renderer3D"]["VSync"].get<bool>();
+	renderer3D->vSync = obj["Renderer3D"]["VSync"].get<bool>();
 
 	//GUI
-	engineGUI->show_demo_window = config["GUI"]["DemoWindow"].get<bool>();
-	engineGUI->show_another_window = config["GUI"]["AnotherWindow"].get<bool>();
-	engineGUI->show_configuration_window = config["GUI"]["ConfigurationWindow"].get<bool>();
-	engineGUI->show_console_window = config["GUI"]["ConsoleWindow"].get<bool>();
 
 	return ret;
 }
@@ -485,14 +514,11 @@ bool Application::SaveConfig() const
 		}},
 
 		{"GUI", {
-			{"DemoWindow", engineGUI->show_demo_window},
-			{"AnotherWindow", engineGUI->show_another_window},
-			{"ConfigurationWindow", engineGUI->show_configuration_window},
-			{"ConsoleWindow", engineGUI->show_console_window},
+
 		}},
 	};
 
-	jLoad.Save(config, configName.c_str());
+	jLoad.Save(config, editableConfig.c_str());
 
 	return ret;
 }

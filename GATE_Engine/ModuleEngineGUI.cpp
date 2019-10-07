@@ -196,7 +196,7 @@ update_status ModuleEngineGUI::Update(float dt)
 		// Settings: Engine confiuration settings
 		if (ImGui::BeginMenu("Settings", true)) {
 
-			if (ImGui::MenuItem("Open Settings", "4"))	//CHANGE/FIX: Change shortcut from 4 to something more intuitive
+			if (ImGui::MenuItem("Open Configuration", "4"))	//CHANGE/FIX: Change shortcut from 4 to something more intuitive
 				show_configuration_window = !show_configuration_window;
 
 			ImGui::EndMenu();
@@ -312,16 +312,40 @@ update_status ModuleEngineGUI::Update(float dt)
 
 		if (ImGui::BeginMenu("Options"))
 		{
-			ImGui::MenuItem("Set Defaults");
-			ImGui::MenuItem("Save");
-			ImGui::MenuItem("Load");
+			if (ImGui::MenuItem("Save")) {
+				App->RequestConfigSave();
+			}
+
+			if (ImGui::MenuItem("Load")) {
+				App->RequestConfigLoad();
+			}
+
+			if (ImGui::Button("Reset Defaults")) {
+				ImGui::OpenPopup("Are you sure?");
+			}
+
+			if (ImGui::BeginPopup("Are you sure?"))
+			{
+				ImGui::Text("Are you sure?");
+
+				if (ImGui::Button("Yes")) {
+					App->RequestConfigReset();
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (ImGui::Button("Cancel")) {
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
 
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::CollapsingHeader("Application"))
 		{
-			static char str0[128] = "Add name and functions!";
+			static char str0[128] = "Add name and functions!";	//CHANGE/FIX: Ask Marc what's the point of this, because doing it right requires work that feels unnecesary
 			ImGui::InputText("App Name", str0, IM_ARRAYSIZE(str0));
 
 			static char str1[128] = "Add organization and functions!";
@@ -460,7 +484,6 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			ImGui::Text("VRAM Reserved: ");
 		}
-
 
 		ImGui::End();
 	}

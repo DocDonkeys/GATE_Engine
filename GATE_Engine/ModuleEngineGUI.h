@@ -35,14 +35,17 @@ public: // Vars
 	bool show_configuration_window = false;
 	bool show_console_window = false;		//CHANGE/FIX: Delete, imgui console is the same but better
 	bool show_imgui_console = false;
-	bool show_about_window = true;
+	
 
 	AppConsole console;
 
+private:
 	//UI values
 	float standard_text_width = 600.0f;	//Default/max text width
 
-private:
+	//UI flags
+	bool show_about_window = true;
+
 	ImGuiIO* io = nullptr;
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.00f); //Black
 
