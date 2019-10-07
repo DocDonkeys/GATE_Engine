@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "SolidSphere.h" //CHANGE/FIX if we end up having a primitives header change this
 
 class ModuleSceneIntro : public Module
 {
@@ -10,6 +11,7 @@ public:
 
 	bool Start();
 	update_status Update(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 
 public:
@@ -17,4 +19,5 @@ public:
 
 public:
 	//members
+	SolidSphere* sphere = nullptr;
 };

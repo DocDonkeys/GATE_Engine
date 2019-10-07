@@ -172,6 +172,9 @@
     <ClInclude Include="Console.h">
       <Filter>Sources\Modules\GUI\GUI_Elements</Filter>
     </ClInclude>
+    <ClInclude Include="SolidSphere.h">
+      <Filter>Sources\Tools\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -209,6 +212,9 @@
     </Filter>
     <Filter Include="Sources\Modules\GUI\GUI_Elements">
       <UniqueIdentifier>{96d80fa6-dbf7-46f2-8521-2803950057db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Primitives">
+      <UniqueIdentifier>{e27285dc-d11e-4471-a423-94ceb6e61b8d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

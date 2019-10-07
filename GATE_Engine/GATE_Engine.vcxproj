@@ -81,6 +81,7 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="JsonLoader.h" />
     <ClInclude Include="libs\glew\include\GL\glew.h" />
     <ClInclude Include="libs\imgui-1.72b\examples\libs\glfw\include\GLFW\glfw3.h" />
