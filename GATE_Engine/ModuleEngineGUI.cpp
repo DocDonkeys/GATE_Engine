@@ -70,48 +70,41 @@ update_status ModuleEngineGUI::Update(float dt)
 		// File: Options for file and App management
 		if (ImGui::BeginMenu("File", true)) {
 
-			if (ImGui::BeginMenu("New Scene", true)) {
+			if (ImGui::MenuItem("New Scene", "Ctrl+N")) {
 
-				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Open Scene", true)) {
+			if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
 
-				ImGui::EndMenu();
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::BeginMenu("Save", true)) {
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Save As...", true)) {
-
-				ImGui::EndMenu();
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::BeginMenu("New Project", true)) {
+			if (ImGui::MenuItem("Save", "Ctrl+S")) {
 
-				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Open Project", true)) {
+			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
 
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Save Project", true)) {
-
-				ImGui::EndMenu();
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("Exit", "(Alt+F4)", false, true)) {
+			if (ImGui::MenuItem("New Project", "Ctrl+Shift+N")) {
+
+			}
+
+			if (ImGui::MenuItem("Open Project", "Ctrl+Shift+O")) {
+				
+			}
+
+			if (ImGui::MenuItem("Save Project")) {
+				
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Exit", "(Alt+F4)", false)) {
 
 				return update_status::UPDATE_STOP;
 			}
@@ -121,6 +114,56 @@ update_status ModuleEngineGUI::Update(float dt)
 
 		// Edit: Tools for easier edition
 		if (ImGui::BeginMenu("Edit", true)) {
+
+			if (ImGui::MenuItem("Undo", "Ctrl+Z")) {
+
+			}
+
+			if (ImGui::MenuItem("Redo", "Ctrl+Y")) {
+
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Select All", "Ctrl+A")) {
+
+			}
+
+			if (ImGui::MenuItem("Deselect All", "Shift+D")) {
+
+			}
+
+			if (ImGui::MenuItem("Select Children", "Shift+C")) {
+
+			}
+
+			if (ImGui::MenuItem("Invert Selection", "Ctrl+I")) {
+
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Duplicate", "Ctrl+D")) {
+
+			}
+
+			if (ImGui::MenuItem("Delete", "Supr")) {
+
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Play", "Ctrl+P")) {
+
+			}
+
+			if (ImGui::MenuItem("Pause", "Ctrl+Shift+P")) {
+
+			}
+
+			if (ImGui::MenuItem("Step", "Ctrl+Alt+P")) {
+
+			}
 
 			ImGui::EndMenu();
 		}
@@ -135,10 +178,7 @@ update_status ModuleEngineGUI::Update(float dt)
 		if (ImGui::BeginMenu("View", true)) {
 
 			if (ImGui::MenuItem("Show Console", "1"))
-				show_console_window = !show_console_window;
-
-			if (ImGui::MenuItem("Show Configuration", "4"))
-				show_configuration_window = !show_configuration_window;
+				show_imgui_console = !show_imgui_console;
 
 			if (ImGui::BeginMenu("DevTools")) {
 				if (ImGui::MenuItem("Show UI Demo"))
@@ -149,6 +189,15 @@ update_status ModuleEngineGUI::Update(float dt)
 
 				ImGui::EndMenu();
 			}
+
+			ImGui::EndMenu();
+		}
+
+		// Settings: Engine confiuration settings
+		if (ImGui::BeginMenu("Settings", true)) {
+
+			if (ImGui::MenuItem("Open Settings", "4"))	//CHANGE/FIX: Change shortcut from 4 to something more intuitive
+				show_configuration_window = !show_configuration_window;
 
 			ImGui::EndMenu();
 		}
@@ -206,7 +255,7 @@ update_status ModuleEngineGUI::Update(float dt)
 
 				ImGui::Separator();
 
-				ImGui::PushTextWrapPos(600.0f);
+				ImGui::PushTextWrapPos(standard_text_width);
 				ImGui::Text(App->GetLicense());
 				ImGui::PopTextWrapPos();
 

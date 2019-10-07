@@ -36,7 +36,7 @@ public:
 	SDL_Surface* screen_surface;
 
 	//Window data
-	int window_width = 1280;	//TODO: Save/Load
+	int window_width = 1280;	//CHANGE/FIX: Save/Load
 	int window_height = 1024;
 	int window_scale = 1;
 	float window_brightness = 1.0f;
