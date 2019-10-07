@@ -464,10 +464,13 @@ bool Application::LoadConfig(json& obj)
 	organization = obj["App"]["Organization"].get<std::string>();
 	authors = obj["App"]["Authors"].get<std::string>();
 	license = obj["App"]["License"].get<std::string>();
+	max_FPS = obj["App"]["Max FPS"].get<int>();
 
 	//Window
 	window->window_width = obj["Window"]["Width"].get<int>();
 	window->window_height = obj["Window"]["Height"].get<int>();
+	window->window_scale = obj["Window"]["Scale"].get<int>();
+	window->window_brightness = obj["Window"]["Brightness"].get<float>();
 	window->window_fullscreen = obj["Window"]["Fullscreen"].get<bool>();
 	window->window_resizable = obj["Window"]["Resizable"].get<bool>();
 	window->window_borderless = obj["Window"]["Borderless"].get<bool>();
@@ -493,12 +496,15 @@ bool Application::SaveConfig() const
 			{"Title", title.c_str()},
 			{"Organization", organization.c_str()},
 			{"Authors", authors.c_str()},
-			{"License", license.c_str()}
+			{"License", license.c_str()},
+			{"Max FPS", max_FPS}
 		}},
 
 		{"Window", {
 			{"Width", window->window_width},
 			{"Height", window->window_height},
+			{"Scale", window->window_scale},
+			{"Brightness", window->window_brightness},
 			{"Fullscreen", window->window_fullscreen},
 			{"Resizable", window->window_resizable},
 			{"Borderless", window->window_borderless},
