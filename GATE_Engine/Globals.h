@@ -78,6 +78,6 @@ enum update_status
 	UPDATE_ERROR
 };
 
-//Only arbitrary value that can't be saved by JSON
+//Only arbitrary value that can't be managed by JSON
 #define CONFIG_FILENAME "settings/config.json"
 #define DEFAULT_CONFIG_FILENAME "settings/default_config.json"
