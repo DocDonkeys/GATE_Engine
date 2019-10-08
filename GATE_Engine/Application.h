@@ -19,6 +19,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEngineGUI.h"
 #include "ModulePhysics.h"
+#include "GeometryLoader.h"
 
 // SDL
 #include "libs/SDL/include/SDL.h"
@@ -88,8 +89,9 @@ public:
 	void RequestConfigLoad();
 	void RequestConfigReset();
 
-	//TODO: Didac, title these functions with a comment just like the ones above
+	//Open the Web Page provided by the link
 	void RequestBrowser(const char* link);
+	//LOG info to both Visual Studio & the editor / Engine UI console
 	void ConsoleLOG(const char* format,...);
 
 private:
@@ -128,6 +130,7 @@ public:
 	ModuleCamera3D*		camera;
 	ModuleEngineGUI*	engineGUI;
 	ModulePhysics*		physics;
+	GeometryLoader*		geometry_loader;
 
 	//App members
 	hardware_info		hardware;

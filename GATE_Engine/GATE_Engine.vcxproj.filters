@@ -75,6 +75,9 @@
     <ClCompile Include="ModuleEngineGUI.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GeometryLoader.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -174,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="SolidSphere.h">
       <Filter>Sources\Tools\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryLoader.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@ Application::Application()
 {
 	window = new ModuleWindow(this, "Window");
 	input = new ModuleInput(this, "Input");
+	geometry_loader = new GeometryLoader(this, "Geometry_Loader");
 	scene_intro = new ModuleSceneIntro(this, "Scene");
 	renderer3D = new ModuleRenderer3D(this, "Renderer");
 	camera = new ModuleCamera3D(this, "Camera");
@@ -20,6 +21,7 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(physics);
+	AddModule(geometry_loader);
 
 	//"Scene" (Currently the axis + white grid plane)
 	AddModule(scene_intro);
