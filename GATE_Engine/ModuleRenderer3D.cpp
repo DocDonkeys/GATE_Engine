@@ -5,6 +5,7 @@
 #include "ModuleInput.h"
 #include "libs/par/par_shapes.h"
 
+
 #include "libs/glew/include/GL/glew.h"
 #include "libs/SDL/include/SDL_opengl.h"
 
@@ -189,14 +190,14 @@ bool ModuleRenderer3D::Start()
 	3.f, 0.f, 3.f};
 
 	float vertex_array_findexing[24] = {
-		4.f,1.f,4.f,
-		4.f,0.f,4.f,
-		4.f,0.f,5.f,
-		4.f, 1.f, 5.f,
-		5.f,1.f,4.f,
-		5.f,0.f,4.f,
-		5.f,0.f,5.f,
-		5.f, 1.f, 5.f,
+		0.f,1.f,0.f,
+		0.f,0.f,0.f,
+		0.f,0.f,1.f,
+		0.f, 1.f, 1.f,
+		1.f,1.f,0.f,
+		1.f,0.f,0.f,
+		1.f,0.f,1.f,
+		1.f, 1.f, 1.f,
 	};
 
 	GLubyte indices[] = { 
@@ -314,75 +315,75 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glEnd();
 
 	
-	angle_rot += 30 *dt;
-	glRotatef(angle_rot, 0, 1, 0);
-	glBegin(GL_TRIANGLES);
-	float size = 1;
+	/*angle_rot += 30 *dt;
+	glRotatef(angle_rot, 0, 1, 0);*/
+	//glBegin(GL_TRIANGLES);
+	//float size = 1;
 
-	//1st face
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, 0.f, 0.f);
-	glVertex3f(0, 0.f, size);
+	////1st face
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, 0.f, 0.f);
+	//glVertex3f(0, 0.f, size);
 
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, 0.f, size);
-	glVertex3f(0, size, size);
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, 0.f, size);
+	//glVertex3f(0, size, size);
 
-	//2nd face
-	glVertex3f(0.f,size,size);
-	glVertex3f(0.f,0.f,size);
-	glVertex3f(size,0.f,size);
+	////2nd face
+	//glVertex3f(0.f,size,size);
+	//glVertex3f(0.f,0.f,size);
+	//glVertex3f(size,0.f,size);
 
-	glVertex3f(0.f,size,size);
-	glVertex3f(size,0.f,size);
-	glVertex3f(size, size, size);
+	//glVertex3f(0.f,size,size);
+	//glVertex3f(size,0.f,size);
+	//glVertex3f(size, size, size);
 
-	//3rd face
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, size, size);
-	glVertex3f(size, size, size);
+	////3rd face
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, size, size);
+	//glVertex3f(size, size, size);
 
-	glVertex3f(0, size, 0.f);
-	glVertex3f(size, size, size);
-	glVertex3f(size, size, 0);
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(size, size, size);
+	//glVertex3f(size, size, 0);
 
-	//4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal, 
-	// and then we displace it by size in the direction we need
+	////4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal, 
+	//// and then we displace it by size in the direction we need
 
-	//4th face
-	glVertex3f(size, 0.f, size);
-	glVertex3f(size, 0.f, 0.f);
-	glVertex3f(size, size, 0.f);
-	
-	glVertex3f(size, size, size);
-	glVertex3f(size, 0.f, size);
-	glVertex3f(size, size, 0.f);
+	////4th face
+	//glVertex3f(size, 0.f, size);
+	//glVertex3f(size, 0.f, 0.f);
+	//glVertex3f(size, size, 0.f);
+	//
+	//glVertex3f(size, size, size);
+	//glVertex3f(size, 0.f, size);
+	//glVertex3f(size, size, 0.f);
 
-	//5th face
-	glVertex3f(size, 0.f, 0);
-	glVertex3f(0.f, 0.f, 0);
-	glVertex3f(0.f, size, 0);
+	////5th face
+	//glVertex3f(size, 0.f, 0);
+	//glVertex3f(0.f, 0.f, 0);
+	//glVertex3f(0.f, size, 0);
 
-	glVertex3f(size, size, 0);
-	glVertex3f(size, 0.f, 0);
-	glVertex3f(0.f, size, 0);
+	//glVertex3f(size, size, 0);
+	//glVertex3f(size, 0.f, 0);
+	//glVertex3f(0.f, size, 0);
 
-	//6th face
-	glVertex3f(size, 0, size);
-	glVertex3f(0, 0, size);
-	glVertex3f(0, 0, 0.f);
+	////6th face
+	//glVertex3f(size, 0, size);
+	//glVertex3f(0, 0, size);
+	//glVertex3f(0, 0, 0.f);
 
-	glVertex3f(size, 0, 0);
-	glVertex3f(size, 0, size);
-	glVertex3f(0, 0, 0.f);
+	//glVertex3f(size, 0, 0);
+	//glVertex3f(size, 0, size);
+	//glVertex3f(0, 0, 0.f);
 
-	glEnd();
+	//glEnd();
 
 	glLineWidth(1.0f);
 
 	//END of DIRECT MODE rendering
 
-	glRotatef(angle_rot, 0, 1, 0);
+	//glRotatef(angle_rot, 0, 1, 0);
 	//START FRAME BUFFER Rendering
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
@@ -390,19 +391,30 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
 	//END FRAME BUFFER Rendering
 
-	glRotatef(angle_rot, 0, 1, 0);
+	//glRotatef(angle_rot, 0, 1, 0);
 	//START VERTICES & INDICES BUFFER Rendering
 	glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_optimized_array_id);
+	
 	
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	//glVertexPointer(1, GL_FLOAT, 0, NULL);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
+	
+
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, nullptr);
 
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
+	
+	App->scene_intro->sphere->draw(0,5,0);
 	
 
 	//Render

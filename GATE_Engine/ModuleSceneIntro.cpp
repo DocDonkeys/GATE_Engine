@@ -26,6 +26,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 1.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	sphere = new SolidSphere(3,30,30);
+
 	return ret;
 }
 
@@ -44,6 +46,19 @@ update_status ModuleSceneIntro::Update(float dt)
 	/*Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();*/
+
+	return UPDATE_CONTINUE;
+}
+
+// Update
+update_status ModuleSceneIntro::PostUpdate(float dt)
+{
+	//Ground Render	(Used the Primitives Container)
+	/*Plane p(0, 1, 0, 0);
+	p.axis = true;
+	p.Render();*/
+
+	//sphere->draw(0,0,0);
 
 	return UPDATE_CONTINUE;
 }
