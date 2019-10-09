@@ -78,6 +78,9 @@
     <ClCompile Include="GeometryLoader.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>Sources\Tools\Primitives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -180,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="GeometryLoader.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>Sources\Tools\Primitives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

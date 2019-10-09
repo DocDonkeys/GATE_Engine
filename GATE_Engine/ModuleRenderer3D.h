@@ -1,10 +1,15 @@
-#pragma once
+#ifndef __MODULERENDERER_H__
+#define __MODULERENDERER_H__
+
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include "Primitive.h"
 
 #define MAX_LIGHTS 8
+
+class Primitive;
 
 class ModuleRenderer3D : public Module
 {
@@ -37,4 +42,8 @@ public:
 	float x_rot, y_rot, z_rot = 1.f;
 	float angle_rot = 0.0f;
 
+	//TEST
+	Primitive* sphere_test = nullptr;
 };
+
+#endif

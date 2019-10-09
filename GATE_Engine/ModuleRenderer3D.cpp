@@ -3,7 +3,6 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "libs/par/par_shapes.h"
 
 
 #include "libs/glew/include/GL/glew.h"
@@ -227,6 +226,10 @@ bool ModuleRenderer3D::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 36, indices, GL_STATIC_DRAW);
 
+	sphere_test = new Primitive();
+	sphere_test->CreateSphere(10,10);
+	sphere_test->SendToVRAM();
+
 	return ret;
 }
 
@@ -314,7 +317,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	}
 	glEnd();
 
-	App->scene_intro->sphere->draw(0, 5, 0);
+	sphere_test->Draw();
+
+	//App->scene_intro->sphere->draw(0, 5, 0);
 	
 	angle_rot += 30 *dt;
 	glRotatef(angle_rot, 0, 1, 0);
@@ -402,7 +407,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_optimized_array_id);
 	
-	
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	//glVertexPointer(1, GL_FLOAT, 0, NULL);
 
@@ -415,6 +419,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	
 	
 
 	//Render
@@ -434,6 +440,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	App->ConsoleLOG("Destroying 3D Renderer");
+
+	RELEASE(sphere_test);
 
 	SDL_GL_DeleteContext(context);
 
