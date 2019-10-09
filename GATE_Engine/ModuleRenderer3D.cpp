@@ -130,6 +130,13 @@ bool ModuleRenderer3D::Init()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		lights[0].Active(true);
+
+		//GL_Settings Startup
+		SetGLSetting(GL_DEPTH_TEST, GL_DepthTest);
+		SetGLSetting(GL_CULL_FACE, GL_CullFace);
+		SetGLSetting(GL_LIGHTING, GL_Lightning);
+		SetGLSetting(GL_COLOR_MATERIAL, GL_ColorMaterial);
+		SetGLSetting(GL_TEXTURE_2D, GL_Texture2D);
 	}
 
 	// Projection matrix for
@@ -415,13 +422,11 @@ void ModuleRenderer3D::OnResize(int width, int height)
 }
 
 // GL Settings
-bool ModuleRenderer3D::SetGLSetting(GLenum id, bool status) const	// Enables GL setting if bool flag marks so
+void ModuleRenderer3D::SetGLSetting(GLenum id, bool status) const	// Enables GL setting if bool flag marks so
 {
 	if (status) {
 		glEnable(id);
 	}
-
-	return status;
 }
 
 bool ModuleRenderer3D::SwitchGLSetting(GLenum id) const	// Switches setting value from on/off or viceversa

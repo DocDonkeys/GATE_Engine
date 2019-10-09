@@ -27,7 +27,7 @@ public:
 	void OnResize(int width, int height);
 
 	// OpenGL Settings
-	bool SetGLSetting(GLenum id, bool status) const;
+	void SetGLSetting(GLenum id, bool status) const;
 	bool SwitchGLSetting(GLenum id) const;
 
 public:

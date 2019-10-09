@@ -482,11 +482,13 @@ bool Application::LoadConfig(json& obj)
 
 	//Renderer
 	renderer3D->vSync = obj["Renderer3D"]["VSync"].get<bool>();
-	renderer3D->GL_DepthTest = renderer3D->SetGLSetting(GL_DEPTH_TEST, obj["Renderer3D"]["GL Settings"]["Depth Test"].get<bool>());
-	renderer3D->GL_CullFace = renderer3D->SetGLSetting(GL_CULL_FACE, obj["Renderer3D"]["GL Settings"]["Cull Face"].get<bool>());
-	renderer3D->GL_Lightning = renderer3D->SetGLSetting(GL_LIGHTING, obj["Renderer3D"]["GL Settings"]["Lightning"].get<bool>());
-	renderer3D->GL_ColorMaterial = renderer3D->SetGLSetting(GL_COLOR_MATERIAL, obj["Renderer3D"]["GL Settings"]["Color Material"].get<bool>());
-	renderer3D->GL_Texture2D = renderer3D->SetGLSetting(GL_TEXTURE_2D, obj["Renderer3D"]["GL Settings"]["Texture 2D"].get<bool>());
+
+	//GL_Settings Loading
+	renderer3D->GL_DepthTest = obj["Renderer3D"]["GL Settings"]["Depth Test"].get<bool>();
+	renderer3D->GL_CullFace = obj["Renderer3D"]["GL Settings"]["Cull Face"].get<bool>();
+	renderer3D->GL_Lightning = obj["Renderer3D"]["GL Settings"]["Lightning"].get<bool>();
+	renderer3D->GL_ColorMaterial = obj["Renderer3D"]["GL Settings"]["Color Material"].get<bool>();
+	renderer3D->GL_Texture2D = obj["Renderer3D"]["GL Settings"]["Texture 2D"].get<bool>();
 
 	//GUI
 
@@ -524,7 +526,7 @@ bool Application::SaveConfig() const
 
 		{"Renderer3D", {
 			{"VSync", renderer3D->vSync},
-			{"GL Settings", {
+			{"GL Settings", {	//GL_Settings Saving
 				{"Depth Test", renderer3D->GL_DepthTest},
 				{"Cull Face", renderer3D->GL_CullFace},
 				{"Lightning", renderer3D->GL_Lightning},
