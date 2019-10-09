@@ -127,6 +127,15 @@ update_status ModuleInput::PreUpdate(float dt)
 				windowEvents[WE_QUIT] = true;
 				break;
 
+			case SDL_DROPFILE:     // In case if dropped file
+				dropFileDir = e.drop.file;
+				App->ConsoleLOG("File dropped on window: %s", dropFileDir);
+				
+				//CHANGE/FIX: DO OPEN FILE OPERATION OR FLAG TO START IT
+
+				SDL_free(dropFileDir);    // Free dropped_filedir memory
+				break;
+
 			case SDL_WINDOWEVENT:
 				switch (e.window.event)
 				{
