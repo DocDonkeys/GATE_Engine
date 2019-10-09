@@ -484,11 +484,21 @@ bool Application::LoadConfig(json& obj)
 	renderer3D->vSync = obj["Renderer3D"]["VSync"].get<bool>();
 
 	//GL_Settings Loading
-	renderer3D->GL_DepthTest = obj["Renderer3D"]["GL Settings"]["Depth Test"].get<bool>();
-	renderer3D->GL_CullFace = obj["Renderer3D"]["GL Settings"]["Cull Face"].get<bool>();
-	renderer3D->GL_Lightning = obj["Renderer3D"]["GL Settings"]["Lightning"].get<bool>();
-	renderer3D->GL_ColorMaterial = obj["Renderer3D"]["GL Settings"]["Color Material"].get<bool>();
-	renderer3D->GL_Texture2D = obj["Renderer3D"]["GL Settings"]["Texture 2D"].get<bool>();
+	renderer3D->GL_DepthTest = obj["Renderer3D"]["GL_Settings"]["DepthTest"].get<bool>();
+	renderer3D->GL_CullFace = obj["Renderer3D"]["GL_Settings"]["CullFace"].get<bool>();
+	renderer3D->GL_Lighting = obj["Renderer3D"]["GL_Settings"]["Lightning"].get<bool>();
+	renderer3D->GL_ColorMaterial = obj["Renderer3D"]["GL_Settings"]["ColorMaterial"].get<bool>();
+	renderer3D->GL_Texture2D = obj["Renderer3D"]["GL_Settings"]["Texture2D"].get<bool>();
+	renderer3D->GL_TextureCubeMap = obj["Renderer3D"]["GL_Settings"]["TextureCubeMap"].get<bool>();
+	renderer3D->GL_Blend = obj["Renderer3D"]["GL_Settings"]["Blend"].get<bool>();
+	renderer3D->GL_Dither = obj["Renderer3D"]["GL_Settings"]["Dither"].get<bool>();
+	renderer3D->GL_PointSmooth = obj["Renderer3D"]["GL_Settings"]["PointSmooth"].get<bool>();
+	renderer3D->GL_LineSmooth = obj["Renderer3D"]["GL_Settings"]["LineSmooth"].get<bool>();
+	renderer3D->GL_LineStipple = obj["Renderer3D"]["GL_Settings"]["LineStipple"].get<bool>();
+	renderer3D->GL_PolygonSmooth = obj["Renderer3D"]["GL_Settings"]["PolygonSmooth"].get<bool>();
+	renderer3D->GL_PolygonStipple = obj["Renderer3D"]["GL_Settings"]["PolygonStipple"].get<bool>();
+	renderer3D->GL_MinMax = obj["Renderer3D"]["GL_Settings"]["MinMax"].get<bool>();
+	renderer3D->GL_MultiSample = obj["Renderer3D"]["GL_Settings"]["MultiSample"].get<bool>();
 
 	//GUI
 
@@ -526,12 +536,22 @@ bool Application::SaveConfig() const
 
 		{"Renderer3D", {
 			{"VSync", renderer3D->vSync},
-			{"GL Settings", {	//GL_Settings Saving
-				{"Depth Test", renderer3D->GL_DepthTest},
-				{"Cull Face", renderer3D->GL_CullFace},
-				{"Lightning", renderer3D->GL_Lightning},
-				{"Color Material", renderer3D->GL_ColorMaterial},
-				{"Texture 2D", renderer3D->GL_Texture2D}
+			{"GL_Settings", {	//GL_Settings Saving
+				{"DepthTest", renderer3D->GL_DepthTest},
+				{"CullFace", renderer3D->GL_CullFace},
+				{"Lightning", renderer3D->GL_Lighting},
+				{"ColorMaterial", renderer3D->GL_ColorMaterial},
+				{"Texture2D", renderer3D->GL_Texture2D},
+				{"TextureCubeMap", renderer3D->GL_TextureCubeMap},
+				{"Blend", renderer3D->GL_Blend},
+				{"Dither", renderer3D->GL_Dither},
+				{"PointSmooth", renderer3D->GL_PointSmooth},
+				{"LineSmooth", renderer3D->GL_LineSmooth},
+				{"LineStipple", renderer3D->GL_LineStipple},
+				{"PolygonSmooth", renderer3D->GL_PolygonSmooth},
+				{"PolygonStipple", renderer3D->GL_PolygonStipple},
+				{"MinMax", renderer3D->GL_MinMax},
+				{"MultiSample", renderer3D->GL_MultiSample}
 			}}
 		}},
 

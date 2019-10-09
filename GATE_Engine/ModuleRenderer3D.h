@@ -39,13 +39,28 @@ public:
 	bool vSync = true;
 
 	//OpenGL Flags https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glEnable.xml
-	bool GL_DepthTest;
-	bool GL_CullFace;
-	bool GL_Lightning;
-	bool GL_ColorMaterial;
-	bool GL_Texture2D;
-	//CHANGE/FIX: Add more toggle options
+	bool GL_DepthTest;		//Do depth comparisons and update the depth buffer.
+	bool GL_CullFace;		//Cull polygons based on their winding in window coordinates.
+	bool GL_Lighting;		//If no vertex shader is active, use the current lighting parameters to compute the vertex color or index.
+	
+	bool GL_Texture2D;		//If no fragment shader is active, two - dimensional texturing is performed
+	bool GL_TextureCubeMap;	//If no fragment shader is active, cube - mapped texturing is performed.
+	
+	bool GL_PointSmooth;	//If enabled, draw points with proper filtering. Otherwise, draw aliased points
+	bool GL_LineSmooth;		//If enabled draw lines with correct filtering. Otherwise, draw aliased lines.
+	bool GL_PolygonSmooth;	//If enabled, draw polygons with proper filtering. Otherwise, draw aliased polygons. (For correct antialiased polygons, an alpha buffer is needed and the polygons must be sorted front to back.)
+	
+	bool GL_LineStipple;	//Use the current line stipple pattern when drawing lines.
+	bool GL_PolygonStipple;	//Use the current polygon stipple pattern when rendering polygons.
 
+	bool GL_Blend;			//Blend the computed fragment color values with the values in the color buffers.
+	bool GL_Dither;			//Dither color components or indices before they are written to the color buffer.
+
+	bool GL_ColorMaterial;	//Have one or more material parameters track the current color.
+	bool GL_MinMax;			//Compute the minimum and maximum values of incoming RGBA color values.
+	bool GL_MultiSample;	//Use multiple fragment samples in computing the final color of a pixel.
+
+	////////////////
 	uint vertex_array_id = 0; // vertex array ID for example 1 of drawing with vertex buffers
 	uint vertex_optimized_array_id = 0;
 	uint indices_id = 0;

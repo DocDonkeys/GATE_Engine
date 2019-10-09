@@ -134,9 +134,19 @@ bool ModuleRenderer3D::Init()
 		//GL_Settings Startup
 		SetGLSetting(GL_DEPTH_TEST, GL_DepthTest);
 		SetGLSetting(GL_CULL_FACE, GL_CullFace);
-		SetGLSetting(GL_LIGHTING, GL_Lightning);
+		SetGLSetting(GL_LIGHTING, GL_Lighting);
 		SetGLSetting(GL_COLOR_MATERIAL, GL_ColorMaterial);
 		SetGLSetting(GL_TEXTURE_2D, GL_Texture2D);
+		SetGLSetting(GL_TEXTURE_CUBE_MAP, GL_TextureCubeMap);
+		SetGLSetting(GL_BLEND, GL_Blend);
+		SetGLSetting(GL_DITHER, GL_Dither);
+		SetGLSetting(GL_POINT_SMOOTH, GL_PointSmooth);
+		SetGLSetting(GL_LINE_SMOOTH, GL_LineSmooth);
+		SetGLSetting(GL_LINE_STIPPLE, GL_LineStipple);
+		SetGLSetting(GL_POLYGON_SMOOTH, GL_PolygonSmooth);
+		SetGLSetting(GL_POLYGON_STIPPLE, GL_PolygonStipple);
+		SetGLSetting(GL_MINMAX, GL_MinMax);
+		SetGLSetting(GL_MULTISAMPLE, GL_MultiSample);
 	}
 
 	// Projection matrix for
