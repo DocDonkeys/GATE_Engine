@@ -130,12 +130,7 @@ bool ModuleRenderer3D::Init()
 		glClearColor(0.f, 0.f, 0.f, 1.f); 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE); 
 		lights[0].Active(true);
-		glEnable(GL_LIGHTING);
-		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_TEXTURE_2D); 
 	}
 
 	// Projection matrix for
@@ -246,48 +241,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
-
-	//Change some options GL_DEPTH_TEST,GL_CULL_FACE,GL_LIGHTING ○ GL_COLOR_MATERIAL,GL_TEXTURE_2D + two other
-	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
-	{
-		if (glIsEnabled(GL_DEPTH_TEST))
-			glDisable(GL_DEPTH_TEST);
-		else
-			glEnable(GL_DEPTH_TEST);
-	}
-		
-
-	if (App->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
-	{
-		if (glIsEnabled(GL_CULL_FACE))
-			glDisable(GL_CULL_FACE);
-		else
-			glEnable(GL_CULL_FACE);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
-	{
-		if (glIsEnabled(GL_LIGHTING))
-			glDisable(GL_LIGHTING);
-		else
-			glEnable(GL_LIGHTING);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
-	{
-		if (glIsEnabled(GL_COLOR_MATERIAL))
-			glDisable(GL_COLOR_MATERIAL);
-		else
-			glEnable(GL_COLOR_MATERIAL);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
-	{
-		if (glIsEnabled(GL_TEXTURE_2D))
-			glDisable(GL_TEXTURE_2D);
-		else
-			glEnable(GL_TEXTURE_2D);
-	}
 
 	return UPDATE_CONTINUE;
 }
@@ -451,4 +404,26 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+// GL Settings
+bool ModuleRenderer3D::SetGLSetting(GLenum id, bool status) const	// Enables GL setting if bool flag marks so
+{
+	if (status) {
+		glEnable(id);
+	}
+
+	return status;
+}
+
+bool ModuleRenderer3D::SwitchGLSetting(GLenum id) const	// Switches setting value from on/off or viceversa
+{
+	if (glIsEnabled(id)) {
+		glDisable(id);
+		return false;
+	}
+	else {
+		glEnable(id);
+		return true;
+	}	
 }

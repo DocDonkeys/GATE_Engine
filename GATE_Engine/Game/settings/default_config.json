@@ -9,7 +9,14 @@
   "GUI": null,
   "Input": null,
   "Renderer3D": {
-    "VSync": true
+    "VSync": true,
+    "GL Settings": {
+      "Depth Test": true,
+      "Cull Face": true,
+      "Lightning": true,
+      "Color Material": true,
+      "Texture 2D": true
+    }
   },
   "Window": {
     "Borderless": false,

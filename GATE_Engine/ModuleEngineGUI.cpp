@@ -67,7 +67,7 @@ update_status ModuleEngineGUI::Update(float dt)
 	//Main toolbar
 	if (ImGui::BeginMainMenuBar()) {
 
-		// File: Options for file and App management
+		// Menu - File: Options for file and App management
 		if (ImGui::BeginMenu("File", true)) {
 
 			if (ImGui::MenuItem("New Scene", "Ctrl+N")) {
@@ -112,7 +112,7 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
-		// Edit: Tools for easier edition
+		// Menu - Edit: Tools for easier edition
 		if (ImGui::BeginMenu("Edit", true)) {
 
 			if (ImGui::MenuItem("Undo", "Ctrl+Z")) {
@@ -168,13 +168,13 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 		
-		// Assets: Create premade objects and primitives
+		// Menu - Assets: Create premade objects and primitives
 		if (ImGui::BeginMenu("Assets", true)) {
 
 			ImGui::EndMenu();
 		}
 
-		// View: Display options
+		// Menu - View: Display options
 		if (ImGui::BeginMenu("View", true)) {
 
 			if (ImGui::MenuItem("Show Console", "1"))
@@ -193,7 +193,7 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
-		// Settings: Engine confiuration settings
+		// Menu - Settings: Engine confiuration settings
 		if (ImGui::BeginMenu("Settings", true)) {
 
 			if (ImGui::MenuItem("Open Configuration", "4"))	//CHANGE/FIX: Change shortcut from 4 to something more intuitive
@@ -202,7 +202,7 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
-		// Help: Information & Documentation
+		// Menu - Help: Information & Documentation
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::Button("About GATE...")) {
@@ -210,6 +210,7 @@ update_status ModuleEngineGUI::Update(float dt)
 				ImGui::OpenPopup("About this engine...");
 			}
 
+			// PopupModal - About: Information about the engine and its properties
 			if (ImGui::BeginPopupModal("About this engine...", &show_about_window, ImGuiWindowFlags_AlwaysAutoResize))
 			{
 				ImGui::Text("%s\nA simple engine for 3D game development.\nBy %s, %s", App->GetTitle(), App->GetAuthors(), App->GetOrganization());
@@ -289,12 +290,12 @@ update_status ModuleEngineGUI::Update(float dt)
 
 	ImGui::EndMainMenuBar();
 
-	//TEST IMGUI CONSOLE
+	//TEST IMGUI CONSOLE	//CHANGE/FIX: Should we improve this?
 	if(show_imgui_console)
 	console.Draw("GATE Console",&show_imgui_console);
 
 	//CONSOLE MENU
-	if (show_console_window)
+	if (show_console_window)		//CHANGE/FIX: Delete, imgui console is the same but better
 	{
 		ImGui::Begin("Console",&show_console_window);
 
@@ -304,52 +305,60 @@ update_status ModuleEngineGUI::Update(float dt)
 		ImGui::End();
 
 	}
-
-	//CONFIGURATION MENU	
+	
+	// Window - Configuration: Engine settings
 	if (show_configuration_window)
 	{
 		ImGui::Begin("Configuration", &show_configuration_window);
 
-		if (ImGui::BeginMenu("Options"))
-		{
-			if (ImGui::MenuItem("Save")) {
-				App->RequestConfigSave();
-			}
+		//// Menu - Options: Confirm
+		//if (ImGui::BeginMenu("Options"))	//CHANGE/FIX: Buttons feel better being below, so the options menu has been removed
+		//{
+		//	if (ImGui::MenuItem("Save")) {
+		//		App->RequestConfigSave();
+		//	}
 
-			if (ImGui::MenuItem("Load")) {
-				App->RequestConfigLoad();
-			}
+		//	/*if (ImGui::MenuItem("Load")) {
+		//		App->RequestConfigLoad();
+		//	}*/
 
-			if (ImGui::Button("Reset Defaults")) {
-				ImGui::OpenPopup("Are you sure?");
-			}
+		//	if (ImGui::Button("Reset Defaults")) {
+		//		ImGui::OpenPopup("Are you sure?");
+		//	}
 
-			if (ImGui::BeginPopup("Are you sure?"))
-			{
-				ImGui::Text("Are you sure?");
+		//	if (ImGui::BeginPopup("Are you sure?"))
+		//	{
+		//		ImGui::Text("Are you sure?");
 
-				if (ImGui::Button("Yes")) {
-					App->RequestConfigReset();
-					ImGui::CloseCurrentPopup();
-				}
+		//		if (ImGui::Button("Yes")) {
+		//			App->RequestConfigReset();
+		//			ImGui::CloseCurrentPopup();
+		//		}
 
-				if (ImGui::Button("Cancel")) {
-					ImGui::CloseCurrentPopup();
-				}
+		//		if (ImGui::Button("Cancel")) {
+		//			ImGui::CloseCurrentPopup();
+		//		}
 
-				ImGui::EndPopup();
-			}
+		//		ImGui::EndPopup();
+		//	}
 
-			ImGui::EndMenu();
-		}
+		//	ImGui::EndMenu();
+		//}
 
+		// Header - Application: General App settings
 		if (ImGui::CollapsingHeader("Application"))
 		{
-			static char str0[128] = "Add name and functions!";	//CHANGE/FIX: Ask Marc what's the point of this, because doing it right requires work that feels unnecesary
-			ImGui::InputText("App Name", str0, IM_ARRAYSIZE(str0));
+			//CHANGE/FIX: Add VSync checkbox here
+			if (ImGui::Checkbox("VSync", &App->renderer3D->vSync)) {
+				if (App->renderer3D->vSync) {
+					SDL_GL_SetSwapInterval(1);
+				}
+				else {
+					SDL_GL_SetSwapInterval(0);
+				}
+			}
 
-			static char str1[128] = "Add organization and functions!";
-			ImGui::InputText("Organization", str1, IM_ARRAYSIZE(str1));
+			ImGui::Separator();
 
 			ImGui::SliderInt("MAX FPS", &App->max_FPS, -1, 120);
 
@@ -397,6 +406,7 @@ update_status ModuleEngineGUI::Update(float dt)
 				App->window->WindowSetFullscreenDesktop(App->window->window_full_desktop);
 		}
 
+		// Header - Input: Input settings
 		if (ImGui::CollapsingHeader("Input"))
 		{
 			ImGui::Text("Mouse Position: "); ImGui::SameLine();
@@ -441,6 +451,31 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndChild();
 		}
 
+		// Header - Renderer: Renderer and OpenGL settings
+		if (ImGui::CollapsingHeader("Renderer"))
+		{
+			ImGui::Text("OpenGL Options");
+			if (ImGui::Checkbox("Depth Test", &App->renderer3D->GL_DepthTest))
+				App->renderer3D->SwitchGLSetting(GL_DEPTH_TEST);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Cull Face", &App->renderer3D->GL_CullFace))
+				App->renderer3D->SwitchGLSetting(GL_CULL_FACE);
+
+			if (ImGui::Checkbox("Lightning", &App->renderer3D->GL_Lightning))
+				App->renderer3D->SwitchGLSetting(GL_LIGHTING);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Color Material", &App->renderer3D->GL_ColorMaterial))
+				App->renderer3D->SwitchGLSetting(GL_COLOR_MATERIAL);
+
+			if (ImGui::Checkbox("Texture 2D", &App->renderer3D->GL_Texture2D))
+				App->renderer3D->SwitchGLSetting(GL_TEXTURE_2D);
+		}
+
+		// Header - Hardware: Hardware information
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
 			ImGui::Text("SDL Version: ");
@@ -483,6 +518,38 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
 
 			ImGui::Text("VRAM Reserved: ");
+		}
+
+		ImGui::Separator();
+
+		if (ImGui::Button("Save")) {
+			App->RequestConfigSave();
+		}
+
+		/*if (ImGui::MenuItem("Load")) {	// Feels unnecesary design-wise
+			App->RequestConfigLoad();
+		}*/
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Reset Defaults")) {
+			ImGui::OpenPopup("Are you sure?");
+		}
+
+		if (ImGui::BeginPopup("Are you sure?"))
+		{
+			ImGui::Text("Are you sure?");
+
+			if (ImGui::Button("Yes")) {
+				App->RequestConfigReset();
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::Button("Cancel")) {
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
 		}
 
 		ImGui::End();
