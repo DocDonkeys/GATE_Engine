@@ -76,10 +76,16 @@ public:
 	std::vector<unsigned char> input_log;
 	std::vector<unsigned char*> input_type_log;
 
+	char* dropFileDir;
+
 private:
 	bool windowEvents[WE_COUNT];
+
+	//Button mapping
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
+
+	//Mouse position and movement
 	int mouse_x;
 	int mouse_y;
 	int mouse_z;

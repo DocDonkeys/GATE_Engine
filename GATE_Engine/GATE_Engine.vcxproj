@@ -48,13 +48,13 @@
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\include;E:\ch0m5 Database\ch0m5\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalLibraryDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\libx86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\libx86;E:\ch0m5 Database\ch0m5\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\libx86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -67,7 +67,7 @@
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\include;E:\ch0m5 Database\ch0m5\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -75,7 +75,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalLibraryDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\libx86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\libx86;E:\ch0m5 Database\ch0m5\Documents\GitHub\GATE\GATE_Engine\libs\assimp-5.0.0\libx86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

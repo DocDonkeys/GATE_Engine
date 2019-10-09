@@ -123,6 +123,27 @@ update_status ModuleInput::PreUpdate(float dt)
 			mouse_y_motion = e.motion.yrel / App->window->window_scale;
 			break;
 
+			//case SDL_DROPBEGIN:     // Drop Start
+			//	quit = false;
+			//	break;
+
+			case SDL_DROPFILE:     // In case if dropped file	//CHANGE/FIX: Doesn't work consistently, sometimes the drop event is not called
+				dropFileDir = e.drop.file;
+				
+				App->ConsoleLOG("File dropped on window: %s", dropFileDir);
+
+				SDL_free(dropFileDir);
+				/*CHANGE/FIX:
+				1. DO OPEN FILE OPERATION OR FLAG ITS START
+				2. App->ConsoleLOG("File dropped on window: %s", dropFileDir);
+				3. SDL_free(dropFileDir);    // Free dropped_filedir memory
+				*/
+				break;
+
+			//case SDL_DROPCOMPLETE:     // Drop end
+			//	quit = false;
+			//	break;
+
 			case SDL_QUIT:
 				windowEvents[WE_QUIT] = true;
 				break;
