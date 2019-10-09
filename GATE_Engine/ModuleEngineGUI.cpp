@@ -463,7 +463,11 @@ update_status ModuleEngineGUI::Update(float dt)
 		// Header - Renderer: Renderer and OpenGL settings
 		if (ImGui::CollapsingHeader("Renderer"))
 		{
+			//GL_Settings
 			ImGui::Text("OpenGL Options");
+
+			ImGui::BulletText("General");
+
 			if (ImGui::Checkbox("Depth Test", &App->renderer3D->GL_DepthTest))
 				App->renderer3D->SwitchGLSetting(GL_DEPTH_TEST);
 
@@ -472,16 +476,78 @@ update_status ModuleEngineGUI::Update(float dt)
 			if (ImGui::Checkbox("Cull Face", &App->renderer3D->GL_CullFace))
 				App->renderer3D->SwitchGLSetting(GL_CULL_FACE);
 
-			if (ImGui::Checkbox("Lightning", &App->renderer3D->GL_Lightning))
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Lightning", &App->renderer3D->GL_Lighting))
 				App->renderer3D->SwitchGLSetting(GL_LIGHTING);
 
+			//------------------------------------------------------------
+
+			ImGui::BulletText("Textures");
+
+			if (ImGui::Checkbox("Texture 2D", &App->renderer3D->GL_Texture2D))
+				App->renderer3D->SwitchGLSetting(GL_TEXTURE_2D);
+
 			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Texture CubeMap", &App->renderer3D->GL_TextureCubeMap))
+				App->renderer3D->SwitchGLSetting(GL_TEXTURE_CUBE_MAP);
+
+			//------------------------------------------------------------
+
+			ImGui::BulletText("Points & Lines");
+
+			if (ImGui::Checkbox("Point Smooth", &App->renderer3D->GL_PointSmooth))
+				App->renderer3D->SwitchGLSetting(GL_POINT_SMOOTH);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Line Smooth", &App->renderer3D->GL_LineSmooth))
+				App->renderer3D->SwitchGLSetting(GL_LINE_SMOOTH);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Line Stipple", &App->renderer3D->GL_LineStipple))
+				App->renderer3D->SwitchGLSetting(GL_LINE_STIPPLE);
+
+			//------------------------------------------------------------
+
+			ImGui::BulletText("Polygons");
+
+			if (ImGui::Checkbox("Polygon Smooth", &App->renderer3D->GL_PolygonSmooth))
+				App->renderer3D->SwitchGLSetting(GL_POLYGON_SMOOTH);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Polygon Stipple", &App->renderer3D->GL_PolygonStipple))
+				App->renderer3D->SwitchGLSetting(GL_POLYGON_STIPPLE);
+
+			//------------------------------------------------------------
+
+			ImGui::BulletText("Color");
+
+			if (ImGui::Checkbox("Blend", &App->renderer3D->GL_Blend))
+				App->renderer3D->SwitchGLSetting(GL_BLEND);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Dither", &App->renderer3D->GL_Dither))
+				App->renderer3D->SwitchGLSetting(GL_DITHER);
+
+			//------------------------------------------------------------
 
 			if (ImGui::Checkbox("Color Material", &App->renderer3D->GL_ColorMaterial))
 				App->renderer3D->SwitchGLSetting(GL_COLOR_MATERIAL);
 
-			if (ImGui::Checkbox("Texture 2D", &App->renderer3D->GL_Texture2D))
-				App->renderer3D->SwitchGLSetting(GL_TEXTURE_2D);
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("MinMax", &App->renderer3D->GL_MinMax))
+				App->renderer3D->SwitchGLSetting(GL_MINMAX);
+
+			ImGui::SameLine();
+
+			if (ImGui::Checkbox("Multi Sample", &App->renderer3D->GL_MultiSample))
+				App->renderer3D->SwitchGLSetting(GL_MULTISAMPLE);
 		}
 
 		// Header - Hardware: Hardware information

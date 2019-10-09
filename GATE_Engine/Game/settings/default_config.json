@@ -9,12 +9,22 @@
   "GUI": null,
   "Input": null,
   "Renderer3D": {
-    "GL Settings": {
-      "Color Material": true,
-      "Cull Face": true,
-      "Depth Test": true,
+    "GL_Settings": {
+      "Blend": false,
+      "ColorMaterial": true,
+      "CullFace": true,
+      "DepthTest": true,
+      "Dither": false,
       "Lightning": true,
-      "Texture 2D": true
+      "LineSmooth": false,
+      "LineStipple": false,
+      "MinMax": false,
+      "MultiSample": false,
+      "PointSmooth": false,
+      "PolygonSmooth": false,
+      "PolygonStipple": false,
+      "Texture2D": false,
+      "TextureCubeMap": false
     },
     "VSync": true
   },
