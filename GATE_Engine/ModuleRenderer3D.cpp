@@ -435,3 +435,18 @@ bool ModuleRenderer3D::SwitchGLSetting(GLenum id) const	// Switches setting valu
 		return true;
 	}	
 }
+
+void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int& size, const float * vertex)
+{
+	glGenBuffers(1, (GLuint*) &(id_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, vertex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void ModuleRenderer3D::GenerateIndexBuffer(uint & id_index,const int& size, const uint * index)
+{
+	glGenBuffers(1, (GLuint*) &(id_index));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * size, index, GL_STATIC_DRAW);
+}

@@ -1,6 +1,6 @@
 #include "GeometryLoader.h"
 #include "Application.h"
-
+#include "ModuleRenderer3D.h"
 
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
@@ -32,6 +32,74 @@ bool GeometryLoader::CleanUp()
 
 	// detach log stream 
 	aiDetachAllLogStreams();
+
+	//Delete data
+	for (int i = 0; i < meshes.size(); ++i)
+	{
+		//Delete the allocated memory data inside the mesh
+		RELEASE(meshes[i]->index);
+		RELEASE(meshes[i]->vertex);
+
+		//Delete the allocated memory data for the mesh
+		RELEASE(meshes[i]);
+	}
+
+	meshes.clear();
+
+	return ret;
+}
+
+bool GeometryLoader::Load3DFile(const char* full_path)
+{
+	bool ret = true;
+	//We call assimp to import the file
+	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		//We loaded the 3D file successfully!
+
+		//We iterate the meshes array
+		int nmeshes = scene->mNumMeshes;
+		for (int i = 0; i < nmeshes; ++i)
+		{
+			Mesh_Data* new_mesh = new Mesh_Data;
+			// Copy VERTICES data (vertex)
+			aiMesh* loaded_mesh = scene->mMeshes[i];
+			new_mesh->num_vertex = loaded_mesh->mNumVertices;
+			new_mesh->vertex = new float[new_mesh->num_vertex * 3];
+			memcpy(new_mesh->vertex, loaded_mesh->mVertices, sizeof(float) * new_mesh->num_vertex * 3);
+			App->ConsoleLOG("New mesh with %d vertices loaded", new_mesh->num_vertex);
+
+			// Copy INDICES/FACES data (index) (Faces as used in assimp)
+			if (loaded_mesh->HasFaces())
+			{
+				new_mesh->num_index = loaded_mesh->mNumFaces * 3;
+				new_mesh->index = new uint[new_mesh->num_index]; // assuming each face is a triangle  
+				for (uint j = 0; j < loaded_mesh->mNumFaces; ++j)
+				{   
+					if(loaded_mesh->mFaces[j].mNumIndices != 3)    
+						App->ConsoleLOG("WARNING, geometry face with != 3 indices! Export your 3D file with triangularized faces/polys!");   
+					else    
+						memcpy(&new_mesh->index[j*3], loaded_mesh->mFaces[j].mIndices, 3 * sizeof(uint));
+				}
+			}
+			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
+			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
+
+			if (new_mesh->index != nullptr)
+				App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
+			
+			//Finally add the new mesh to the vector
+			meshes.push_back(new_mesh);
+		}
+
+
+		//Once finished we release the original file
+		aiReleaseImport(scene);
+	}
+	else   
+		App->ConsoleLOG("Error loading scene %s", full_path);
 
 	return ret;
 }

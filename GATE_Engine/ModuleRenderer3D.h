@@ -30,6 +30,9 @@ public:
 	bool SetGLSetting(GLenum id, bool status) const;
 	bool SwitchGLSetting(GLenum id) const;
 
+	//Tools for other modules
+	void GenerateVertexBuffer(uint& id_vertex, const int& size, const float* vertex);
+	void GenerateIndexBuffer(uint& id_index, const int& size, const uint* index);
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
