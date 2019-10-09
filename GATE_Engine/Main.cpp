@@ -4,13 +4,19 @@
 
 // Old school memory leak detector (mmgr)
 #ifdef _DEBUG
-	//#define TEST_MEMORY_MANAGER
-	#include "libs/mmgr/mmgr.h"
+#ifdef _VISUAL_MEM_LEAK
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#else
+//#define TEST_MEMORY_MANAGER
+#include "libs/mmgr/mmgr.h"
+#endif
+
+	
 #endif
 
 ////VS Memory Leak Detector
-//#define _CRTDBG_MAP_ALLOC
-//#include <crtdbg.h>
+
 
 // We need to include this here because SDL overwrites main()
 #include "libs/SDL/include/SDL.h"
@@ -103,13 +109,14 @@ int main(int argc, char ** argv)
 
 	//mmgr Mem Leak Detector
 #ifdef _DEBUG
+#ifdef _VISUAL_MEM_LEAK
+	_CrtDumpMemoryLeaks();
+#else
 	int leaks = MAX(0, m_getMemoryStatistics().totalAllocUnitCount - 23);
 	LOG("With %d memory leaks!\n", (leaks > 0) ? leaks : 0);
 	SDL_assert(leaks <= 0);
 #endif
-
-	//VS Mem Leak Detector
-	//_CrtDumpMemoryLeaks();	
+#endif	
 
 	return main_return;
 }
