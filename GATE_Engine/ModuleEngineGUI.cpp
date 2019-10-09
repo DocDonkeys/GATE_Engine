@@ -165,22 +165,34 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			}
 
+			ImGui::Separator();
+
+			// MenuItem - Settings: Engine confiuration settings
+			if (ImGui::MenuItem("Settings...")) {
+				show_configuration_window = !show_configuration_window;
+			}
+
 			ImGui::EndMenu();
 		}
 		
-		// Menu - Assets: Create premade objects and primitives
-		if (ImGui::BeginMenu("Assets", true)) {
+		// Menu - Window: Display options
+		if (ImGui::BeginMenu("Window", true)) {
+			
+			if (ImGui::BeginMenu("Show")) {
 
-			ImGui::EndMenu();
-		}
+				ImGui::Checkbox("Framerate", &show_imgui_console);
+				ImGui::Checkbox("Polycount", &show_imgui_console);
+				ImGui::Checkbox("Base Grid", &show_imgui_console);
 
-		// Menu - View: Display options
-		if (ImGui::BeginMenu("View", true)) {
+				ImGui::Checkbox("Console", &show_imgui_console);
 
-			if (ImGui::MenuItem("Show Console", "1"))
-				show_imgui_console = !show_imgui_console;
+				ImGui::EndMenu();
+			}
 
-			if (ImGui::BeginMenu("DevTools")) {
+			ImGui::Separator();
+
+			// Menu: Engine Development Tools
+			if (ImGui::BeginMenu("DevDebug")) {
 				if (ImGui::MenuItem("Show UI Demo"))
 					show_demo_window = !show_demo_window;
 
@@ -193,11 +205,8 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
-		// Menu - Settings: Engine confiuration settings
-		if (ImGui::BeginMenu("Settings", true)) {
-
-			if (ImGui::MenuItem("Open Configuration", "4"))	//CHANGE/FIX: Change shortcut from 4 to something more intuitive
-				show_configuration_window = !show_configuration_window;
+		// Menu - GameObjects: Create premade objects and primitives
+		if (ImGui::BeginMenu("GameObjects", true)) {
 
 			ImGui::EndMenu();
 		}
