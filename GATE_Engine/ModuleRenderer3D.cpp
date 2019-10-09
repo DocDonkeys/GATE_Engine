@@ -445,7 +445,7 @@ void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int& size, c
 {
 	glGenBuffers(1, (GLuint*) &(id_vertex));
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(double) * size, vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -454,4 +454,33 @@ void ModuleRenderer3D::GenerateIndexBuffer(uint & id_index,const int& size, cons
 	glGenBuffers(1, (GLuint*) &(id_index));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * size, index, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void ModuleRenderer3D::DeleteBuffer(uint & id)
+{
+	glDeleteBuffers(1,&(GLuint)id);
+	id = 0;
+}
+
+//Pass a Mesh_Data to be drawn using glDrawElements
+void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
+{
+	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+		glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, nullptr);
+		//Unbind
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	else
+		App->ConsoleLOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
 }

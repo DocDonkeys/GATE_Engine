@@ -6,6 +6,7 @@
 #include "glmath.h"
 #include "Light.h"
 #include "Primitive.h"
+#include "GeometryLoader.h"
 
 #define MAX_LIGHTS 8
 
@@ -33,6 +34,8 @@ public:
 	//Tools for other modules
 	void GenerateVertexBuffer(uint& id_vertex, const int& size, const float* vertex);
 	void GenerateIndexBuffer(uint& id_index, const int& size, const uint* index);
+	void DeleteBuffer(uint& id);
+	void DrawMesh(const Mesh_Data* mesh);
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

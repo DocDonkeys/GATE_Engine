@@ -36,9 +36,12 @@ bool GeometryLoader::CleanUp()
 	//Delete data
 	for (int i = 0; i < meshes.size(); ++i)
 	{
+		Mesh_Data* m_todestroy = meshes[i];
 		//Delete the allocated memory data inside the mesh
-		RELEASE(meshes[i]->index);
-		RELEASE(meshes[i]->vertex);
+		App->renderer3D->DeleteBuffer(m_todestroy->id_index);
+		RELEASE_ARRAY(m_todestroy->index);
+		App->renderer3D->DeleteBuffer(m_todestroy->id_vertex);
+		RELEASE_ARRAY(m_todestroy->vertex);
 
 		//Delete the allocated memory data for the mesh
 		RELEASE(meshes[i]);
@@ -83,6 +86,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 					else    
 						memcpy(&new_mesh->index[j*3], loaded_mesh->mFaces[j].mIndices, 3 * sizeof(uint));
 				}
+				App->ConsoleLOG("Mesh has %d indices loaded & %d polys", new_mesh->num_index, new_mesh->num_index/3);
 			}
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -121,5 +125,8 @@ bool GeometryLoader::Start()
 
 update_status GeometryLoader::Update(float dt)
 {
+	for (int i = 0; i < meshes.size(); ++i)
+		App->renderer3D->DrawMesh(meshes[i]);
+
 	return UPDATE_CONTINUE;
 }

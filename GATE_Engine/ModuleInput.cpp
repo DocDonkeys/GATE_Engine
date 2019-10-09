@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleEngineGUI.h"
+#include "GeometryLoader.h"
 #include "libs/imgui-1.72b/imgui_impl_sdl.h"
 
 #define MAX_KEYS 300
@@ -133,6 +134,12 @@ update_status ModuleInput::PreUpdate(float dt)
 				App->ConsoleLOG("File dropped on window: %s", dropFileDir);
 
 				SDL_free(dropFileDir);
+
+				App->geometry_loader->Load3DFile(dropFileDir);
+				App->ConsoleLOG("File dropped on window: %s", dropFileDir);
+
+				SDL_free(dropFileDir);
+
 				/*CHANGE/FIX:
 				1. DO OPEN FILE OPERATION OR FLAG ITS START
 				2. App->ConsoleLOG("File dropped on window: %s", dropFileDir);
