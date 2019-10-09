@@ -4,6 +4,8 @@
 #include "Globals.h"
 #include "Module.h"
 
+#include <assimp/cimport.h>
+
 class GeometryLoader : public Module
 {
 public:
@@ -19,6 +21,8 @@ public:
 
 
 public: // Vars
+
+	aiLogStream stream;
 };
 
 

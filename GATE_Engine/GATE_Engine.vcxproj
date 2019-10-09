@@ -86,6 +86,7 @@
     <ClInclude Include="GeometryLoader.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Primitive.h" />
     <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="JsonLoader.h" />
     <ClInclude Include="libs\glew\include\GL\glew.h" />
@@ -142,6 +143,7 @@
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
+    <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="RNGenerator.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
