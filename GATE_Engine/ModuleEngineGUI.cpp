@@ -231,7 +231,7 @@ update_status ModuleEngineGUI::Update(float dt)
 					App->RequestBrowser("https://www.geeksforgeeks.org/the-c-standard-template-library-stl/");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("SDL (v2.0)")) {
+				if (ImGui::SmallButton("SDL (v2.0.10)")) {
 					App->RequestBrowser("https://www.libsdl.org/");
 				}
 				ImGui::Bullet();
