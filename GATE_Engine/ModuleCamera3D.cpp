@@ -58,7 +58,7 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 			else if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
 				if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {
-					newPos -= Z * mouse_y;	//Zoom Camera
+					newPos += Z * mouse_y;	//Zoom Camera
 				}
 				else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {
 					MouseRotate(rotate_type::AROUND, mouse_x, mouse_y);	//Rotate Camera around Reference
