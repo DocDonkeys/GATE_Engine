@@ -132,21 +132,21 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 
 		//GL_Settings Startup
-		SetGLSetting(GL_DEPTH_TEST, GL_DepthTest);
-		SetGLSetting(GL_CULL_FACE, GL_CullFace);
-		SetGLSetting(GL_LIGHTING, GL_Lighting);
-		SetGLSetting(GL_COLOR_MATERIAL, GL_ColorMaterial);
-		SetGLSetting(GL_TEXTURE_2D, GL_Texture2D);
-		SetGLSetting(GL_TEXTURE_CUBE_MAP, GL_TextureCubeMap);
-		SetGLSetting(GL_BLEND, GL_Blend);
-		SetGLSetting(GL_DITHER, GL_Dither);
-		SetGLSetting(GL_POINT_SMOOTH, GL_PointSmooth);
-		SetGLSetting(GL_LINE_SMOOTH, GL_LineSmooth);
-		SetGLSetting(GL_LINE_STIPPLE, GL_LineStipple);
-		SetGLSetting(GL_POLYGON_SMOOTH, GL_PolygonSmooth);
-		SetGLSetting(GL_POLYGON_STIPPLE, GL_PolygonStipple);
-		SetGLSetting(GL_MINMAX, GL_MinMax);
-		SetGLSetting(GL_MULTISAMPLE, GL_MultiSample);
+		SetGLSetting(GL_DepthTest);
+		SetGLSetting(GL_CullFace);
+		SetGLSetting(GL_Lighting);
+		SetGLSetting(GL_ColorMaterial);
+		SetGLSetting(GL_Texture2D);
+		SetGLSetting(GL_TextureCubeMap);
+		SetGLSetting(GL_Blend);
+		SetGLSetting(GL_Dither);
+		SetGLSetting(GL_PointSmooth);
+		SetGLSetting(GL_LineSmooth);
+		SetGLSetting(GL_LineStipple);
+		SetGLSetting(GL_PolygonSmooth);
+		SetGLSetting(GL_PolygonStipple);
+		SetGLSetting(GL_MinMax);
+		SetGLSetting(GL_MultiSample);
 	}
 
 	// Projection matrix for
@@ -432,22 +432,22 @@ void ModuleRenderer3D::OnResize(int width, int height)
 }
 
 // GL Settings
-void ModuleRenderer3D::SetGLSetting(GLenum id, bool status) const	// Enables GL setting if bool flag marks so
+void ModuleRenderer3D::SetGLSetting(GL_Setting& glSet) const	// Enables GL setting if bool flag marks so
 {
-	if (status) {
-		glEnable(id);
+	if (glSet.status) {
+		glEnable(glSet.id);
 	}
 }
 
-bool ModuleRenderer3D::SwitchGLSetting(GLenum id) const	// Switches setting value from on/off or viceversa
+void ModuleRenderer3D::SwitchGLSetting(GL_Setting& glSet) const	// Switches setting value from on/off or viceversa
 {
-	if (glIsEnabled(id)) {
-		glDisable(id);
-		return false;
+	if (glIsEnabled(glSet.id)) {
+		glDisable(glSet.id);
+		glSet.status = false;
 	}
 	else {
-		glEnable(id);
-		return true;
+		glEnable(glSet.id);
+		glSet.status = true;
 	}	
 }
 

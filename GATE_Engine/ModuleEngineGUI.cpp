@@ -468,86 +468,86 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			ImGui::BulletText("General");
 
-			if (ImGui::Checkbox("Depth Test", &App->renderer3D->GL_DepthTest))
-				App->renderer3D->SwitchGLSetting(GL_DEPTH_TEST);
+			if (ImGui::Checkbox("Depth Test", &App->renderer3D->GL_DepthTest.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_DepthTest);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Cull Face", &App->renderer3D->GL_CullFace))
-				App->renderer3D->SwitchGLSetting(GL_CULL_FACE);
+			if (ImGui::Checkbox("Cull Face", &App->renderer3D->GL_CullFace.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_CullFace);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Lightning", &App->renderer3D->GL_Lighting))
-				App->renderer3D->SwitchGLSetting(GL_LIGHTING);
+			if (ImGui::Checkbox("Lightning", &App->renderer3D->GL_Lighting.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Lighting);
 
 			//------------------------------------------------------------
 
 			ImGui::BulletText("Textures");
 
-			if (ImGui::Checkbox("Texture 2D", &App->renderer3D->GL_Texture2D))
-				App->renderer3D->SwitchGLSetting(GL_TEXTURE_2D);
+			if (ImGui::Checkbox("Texture 2D", &App->renderer3D->GL_Texture2D.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Texture2D);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Texture CubeMap", &App->renderer3D->GL_TextureCubeMap))
-				App->renderer3D->SwitchGLSetting(GL_TEXTURE_CUBE_MAP);
+			if (ImGui::Checkbox("Texture CubeMap", &App->renderer3D->GL_TextureCubeMap.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_TextureCubeMap);
 
 			//------------------------------------------------------------
 
 			ImGui::BulletText("Points & Lines");
 
-			if (ImGui::Checkbox("Point Smooth", &App->renderer3D->GL_PointSmooth))
-				App->renderer3D->SwitchGLSetting(GL_POINT_SMOOTH);
+			if (ImGui::Checkbox("Point Smooth", &App->renderer3D->GL_PointSmooth.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PointSmooth);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Line Smooth", &App->renderer3D->GL_LineSmooth))
-				App->renderer3D->SwitchGLSetting(GL_LINE_SMOOTH);
+			if (ImGui::Checkbox("Line Smooth", &App->renderer3D->GL_LineSmooth.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_LineSmooth);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Line Stipple", &App->renderer3D->GL_LineStipple))
-				App->renderer3D->SwitchGLSetting(GL_LINE_STIPPLE);
+			if (ImGui::Checkbox("Line Stipple", &App->renderer3D->GL_LineStipple.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_LineStipple);
 
 			//------------------------------------------------------------
 
 			ImGui::BulletText("Polygons");
 
-			if (ImGui::Checkbox("Polygon Smooth", &App->renderer3D->GL_PolygonSmooth))
-				App->renderer3D->SwitchGLSetting(GL_POLYGON_SMOOTH);
+			if (ImGui::Checkbox("Polygon Smooth", &App->renderer3D->GL_PolygonSmooth.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PolygonSmooth);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Polygon Stipple", &App->renderer3D->GL_PolygonStipple))
-				App->renderer3D->SwitchGLSetting(GL_POLYGON_STIPPLE);
+			if (ImGui::Checkbox("Polygon Stipple", &App->renderer3D->GL_PolygonStipple.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PolygonStipple);
 
 			//------------------------------------------------------------
 
 			ImGui::BulletText("Color");
 
-			if (ImGui::Checkbox("Blend", &App->renderer3D->GL_Blend))
-				App->renderer3D->SwitchGLSetting(GL_BLEND);
+			if (ImGui::Checkbox("Blend", &App->renderer3D->GL_Blend.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Blend);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Dither", &App->renderer3D->GL_Dither))
-				App->renderer3D->SwitchGLSetting(GL_DITHER);
+			if (ImGui::Checkbox("Dither", &App->renderer3D->GL_Dither.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Dither);
 
 			//------------------------------------------------------------
 
-			if (ImGui::Checkbox("Color Material", &App->renderer3D->GL_ColorMaterial))
-				App->renderer3D->SwitchGLSetting(GL_COLOR_MATERIAL);
+			if (ImGui::Checkbox("Color Material", &App->renderer3D->GL_ColorMaterial.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_ColorMaterial);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("MinMax", &App->renderer3D->GL_MinMax))
-				App->renderer3D->SwitchGLSetting(GL_MINMAX);
+			if (ImGui::Checkbox("MinMax", &App->renderer3D->GL_MinMax.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_MinMax);
 
 			ImGui::SameLine();
 
-			if (ImGui::Checkbox("Multi Sample", &App->renderer3D->GL_MultiSample))
-				App->renderer3D->SwitchGLSetting(GL_MULTISAMPLE);
+			if (ImGui::Checkbox("Multi Sample", &App->renderer3D->GL_MultiSample.status))
+				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_MultiSample);
 		}
 
 		// Header - Hardware: Hardware information
