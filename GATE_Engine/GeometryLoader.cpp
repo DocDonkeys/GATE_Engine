@@ -2,12 +2,12 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/cfileio.h>
+#include "libs/Assimp/include/cimport.h"
+#include "libs/Assimp/include/scene.h"
+#include "libs/Assimp/include/postprocess.h"
+#include "libs/Assimp/include/cfileio.h"
 
-#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")
+#pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
 
 //#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")
 /*
@@ -93,7 +93,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 
 			if (new_mesh->index != nullptr)
 				App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
-			
+
 			//Finally add the new mesh to the vector
 			meshes.push_back(new_mesh);
 		}
