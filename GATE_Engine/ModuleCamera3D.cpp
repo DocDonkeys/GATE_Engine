@@ -48,12 +48,13 @@ update_status ModuleCamera3D::Update(float dt)
 		// Mouse Controls
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT
 			|| App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
-			|| App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
+			|| App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {
 
 			float mouse_x = (float)-App->input->GetMouseXMotion() * camMouseSensivility;
 			float mouse_y = (float)-App->input->GetMouseYMotion() * camMouseSensivility;
 
-			if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) {
+			if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
+				|| App->scene_intro->currMode == tool_mode::DRAG && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {
 				DragCamera(newPos, mouse_x / 5.0f, mouse_y / 5.0f);	//Drag Camera
 			}
 			else if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
@@ -71,7 +72,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		// Keyboard Controls
 		MoveCamera(newPos, currSpeed);	//Move Camera
-		if (true) {	//CHANGE/FIX: Add controller variable and activation button for First Person Controls
+		if (false) {	//CHANGE/FIX: Add controller variable and activation button for First Person Controls
 			FirstPersonCamera(newPos, currSpeed, camRotSpeed, dt);	//Move & Rotate Camera with FirstPerson-like controls
 		}
 

@@ -43,6 +43,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
+	currMode = CheckToolMode();
+
 	//Ground Render	(Used the Primitives Container)
 	/*Plane p(0, 1, 0, 0);
 	p.axis = true;
@@ -62,4 +64,24 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 	//sphere->draw(0,0,0);
 
 	return UPDATE_CONTINUE;
+}
+
+tool_mode ModuleSceneIntro::CheckToolMode() const
+{
+	tool_mode ret = currMode;
+
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+		ret = tool_mode::DRAG;
+	else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+		ret = tool_mode::MOVE;
+	else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+		ret = tool_mode::ROTATE;
+	else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+		ret = tool_mode::SCALE;
+	else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		ret = tool_mode::RECT;
+	else if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
+		ret = tool_mode::MULTI;
+
+	return ret;
 }
