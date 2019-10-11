@@ -5,7 +5,7 @@
 #include "Module.h"
 #include <vector>
 
-#include <assimp/cimport.h>
+#include "libs/Assimp/include/cimport.h"
 
 struct Mesh_Data //Struct to hold info for meshes imported with assimp
 {
