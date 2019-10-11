@@ -358,33 +358,13 @@ update_status ModuleEngineGUI::Update(float dt)
 		if (ImGui::CollapsingHeader("Application"))
 		{
 			//CHANGE/FIX: Add VSync checkbox here
-			if (ImGui::Checkbox("VSync", &App->renderer3D->vSync)) {
-				if (App->renderer3D->vSync) {
-					SDL_GL_SetSwapInterval(1);
-				}
-				else {
-					SDL_GL_SetSwapInterval(0);
-				}
-			}
-
-			ImGui::Separator();
-
-			ImGui::SliderInt("MAX FPS", &App->max_FPS, -1, 120);
-
-			//Plotting FPS and ms
-			char title[25];
-			sprintf_s(title, 25, "Framerate %.1f", App->fps_log[App->fps_log.size() - 1]);
-			ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 140.0f, ImVec2(310, 100));
-			sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
-			ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+			
 		}
 
-		if (ImGui::CollapsingHeader("Window"))
+		if (ImGui::CollapsingHeader("Display"))
 		{
-			ImGui::Text("Icon:");
-
-			if (ImGui::SliderFloat("Brightness", &App->window->window_brightness, 0.000f, 1.000f))
-				App->window->ChangeWindowBrightnessTo(App->window->window_brightness);
+			//Window
+			ImGui::Text("Window:");
 
 			if (ImGui::SliderInt("Width", &App->window->window_width, 256, 4096))
 				App->window->ResizeWindow(App->window->window_width, App->window->window_height);
@@ -392,12 +372,9 @@ update_status ModuleEngineGUI::Update(float dt)
 			if (ImGui::SliderInt("Height", &App->window->window_height, 144, 2160))
 				App->window->ResizeWindow(App->window->window_width, App->window->window_height);
 
-			ImGui::Text("Refresh rate: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%.1f", App->fps_log[App->fps_log.size() - 1]);
+			if (ImGui::SliderFloat("Brightness", &App->window->window_brightness, 0.000f, 1.000f))
+				App->window->ChangeWindowBrightnessTo(App->window->window_brightness);
 
-
-			//Fullscreen
 			if (ImGui::Checkbox("Fullscreen", &App->window->window_fullscreen))
 				App->window->WindowSetFullscreen(App->window->window_fullscreen);
 
@@ -413,11 +390,38 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			if (ImGui::Checkbox("Full Desktop", &App->window->window_full_desktop))
 				App->window->WindowSetFullscreenDesktop(App->window->window_full_desktop);
+
+			ImGui::Separator();
+
+			//Plotting FPS and ms
+			ImGui::Text("Frame Rate:");
+			ImGui::SameLine();
+			if (ImGui::Checkbox("VSync", &App->renderer3D->vSync)) {
+				if (App->renderer3D->vSync) {
+					SDL_GL_SetSwapInterval(1);
+				}
+				else {
+					SDL_GL_SetSwapInterval(0);
+				}
+			}
+
+			ImGui::SliderInt("MAX FPS", &App->max_FPS, -1, 120);
+			char title[25];
+			sprintf_s(title, 25, "Framerate %.1f", App->fps_log[App->fps_log.size() - 1]);
+			ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 140.0f, ImVec2(310, 100));
+			sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
+			ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+
 		}
 
 		// Header - Input: Input settings
-		if (ImGui::CollapsingHeader("Input"))
+		if (ImGui::CollapsingHeader("Controls"))
 		{
+			if (ImGui::CollapsingHeader("Camera"))
+			{
+
+			}
+
 			ImGui::Text("Mouse Position: "); ImGui::SameLine();
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
 
@@ -463,6 +467,10 @@ update_status ModuleEngineGUI::Update(float dt)
 		// Header - Renderer: Renderer and OpenGL settings
 		if (ImGui::CollapsingHeader("Renderer"))
 		{
+			ImGui::Text("Refresh rate: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%.1f", App->fps_log[App->fps_log.size() - 1]);
+
 			//GL_Settings
 			ImGui::Text("OpenGL Options");
 

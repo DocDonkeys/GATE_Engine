@@ -3,6 +3,15 @@
 #include "Globals.h"
 #include "SolidSphere.h" //CHANGE/FIX if we end up having a primitives header change this
 
+enum class tool_mode {
+	DRAG,	//Q
+	MOVE,	//W
+	ROTATE,	//E
+	SCALE,	//R
+	RECT,	//T
+	MULTI	//Y
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -16,8 +25,10 @@ public:
 
 public:
 	//methods
+	tool_mode CheckToolMode() const;
 
 public:
 	//members
 	SolidSphere* sphere = nullptr;
+	tool_mode currMode = tool_mode::DRAG;
 };
