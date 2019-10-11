@@ -27,6 +27,7 @@ private:
 
 	// Input Checks
 	void MoveCamera(vec3& mov, float& speed);
+	void RotateCamera(float& rotSpeed);
 	void DragCamera(vec3& mov, float delta_x, float delta_y);
 	void MouseRotate(rotate_type type, float delta_x, float delta_y);
 	void FirstPersonCamera(vec3& mov, float& movSpeed, float& rotSpeed, float& dt);

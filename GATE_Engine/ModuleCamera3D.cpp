@@ -45,7 +45,7 @@ update_status ModuleCamera3D::Update(float dt)
 		vec3 newPos(0, 0, 0);
 		float currSpeed = camMovSpeed * dt;
 
-		// Mouse Controls
+		// Mouse Button Controls
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT
 			|| App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
 			|| App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {
@@ -70,8 +70,9 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 		}
 
-		// Keyboard Controls
-		MoveCamera(newPos, currSpeed);	//Move Camera
+		// Keyboard Controls & Mouse Wheel
+		RotateCamera(camRotSpeed);
+		MoveCamera(newPos, currSpeed);
 		if (false) {	//CHANGE/FIX: Add controller variable and activation button for First Person Controls
 			FirstPersonCamera(newPos, currSpeed, camRotSpeed, dt);	//Move & Rotate Camera with FirstPerson-like controls
 		}
@@ -87,16 +88,31 @@ update_status ModuleCamera3D::Update(float dt)
 
 void ModuleCamera3D::MoveCamera(vec3& mov, float& speed)
 {
-	// Forward/Backwards
+	// Mouse Scroll
 	mov -= Z * App->input->GetMouseZ();	// Mouse Scroll
+
+	// Forward/Backwards
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) mov += Z * speed;
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) mov -= Z * speed;
 
 	// Left/Right
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) mov += X * speed;
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) mov -= X * speed;
 
 	// Up/Down
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) mov += Y * speed;
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) mov -= Y * speed;
+	if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_REPEAT) mov += Y * speed;
+	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_REPEAT) mov -= Y * speed;
+}
+
+void ModuleCamera3D::RotateCamera(float& rotSpeed)
+{
+	// Left/Right
+	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_REPEAT) RotateHorizontal(rotSpeed);
+	if (App->input->GetKey(SDL_SCANCODE_KP_6) == KEY_REPEAT) RotateHorizontal(-rotSpeed);
+
+	// Up/Down
+	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_REPEAT) RotateVertical(rotSpeed);
+	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_REPEAT) RotateVertical(-rotSpeed);
 }
 
 void ModuleCamera3D::FirstPersonCamera(vec3& mov, float& movSpeed, float& rotSpeed, float& dt)

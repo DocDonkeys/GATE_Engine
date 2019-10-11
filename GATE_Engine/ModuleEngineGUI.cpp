@@ -174,7 +174,8 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			ImGui::EndMenu();
 		}
-		
+	
+
 		// Menu - Window: Display options
 		if (ImGui::BeginMenu("Window", true)) {
 			
@@ -318,41 +319,39 @@ update_status ModuleEngineGUI::Update(float dt)
 	// Window - Configuration: Engine settings
 	if (show_configuration_window)
 	{
-		ImGui::Begin("Configuration", &show_configuration_window);
+		ImGui::Begin("Configuration", &show_configuration_window, ImGuiWindowFlags_MenuBar);
 
-		//// Menu - Options: Confirm
-		//if (ImGui::BeginMenu("Options"))	//CHANGE/FIX: Buttons feel better being below, so the options menu has been removed
-		//{
-		//	if (ImGui::MenuItem("Save")) {
-		//		App->RequestConfigSave();
-		//	}
+		ImGui::BeginMenuBar();
 
-		//	/*if (ImGui::MenuItem("Load")) {
-		//		App->RequestConfigLoad();
-		//	}*/
+		if (ImGui::MenuItem("Save")) {
+			App->RequestConfigSave();
+		}
 
-		//	if (ImGui::Button("Reset Defaults")) {
-		//		ImGui::OpenPopup("Are you sure?");
-		//	}
+		if (ImGui::MenuItem("Reset")) {	//CHANGE/FIX: Values are loaded and therefore reseted, but the changes they represent (like window size) don't
+			App->RequestConfigLoad();
+		}
 
-		//	if (ImGui::BeginPopup("Are you sure?"))
-		//	{
-		//		ImGui::Text("Are you sure?");
+		if (ImGui::MenuItem("Defaults")) {
+			ImGui::OpenPopup("Are you sure?");
+		}
 
-		//		if (ImGui::Button("Yes")) {
-		//			App->RequestConfigReset();
-		//			ImGui::CloseCurrentPopup();
-		//		}
+		if (ImGui::BeginPopup("Are you sure?"))
+		{
+			ImGui::Text("Are you sure?");
 
-		//		if (ImGui::Button("Cancel")) {
-		//			ImGui::CloseCurrentPopup();
-		//		}
+			if (ImGui::Button("Yes")) {
+				App->RequestConfigReset();
+				ImGui::CloseCurrentPopup();
+			}
 
-		//		ImGui::EndPopup();
-		//	}
+			if (ImGui::Button("Cancel")) {
+				ImGui::CloseCurrentPopup();
+			}
 
-		//	ImGui::EndMenu();
-		//}
+			ImGui::EndPopup();
+		}
+
+		ImGui::EndMenuBar();
 
 		// Header - Application: General App settings
 		if (ImGui::CollapsingHeader("Application"))
@@ -411,17 +410,11 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 140.0f, ImVec2(310, 100));
 			sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
 			ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
-
 		}
 
 		// Header - Input: Input settings
 		if (ImGui::CollapsingHeader("Controls"))
 		{
-			if (ImGui::CollapsingHeader("Camera"))
-			{
-
-			}
-
 			ImGui::Text("Mouse Position: "); ImGui::SameLine();
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
 
@@ -467,9 +460,12 @@ update_status ModuleEngineGUI::Update(float dt)
 		// Header - Renderer: Renderer and OpenGL settings
 		if (ImGui::CollapsingHeader("Renderer"))
 		{
+			//Refresh rate
 			ImGui::Text("Refresh rate: ");
 			ImGui::SameLine();
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%.1f", App->fps_log[App->fps_log.size() - 1]);
+
+			ImGui::Separator();
 
 			//GL_Settings
 			ImGui::Text("OpenGL Options");
@@ -601,38 +597,6 @@ update_status ModuleEngineGUI::Update(float dt)
 			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
 
 			ImGui::Text("VRAM Reserved: ");
-		}
-
-		ImGui::Separator();
-
-		if (ImGui::Button("Save")) {
-			App->RequestConfigSave();
-		}
-
-		/*if (ImGui::MenuItem("Load")) {	// Feels unnecesary design-wise
-			App->RequestConfigLoad();
-		}*/
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Reset Defaults")) {
-			ImGui::OpenPopup("Are you sure?");
-		}
-
-		if (ImGui::BeginPopup("Are you sure?"))
-		{
-			ImGui::Text("Are you sure?");
-
-			if (ImGui::Button("Yes")) {
-				App->RequestConfigReset();
-				ImGui::CloseCurrentPopup();
-			}
-
-			if (ImGui::Button("Cancel")) {
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
 		}
 
 		ImGui::End();
