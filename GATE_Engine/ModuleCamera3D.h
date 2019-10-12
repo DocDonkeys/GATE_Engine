@@ -45,7 +45,7 @@ private:
 public:
 	vec3 X, Y, Z, Position, Reference;
 
-	float camMovSpeed = 3.0f;			// Movement speed for keyboard inputs		//CHANGE/FIX: Save&Load
+	float camMovSpeed = 30.0f;			// Movement speed for keyboard inputs		//CHANGE/FIX: Save&Load
 	float camRotSpeed = 1.0f;			// Rotation speed for keyboard inputs
 	float camMouseSensivility = 0.25f;	// Multiplier for mouse input
 
