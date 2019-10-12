@@ -273,73 +273,73 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	}
 	glEnd();
 
-	sphere_test->Draw();
+	//sphere_test->Draw();
 
 	//App->scene_intro->sphere->draw(0, 5, 0);
 	
 	angle_rot += 30 *dt;
 	glRotatef(angle_rot, 0, 1, 0);
-	glBegin(GL_TRIANGLES);
-	float size = 1;
+	//glBegin(GL_TRIANGLES);
+	//float size = 1;
 
-	//1st face
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, 0.f, 0.f);
-	glVertex3f(0, 0.f, size);
+	////1st face
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, 0.f, 0.f);
+	//glVertex3f(0, 0.f, size);
 
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, 0.f, size);
-	glVertex3f(0, size, size);
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, 0.f, size);
+	//glVertex3f(0, size, size);
 
-	//2nd face
-	glVertex3f(0.f,size,size);
-	glVertex3f(0.f,0.f,size);
-	glVertex3f(size,0.f,size);
+	////2nd face
+	//glVertex3f(0.f,size,size);
+	//glVertex3f(0.f,0.f,size);
+	//glVertex3f(size,0.f,size);
 
-	glVertex3f(0.f,size,size);
-	glVertex3f(size,0.f,size);
-	glVertex3f(size, size, size);
+	//glVertex3f(0.f,size,size);
+	//glVertex3f(size,0.f,size);
+	//glVertex3f(size, size, size);
 
-	//3rd face
-	glVertex3f(0, size, 0.f);
-	glVertex3f(0, size, size);
-	glVertex3f(size, size, size);
+	////3rd face
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(0, size, size);
+	//glVertex3f(size, size, size);
 
-	glVertex3f(0, size, 0.f);
-	glVertex3f(size, size, size);
-	glVertex3f(size, size, 0);
+	//glVertex3f(0, size, 0.f);
+	//glVertex3f(size, size, size);
+	//glVertex3f(size, size, 0);
 
-	//4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal, 
-	// and then we displace it by size in the direction we need
+	////4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal, 
+	//// and then we displace it by size in the direction we need
 
-	//4th face
-	glVertex3f(size, 0.f, size);
-	glVertex3f(size, 0.f, 0.f);
-	glVertex3f(size, size, 0.f);
-	
-	glVertex3f(size, size, size);
-	glVertex3f(size, 0.f, size);
-	glVertex3f(size, size, 0.f);
+	////4th face
+	//glVertex3f(size, 0.f, size);
+	//glVertex3f(size, 0.f, 0.f);
+	//glVertex3f(size, size, 0.f);
+	//
+	//glVertex3f(size, size, size);
+	//glVertex3f(size, 0.f, size);
+	//glVertex3f(size, size, 0.f);
 
-	//5th face
-	glVertex3f(size, 0.f, 0);
-	glVertex3f(0.f, 0.f, 0);
-	glVertex3f(0.f, size, 0);
+	////5th face
+	//glVertex3f(size, 0.f, 0);
+	//glVertex3f(0.f, 0.f, 0);
+	//glVertex3f(0.f, size, 0);
 
-	glVertex3f(size, size, 0);
-	glVertex3f(size, 0.f, 0);
-	glVertex3f(0.f, size, 0);
+	//glVertex3f(size, size, 0);
+	//glVertex3f(size, 0.f, 0);
+	//glVertex3f(0.f, size, 0);
 
-	//6th face
-	glVertex3f(size, 0, size);
-	glVertex3f(0, 0, size);
-	glVertex3f(0, 0, 0.f);
+	////6th face
+	//glVertex3f(size, 0, size);
+	//glVertex3f(0, 0, size);
+	//glVertex3f(0, 0, 0.f);
 
-	glVertex3f(size, 0, 0);
-	glVertex3f(size, 0, size);
-	glVertex3f(0, 0, 0.f);
+	//glVertex3f(size, 0, 0);
+	//glVertex3f(size, 0, size);
+	//glVertex3f(0, 0, 0.f);
 
-	glEnd();
+	//glEnd();
 
 	glLineWidth(1.0f);
 
@@ -456,11 +456,11 @@ void ModuleRenderer3D::SwitchGLSetting(GL_Setting& glSet) const	// Switches sett
 	}	
 }
 
-void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int& size, const float * vertex)
+void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int& size, const float3 * vertex)
 {
 	glGenBuffers(1, (GLuint*) &(id_vertex));
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size * 3, vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * size, vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -481,6 +481,7 @@ void ModuleRenderer3D::DeleteBuffer(uint & id)
 //Pass a Mesh_Data to be drawn using glDrawElements
 void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 {
+	//Draw VERTICES with INDICES
 	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -498,4 +499,17 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 	}
 	else
 		App->ConsoleLOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
+
+	//Draw NORMALS TODO: only in DEBUG MODE!
+	if (mesh->normals_vertex != nullptr)
+	{
+		glColor3f(1,0,1);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glDrawArrays(GL_LINES, 0, mesh->num_vertex);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glColor3f(1, 1, 1);
+	}
 }

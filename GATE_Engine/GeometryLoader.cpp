@@ -72,8 +72,8 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 
 			// Copy VERTICES data (vertex)
 			new_mesh->num_vertex = loaded_mesh->mNumVertices;
-			new_mesh->vertex = new float[new_mesh->num_vertex * 3];
-			memcpy(new_mesh->vertex, loaded_mesh->mVertices, sizeof(float) * new_mesh->num_vertex * 3);
+			new_mesh->vertex = new float3[new_mesh->num_vertex];
+			memcpy(new_mesh->vertex, loaded_mesh->mVertices, sizeof(float3) * new_mesh->num_vertex);
 			App->ConsoleLOG("New mesh with %d vertices loaded", new_mesh->num_vertex);
 
 			// Copy INDICES/FACES data (index) (Faces as used in assimp)
@@ -90,11 +90,43 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 				}
 				App->ConsoleLOG("Mesh has %d indices loaded & %d polys", new_mesh->num_index, new_mesh->num_index/3);
 			}
+
+			// Copy NORMALS (Vertices)
+			if (loaded_mesh->HasNormals())
+			{
+				new_mesh->normals_vector = new float3[new_mesh->num_vertex];
+				for (int j = 0; j < new_mesh->num_vertex; ++j)
+				{
+					new_mesh->normals_vector[j].x = loaded_mesh->mNormals[j].x;
+					new_mesh->normals_vector[j].y = loaded_mesh->mNormals[j].y;
+					new_mesh->normals_vector[j].z = loaded_mesh->mNormals[j].z;
+				}
+
+				//The normals are just the vectors of each point, so we must add them to the position of each vertex
+				new_mesh->normals_vertex = new float3[new_mesh->num_vertex * 2];
+				for (int j = 0; j < new_mesh->num_vertex; ++j)
+				{
+					int k = j * 2; //Since the array we fill will be double the size we multiply by 2 make things easier when placing data onto the array
+					
+					new_mesh->normals_vertex[k] = new_mesh->vertex[j]; // Original position of the line
+
+					//Position of the line + vector (this way we can )
+					new_mesh->normals_vertex[k + 1].x = new_mesh->vertex[j].x + new_mesh->normals_vector[j].x;
+					new_mesh->normals_vertex[k + 1].y = new_mesh->vertex[j].y + new_mesh->normals_vector[j].y;
+					new_mesh->normals_vertex[k + 1].z = new_mesh->vertex[j].z + new_mesh->normals_vector[j].z;
+				}
+			}
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
 
 			if (new_mesh->index != nullptr)
 				App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
+
+			//Generate buffer for Normals
+			glGenBuffers(1, (GLuint*) &(new_mesh->id_normals));
+			glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_normals);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * new_mesh->num_vertex, new_mesh->normals_vertex, GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			//Finally add the new mesh to the vector
 			meshes.push_back(new_mesh);

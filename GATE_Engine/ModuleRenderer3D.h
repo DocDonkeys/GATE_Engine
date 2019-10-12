@@ -8,6 +8,7 @@
 #include "Primitive.h"
 #include "GeometryLoader.h"
 
+
 #define MAX_LIGHTS 8
 
 class Primitive;
@@ -28,7 +29,7 @@ public:
 	void OnResize(int width, int height);
 
 	//Tools for other modules
-	void GenerateVertexBuffer(uint& id_vertex, const int& size, const float* vertex);
+	void GenerateVertexBuffer(uint& id_vertex, const int& size, const float3* vertex);
 	void GenerateIndexBuffer(uint& id_index, const int& size, const uint* index);
 	void DeleteBuffer(uint& id);
 	void DrawMesh(const Mesh_Data* mesh);
