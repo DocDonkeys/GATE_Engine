@@ -67,8 +67,10 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		for (int i = 0; i < nmeshes; ++i)
 		{
 			Mesh_Data* new_mesh = new Mesh_Data;
-			// Copy VERTICES data (vertex)
+			
 			aiMesh* loaded_mesh = scene->mMeshes[i];
+
+			// Copy VERTICES data (vertex)
 			new_mesh->num_vertex = loaded_mesh->mNumVertices;
 			new_mesh->vertex = new float[new_mesh->num_vertex * 3];
 			memcpy(new_mesh->vertex, loaded_mesh->mVertices, sizeof(float) * new_mesh->num_vertex * 3);

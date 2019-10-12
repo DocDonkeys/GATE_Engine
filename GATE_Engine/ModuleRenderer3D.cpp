@@ -460,7 +460,7 @@ void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int& size, c
 {
 	glGenBuffers(1, (GLuint*) &(id_vertex));
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(double) * size, vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size * 3, vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
