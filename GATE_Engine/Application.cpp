@@ -480,8 +480,18 @@ bool Application::LoadConfig(json& obj)
 
 	//Input
 
+	//Camera
+	//float camMovMultiplier = 1.5f;		// Movement speed multiplier
+	//float camMovSpeed = 30.0f;			// Movement speed for keyboard inputs
+
+	//float camRotMultiplier = 1.5f;		// Rotation speed multiplier
+	//float camRotSpeed = 1.0f;			// Rotation speed for keyboard inputs
+
+	//float camMouseSensivility = 0.25f;	// Multiplier for mouse input
+
 	//Renderer
 	renderer3D->vSync = obj["Renderer3D"]["VSync"].get<bool>();
+	//int draw_mode = (int)draw_mode::MESH;
 
 	//GL_Settings Loading
 	renderer3D->GL_DepthTest = { GL_DEPTH_TEST, obj["Renderer3D"]["GL_Settings"]["DepthTest"].get<bool>() };

@@ -446,6 +446,9 @@ update_status ModuleEngineGUI::Update(float dt)
 			// Controls Tab
 			if (ImGui::BeginTabItem("Controls"))
 			{
+				ImGui::Text("Camera:");
+
+
 				ImGui::Text("Mouse Position: "); ImGui::SameLine();
 				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
 
