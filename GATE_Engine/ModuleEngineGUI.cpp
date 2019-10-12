@@ -174,21 +174,31 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			ImGui::EndMenu();
 		}
-	
 
-		// Menu - Window: Display options
+		// Menu - Window: View options
 		if (ImGui::BeginMenu("Window", true)) {
 			
-			if (ImGui::BeginMenu("Show")) {
+			if (ImGui::BeginMenu("Viewport")) {
 
 				ImGui::Checkbox("Framerate", &show_imgui_console);
 				ImGui::Checkbox("Polycount", &show_imgui_console);
 				ImGui::Checkbox("Base Grid", &show_imgui_console);
 
-				ImGui::Checkbox("Console", &show_imgui_console);
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Menus")) {
+
+				ImGui::MenuItem("Heriarchy", NULL, false);
+				ImGui::MenuItem("Assets", NULL, false);
+				ImGui::MenuItem("Console", NULL, &show_imgui_console);
+				ImGui::MenuItem("Inspector", NULL, false);
+				ImGui::MenuItem("Scene", NULL, false);
+				ImGui::MenuItem("Game", NULL, false);
 
 				ImGui::EndMenu();
 			}
+			
 
 			ImGui::Separator();
 
@@ -209,6 +219,23 @@ update_status ModuleEngineGUI::Update(float dt)
 		// Menu - GameObjects: Create premade objects and primitives
 		if (ImGui::BeginMenu("GameObjects", true)) {
 
+			if (ImGui::BeginMenu("Draw Mode")) {
+				
+				if (ImGui::RadioButton("Mesh", &draw_mode, (int)draw_mode::MESH)) {
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
+
+				if (ImGui::RadioButton("Wireframe", &draw_mode, (int)draw_mode::WIREFRAME)) {
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				}
+
+				if (ImGui::RadioButton("Vertexs", &draw_mode, (int)draw_mode::VERTEX)) {
+					glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+				}
+
+				ImGui::EndMenu();
+			}
+			
 			ImGui::EndMenu();
 		}
 
@@ -353,250 +380,263 @@ update_status ModuleEngineGUI::Update(float dt)
 
 		ImGui::EndMenuBar();
 
-		// Header - Application: General App settings
-		if (ImGui::CollapsingHeader("Application"))
+		if (ImGui::BeginTabBar("Setting Menus"))
 		{
-			//CHANGE/FIX: Add VSync checkbox here
-			
-		}
+			// Application Tab
+			//if (ImGui::BeginTabItem("Application"))	//CHANGE/FIX: Erase?
+			//{
+			//	ImGui::EndTabItem();
+			//}
 
-		if (ImGui::CollapsingHeader("Display"))
-		{
-			//Window
-			ImGui::Text("Window:");
+			// Display Tab
+			if (ImGui::BeginTabItem("Display"))
+			{
+				//Window
+				ImGui::Text("Window:");
 
-			if (ImGui::SliderInt("Width", &App->window->window_width, 256, 4096))
-				App->window->ResizeWindow(App->window->window_width, App->window->window_height);
+				if (ImGui::SliderInt("Width", &App->window->window_width, 256, 4096))
+					App->window->ResizeWindow(App->window->window_width, App->window->window_height);
 
-			if (ImGui::SliderInt("Height", &App->window->window_height, 144, 2160))
-				App->window->ResizeWindow(App->window->window_width, App->window->window_height);
+				if (ImGui::SliderInt("Height", &App->window->window_height, 144, 2160))
+					App->window->ResizeWindow(App->window->window_width, App->window->window_height);
 
-			if (ImGui::SliderFloat("Brightness", &App->window->window_brightness, 0.000f, 1.000f))
-				App->window->ChangeWindowBrightnessTo(App->window->window_brightness);
+				if (ImGui::SliderFloat("Brightness", &App->window->window_brightness, 0.000f, 1.000f))
+					App->window->ChangeWindowBrightnessTo(App->window->window_brightness);
 
-			if (ImGui::Checkbox("Fullscreen", &App->window->window_fullscreen))
-				App->window->WindowSetFullscreen(App->window->window_fullscreen);
+				if (ImGui::Checkbox("Fullscreen", &App->window->window_fullscreen))
+					App->window->WindowSetFullscreen(App->window->window_fullscreen);
 
-			ImGui::SameLine();
+				ImGui::SameLine();
 
-			if (ImGui::Checkbox("Resizable", &App->window->window_resizable))
-				App->window->WindowSetResizable(App->window->window_resizable);
+				if (ImGui::Checkbox("Resizable", &App->window->window_resizable))
+					App->window->WindowSetResizable(App->window->window_resizable);
 
-			if (ImGui::Checkbox("Borderless", &App->window->window_borderless))
-				App->window->WindowSetBorderless(App->window->window_borderless);
+				if (ImGui::Checkbox("Borderless", &App->window->window_borderless))
+					App->window->WindowSetBorderless(App->window->window_borderless);
 
-			ImGui::SameLine();
+				ImGui::SameLine();
 
-			if (ImGui::Checkbox("Full Desktop", &App->window->window_full_desktop))
-				App->window->WindowSetFullscreenDesktop(App->window->window_full_desktop);
+				if (ImGui::Checkbox("Full Desktop", &App->window->window_full_desktop))
+					App->window->WindowSetFullscreenDesktop(App->window->window_full_desktop);
 
-			ImGui::Separator();
+				ImGui::Separator();
 
-			//Plotting FPS and ms
-			ImGui::Text("Frame Rate:");
-			ImGui::SameLine();
-			if (ImGui::Checkbox("VSync", &App->renderer3D->vSync)) {
-				if (App->renderer3D->vSync) {
-					SDL_GL_SetSwapInterval(1);
+				//Plotting FPS and ms
+				ImGui::Text("Frame Rate:");
+				ImGui::SameLine();
+				if (ImGui::Checkbox("VSync", &App->renderer3D->vSync)) {
+					if (App->renderer3D->vSync) {
+						SDL_GL_SetSwapInterval(1);
+					}
+					else {
+						SDL_GL_SetSwapInterval(0);
+					}
 				}
-				else {
-					SDL_GL_SetSwapInterval(0);
-				}
+
+				ImGui::SliderInt("MAX FPS", &App->max_FPS, -1, 120);
+				char title[25];
+				sprintf_s(title, 25, "Framerate %.1f", App->fps_log[App->fps_log.size() - 1]);
+				ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 140.0f, ImVec2(310, 100));
+				sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
+				ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+
+				ImGui::EndTabItem();
 			}
 
-			ImGui::SliderInt("MAX FPS", &App->max_FPS, -1, 120);
-			char title[25];
-			sprintf_s(title, 25, "Framerate %.1f", App->fps_log[App->fps_log.size() - 1]);
-			ImGui::PlotHistogram("##framerate", &App->fps_log[0], App->fps_log.size(), 0, title, 0.0f, 140.0f, ImVec2(310, 100));
-			sprintf_s(title, 25, "Milliseconds %.1f", App->ms_log[App->ms_log.size() - 1]);
-			ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
-		}
-
-		// Header - Input: Input settings
-		if (ImGui::CollapsingHeader("Controls"))
-		{
-			ImGui::Text("Mouse Position: "); ImGui::SameLine();
-			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
-
-			ImGui::Text("Mouse Motion: "); ImGui::SameLine();
-			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
-
-			ImGui::Text("Mouse Wheel: "); ImGui::SameLine();
-			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d", App->input->GetMouseZ());
-
-			ImGui::Text("Input Log");
-
-			// Scrollbar TEST
-			static bool disable_mouse_wheel = false;
-			static bool disable_menu = false;
-			ImGui::Checkbox("Disable Mouse Wheel", &disable_mouse_wheel);
-			ImGui::Checkbox("Disable Menu", &disable_menu);
-
-			static int line = 50;
-			bool goto_line = ImGui::Button("Goto");
-			ImGui::SameLine();
-			ImGui::SetNextItemWidth(100);
-			goto_line |= ImGui::InputInt("##Line", &line, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue);
-
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar | (disable_mouse_wheel ? ImGuiWindowFlags_NoScrollWithMouse : 0);
-			ImGui::BeginChild("Child1", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 260), false, window_flags);
-			if (App->input->input_log.size() > 0)
+			// Controls Tab
+			if (ImGui::BeginTabItem("Controls"))
 			{
-				int i = 0;
-				while (i != App->input->input_log.size())
+				ImGui::Text("Mouse Position: "); ImGui::SameLine();
+				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
+
+				ImGui::Text("Mouse Motion: "); ImGui::SameLine();
+				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+
+				ImGui::Text("Mouse Wheel: "); ImGui::SameLine();
+				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d", App->input->GetMouseZ());
+
+				ImGui::Text("Input Log");
+
+				// Scrollbar TEST
+				static bool disable_mouse_wheel = false;
+				static bool disable_menu = false;
+				ImGui::Checkbox("Disable Mouse Wheel", &disable_mouse_wheel);
+				ImGui::Checkbox("Disable Menu", &disable_menu);
+
+				static int line = 50;
+				bool goto_line = ImGui::Button("Goto");
+				ImGui::SameLine();
+				ImGui::SetNextItemWidth(100);
+				goto_line |= ImGui::InputInt("##Line", &line, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue);
+
+				ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar | (disable_mouse_wheel ? ImGuiWindowFlags_NoScrollWithMouse : 0);
+				ImGui::BeginChild("Child1", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 260), false, window_flags);
+				if (App->input->input_log.size() > 0)
 				{
-					//ImGui::Text("%04d: scrollable region", i);
-					ImGui::Text("Key: %d %s", App->input->input_log[i], App->input->input_type_log[i]);
-					if (goto_line && line == i)
+					int i = 0;
+					while (i != App->input->input_log.size())
+					{
+						//ImGui::Text("%04d: scrollable region", i);
+						ImGui::Text("Key: %d %s", App->input->input_log[i], App->input->input_type_log[i]);
+						if (goto_line && line == i)
+							ImGui::SetScrollHereY();
+						++i;
+					}
+					if (goto_line && line >= 100)
 						ImGui::SetScrollHereY();
-					++i;
 				}
-				if (goto_line && line >= 100)
-					ImGui::SetScrollHereY();
+				ImGui::EndChild();
+
+				ImGui::EndTabItem();
 			}
-			ImGui::EndChild();
-		}
 
-		// Header - Renderer: Renderer and OpenGL settings
-		if (ImGui::CollapsingHeader("Renderer"))
-		{
-			//Refresh rate
-			ImGui::Text("Refresh rate: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%.1f", App->fps_log[App->fps_log.size() - 1]);
+			// Renderer Tab
+			if (ImGui::BeginTabItem("Renderer")) {
 
-			ImGui::Separator();
+				//Refresh rate
+				ImGui::Text("Refresh rate: ");
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%.1f", App->fps_log[App->fps_log.size() - 1]);
 
-			//GL_Settings
-			ImGui::Text("OpenGL Options");
+				ImGui::Separator();
 
-			ImGui::BulletText("General");
+				//GL_Settings
+				ImGui::Text("OpenGL Options");
 
-			if (ImGui::Checkbox("Depth Test", &App->renderer3D->GL_DepthTest.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_DepthTest);
+				ImGui::BulletText("General");
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("Depth Test", &App->renderer3D->GL_DepthTest.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_DepthTest);
 
-			if (ImGui::Checkbox("Cull Face", &App->renderer3D->GL_CullFace.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_CullFace);
+				ImGui::SameLine();
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("Cull Face", &App->renderer3D->GL_CullFace.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_CullFace);
 
-			if (ImGui::Checkbox("Lightning", &App->renderer3D->GL_Lighting.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Lighting);
+				ImGui::SameLine();
 
-			//------------------------------------------------------------
+				if (ImGui::Checkbox("Lightning", &App->renderer3D->GL_Lighting.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Lighting);
 
-			ImGui::BulletText("Textures");
+				//------------------------------------------------------------
 
-			if (ImGui::Checkbox("Texture 2D", &App->renderer3D->GL_Texture2D.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Texture2D);
+				ImGui::BulletText("Textures");
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("Texture 2D", &App->renderer3D->GL_Texture2D.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Texture2D);
 
-			if (ImGui::Checkbox("Texture CubeMap", &App->renderer3D->GL_TextureCubeMap.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_TextureCubeMap);
+				ImGui::SameLine();
 
-			//------------------------------------------------------------
+				if (ImGui::Checkbox("Texture CubeMap", &App->renderer3D->GL_TextureCubeMap.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_TextureCubeMap);
 
-			ImGui::BulletText("Points & Lines");
+				//------------------------------------------------------------
 
-			if (ImGui::Checkbox("Point Smooth", &App->renderer3D->GL_PointSmooth.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PointSmooth);
+				ImGui::BulletText("Points & Lines");
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("Point Smooth", &App->renderer3D->GL_PointSmooth.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PointSmooth);
 
-			if (ImGui::Checkbox("Line Smooth", &App->renderer3D->GL_LineSmooth.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_LineSmooth);
+				ImGui::SameLine();
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("Line Smooth", &App->renderer3D->GL_LineSmooth.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_LineSmooth);
 
-			if (ImGui::Checkbox("Line Stipple", &App->renderer3D->GL_LineStipple.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_LineStipple);
+				ImGui::SameLine();
 
-			//------------------------------------------------------------
+				if (ImGui::Checkbox("Line Stipple", &App->renderer3D->GL_LineStipple.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_LineStipple);
 
-			ImGui::BulletText("Polygons");
+				//------------------------------------------------------------
 
-			if (ImGui::Checkbox("Polygon Smooth", &App->renderer3D->GL_PolygonSmooth.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PolygonSmooth);
+				ImGui::BulletText("Polygons");
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("Polygon Smooth", &App->renderer3D->GL_PolygonSmooth.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PolygonSmooth);
 
-			if (ImGui::Checkbox("Polygon Stipple", &App->renderer3D->GL_PolygonStipple.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PolygonStipple);
+				ImGui::SameLine();
 
-			//------------------------------------------------------------
+				if (ImGui::Checkbox("Polygon Stipple", &App->renderer3D->GL_PolygonStipple.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_PolygonStipple);
 
-			ImGui::BulletText("Color");
+				//------------------------------------------------------------
 
-			if (ImGui::Checkbox("Blend", &App->renderer3D->GL_Blend.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Blend);
+				ImGui::BulletText("Color");
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("Blend", &App->renderer3D->GL_Blend.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Blend);
 
-			if (ImGui::Checkbox("Dither", &App->renderer3D->GL_Dither.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Dither);
+				ImGui::SameLine();
 
-			//------------------------------------------------------------
+				if (ImGui::Checkbox("Dither", &App->renderer3D->GL_Dither.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Dither);
 
-			if (ImGui::Checkbox("Color Material", &App->renderer3D->GL_ColorMaterial.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_ColorMaterial);
+				//------------------------------------------------------------
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("Color Material", &App->renderer3D->GL_ColorMaterial.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_ColorMaterial);
 
-			if (ImGui::Checkbox("MinMax", &App->renderer3D->GL_MinMax.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_MinMax);
+				ImGui::SameLine();
 
-			ImGui::SameLine();
+				if (ImGui::Checkbox("MinMax", &App->renderer3D->GL_MinMax.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_MinMax);
 
-			if (ImGui::Checkbox("Multi Sample", &App->renderer3D->GL_MultiSample.status))
-				App->renderer3D->SwitchGLSetting(App->renderer3D->GL_MultiSample);
-		}
+				ImGui::SameLine();
 
-		// Header - Hardware: Hardware information
-		if (ImGui::CollapsingHeader("Hardware"))
-		{
-			ImGui::Text("SDL Version: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
+				if (ImGui::Checkbox("Multi Sample", &App->renderer3D->GL_MultiSample.status))
+					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_MultiSample);
 
-			ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
-			ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
+				ImGui::EndTabItem();
+			}
 
-			ImGui::Text("CPU has Features: ");
-			for (int i = 0; i < App->CPU_features.size(); ++i)
+			// Hardware Tab
+			if (ImGui::BeginTabItem("Hardware"))
 			{
-				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%s,", App->CPU_features[i].data());
-				if (i == 0 || (float)(i % 4) != 0.0f)
-					ImGui::SameLine();
+				ImGui::Text("SDL Version: ");
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
+
+				ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
+				ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
+
+				ImGui::Text("CPU has Features: ");
+				for (int i = 0; i < App->CPU_features.size(); ++i)
+				{
+					ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%s,", App->CPU_features[i].data());
+					if (i == 0 || (float)(i % 4) != 0.0f)
+						ImGui::SameLine();
+				}
+
+				ImGui::Separator();
+
+				ImGui::Text("GPU: ");
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
+
+				ImGui::Text("Brand: ");
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
+
+				ImGui::Separator();
+
+				ImGui::Text("VRAM Budget: ");
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.budget);
+
+				ImGui::Text("VRAM Usage: ");
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.usage);
+
+				ImGui::Text("VRAM Available: ");
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
+
+				ImGui::Text("VRAM Reserved: ");
+
+				ImGui::EndTabItem();
 			}
 
-			ImGui::Separator();
-
-			ImGui::Text("GPU: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
-
-			ImGui::Text("Brand: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
-
-			ImGui::Separator();
-
-			ImGui::Text("VRAM Budget: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.budget);
-
-			ImGui::Text("VRAM Usage: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.usage);
-
-			ImGui::Text("VRAM Available: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
-
-			ImGui::Text("VRAM Reserved: ");
+			ImGui::EndTabBar();
 		}
 
 		ImGui::End();

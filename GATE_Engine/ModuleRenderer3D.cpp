@@ -132,21 +132,7 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 
 		//GL_Settings Startup
-		SetGLSetting(GL_DepthTest);
-		SetGLSetting(GL_CullFace);
-		SetGLSetting(GL_Lighting);
-		SetGLSetting(GL_ColorMaterial);
-		SetGLSetting(GL_Texture2D);
-		SetGLSetting(GL_TextureCubeMap);
-		SetGLSetting(GL_Blend);
-		SetGLSetting(GL_Dither);
-		SetGLSetting(GL_PointSmooth);
-		SetGLSetting(GL_LineSmooth);
-		SetGLSetting(GL_LineStipple);
-		SetGLSetting(GL_PolygonSmooth);
-		SetGLSetting(GL_PolygonStipple);
-		SetGLSetting(GL_MinMax);
-		SetGLSetting(GL_MultiSample);
+		GLSettingsSetup();
 	}
 
 	// Projection matrix for
@@ -432,6 +418,25 @@ void ModuleRenderer3D::OnResize(int width, int height)
 }
 
 // GL Settings
+void ModuleRenderer3D::GLSettingsSetup() 
+{
+	SetGLSetting(GL_DepthTest);
+	SetGLSetting(GL_CullFace);
+	SetGLSetting(GL_Lighting);
+	SetGLSetting(GL_ColorMaterial);
+	SetGLSetting(GL_Texture2D);
+	SetGLSetting(GL_TextureCubeMap);
+	SetGLSetting(GL_Blend);
+	SetGLSetting(GL_Dither);
+	SetGLSetting(GL_PointSmooth);
+	SetGLSetting(GL_LineSmooth);
+	SetGLSetting(GL_LineStipple);
+	SetGLSetting(GL_PolygonSmooth);
+	SetGLSetting(GL_PolygonStipple);
+	SetGLSetting(GL_MinMax);
+	SetGLSetting(GL_MultiSample);
+}
+
 void ModuleRenderer3D::SetGLSetting(GL_Setting& glSet) const	// Enables GL setting if bool flag marks so
 {
 	if (glSet.status) {

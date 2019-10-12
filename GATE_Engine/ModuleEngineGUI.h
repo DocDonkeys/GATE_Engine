@@ -1,7 +1,6 @@
 #ifndef __MODULEENGINEGUI_H__
 #define __MODULEENGINEGUI_H__
 
-
 #include "Globals.h"
 #include "Module.h"
 
@@ -14,6 +13,14 @@
 #include "libs/glew/include/GL/glew.h"
 
 #include "Console.h"
+
+enum class draw_mode {
+	MESH,
+	WIREFRAME,
+	VERTEX,
+
+	MAX_MODES
+};
 
 class ModuleEngineGUI : public Module
 {
@@ -36,6 +43,7 @@ public: // Vars
 	bool show_console_window = false;		//CHANGE/FIX: Delete, imgui console is the same but better
 	bool show_imgui_console = false;
 	
+	int draw_mode = (int)draw_mode::MESH;	//CHANGE/FIX: Save&Load
 
 	AppConsole console;
 
