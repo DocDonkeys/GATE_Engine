@@ -221,15 +221,15 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			if (ImGui::BeginMenu("Draw Mode")) {
 				
-				if (ImGui::RadioButton("Mesh", &draw_mode, (int)draw_mode::MESH)) {
+				if (ImGui::RadioButton("Mesh", &drawMode, (int)draw_mode::MESH)) {
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				}
 
-				if (ImGui::RadioButton("Wireframe", &draw_mode, (int)draw_mode::WIREFRAME)) {
+				if (ImGui::RadioButton("Wireframe", &drawMode, (int)draw_mode::WIREFRAME)) {
 					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				}
 
-				if (ImGui::RadioButton("Vertexs", &draw_mode, (int)draw_mode::VERTEX)) {
+				if (ImGui::RadioButton("Vertexs", &drawMode, (int)draw_mode::VERTEX)) {
 					glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 				}
 
@@ -525,13 +525,15 @@ update_status ModuleEngineGUI::Update(float dt)
 
 				ImGui::BulletText("Textures");
 
-				if (ImGui::Checkbox("Texture 2D", &App->renderer3D->GL_Texture2D.status))
-					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_Texture2D);
+				if (ImGui::RadioButton("2D", &textureMode, (int)texture_mode::TWO_D)) {
+					App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_Texture2D, App->renderer3D->GL_Texture2D.group);
+				}
 
 				ImGui::SameLine();
 
-				if (ImGui::Checkbox("Texture CubeMap", &App->renderer3D->GL_TextureCubeMap.status))
-					App->renderer3D->SwitchGLSetting(App->renderer3D->GL_TextureCubeMap);
+				if (ImGui::RadioButton("Cubemap", &textureMode, (int)texture_mode::CUBEMAP)) {
+					App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_TextureCubeMap, App->renderer3D->GL_TextureCubeMap.group);
+				}
 
 				//------------------------------------------------------------
 

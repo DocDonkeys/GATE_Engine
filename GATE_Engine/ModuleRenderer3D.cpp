@@ -456,6 +456,25 @@ void ModuleRenderer3D::SwitchGLSetting(GL_Setting& glSet) const	// Switches sett
 	}	
 }
 
+void ModuleRenderer3D::SwitchGroupGLSetting(GL_Setting& glSet, std::vector<GL_Setting*>* group) const
+{
+	if (!glIsEnabled(glSet.id)) {
+		
+		if (group != nullptr) {
+			for (std::vector<GL_Setting*>::iterator it = group->begin(); it != group->end(); it = next(it)) {
+				if ((*it)->status) {
+					glDisable((*it)->id);
+					(*it)->status = false;
+					break;
+				}
+			}
+		}
+
+		glEnable(glSet.id);
+		glSet.status = true;
+	}
+}
+
 void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int& size, const float * vertex)
 {
 	glGenBuffers(1, (GLuint*) &(id_vertex));

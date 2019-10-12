@@ -15,9 +15,17 @@
 #include "Console.h"
 
 enum class draw_mode {
-	MESH,
+	MESH = 0,
 	WIREFRAME,
 	VERTEX,
+
+	MAX_MODES
+};
+
+//Mutually exclusive GL settings groups
+enum class texture_mode {
+	TWO_D = 0,
+	CUBEMAP,
 
 	MAX_MODES
 };
@@ -43,7 +51,8 @@ public: // Vars
 	bool show_console_window = false;		//CHANGE/FIX: Delete, imgui console is the same but better
 	bool show_imgui_console = false;
 	
-	int draw_mode = (int)draw_mode::MESH;	//CHANGE/FIX: Save&Load
+	int drawMode = (int)draw_mode::MESH;			//CHANGE/FIX: Save&Load
+	int textureMode = (int)texture_mode::TWO_D;		//CHANGE/FIX: Save&Load
 
 	AppConsole console;
 

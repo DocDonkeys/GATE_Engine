@@ -36,10 +36,12 @@ public:
 	// OpenGL Settings
 	struct GL_Setting {
 		GLenum id;
+		std::vector<GL_Setting*>* group;	//Used for grouping settings that are mutually exclusive
 		bool status;
 	};
 	void SwitchGLSetting(GL_Setting& glSet) const;
-	
+	void SwitchGroupGLSetting(GL_Setting& glSet, std::vector<GL_Setting*>* group) const;
+
 private:
 	void GLSettingsSetup();
 	void SetGLSetting(GL_Setting& glSet) const;
@@ -52,11 +54,12 @@ public:
 
 	bool vSync = true;
 
-	//OpenGL Flags https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glEnable.xml
+	//OpenGL Flags https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glEnable.xml	//IMPROVE: Make a list jesus
 	GL_Setting GL_DepthTest;		//Do depth comparisons and update the depth buffer.
 	GL_Setting GL_CullFace;			//Cull polygons based on their winding in window coordinates.
 	GL_Setting GL_Lighting;			//If no vertex shader is active, use the current lighting parameters to compute the vertex color or index.
 	
+	std::vector<GL_Setting*> GL_TextureModes;
 	GL_Setting GL_Texture2D;		//If no fragment shader is active, two - dimensional texturing is performed
 	GL_Setting GL_TextureCubeMap;	//If no fragment shader is active, cube - mapped texturing is performed.
 	

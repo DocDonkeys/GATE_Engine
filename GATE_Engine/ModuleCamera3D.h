@@ -54,14 +54,14 @@ public:
 	bool firstPersonMode = false;		//CHANGE/FIX: Give use to this (DON'T SAVE&LOAD)
 
 	// Camera Movement
-	float camMovMultiplier = 1.5f;		// Movement speed multiplier for percentage boosts
-	float camMovSpeed = 30.0f;			// Movement speed for keyboard inputs
+	float camMovMultiplier;		// Movement speed multiplier for percentage boosts
+	float camMovSpeed;			// Movement speed for keyboard inputs
 
 	// Camera Rotation
-	float camRotMultiplier = 1.5f;		// Rotation speed multiplier for percentage boosts
-	float camRotSpeed = 1.0f;			// Rotation speed for keyboard inputs
+	float camRotMultiplier;		// Rotation speed multiplier for percentage boosts
+	float camRotSpeed;			// Rotation speed for keyboard inputs
 
-	float camMouseSensivility = 0.25f;	// Multiplier for mouse input
+	float camMouseSensivility;	// Multiplier for mouse input
 
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;
