@@ -480,27 +480,40 @@ bool Application::LoadConfig(json& obj)
 
 	//Input
 
+	//Camera
+	camera->camMovSpeed = obj["Camera"]["Movement Speed"].get<float>();
+	camera->camRotSpeed = obj["Camera"]["Rotation Speed"].get<float>();
+	camera->camMovMultiplier = obj["Camera"]["Movement Multiplier"].get<float>();
+	camera->camRotMultiplier = obj["Camera"]["Rotation Multiplier"].get<float>();
+	camera->camMouseSensivility = obj["Camera"]["Mouse Sensitivity"].get<float>();
+
 	//Renderer
 	renderer3D->vSync = obj["Renderer3D"]["VSync"].get<bool>();
 
-	//GL_Settings Loading
-	renderer3D->GL_DepthTest = { GL_DEPTH_TEST, obj["Renderer3D"]["GL_Settings"]["DepthTest"].get<bool>() };
-	renderer3D->GL_CullFace = { GL_CULL_FACE, obj["Renderer3D"]["GL_Settings"]["CullFace"].get<bool>() };
-	renderer3D->GL_Lighting = { GL_LIGHTING, obj["Renderer3D"]["GL_Settings"]["Lightning"].get<bool>() };
-	renderer3D->GL_ColorMaterial = { GL_COLOR_MATERIAL, obj["Renderer3D"]["GL_Settings"]["ColorMaterial"].get<bool>() };
-	renderer3D->GL_Texture2D = { GL_TEXTURE_2D, obj["Renderer3D"]["GL_Settings"]["Texture2D"].get<bool>() };
-	renderer3D->GL_TextureCubeMap = { GL_TEXTURE_CUBE_MAP, obj["Renderer3D"]["GL_Settings"]["TextureCubeMap"].get<bool>() };
-	renderer3D->GL_Blend = { GL_BLEND, obj["Renderer3D"]["GL_Settings"]["Blend"].get<bool>() };
-	renderer3D->GL_Dither = { GL_DITHER, obj["Renderer3D"]["GL_Settings"]["Dither"].get<bool>() };
-	renderer3D->GL_PointSmooth = { GL_POINT_SMOOTH, obj["Renderer3D"]["GL_Settings"]["PointSmooth"].get<bool>() };
-	renderer3D->GL_LineSmooth = { GL_LINE_SMOOTH, obj["Renderer3D"]["GL_Settings"]["LineSmooth"].get<bool>() };
-	renderer3D->GL_LineStipple = { GL_LINE_STIPPLE, obj["Renderer3D"]["GL_Settings"]["LineStipple"].get<bool>() };
-	renderer3D->GL_PolygonSmooth = { GL_POLYGON_SMOOTH, obj["Renderer3D"]["GL_Settings"]["PolygonSmooth"].get<bool>() };
-	renderer3D->GL_PolygonStipple = { GL_POLYGON_STIPPLE, obj["Renderer3D"]["GL_Settings"]["PolygonStipple"].get<bool>() };
-	renderer3D->GL_MinMax = { GL_MINMAX, obj["Renderer3D"]["GL_Settings"]["MinMax"].get<bool>() };
-	renderer3D->GL_MultiSample = { GL_MULTISAMPLE, obj["Renderer3D"]["GL_Settings"]["MultiSample"].get<bool>() };
+	//GL_Settings Loading (GL Id, mutually exclusive group linking, initial status)
+	renderer3D->GL_DepthTest = { GL_DEPTH_TEST, nullptr, obj["Renderer3D"]["GL_Settings"]["DepthTest"].get<bool>() };
+	renderer3D->GL_CullFace = { GL_CULL_FACE, nullptr, obj["Renderer3D"]["GL_Settings"]["CullFace"].get<bool>() };
+	renderer3D->GL_Lighting = { GL_LIGHTING, nullptr, obj["Renderer3D"]["GL_Settings"]["Lightning"].get<bool>() };
+	renderer3D->GL_ColorMaterial = { GL_COLOR_MATERIAL, nullptr, obj["Renderer3D"]["GL_Settings"]["ColorMaterial"].get<bool>() };
+
+	renderer3D->GL_Texture2D = { GL_TEXTURE_2D,  &renderer3D->GL_TextureModes, obj["Renderer3D"]["GL_Settings"]["Texture2D"].get<bool>() };
+	renderer3D->GL_TextureModes.push_back(&renderer3D->GL_Texture2D);
+	renderer3D->GL_TextureCubeMap = { GL_TEXTURE_CUBE_MAP,  &renderer3D->GL_TextureModes, obj["Renderer3D"]["GL_Settings"]["TextureCubeMap"].get<bool>() };
+	renderer3D->GL_TextureModes.push_back(&renderer3D->GL_TextureCubeMap);
+
+	renderer3D->GL_Blend = { GL_BLEND, nullptr, obj["Renderer3D"]["GL_Settings"]["Blend"].get<bool>() };
+	renderer3D->GL_Dither = { GL_DITHER, nullptr, obj["Renderer3D"]["GL_Settings"]["Dither"].get<bool>() };
+	renderer3D->GL_PointSmooth = { GL_POINT_SMOOTH, nullptr, obj["Renderer3D"]["GL_Settings"]["PointSmooth"].get<bool>() };
+	renderer3D->GL_LineSmooth = { GL_LINE_SMOOTH, nullptr, obj["Renderer3D"]["GL_Settings"]["LineSmooth"].get<bool>() };
+	renderer3D->GL_LineStipple = { GL_LINE_STIPPLE, nullptr, obj["Renderer3D"]["GL_Settings"]["LineStipple"].get<bool>() };
+	renderer3D->GL_PolygonSmooth = { GL_POLYGON_SMOOTH, nullptr, obj["Renderer3D"]["GL_Settings"]["PolygonSmooth"].get<bool>() };
+	renderer3D->GL_PolygonStipple = { GL_POLYGON_STIPPLE, nullptr, obj["Renderer3D"]["GL_Settings"]["PolygonStipple"].get<bool>() };
+	renderer3D->GL_MinMax = { GL_MINMAX, nullptr, obj["Renderer3D"]["GL_Settings"]["MinMax"].get<bool>() };
+	renderer3D->GL_MultiSample = { GL_MULTISAMPLE, nullptr, obj["Renderer3D"]["GL_Settings"]["MultiSample"].get<bool>() };
 
 	//GUI
+	engineGUI->drawMode = obj["GUI"]["Draw Mode"].get<int>();
+	engineGUI->textureMode = obj["GUI"]["Texture Mode"].get<int>();
 
 	return ret;
 }
@@ -531,7 +544,15 @@ bool Application::SaveConfig() const
 		}},
 
 		{"Input", {
+	
+		}},
 
+		{"Camera", {
+			{"Movement Speed", camera->camMovSpeed},
+			{"Rotation Speed", camera->camRotSpeed},
+			{"Movement Multiplier", camera->camMovMultiplier},
+			{"Rotation Multiplier", camera->camRotMultiplier},
+			{"Mouse Sensitivity", camera->camMouseSensivility}
 		}},
 
 		{"Renderer3D", {
@@ -556,7 +577,8 @@ bool Application::SaveConfig() const
 		}},
 
 		{"GUI", {
-
+			{"Draw Mode", engineGUI->drawMode},
+			{"Texture Mode", engineGUI->textureMode}
 		}},
 	};
 

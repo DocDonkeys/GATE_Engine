@@ -43,7 +43,12 @@ update_status ModuleCamera3D::Update(float dt)
 	if (true) {	//CHANGE/FIX: Should only work if Scene Window was the last window the user interacted with
 		
 		vec3 newPos(0, 0, 0);
-		float currSpeed = camMovSpeed * dt;
+		float currMovSpeed = camMovSpeed * dt;	//CHANGE/FIX: Multiplier should only trigger when double tapping a movement key
+		float currRotSpeed = camRotSpeed;
+
+		// Double Tap Processes
+		ProcessBoost(boostingSpeed, currMovSpeed, &ModuleCamera3D::MovBoostInput);
+		ProcessBoost(boostingRot, currRotSpeed, &ModuleCamera3D::RotBoostInput);
 
 		// Mouse Button Controls
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT
@@ -71,10 +76,14 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		// Keyboard Controls & Mouse Wheel
-		RotateCamera(camRotSpeed);
-		MoveCamera(newPos, currSpeed);
+		if (App->input->GetKey(SDL_SCANCODE_KP_0) == KEY_REPEAT)
+			RotateCamera(rotate_type::AROUND, currRotSpeed);
+		else
+			RotateCamera(rotate_type::SELF, currRotSpeed);
+
+		MoveCamera(newPos, currMovSpeed);
 		if (false) {	//CHANGE/FIX: Add controller variable and activation button for First Person Controls
-			FirstPersonCamera(newPos, currSpeed, camRotSpeed, dt);	//Move & Rotate Camera with FirstPerson-like controls
+			FirstPersonCamera(newPos, currMovSpeed, currRotSpeed, dt);	//Move & Rotate Camera with FirstPerson-like controls
 		}
 
 		// Apply changes and recalculate matrix
@@ -104,15 +113,24 @@ void ModuleCamera3D::MoveCamera(vec3& mov, float& speed)
 	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_REPEAT) mov -= Y * speed;
 }
 
-void ModuleCamera3D::RotateCamera(float& rotSpeed)
+void ModuleCamera3D::RotateCamera(rotate_type rotType, float& rotSpeed)
 {
+	int inverter = 1.0f;
+
+	if (rotType == rotate_type::AROUND)
+		inverter *= -1.0f;
+
+	RotateBegin(rotType);
+
 	// Left/Right
-	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_REPEAT) RotateHorizontal(rotSpeed);
-	if (App->input->GetKey(SDL_SCANCODE_KP_6) == KEY_REPEAT) RotateHorizontal(-rotSpeed);
+	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_REPEAT) RotateHorizontal(rotSpeed * inverter);
+	if (App->input->GetKey(SDL_SCANCODE_KP_6) == KEY_REPEAT) RotateHorizontal(-rotSpeed * inverter);
 
 	// Up/Down
-	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_REPEAT) RotateVertical(rotSpeed);
-	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_REPEAT) RotateVertical(-rotSpeed);
+	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_REPEAT) RotateVertical(rotSpeed * inverter);
+	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_REPEAT) RotateVertical(-rotSpeed * inverter);
+
+	RotateFinish(rotType);
 }
 
 void ModuleCamera3D::FirstPersonCamera(vec3& mov, float& movSpeed, float& rotSpeed, float& dt)
@@ -131,10 +149,6 @@ void ModuleCamera3D::FirstPersonCamera(vec3& mov, float& movSpeed, float& rotSpe
 	RotateFinish(rotate_type::SELF);
 	// END SELF_ROTATE
 
-	// TURBO
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-		movSpeed = 20.0f * dt;	//CHANGE/FIX: Dehardcode
-
 	// MOVE
 	// Forward/Backwards
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) mov -= Z * movSpeed;
@@ -148,6 +162,69 @@ void ModuleCamera3D::FirstPersonCamera(vec3& mov, float& movSpeed, float& rotSpe
 	// Left/Right
 	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) mov -= Y * movSpeed;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) mov += Y * movSpeed;
+}
+
+// -----------------------------------------------------------------
+
+// Double Tap Boosting
+void ModuleCamera3D::ProcessBoost(bool& boostType, float& currSpeed, void(ModuleCamera3D::*fPtr)(void))
+{
+	if (boostType) {
+		if (App->input->GetKey(lastKeyPressed) == KEY_UP) {
+			boostType = false;
+		}
+		else {
+			currSpeed *= 3.0f;//camMovMultiplier;
+		}
+	}
+	else {
+		(this->*fPtr)();
+	}
+}
+
+void ModuleCamera3D::MovBoostInput()	//IMPROVE: Add First-person camera condition and inputs
+{
+	int currKey = -1;
+
+	// Forward/Backwards
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) currKey = SDL_SCANCODE_DOWN;
+	else if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) currKey = SDL_SCANCODE_UP;
+
+	// Left/Right
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) currKey = SDL_SCANCODE_RIGHT;
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) currKey = SDL_SCANCODE_LEFT;
+
+	// Up/Down
+	else if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_DOWN) currKey = SDL_SCANCODE_KP_7;
+	else if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_DOWN) currKey = SDL_SCANCODE_KP_1;
+
+	CheckStartBoost(currKey, boostingSpeed);
+}
+
+void ModuleCamera3D::RotBoostInput()		//IMPROVE: Add First-person camera condition and inputs
+{
+	int currKey = -1;
+
+	// Left/Right
+	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_DOWN) currKey = SDL_SCANCODE_KP_4;
+	if (App->input->GetKey(SDL_SCANCODE_KP_6) == KEY_DOWN) currKey = SDL_SCANCODE_KP_6;
+
+	// Up/Down
+	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_DOWN) currKey = SDL_SCANCODE_KP_8;
+	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_DOWN) currKey = SDL_SCANCODE_KP_2;
+
+	CheckStartBoost(currKey, boostingRot);
+}
+
+void ModuleCamera3D::CheckStartBoost(int currKey, bool& boostType)
+{
+	if (currKey == lastKeyPressed && doubleTapTimer.Read() < doubleTapMsFrame) {
+		boostType = true;
+	}
+	else if (currKey != -1) {
+		lastKeyPressed = currKey;
+		doubleTapTimer.Start();
+	}
 }
 
 void ModuleCamera3D::DragCamera(vec3& mov, float delta_x, float delta_y)

@@ -6,7 +6,17 @@
     "Organization": "DocDonkeys (CITM)",
     "Title": "GATE Engine"
   },
-  "GUI": null,
+  "Camera": {
+    "Mouse Sensitivity": 0.25,
+    "Movement Multiplier": 1.5,
+    "Movement Speed": 30.0,
+    "Rotation Multiplier": 1.5,
+    "Rotation Speed": 1.0
+  },
+  "GUI": {
+    "Draw Mode": 0,
+    "Texture Mode": 0
+  },
   "Input": null,
   "Renderer3D": {
     "GL_Settings": {
@@ -23,7 +33,7 @@
       "PointSmooth": false,
       "PolygonSmooth": false,
       "PolygonStipple": false,
-      "Texture2D": false,
+      "Texture2D": true,
       "TextureCubeMap": false
     },
     "VSync": true

@@ -27,7 +27,7 @@ bool ModuleRenderer3D::Init()
 {
 	App->ConsoleLOG("Creating 3D Renderer context");
 	bool ret = true;
-	
+
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 	if(context == NULL)
@@ -46,7 +46,7 @@ bool ModuleRenderer3D::Init()
 				SDL_TriggerBreakpoint();
 			}
 		}
-			
+
 		//Init OpenGL wth Glew
 		GLenum err = glewInit();
 
@@ -55,18 +55,18 @@ bool ModuleRenderer3D::Init()
 			App->ConsoleLOG("Could not Initialize Glew, %s", glewGetErrorString(err));
 			return false;
 		}
-		else // Success! 
+		else // Success!
 		{
 			App->ConsoleLOG("Succesfully initialized Glew!");
 			App->ConsoleLOG("Using Glew %s", glewGetString(GLEW_VERSION));
 
 			//LOG Hardware
-			App->ConsoleLOG("Vendor: %s", glGetString(GL_VENDOR)); 
+			App->ConsoleLOG("Vendor: %s", glGetString(GL_VENDOR));
 			App->ConsoleLOG("Renderer: %s", glGetString(GL_RENDERER));
 			App->ConsoleLOG("OpenGL version supported %s", glGetString(GL_VERSION));
 			App->ConsoleLOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
-			
+
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -93,10 +93,10 @@ bool ModuleRenderer3D::Init()
 			SDL_TriggerBreakpoint();
 			ret = false;
 		}
-		
+
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
-		
+
 		//Initialize clear color
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 
@@ -108,27 +108,27 @@ bool ModuleRenderer3D::Init()
 			SDL_TriggerBreakpoint();
 			ret = false;
 		}
-		
+
 		GLfloat LightModelAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightModelAmbient);
-		
+
 		lights[0].ref = GL_LIGHT0;
 		lights[0].ambient.Set(0.25f, 0.25f, 0.25f, 1.0f);
 		lights[0].diffuse.Set(0.75f, 0.75f, 0.75f, 1.0f);
 		lights[0].SetPos(0.0f, 0.0f, 2.5f);
 		lights[0].Init();
-		
+
 		GLfloat MaterialAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, MaterialAmbient);
 
 		GLfloat MaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
 
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
-		glClearDepth(1.0f); 
-		glClearColor(0.f, 0.f, 0.f, 1.f); 
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+		glClearDepth(1.0f);
+		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
+
 		lights[0].Active(true);
 
 		//GL_Settings Startup
@@ -197,8 +197,8 @@ bool ModuleRenderer3D::Start()
 		1.f, 1.f, 1.f,
 	};
 
-	GLubyte indices[] = { 
-		0,1,2, 2,3,0,   
+	GLubyte indices[] = {
+		0,1,2, 2,3,0,
 		0,3,4, 3,7,4,
 		3,2,7, 2,6,7,
 		6,4,7, 4,6,5,
@@ -235,7 +235,7 @@ bool ModuleRenderer3D::Start()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::Orange);
-	
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -259,7 +259,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//DIRECT MODE Rendering
 	glLineWidth(2.0f);
 
-	
+
 
 	glBegin(GL_LINES);
 	//PLANE
@@ -276,7 +276,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//sphere_test->Draw();
 
 	//App->scene_intro->sphere->draw(0, 5, 0);
-	
+
 	angle_rot += 30 *dt;
 	glRotatef(angle_rot, 0, 1, 0);
 	//glBegin(GL_TRIANGLES);
@@ -309,7 +309,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//glVertex3f(size, size, size);
 	//glVertex3f(size, size, 0);
 
-	////4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal, 
+	////4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal,
 	//// and then we displace it by size in the direction we need
 
 	////4th face
@@ -360,14 +360,14 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glTranslatef(5.f,0.f,0.f);
 	//START VERTICES & INDICES BUFFER Rendering
 	glEnableClientState(GL_VERTEX_ARRAY);
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_optimized_array_id);
-	
+
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	//glVertexPointer(1, GL_FLOAT, 0, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
-	
+
 
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, nullptr);
 
@@ -376,8 +376,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
-	
-	
+
+
 
 	//Render
 
@@ -418,7 +418,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 }
 
 // GL Settings
-void ModuleRenderer3D::GLSettingsSetup() 
+void ModuleRenderer3D::GLSettingsSetup()
 {
 	SetGLSetting(GL_DepthTest);
 	SetGLSetting(GL_CullFace);
@@ -453,7 +453,27 @@ void ModuleRenderer3D::SwitchGLSetting(GL_Setting& glSet) const	// Switches sett
 	else {
 		glEnable(glSet.id);
 		glSet.status = true;
-	}	
+	}
+}
+
+
+void ModuleRenderer3D::SwitchGroupGLSetting(GL_Setting& glSet, std::vector<GL_Setting*>* group) const
+{
+	if (!glIsEnabled(glSet.id)) {
+
+		if (group != nullptr) {
+			for (std::vector<GL_Setting*>::iterator it = group->begin(); it != group->end(); it = next(it)) {
+				if ((*it)->status) {
+					glDisable((*it)->id);
+					(*it)->status = false;
+					break;
+				}
+			}
+		}
+
+		glEnable(glSet.id);
+		glSet.status = true;
+	}
 }
 
 void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int& size, const float3 * vertex)

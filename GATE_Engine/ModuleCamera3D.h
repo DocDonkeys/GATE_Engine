@@ -27,10 +27,16 @@ private:
 
 	// Input Checks
 	void MoveCamera(vec3& mov, float& speed);
-	void RotateCamera(float& rotSpeed);
+	void RotateCamera(rotate_type rotType, float& rotSpeed);
 	void DragCamera(vec3& mov, float delta_x, float delta_y);
 	void MouseRotate(rotate_type type, float delta_x, float delta_y);
 	void FirstPersonCamera(vec3& mov, float& movSpeed, float& rotSpeed, float& dt);
+
+	// Double Tap Checks
+	void ProcessBoost(bool& boostType, float& currSpeed, void(ModuleCamera3D::*fPtr)(void));
+	void MovBoostInput();
+	void RotBoostInput();
+	void CheckStartBoost(int currKey, bool& boostType);
 
 	// Camera Rotations
 	void RotateBegin(rotate_type type);
@@ -45,11 +51,26 @@ private:
 public:
 	vec3 X, Y, Z, Position, Reference;
 
-	float camMovSpeed = 3.0f;			// Movement speed for keyboard inputs		//CHANGE/FIX: Save&Load
-	float camRotSpeed = 1.0f;			// Rotation speed for keyboard inputs
-	float camMouseSensivility = 0.25f;	// Multiplier for mouse input
+	bool firstPersonMode = false;		//CHANGE/FIX: Give use to this (DON'T SAVE&LOAD)
+
+	// Camera Movement
+	float camMovMultiplier;		// Movement speed multiplier for percentage boosts
+	float camMovSpeed;			// Movement speed for keyboard inputs
+
+	// Camera Rotation
+	float camRotMultiplier;		// Rotation speed multiplier for percentage boosts
+	float camRotSpeed;			// Rotation speed for keyboard inputs
+
+	float camMouseSensivility;	// Multiplier for mouse input
 
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;
-	
+
+	// Dobule Tap
+	Timer doubleTapTimer;
+	uint doubleTapMsFrame = 1000;
+	int lastKeyPressed = 0;
+
+	bool boostingSpeed = false;
+	bool boostingRot = false;
 };
