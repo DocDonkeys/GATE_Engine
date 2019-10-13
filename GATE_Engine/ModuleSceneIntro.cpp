@@ -29,7 +29,7 @@ bool ModuleSceneIntro::Start()
 
 	sphere = new SolidSphere(3,30,30);
 
-	App->geometry_loader->CreateSphere(10,10);
+	App->geometry_loader->CreatePrimitive(PRIMITIVE::TORUS,30,30, 0.5f);
 
 	return ret;
 }

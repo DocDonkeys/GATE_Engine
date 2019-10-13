@@ -11,6 +11,17 @@
 
 struct par_shapes_mesh_s;
 
+enum class PRIMITIVE
+{
+	PLANE = 0,
+	CUBE,
+	SPHERE,
+	HEMISPHERE,
+	CYLINDER,
+	CONE,
+	TORUS
+};
+
 struct Mesh_Data //Struct to hold info for meshes
 {
 	uint id_index = 0; // index in VRAM 
@@ -47,9 +58,8 @@ public:
 	bool Load3DFile(const char* full_path); // Load a 3D file such as an FBX, OBJ etc.
 	void LoadPrimitiveShape(par_shapes_mesh_s* p_mesh); // Load a generated primitive (par_shape) into a mesh (Mesh_Data)
 
-
-	//Primitive Generation
-	void CreateSphere(int slices, int stacks);
+	//Generate a primitive, for CUBE (slices,stacks,radius) will be ignored, for anything else except Torus (radius) will be ignored. Remember radius between 0 & 1.0f
+	void CreatePrimitive(PRIMITIVE p, int slices = 0, int stacks = 0, float radius = 0.f);
 
 public: // Vars
 	aiLogStream stream;

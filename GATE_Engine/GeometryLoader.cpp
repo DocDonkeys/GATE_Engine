@@ -196,6 +196,7 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	{
 		new_mesh->index[i] = (uint)p_mesh->triangles[i];
 	}
+	App->ConsoleLOG("Created Primitive with %d vertices & %d indices.", new_mesh->num_vertex, new_mesh->num_index);
 
 	//Generate Buffers
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -205,10 +206,42 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	meshes.push_back(new_mesh);
 }
 
-void GeometryLoader::CreateSphere(int slices, int stacks)
+void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float radius)
 {
-	par_shapes_mesh* primitive_mesh = par_shapes_create_parametric_sphere(slices, stacks);
-	LoadPrimitiveShape(primitive_mesh);
+	par_shapes_mesh* primitive_mesh = nullptr;
+
+	switch (p)
+	{
+	case PRIMITIVE::PLANE:
+		primitive_mesh = par_shapes_create_plane(slices,stacks);
+		break;
+	case PRIMITIVE::CUBE:
+		primitive_mesh = par_shapes_create_cube();
+		break;
+	case PRIMITIVE::SPHERE:
+		primitive_mesh = par_shapes_create_parametric_sphere(slices, stacks);
+		break;
+	case PRIMITIVE::HEMISPHERE:
+		primitive_mesh = par_shapes_create_hemisphere(slices, stacks);
+		break;
+	case PRIMITIVE::CYLINDER:
+		primitive_mesh = par_shapes_create_cylinder(slices, stacks);
+		break;
+	case PRIMITIVE::CONE:
+		primitive_mesh = par_shapes_create_cone(slices, stacks);
+		break;
+	case PRIMITIVE::TORUS:
+		primitive_mesh = par_shapes_create_torus(slices, stacks,radius);
+		break;
+	default:
+		break;
+	}
+
+	//Push into the meshes vector
+	if (primitive_mesh != nullptr)
+		LoadPrimitiveShape(primitive_mesh);
+	else
+		App->ConsoleLOG("Failed to create primitive! Invalid primitive enum value received");
 }
 
 bool GeometryLoader::Init()
