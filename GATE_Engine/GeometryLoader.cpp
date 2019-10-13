@@ -116,6 +116,29 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 					new_mesh->normals_vertex[k + 1].z = new_mesh->vertex[j].z + new_mesh->normals_vector[j].z;
 				}
 			}
+
+			//ASK: We should try and make a system to actually load all possible tex coords for each texture
+			/*for (int j = 0; j < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++j) 
+			{
+				if (loaded_mesh->HasTextureCoords(j))
+				{
+				}
+			}*/
+			
+			if (loaded_mesh->HasTextureCoords(0)) // Check only the fisrt texture tex_coords 
+			{
+				new_mesh->num_tex_coords = new_mesh->num_vertex;
+				new_mesh->tex_coords = new float3[new_mesh->num_tex_coords];
+
+				for (int j = 0; j < new_mesh->num_tex_coords; ++j)
+				{
+					new_mesh->tex_coords[j].x = loaded_mesh->mTextureCoords[0][j].x;
+					new_mesh->tex_coords[j].y = loaded_mesh->mTextureCoords[0][j].y;
+					new_mesh->tex_coords[j].z = loaded_mesh->mTextureCoords[0][j].z;
+				}
+			}
+			
+
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
 
@@ -127,6 +150,9 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_normals);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * new_mesh->num_vertex, new_mesh->normals_vertex, GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			//Generate the buffer for the tex_coordinates
+			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords, new_mesh->tex_coords);
 
 			//Finally add the new mesh to the vector
 			meshes.push_back(new_mesh);
