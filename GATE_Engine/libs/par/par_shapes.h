@@ -23,8 +23,8 @@
 //
 // Distributed under the MIT License, see bottom of file.
 
-#ifndef PAR_SHAPES_H
-#define PAR_SHAPES_H
+#ifndef __PAR_SHAPES_H__
+#define __PAR_SHAPES_H__
 #define PAR_SHAPES_IMPLEMENTATION
 
 #ifdef __cplusplus

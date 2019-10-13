@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "GeometryLoader.h"
 #include <math.h>
 #include <ctime>
 #include "Application.h"
@@ -27,6 +28,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	sphere = new SolidSphere(3,30,30);
+
+	App->geometry_loader->CreateSphere(10,10);
 
 	return ret;
 }

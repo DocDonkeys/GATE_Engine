@@ -9,7 +9,9 @@
 
 #include "libs/Assimp/include/cimport.h"
 
-struct Mesh_Data //Struct to hold info for meshes imported with assimp
+struct par_shapes_mesh_s;
+
+struct Mesh_Data //Struct to hold info for meshes
 {
 	uint id_index = 0; // index in VRAM 
 	uint num_index = 0; 
@@ -42,7 +44,12 @@ public:
 	bool CleanUp();
 
 public:
-	bool Load3DFile(const char* full_path);
+	bool Load3DFile(const char* full_path); // Load a 3D file such as an FBX, OBJ etc.
+	void LoadPrimitiveShape(par_shapes_mesh_s* p_mesh); // Load a generated primitive (par_shape) into a mesh (Mesh_Data)
+
+
+	//Primitive Generation
+	void CreateSphere(int slices, int stacks);
 
 public: // Vars
 	aiLogStream stream;

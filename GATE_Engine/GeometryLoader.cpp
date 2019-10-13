@@ -2,12 +2,15 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 
+
 #include "libs/Assimp/include/cimport.h"
 #include "libs/Assimp/include/scene.h"
 #include "libs/Assimp/include/postprocess.h"
 #include "libs/Assimp/include/cfileio.h"
 
 #pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
+
+#include "libs/par/par_shapes.h"
 
 //#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")
 /*
@@ -166,6 +169,46 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		App->ConsoleLOG("Error loading scene %s", full_path);
 
 	return ret;
+}
+
+void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
+{
+	Mesh_Data* new_mesh = new Mesh_Data();
+
+	//Get sizes
+	new_mesh->num_vertex = p_mesh->npoints;
+	new_mesh->num_index = p_mesh->ntriangles * 3;
+
+	//Alloc memory
+	new_mesh->vertex = new float3[new_mesh->num_vertex];
+	new_mesh->index = new uint[new_mesh->num_index];
+
+	//Copy the par_shape_mesh vertex array and index array into Mesh_Data
+	for (int i = 0; i < new_mesh->num_vertex; i++)
+	{
+		int j = i * 3;
+		new_mesh->vertex[i].x = p_mesh->points[j];
+		new_mesh->vertex[i].y = p_mesh->points[j + 1];
+		new_mesh->vertex[i].z = p_mesh->points[j + 2];
+	}
+
+	for (int i = 0; i < new_mesh->num_index; i++)
+	{
+		new_mesh->index[i] = (uint)p_mesh->triangles[i];
+	}
+
+	//Generate Buffers
+	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
+	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
+
+	//Push into the meshes vector
+	meshes.push_back(new_mesh);
+}
+
+void GeometryLoader::CreateSphere(int slices, int stacks)
+{
+	par_shapes_mesh* primitive_mesh = par_shapes_create_parametric_sphere(slices, stacks);
+	LoadPrimitiveShape(primitive_mesh);
 }
 
 bool GeometryLoader::Init()
