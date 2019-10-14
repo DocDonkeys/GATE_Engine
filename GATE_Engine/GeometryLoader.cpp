@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 
-
 #include "libs/Assimp/include/cimport.h"
 #include "libs/Assimp/include/scene.h"
 #include "libs/Assimp/include/postprocess.h"

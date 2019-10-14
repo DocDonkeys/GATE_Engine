@@ -72,9 +72,6 @@
     <ClCompile Include="ModuleEngineGUI.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GeometryLoader.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Tools\Primitives</Filter>
     </ClCompile>
@@ -82,6 +79,9 @@
       <Filter>Sources\Tools\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="TextureLoader.cpp">
+      <Filter>Sources\Tools\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryLoader.cpp">
       <Filter>Sources\Tools\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
@@ -181,9 +181,6 @@
     <ClInclude Include="SolidSphere.h">
       <Filter>Sources\Tools\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryLoader.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Tools\Primitives</Filter>
     </ClInclude>
@@ -195,6 +192,9 @@
     </ClInclude>
     <ClInclude Include="libs\par\par_shapes.h">
       <Filter>Sources\Tools\Par</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryLoader.h">
+      <Filter>Sources\Tools\Loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
