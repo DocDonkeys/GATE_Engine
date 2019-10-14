@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
+#include "GeometryLoader.h"
 
 ModuleEngineGUI::ModuleEngineGUI(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -218,6 +219,46 @@ update_status ModuleEngineGUI::Update(float dt)
 
 		// Menu - GameObjects: Create premade objects and primitives
 		if (ImGui::BeginMenu("GameObjects", true)) {
+
+			if (ImGui::BeginMenu("3D Object")) {
+				
+				if (ImGui::MenuItem("Plane"))
+				{
+					App->geometry_loader->CreatePrimitive(PRIMITIVE::PLANE, 10,10);
+				}
+
+				if (ImGui::MenuItem("Cube"))
+				{
+					App->geometry_loader->CreatePrimitive(PRIMITIVE::CUBE);
+				}
+
+				if (ImGui::MenuItem("Sphere"))
+				{
+					App->geometry_loader->CreatePrimitive(PRIMITIVE::SPHERE, 30, 30);
+				}
+
+				if (ImGui::MenuItem("Hemisphere"))
+				{
+					App->geometry_loader->CreatePrimitive(PRIMITIVE::HEMISPHERE, 30, 30);
+				}
+
+				if (ImGui::MenuItem("Cylinder"))
+				{
+					App->geometry_loader->CreatePrimitive(PRIMITIVE::CYLINDER, 30, 30);
+				}
+
+				if (ImGui::MenuItem("Cone"))
+				{
+					App->geometry_loader->CreatePrimitive(PRIMITIVE::CONE, 30, 30);
+				}
+
+				if (ImGui::MenuItem("Torus"))
+				{
+					App->geometry_loader->CreatePrimitive(PRIMITIVE::TORUS, 30, 30, 0.5f);
+				}
+
+				ImGui::EndMenu();
+			}
 
 			if (ImGui::BeginMenu("Draw Mode")) {
 				

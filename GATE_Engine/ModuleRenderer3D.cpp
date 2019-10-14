@@ -224,10 +224,6 @@ bool ModuleRenderer3D::Start()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 36, indices, GL_STATIC_DRAW);
 
-	sphere_test = new Primitive();
-	sphere_test->CreateSphere(10,10);
-	sphere_test->SendToVRAM();
-
 	return ret;
 }
 
@@ -396,8 +392,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	App->ConsoleLOG("Destroying 3D Renderer");
-
-	RELEASE(sphere_test);
 
 	SDL_GL_DeleteContext(context);
 

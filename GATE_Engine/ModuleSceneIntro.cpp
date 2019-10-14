@@ -27,10 +27,6 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 1.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	sphere = new SolidSphere(3,30,30);
-
-	App->geometry_loader->CreatePrimitive(PRIMITIVE::TORUS,30,30, 0.5f);
-
 	return ret;
 }
 

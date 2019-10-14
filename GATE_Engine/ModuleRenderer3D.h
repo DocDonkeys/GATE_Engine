@@ -86,9 +86,6 @@ public:
 	//JUST TO SHOW THE SQUARES ROTATE, MUST BE REMOVED WHEN NO LONGER REQUIRED
 	float x_rot, y_rot, z_rot = 1.f;
 	float angle_rot = 0.0f;
-
-	//TEST
-	Primitive* sphere_test = nullptr;
 };
 
 
