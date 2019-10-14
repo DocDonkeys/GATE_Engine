@@ -146,7 +146,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	return texId;
 }
 
-uint TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const	//CHANGE/FIX: Add error SDL_Asserts
+uint TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const
 {
 	if (path == nullptr)
 	{
