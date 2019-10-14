@@ -51,8 +51,8 @@ public: // Vars
 	bool show_console_window = false;		//CHANGE/FIX: Delete, imgui console is the same but better
 	bool show_imgui_console = false;
 	
-	int drawMode = (int)draw_mode::MESH;			//CHANGE/FIX: Save&Load
-	int textureMode = (int)texture_mode::TWO_D;		//CHANGE/FIX: Save&Load
+	int drawMode = (int)draw_mode::MESH;
+	int textureMode = (int)texture_mode::TWO_D;
 
 	AppConsole console;
 

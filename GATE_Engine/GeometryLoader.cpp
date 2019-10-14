@@ -9,7 +9,7 @@
 
 #pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
 
-//#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")
+//#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")	//CHANGE/FIX: Remove? @Didac do we need to keep this here just in case?
 /*
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h" 

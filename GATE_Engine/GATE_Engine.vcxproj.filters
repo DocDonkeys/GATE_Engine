@@ -63,9 +63,6 @@
     <ClCompile Include="libs\mmgr\mmgr.cpp">
       <Filter>Sources\Tools\mmgr</Filter>
     </ClCompile>
-    <ClCompile Include="JsonLoader.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Sources\Tools\Timers</Filter>
     </ClCompile>
@@ -80,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Tools\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonLoader.cpp">
+      <Filter>Sources\Tools\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>Sources\Tools\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,9 +166,6 @@
     <ClInclude Include="libs\mmgr\nommgr.h">
       <Filter>Sources\Tools\mmgr</Filter>
     </ClInclude>
-    <ClInclude Include="JsonLoader.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools\Timers</Filter>
     </ClInclude>
@@ -186,6 +186,12 @@
     </ClInclude>
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Tools\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonLoader.h">
+      <Filter>Sources\Tools\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>Sources\Tools\Loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +233,9 @@
     </Filter>
     <Filter Include="Sources\Tools\Primitives">
       <UniqueIdentifier>{e27285dc-d11e-4471-a423-94ceb6e61b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Loaders">
+      <UniqueIdentifier>{2d1268be-23c1-429f-b07b-461cf872e673}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

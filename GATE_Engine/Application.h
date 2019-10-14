@@ -20,6 +20,7 @@
 #include "ModuleEngineGUI.h"
 #include "ModulePhysics.h"
 #include "GeometryLoader.h"
+#include "TextureLoader.h"
 
 // SDL
 #include "libs/SDL/include/SDL.h"
@@ -131,6 +132,7 @@ public:
 	ModuleEngineGUI*	engineGUI;
 	ModulePhysics*		physics;
 	GeometryLoader*		geometry_loader;
+	TextureLoader*		texture_loader;
 
 	//App members
 	hardware_info		hardware;
