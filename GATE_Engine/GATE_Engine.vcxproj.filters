@@ -193,6 +193,9 @@
     <ClInclude Include="TextureLoader.h">
       <Filter>Sources\Tools\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="libs\par\par_shapes.h">
+      <Filter>Sources\Tools\Par</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -233,6 +236,9 @@
     </Filter>
     <Filter Include="Sources\Tools\Primitives">
       <UniqueIdentifier>{e27285dc-d11e-4471-a423-94ceb6e61b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Par">
+      <UniqueIdentifier>{60121fa4-d3c0-4110-967e-98d6d65d1b3e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Tools\Loaders">
       <UniqueIdentifier>{2d1268be-23c1-429f-b07b-461cf872e673}</UniqueIdentifier>

@@ -9,7 +9,20 @@
 
 #include "libs/Assimp/include/cimport.h"
 
-struct Mesh_Data //Struct to hold info for meshes imported with assimp
+struct par_shapes_mesh_s;
+
+enum class PRIMITIVE
+{
+	PLANE = 0,
+	CUBE,
+	SPHERE,
+	HEMISPHERE,
+	CYLINDER,
+	CONE,
+	TORUS
+};
+
+struct Mesh_Data //Struct to hold info for meshes
 {
 	uint id_index = 0; // index in VRAM 
 	uint num_index = 0; 
@@ -23,6 +36,10 @@ struct Mesh_Data //Struct to hold info for meshes imported with assimp
 	uint num_normals = 0;
 	float3* normals_vector = nullptr; // Store the Vectors of the normals
 	float3* normals_vertex = nullptr; // Since on resize vertex positions will change we store the position
+
+	uint id_tex_coords = 0; // index in VRAM
+	uint num_tex_coords = 0;
+	float3* tex_coords = nullptr;
 };
 
 class GeometryLoader : public Module
@@ -38,7 +55,11 @@ public:
 	bool CleanUp();
 
 public:
-	bool Load3DFile(const char* full_path);
+	bool Load3DFile(const char* full_path); // Load a 3D file such as an FBX, OBJ etc.
+	void LoadPrimitiveShape(par_shapes_mesh_s* p_mesh); // Load a generated primitive (par_shape) into a mesh (Mesh_Data)
+
+	//Generate a primitive, for CUBE (slices,stacks,radius) will be ignored, for anything else except Torus (radius) will be ignored. Remember radius between 0 & 1.0f
+	void CreatePrimitive(PRIMITIVE p, int slices = 0, int stacks = 0, float radius = 0.f);
 
 public: // Vars
 	aiLogStream stream;
