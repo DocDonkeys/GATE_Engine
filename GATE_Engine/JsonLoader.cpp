@@ -26,7 +26,7 @@ bool JsonLoader::Save(json obj, const char* file) const
 
 json JsonLoader::Load(const char* file) const
 {
-	SDL_assert(file != nullptr);
+	SDL_assert(file != nullptr);	//CHANGE/FIX: Add a "File does not exist" UI error message
 
 	json obj;
 	std::ifstream stream(file, std::ifstream::in);

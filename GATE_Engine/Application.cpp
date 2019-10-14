@@ -6,6 +6,7 @@ Application::Application()
 	window = new ModuleWindow(this, "Window");
 	input = new ModuleInput(this, "Input");
 	geometry_loader = new GeometryLoader(this, "Geometry_Loader");
+	texture_loader = new TextureLoader(this, "Texture_Loader");
 	scene_intro = new ModuleSceneIntro(this, "Scene");
 	renderer3D = new ModuleRenderer3D(this, "Renderer");
 	camera = new ModuleCamera3D(this, "Camera");
@@ -22,6 +23,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(physics);
 	AddModule(geometry_loader);
+	AddModule(texture_loader);
 
 	//"Scene" (Currently the axis + white grid plane)
 	AddModule(scene_intro);
@@ -51,7 +53,7 @@ bool Application::Init()
 	//Load Settings before initializing modules
 	editableConfig.assign(CONFIG_FILENAME);
 	defaultConfig.assign(DEFAULT_CONFIG_FILENAME);
-	LoadUserConfig();	//TODO: If config is deleted code breaks, add failsave method that creates new config with default values inside settings folder
+	LoadUserConfig();	//CHANGE/FIX: If config is deleted code breaks, add failsave method that creates new config with default values inside settings folder
 
 	//Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
@@ -457,7 +459,7 @@ bool Application::LoadUserConfig()
 	return LoadConfig(config);
 }
 
-bool Application::LoadConfig(json& obj)
+bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in sections, each processed by its correspondant module using a json obj pointer as parameter
 {
 	bool ret = true;
 
@@ -518,7 +520,7 @@ bool Application::LoadConfig(json& obj)
 	return ret;
 }
 
-bool Application::SaveConfig() const
+bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, each processed by its correspondant module using a json obj pointer as parameter
 {
 	bool ret = true;
 

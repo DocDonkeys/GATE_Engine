@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 
-
 #include "libs/Assimp/include/cimport.h"
 #include "libs/Assimp/include/scene.h"
 #include "libs/Assimp/include/postprocess.h"
@@ -12,11 +11,11 @@
 
 #include "libs/par/par_shapes.h"
 
-//#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")
+//#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")		//CHANGE/FIX: Remove? @Didac do we need to keep this here just in case?
 /*
 #include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h" 
-#include "Assimp/include/postprocess.h" 
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 */
@@ -33,7 +32,7 @@ bool GeometryLoader::CleanUp()
 {
 	bool ret = true;
 
-	// detach log stream 
+	// detach log stream
 	aiDetachAllLogStreams();
 
 	//Delete data
@@ -70,7 +69,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		for (int i = 0; i < nmeshes; ++i)
 		{
 			Mesh_Data* new_mesh = new Mesh_Data;
-			
+
 			aiMesh* loaded_mesh = scene->mMeshes[i];
 
 			// Copy VERTICES data (vertex)
@@ -83,12 +82,12 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			if (loaded_mesh->HasFaces())
 			{
 				new_mesh->num_index = loaded_mesh->mNumFaces * 3;
-				new_mesh->index = new uint[new_mesh->num_index]; // assuming each face is a triangle  
+				new_mesh->index = new uint[new_mesh->num_index]; // assuming each face is a triangle
 				for (uint j = 0; j < loaded_mesh->mNumFaces; ++j)
-				{   
-					if(loaded_mesh->mFaces[j].mNumIndices != 3)    
-						App->ConsoleLOG("WARNING, geometry face with != 3 indices! Export your 3D file with triangularized faces/polys!");   
-					else    
+				{
+					if(loaded_mesh->mFaces[j].mNumIndices != 3)
+						App->ConsoleLOG("WARNING, geometry face with != 3 indices! Export your 3D file with triangularized faces/polys!");
+					else
 						memcpy(&new_mesh->index[j*3], loaded_mesh->mFaces[j].mIndices, 3 * sizeof(uint));
 				}
 				App->ConsoleLOG("Mesh has %d indices loaded & %d polys", new_mesh->num_index, new_mesh->num_index/3);
@@ -110,7 +109,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 				for (int j = 0; j < new_mesh->num_vertex; ++j)
 				{
 					int k = j * 2; //Since the array we fill will be double the size we multiply by 2 make things easier when placing data onto the array
-					
+
 					new_mesh->normals_vertex[k] = new_mesh->vertex[j]; // Original position of the line
 
 					//Position of the line + vector (this way we can )
@@ -121,14 +120,14 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			}
 
 			//ASK: We should try and make a system to actually load all possible tex coords for each texture
-			/*for (int j = 0; j < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++j) 
+			/*for (int j = 0; j < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++j)
 			{
 				if (loaded_mesh->HasTextureCoords(j))
 				{
 				}
 			}*/
-			
-			if (loaded_mesh->HasTextureCoords(0)) // Check only the fisrt texture tex_coords 
+
+			if (loaded_mesh->HasTextureCoords(0)) // Check only the fisrt texture tex_coords
 			{
 				new_mesh->num_tex_coords = new_mesh->num_vertex;
 				new_mesh->tex_coords = new float3[new_mesh->num_tex_coords];
@@ -140,7 +139,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 					new_mesh->tex_coords[j].z = loaded_mesh->mTextureCoords[0][j].z;
 				}
 			}
-			
+
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -165,7 +164,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		//Once finished we release the original file
 		aiReleaseImport(scene);
 	}
-	else   
+	else
 		App->ConsoleLOG("Error loading scene %s", full_path);
 
 	return ret;
@@ -246,9 +245,9 @@ void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float 
 
 bool GeometryLoader::Init()
 {
-	// Stream log messages to Debug window 
-	
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr); 
+	// Stream log messages to Debug window
+
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
 	return true;

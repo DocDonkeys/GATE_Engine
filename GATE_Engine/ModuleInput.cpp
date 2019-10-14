@@ -28,10 +28,11 @@ bool ModuleInput::Init()
 	bool ret = true;
 	SDL_Init(0);
 
-	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
+	int initSysRes = SDL_InitSubSystem(SDL_INIT_EVENTS);
+	if (initSysRes < 0)
 	{
 		App->ConsoleLOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
-		SDL_TriggerBreakpoint();
+		SDL_assert(initSysRes >= 0);
 		ret = false;
 	}
 	

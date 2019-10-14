@@ -7,7 +7,6 @@ using json = nlohmann::json;
 class JsonLoader
 {
 public:
-
 	// Constructor
 	JsonLoader() {};
 

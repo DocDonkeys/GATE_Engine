@@ -33,7 +33,7 @@ bool ModuleRenderer3D::Init()
 	if(context == NULL)
 	{
 		App->ConsoleLOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
-		SDL_TriggerBreakpoint();
+		SDL_assert(context != NULL);
 		ret = false;
 	}
 
@@ -41,9 +41,10 @@ bool ModuleRenderer3D::Init()
 	{
 		//Use Vsync
 		if (App->renderer3D->vSync) {
-			if (SDL_GL_SetSwapInterval(1) < 0) {
+			int swapInt = SDL_GL_SetSwapInterval(1);
+			if (swapInt < 0) {
 				App->ConsoleLOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-				SDL_TriggerBreakpoint();
+				SDL_assert(swapInt >= 0);
 			}
 		}
 
@@ -72,12 +73,12 @@ bool ModuleRenderer3D::Init()
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 
-		//Check for error
+		//Check for error	//IMPROVE: This error check code is repeated several times, make a function
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
 			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			SDL_TriggerBreakpoint();
+			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
 
@@ -90,7 +91,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			SDL_TriggerBreakpoint();
+			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
 
@@ -105,7 +106,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			SDL_TriggerBreakpoint();
+			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
 
