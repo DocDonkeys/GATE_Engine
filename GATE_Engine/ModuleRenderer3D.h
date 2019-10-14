@@ -31,6 +31,8 @@ public:
 	//Tools for other modules
 	void GenerateVertexBuffer(uint& id_vertex, const int& size, const float3* vertex);
 	void GenerateIndexBuffer(uint& id_index, const int& size, const uint* index);
+	void GenerateTextureBuffer(uint& id_tex_coords, const int& size, const float3* tex_coords);
+
 	void DeleteBuffer(uint& id);
 	void DrawMesh(const Mesh_Data* mesh);
 

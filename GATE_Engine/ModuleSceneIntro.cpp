@@ -31,6 +31,8 @@ bool ModuleSceneIntro::Start()
 
 	App->geometry_loader->CreatePrimitive(PRIMITIVE::TORUS,30,30, 0.5f);
 
+
+
 	return ret;
 }
 

@@ -44,6 +44,8 @@ bool GeometryLoader::CleanUp()
 		RELEASE_ARRAY(m_todestroy->index);
 		App->renderer3D->DeleteBuffer(m_todestroy->id_vertex);
 		RELEASE_ARRAY(m_todestroy->vertex);
+		App->renderer3D->DeleteBuffer(m_todestroy->id_tex_coords);
+		RELEASE_ARRAY(m_todestroy->tex_coords);
 
 		//Delete the allocated memory data for the mesh
 		RELEASE(meshes[i]);
@@ -127,19 +129,20 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 				}
 			}*/
 
-			if (loaded_mesh->HasTextureCoords(0)) // Check only the fisrt texture tex_coords
+			if (!loaded_mesh->HasTextureCoords(0)) // Check only the fisrt texture tex_coords
 			{
-				new_mesh->num_tex_coords = new_mesh->num_vertex;
-				new_mesh->tex_coords = new float3[new_mesh->num_tex_coords];
-
-				for (int j = 0; j < new_mesh->num_tex_coords; ++j)
-				{
-					new_mesh->tex_coords[j].x = loaded_mesh->mTextureCoords[0][j].x;
-					new_mesh->tex_coords[j].y = loaded_mesh->mTextureCoords[0][j].y;
-					new_mesh->tex_coords[j].z = loaded_mesh->mTextureCoords[0][j].z;
-				}
+				new_mesh->texId = App->texture_loader->GetDefaultTex();
 			}
 
+			new_mesh->num_tex_coords = new_mesh->num_vertex;
+			new_mesh->tex_coords = new float3[new_mesh->num_tex_coords];
+
+			for (int j = 0; j < new_mesh->num_tex_coords; ++j)
+			{
+				new_mesh->tex_coords[j].x = loaded_mesh->mTextureCoords[0][j].x;
+				new_mesh->tex_coords[j].y = loaded_mesh->mTextureCoords[0][j].y;
+				new_mesh->tex_coords[j].z = loaded_mesh->mTextureCoords[0][j].z;
+			}
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -181,6 +184,7 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	//Alloc memory
 	new_mesh->vertex = new float3[new_mesh->num_vertex];
 	new_mesh->index = new uint[new_mesh->num_index];
+	new_mesh->tex_coords = new float3[new_mesh->num_tex_coords];
 
 	//Copy the par_shape_mesh vertex array and index array into Mesh_Data
 	for (int i = 0; i < new_mesh->num_vertex; i++)
@@ -200,6 +204,7 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	//Generate Buffers
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
 	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
+	App->renderer3D->GenerateTextureBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords, new_mesh->tex_coords);
 
 	//Push into the meshes vector
 	meshes.push_back(new_mesh);

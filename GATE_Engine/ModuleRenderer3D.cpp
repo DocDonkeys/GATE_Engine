@@ -493,6 +493,14 @@ void ModuleRenderer3D::GenerateIndexBuffer(uint & id_index,const int& size, cons
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void ModuleRenderer3D::GenerateTextureBuffer(uint& id_tex_coords, const int& size, const float3* tex_coords)
+{
+	glGenBuffers(1, (GLuint*) &(id_tex_coords));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_tex_coords);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float3) * size, tex_coords, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void ModuleRenderer3D::DeleteBuffer(uint & id)
 {
 	glDeleteBuffers(1,&(GLuint)id);
@@ -532,5 +540,15 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 		glDrawArrays(GL_LINES, 0, mesh->num_vertex);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glColor3f(1, 1, 1);
+	}
+
+	if (mesh->tex_coords != nullptr)
+	{
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY); // enable gl capability
+		glEnable(GL_TEXTURE_2D); // enable gl capability
+		glBindTexture(GL_TEXTURE_2D, mesh->texId); // start using texture
+		glActiveTexture(GL_TEXTURE0); // In case we had multitexturing, we should set which one is active 
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_coords); // start using created buffer (tex coords)
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL); // Specify type of data format
 	}
 }
