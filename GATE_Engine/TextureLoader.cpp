@@ -115,7 +115,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 
 	if (!defaultTex)	// If texture isn't the default one
 	{
-		if (target == GL_TEXTURE_2D) {
+		if (target == GL_TEXTURE_2D) {	// Change GL_Setting related to texture mode depending on the texture loaded
 			if (!App->renderer3D->GL_Texture2D.status) {
 				App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_Texture2D, App->renderer3D->GL_Texture2D.group);
 				App->engineGUI->textureMode = (int)texture_mode::TWO_D;
@@ -141,7 +141,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	// Unbind Texture
 	glBindTexture(target, 0);
 
-	LOG("[Success]: Loaded Texture: ID: %i , Width: %i , Height: %i, Filter: %s, Texture Type: %s", texId, width, height, filterStr.c_str(), texType.c_str());
+	LOG("[Success]: Loaded Texture: ID: %i , Width: %i , Height: %i, Filter: %s, Texture Type: %s", texId, width, height, filterStr.c_str(), texType.c_str());	//CHANGE/FIX: This pops up even if an error happened on the way, fix
 
 	return texId;
 }
@@ -180,6 +180,7 @@ uint TextureLoader::LoadTextureFile(const char* path, uint target, int filterTyp
 		{
 			// Create texture and assign ID
 			texId = CreateTexture(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_FORMAT), target, filterType, fillingType);
+			LOG("[Success]: Loaded texture from path %s", path);	//IMPROVE: Add error call here related to texId?
 		}
 		else {
 			LOG("[Error]: Image conversion failed. Cause: %s", iluErrorString(ilGetError()));
@@ -192,8 +193,6 @@ uint TextureLoader::LoadTextureFile(const char* path, uint target, int filterTyp
 	}
 
 	ilDeleteImages(1, (const ILuint*)&imgId);	// Delete image inside DevIL
-
-	LOG("[Success]: Loaded texture from path %s", path);
 
 	return texId;
 }
