@@ -39,7 +39,7 @@ struct Mesh_Data //Struct to hold info for meshes
 
 	uint id_tex_coords = 0; // index in VRAM
 	uint num_tex_coords = 0;
-	float3* tex_coords = nullptr;
+	float* tex_coords = nullptr;
 };
 
 class GeometryLoader : public Module

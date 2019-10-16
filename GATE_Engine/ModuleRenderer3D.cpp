@@ -270,111 +270,46 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	}
 	glEnd();
 
-	//sphere_test->Draw();
-
-	//App->scene_intro->sphere->draw(0, 5, 0);
-
-	angle_rot += 30 *dt;
-	glRotatef(angle_rot, 0, 1, 0);
-	//glBegin(GL_TRIANGLES);
-	//float size = 1;
-
-	////1st face
-	//glVertex3f(0, size, 0.f);
-	//glVertex3f(0, 0.f, 0.f);
-	//glVertex3f(0, 0.f, size);
-
-	//glVertex3f(0, size, 0.f);
-	//glVertex3f(0, 0.f, size);
-	//glVertex3f(0, size, size);
-
-	////2nd face
-	//glVertex3f(0.f,size,size);
-	//glVertex3f(0.f,0.f,size);
-	//glVertex3f(size,0.f,size);
-
-	//glVertex3f(0.f,size,size);
-	//glVertex3f(size,0.f,size);
-	//glVertex3f(size, size, size);
-
-	////3rd face
-	//glVertex3f(0, size, 0.f);
-	//glVertex3f(0, size, size);
-	//glVertex3f(size, size, size);
-
-	//glVertex3f(0, size, 0.f);
-	//glVertex3f(size, size, size);
-	//glVertex3f(size, size, 0);
-
-	////4th 5th & 6th face are 1st, 2nd & 3rd in reverse order to change the direction of the normal,
-	//// and then we displace it by size in the direction we need
-
-	////4th face
-	//glVertex3f(size, 0.f, size);
-	//glVertex3f(size, 0.f, 0.f);
-	//glVertex3f(size, size, 0.f);
-	//
-	//glVertex3f(size, size, size);
-	//glVertex3f(size, 0.f, size);
-	//glVertex3f(size, size, 0.f);
-
-	////5th face
-	//glVertex3f(size, 0.f, 0);
-	//glVertex3f(0.f, 0.f, 0);
-	//glVertex3f(0.f, size, 0);
-
-	//glVertex3f(size, size, 0);
-	//glVertex3f(size, 0.f, 0);
-	//glVertex3f(0.f, size, 0);
-
-	////6th face
-	//glVertex3f(size, 0, size);
-	//glVertex3f(0, 0, size);
-	//glVertex3f(0, 0, 0.f);
-
-	//glVertex3f(size, 0, 0);
-	//glVertex3f(size, 0, size);
-	//glVertex3f(0, 0, 0.f);
-
-	//glEnd();
-
 	glLineWidth(1.0f);
 
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, App->texture_loader->GetDefaultTex());
+	glBegin(GL_QUADS);
+	// Front Face
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Top Right Of The Texture and Quad
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Top Left Of The Texture and Quad
+	// Back Face
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
+	// Top Face
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
+	// Bottom Face
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Top Right Of The Texture and Quad
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Top Left Of The Texture and Quad
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
+	// Right face
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Top Left Of The Texture and Quad
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
+	// Left Face
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Top Right Of The Texture and Quad
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
+	glEnd();
+
+
+
 	//END of DIRECT MODE rendering
-
-	glRotatef(angle_rot, 0, 1, 0);
-	//START FRAME BUFFER Rendering
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	//END FRAME BUFFER Rendering
-
-	glRotatef(angle_rot, 0, 1, 0);
-	glTranslatef(5.f,0.f,0.f);
-	//START VERTICES & INDICES BUFFER Rendering
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_optimized_array_id);
-
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	//glVertexPointer(1, GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
-
-
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, nullptr);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-
-
 
 	//Render
 
@@ -479,6 +414,14 @@ void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int& size, c
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void ModuleRenderer3D::GenerateVertexBuffer(uint & id_vertex, const int & size, const float * vertex)
+{
+	glGenBuffers(1, (GLuint*) &(id_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, vertex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void ModuleRenderer3D::GenerateIndexBuffer(uint & id_index,const int& size, const uint * index)
 {
 	glGenBuffers(1, (GLuint*) &(id_index));
@@ -496,20 +439,30 @@ void ModuleRenderer3D::DeleteBuffer(uint & id)
 //Pass a Mesh_Data to be drawn using glDrawElements
 void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 {
+	uint default_tex = App->texture_loader->GetDefaultTex();
 	//Draw VERTICES with INDICES
 	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindTexture(GL_TEXTURE_2D, default_tex);
+		glActiveTexture(GL_TEXTURE0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_coords);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
 		glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, nullptr);
 		//Unbind
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 	else

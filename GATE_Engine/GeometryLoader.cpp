@@ -130,13 +130,14 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			if (loaded_mesh->HasTextureCoords(0)) // Check only the fisrt texture tex_coords
 			{
 				new_mesh->num_tex_coords = new_mesh->num_vertex;
-				new_mesh->tex_coords = new float3[new_mesh->num_tex_coords];
+				new_mesh->tex_coords = new float[new_mesh->num_tex_coords * 2]; // Since each vertex will have a U and a V value we use double the size
 
+				int k = 0;
 				for (int j = 0; j < new_mesh->num_tex_coords; ++j)
 				{
-					new_mesh->tex_coords[j].x = loaded_mesh->mTextureCoords[0][j].x;
-					new_mesh->tex_coords[j].y = loaded_mesh->mTextureCoords[0][j].y;
-					new_mesh->tex_coords[j].z = loaded_mesh->mTextureCoords[0][j].z;
+					k = j * 2;
+					new_mesh->tex_coords[k] = loaded_mesh->mTextureCoords[0][j].x;
+					new_mesh->tex_coords[k + 1] = loaded_mesh->mTextureCoords[0][j].y;
 				}
 			}
 
@@ -154,7 +155,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			//Generate the buffer for the tex_coordinates
-			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords, new_mesh->tex_coords);
+			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2, new_mesh->tex_coords);
 
 			//Finally add the new mesh to the vector
 			meshes.push_back(new_mesh);
@@ -165,7 +166,19 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		aiReleaseImport(scene);
 	}
 	else
-		App->ConsoleLOG("Error loading scene %s", full_path);
+		App->ConsoleLOG("Error loading scene meshes %s", full_path);
+
+	if (scene->HasMaterials())
+	{
+		aiString* tex_path;
+		aiMaterial* material = scene->mMaterials[0]; // For now we are just required to use 1 diffse texture
+
+		material->GetTexture(aiTextureType_DIFFUSE,0, tex_path);
+
+		//App->texture_loader->LoadTextureFile(tex_path.C_Str());
+	}
+	else
+		App->ConsoleLOG("Error loading scene materials %s", full_path);
 
 	return ret;
 }
