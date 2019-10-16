@@ -79,14 +79,8 @@ public:
 	GL_Setting GL_MinMax;			//Compute the minimum and maximum values of incoming RGBA color values.
 	GL_Setting GL_MultiSample;		//Use multiple fragment samples in computing the final color of a pixel.
 
-	////////////////
-	uint vertex_array_id = 0; // vertex array ID for example 1 of drawing with vertex buffers
-	uint vertex_optimized_array_id = 0;
-	uint indices_id = 0;
-
-	//JUST TO SHOW THE SQUARES ROTATE, MUST BE REMOVED WHEN NO LONGER REQUIRED
-	float x_rot, y_rot, z_rot = 1.f;
-	float angle_rot = 0.0f;
+	uint test_tex_id = 0;
+	uint house_test_tex = 0;
 };
 
 

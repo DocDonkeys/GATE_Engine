@@ -146,85 +146,10 @@ bool ModuleRenderer3D::Start()
 {
 	bool ret = true;
 
-	//This code must be reestructured after next week class 08/10/19
-	float size = 1.0f;
+	test_tex_id = App->texture_loader->LoadTextureFile("Assets/Textures/Lenna_(test_image).png");
+	house_test_tex = App->texture_loader->LoadTextureFile("Assets/Textures/Baker_house.png");
 
-	float vertex_array_wduplication[108] = { //Vertex array for 1st example of frame buffers, vertices duplicated
-	3.f, 1.f, 3.f,
-	3.f, 0.f, 3.f,
-	3.f, 0.f, 4.f,
-	3.f, 1.f, 3.f,
-	3.f, 0.f, 4.f,
-	3.f, 1.f, 4.f,
-	3.f, 1.f, 4.f,
-	3.f, 0.f, 4.f,
-	4.f, 0.f, 4.f,
-	3.f, 1.f, 4.f,
-	4.f, 0.f, 4.f,
-	4.f, 1.f, 4.f,
-	3.f, 1.f, 3.f,
-	3.f, 1.f, 4.f,
-	4.f, 1.f, 4.f,
-	3.f, 1.f, 3.f,
-	4.f, 1.f, 4.f,
-	4.f, 1.f, 3.f,
-	4.f, 0.f, 4.f,
-	4.f, 0.f, 3.f,
-	4.f, 1.f, 3.f,
-	4.f, 1.f, 4.f,
-	4.f, 0.f, 4.f,
-	4.f, 1.f, 3.f,
-	4.f, 0.f, 3.f,
-	3.f, 0.f, 3.f,
-	3.f, 1.f, 3.f,
-	4.f, 1.f, 3.f,
-	4.f, 0.f, 3.f,
-	3.f, 1.f, 3.f,
-	4.f, 0.f, 4.f,
-	3.f, 0.f, 4.f,
-	3.f, 0.f, 3.f,
-	4.f, 0.f, 3.f,
-	4.f, 0.f, 4.f,
-	3.f, 0.f, 3.f};
-
-	float vertex_array_findexing[24] = {
-		0.f,1.f,0.f,
-		0.f,0.f,0.f,
-		0.f,0.f,1.f,
-		0.f, 1.f, 1.f,
-		1.f,1.f,0.f,
-		1.f,0.f,0.f,
-		1.f,0.f,1.f,
-		1.f, 1.f, 1.f,
-	};
-
-	GLubyte indices[] = {
-		0,1,2, 2,3,0,
-		0,3,4, 3,7,4,
-		3,2,7, 2,6,7,
-		6,4,7, 4,6,5,
-		1,0,4, 5,1,4,
-		1,5,2, 2,5,6,
-
-		/*0,3,4, 4,5,0,
-		0,5,6, 6,1,0,
-		1,6,7, 7,2,1,
-		7,4,3, 3,2,7,
-		4,7,6, 6,5,4*/ };
-
-	//Prepare Buffers to be sent to VRAM
-	glGenBuffers(1, (GLuint*) &(vertex_array_id));
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 108, vertex_array_wduplication, GL_STATIC_DRAW);
-
-	glGenBuffers(1, (GLuint*) &(vertex_optimized_array_id));
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_optimized_array_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, vertex_array_findexing, GL_STATIC_DRAW);
-
-	glGenBuffers(1, (GLuint*) &(indices_id));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * 36, indices, GL_STATIC_DRAW);
-
+	
 	return ret;
 }
 
@@ -272,43 +197,40 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	glLineWidth(1.0f);
 
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, App->texture_loader->GetDefaultTex());
-	glBegin(GL_QUADS);
-	// Front Face
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Top Left Of The Texture and Quad
-	// Back Face
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
-	// Top Face
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
-	// Bottom Face
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Top Left Of The Texture and Quad
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
-	// Right face
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Top Left Of The Texture and Quad
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
-	// Left Face
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Top Right Of The Texture and Quad
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
-	glEnd();
-
-
-
+	//glEnable(GL_TEXTURE_2D);
+	//glBindTexture(GL_TEXTURE_2D, test_tex_id);
+	//glBegin(GL_QUADS);
+	//// Front Face
+	//glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
+	//glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
+	//glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Top Right Of The Texture and Quad
+	//glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Top Left Of The Texture and Quad
+	//// Back Face
+	//glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
+	//glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
+	//glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
+	//glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
+	//// Top Face
+	//glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
+	//glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
+	//glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
+	//glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
+	//// Bottom Face
+	//glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Top Right Of The Texture and Quad
+	//glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Top Left Of The Texture and Quad
+	//glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
+	//glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
+	//// Right face
+	//glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);  // Bottom Right Of The Texture and Quad
+	//glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);  // Top Right Of The Texture and Quad
+	//glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);  // Top Left Of The Texture and Quad
+	//glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);  // Bottom Left Of The Texture and Quad
+	//// Left Face
+	//glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);  // Bottom Left Of The Texture and Quad
+	//glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);  // Bottom Right Of The Texture and Quad
+	//glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);  // Top Right Of The Texture and Quad
+	//glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);  // Top Left Of The Texture and Quad
+	//glEnd();
 	//END of DIRECT MODE rendering
 
 	//Render
@@ -439,7 +361,6 @@ void ModuleRenderer3D::DeleteBuffer(uint & id)
 //Pass a Mesh_Data to be drawn using glDrawElements
 void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 {
-	uint default_tex = App->texture_loader->GetDefaultTex();
 	//Draw VERTICES with INDICES
 	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
 	{
@@ -449,7 +370,7 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindTexture(GL_TEXTURE_2D, default_tex);
+		glBindTexture(GL_TEXTURE_2D, house_test_tex);
 		glActiveTexture(GL_TEXTURE0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_coords);
@@ -462,7 +383,6 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 	else

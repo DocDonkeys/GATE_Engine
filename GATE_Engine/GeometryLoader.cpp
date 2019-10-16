@@ -173,7 +173,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		aiString* tex_path;
 		aiMaterial* material = scene->mMaterials[0]; // For now we are just required to use 1 diffse texture
 
-		material->GetTexture(aiTextureType_DIFFUSE,0, tex_path);
+		//material->GetTexture(aiTextureType_DIFFUSE,0, tex_path);
 
 		//App->texture_loader->LoadTextureFile(tex_path.C_Str());
 	}
