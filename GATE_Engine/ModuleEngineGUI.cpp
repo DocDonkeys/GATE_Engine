@@ -501,6 +501,8 @@ update_status ModuleEngineGUI::Update(float dt)
 					ImGui::SliderFloat("Rotation Speed", &App->camera->camRotSpeed, App->camera->camDefaultMin, App->camera->maxRotSpeed);
 					ImGui::SliderFloat("Rotation Multiplier", &App->camera->camRotMultiplier, App->camera->camDefaultMin, App->camera->maxRotMultiplier);
 
+					ImGui::Separator();
+
 					ImGui::Text("Mouse Inputs");
 					ImGui::SliderFloat("Mouse Sensibility", &App->camera->camMouseSens, App->camera->camDefaultMin, App->camera->maxMouseSens);
 				}				
