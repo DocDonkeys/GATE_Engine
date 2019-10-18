@@ -609,7 +609,7 @@ update_status ModuleEngineGUI::Update(float dt)
 
 				ImGui::SameLine();
 
-				if (ImGui::RadioButton("Cubemap", &textureMode, (int)texture_mode::CUBEMAP)) {
+				if (ImGui::RadioButton("Cube Map", &textureMode, (int)texture_mode::CUBEMAP)) {
 					App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_TextureCubeMap, App->renderer3D->GL_TextureCubeMap.group);
 				}
 
