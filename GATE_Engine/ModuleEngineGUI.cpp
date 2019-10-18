@@ -181,21 +181,21 @@ update_status ModuleEngineGUI::Update(float dt)
 			
 			if (ImGui::BeginMenu("Viewport")) {
 
-				ImGui::Checkbox("Framerate", &show_imgui_console);
-				ImGui::Checkbox("Polycount", &show_imgui_console);
-				ImGui::Checkbox("Base Grid", &show_imgui_console);
+				/*ImGui::Checkbox("Framerate", false);
+				ImGui::Checkbox("Polycount", false);
+				ImGui::Checkbox("Base Grid", false);*/
 
 				ImGui::EndMenu();
 			}
 
 			if (ImGui::BeginMenu("Menus")) {
 
-				ImGui::MenuItem("Heriarchy", NULL, false);
-				ImGui::MenuItem("Assets", NULL, false);
+				ImGui::MenuItem("Heriarchy", NULL, &show_heriarchy_window);
+				ImGui::MenuItem("Project", NULL, &show_project_window);
 				ImGui::MenuItem("Console", NULL, &show_imgui_console);
-				ImGui::MenuItem("Inspector", NULL, false);
-				ImGui::MenuItem("Scene", NULL, false);
-				ImGui::MenuItem("Game", NULL, false);
+				ImGui::MenuItem("Inspector", NULL, &show_inspector_window);
+				ImGui::MenuItem("Scene", NULL, &show_scene_window);
+				ImGui::MenuItem("Game", NULL, &show_game_window);
 
 				ImGui::EndMenu();
 			}
@@ -368,20 +368,38 @@ update_status ModuleEngineGUI::Update(float dt)
 
 	ImGui::EndMainMenuBar();
 
-	//TEST IMGUI CONSOLE	//CHANGE/FIX: Should we improve this?
-	if(show_imgui_console)
-	console.Draw("GATE Console",&show_imgui_console);
+	// Main Windows
+	if (show_imgui_console)	//TEST IMGUI CONSOLE	//CHANGE/FIX: Should we improve this?
+		console.Draw("GATE Console", &show_imgui_console);
 
-	//CONSOLE MENU
-	if (show_console_window)		//CHANGE/FIX: Delete, imgui console is the same but better
-	{
-		ImGui::Begin("Console",&show_console_window);
-
-		for (int i = 0; i < App->console_LOG.size(); ++i)
-			ImGui::Text(App->console_LOG[i].data());
+	if (show_heriarchy_window) {
+		ImGui::Begin("Heriarchy", &show_heriarchy_window);
 
 		ImGui::End();
+	}
 
+	if (show_project_window) {
+		ImGui::Begin("Project", &show_project_window);
+
+		ImGui::End();
+	}
+
+	if (show_inspector_window) {
+		ImGui::Begin("Inspector", &show_inspector_window);
+
+		ImGui::End();
+	}
+
+	if (show_scene_window) {
+		ImGui::Begin("Scene", &show_scene_window);
+
+		ImGui::End();
+	}
+
+	if (show_game_window) {
+		ImGui::Begin("Game", &show_game_window);
+
+		ImGui::End();
 	}
 	
 	// Window - Configuration: Engine settings
@@ -705,6 +723,18 @@ update_status ModuleEngineGUI::Update(float dt)
 		}
 
 		ImGui::End();
+	}
+
+	//CONSOLE MENU
+	if (show_console_window)		//CHANGE/FIX: Delete, imgui console is the same but better
+	{
+		ImGui::Begin("Console", &show_console_window);
+
+		for (int i = 0; i < App->console_LOG.size(); ++i)
+			ImGui::Text(App->console_LOG[i].data());
+
+		ImGui::End();
+
 	}
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
