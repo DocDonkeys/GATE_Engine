@@ -89,7 +89,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		// Regular Controls
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT) {
+		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT) {	// If First Person disabled...
 			MoveCamera(newPos, currMovSpeed);		// Arrow Key Controls
 			newPos -= Z * App->input->GetMouseZ();	// Mouse Scroll: Zoom
 
