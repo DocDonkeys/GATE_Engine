@@ -484,11 +484,17 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 
 	//Camera
 	camera->camMovSpeed = obj["Camera"]["Movement Speed"].get<float>();
+	camera->maxMovSpeed = obj["Camera"]["Max Movement Speed"].get<float>();
 	camera->camMovMultiplier = obj["Camera"]["Movement Multiplier"].get<float>();
-	camera->camMaxMovSpeed = obj["Camera"]["Max Movement Speed"].get<float>();
+	camera->maxMovMultiplier = obj["Camera"]["Max Movement Multiplier"].get<float>();
+
 	camera->camRotSpeed = obj["Camera"]["Rotation Speed"].get<float>();
+	camera->maxRotSpeed = obj["Camera"]["Max Rotation Speed"].get<float>();
 	camera->camRotMultiplier = obj["Camera"]["Rotation Multiplier"].get<float>();
-	camera->camMouseSensivility = obj["Camera"]["Mouse Sensitivity"].get<float>();
+	camera->maxRotMultiplier = obj["Camera"]["Max Rotation Multiplier"].get<float>();
+	
+	camera->camMouseSens = obj["Camera"]["Mouse Sensitivity"].get<float>();
+	camera->maxMouseSens = obj["Camera"]["Max Mouse Sensitivity"].get<float>();
 
 	//Renderer
 	renderer3D->vSync = obj["Renderer3D"]["VSync"].get<bool>();
@@ -552,11 +558,17 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 
 		{"Camera", {
 			{"Movement Speed", camera->camMovSpeed},
+			{"Max Movement Speed", camera->maxMovSpeed},
 			{"Movement Multiplier", camera->camMovMultiplier},
-			{"Max Movement Speed", camera->camMaxMovSpeed},
+			{"Max Movement Multiplier", camera->maxMovMultiplier},
+			
 			{"Rotation Speed", camera->camRotSpeed},
+			{"Max Rotation Speed", camera->maxRotSpeed},
 			{"Rotation Multiplier", camera->camRotMultiplier},
-			{"Mouse Sensitivity", camera->camMouseSensivility}
+			{"Max Rotation Multiplier", camera->maxRotMultiplier},
+
+			{"Mouse Sensitivity", camera->camMouseSens},
+			{"Max Mouse Sensitivity", camera->maxMouseSens}
 		}},
 
 		{"Renderer3D", {

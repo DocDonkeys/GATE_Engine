@@ -52,18 +52,23 @@ private:
 public:
 	vec3 X, Y, Z, Position, Reference;
 
-	bool firstPersonMode = false;		//CHANGE/FIX: Give use to this (DON'T SAVE&LOAD)
-
 	// Camera Movement
-	float camMovMultiplier;		// Movement speed multiplier for percentage boosts
 	float camMovSpeed;			// Movement speed for keyboard inputs
-	float camMaxMovSpeed;		// Maximum movement speed
+	float maxMovSpeed;			// Maximum movement speed
+	float camMovMultiplier;		// Movement speed multiplier for percentage boosts
+	float maxMovMultiplier;		// Maximum movement multiplier
 
 	// Camera Rotation
-	float camRotMultiplier;		// Rotation speed multiplier for percentage boosts
 	float camRotSpeed;			// Rotation speed for keyboard inputs
+	float maxRotSpeed;			// Maximum rotation speed
+	float camRotMultiplier;		// Rotation speed multiplier for percentage boosts
+	float maxRotMultiplier;		// Maximum rotation multiplier
 
-	float camMouseSensivility;	// Multiplier for mouse input
+	// Mouse input multiplier
+	float camMouseSens;		// Multiplier for mouse input
+	float maxMouseSens;		// Maximum mouse sensibility
+
+	float camDefaultMin = 0.1f;
 
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;

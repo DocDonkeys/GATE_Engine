@@ -43,7 +43,7 @@ update_status ModuleCamera3D::Update(float dt)
 	if (true) {	//CHANGE/FIX: Should only work if Scene Window was the last window the user interacted with
 		
 		vec3 newPos(0, 0, 0);
-		float currMovSpeed = camMovSpeed * dt;	//CHANGE/FIX: Multiplier should only trigger when double tapping a movement key
+		float currMovSpeed = camMovSpeed * dt;
 		float currRotSpeed = camRotSpeed;
 
 		// Double Tap Boosting
@@ -60,8 +60,8 @@ update_status ModuleCamera3D::Update(float dt)
 			|| App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
 			|| App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {	// If there's a mouse input...
 
-			float mouse_x = (float)-App->input->GetMouseXMotion() * camMouseSensivility;
-			float mouse_y = (float)-App->input->GetMouseYMotion() * camMouseSensivility;
+			float mouse_x = (float)-App->input->GetMouseXMotion() * camMouseSens;
+			float mouse_y = (float)-App->input->GetMouseYMotion() * camMouseSens;
 
 			if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
 				|| App->scene_intro->currMode == tool_mode::DRAG && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {	// Drag Camera
@@ -80,7 +80,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 				if (FirstPersonCamera(newPos, currMovSpeed)) {	// First Person Controls (if true == there's an input)
 					camMovSpeed += App->input->GetMouseZ();	// Mouse Scroll: Increase/Decrease movement speed
-					camMovSpeed = CLAMP(camMovSpeed, camMaxMovSpeed, 0.1f);
+					camMovSpeed = CLAMP(camMovSpeed, maxMovSpeed, 0.1f);
 				}
 				else {
 					newPos -= Z * App->input->GetMouseZ();	// Mouse Scroll: Forward/Backwrads
