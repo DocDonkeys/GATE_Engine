@@ -42,21 +42,27 @@ public:
 	update_status Update(float dt);
 	void RenderGUI();
 
-public: // Vars
-
-	// Bools to show / hide or open / close windows	//CHANGE/FIX: Should all of them be public? There's probably going to be a lot of flags which shouldn't be able to be triggered outside it's context
-	bool show_demo_window = false;
-	bool show_another_window = false;
-	bool show_configuration_window = false;
-	bool show_console_window = false;		//CHANGE/FIX: Delete, imgui console is the same but better
-	bool show_imgui_console = false;
-	
+public: // Members
 	int drawMode = (int)draw_mode::MESH;
 	int textureMode = (int)texture_mode::TWO_D;
 
 	AppConsole console;
 
 private:
+	// Bools to open/close windows
+	bool show_settings_window = false;
+	bool show_imgui_console = false;	//CHANGE/FIX: To show_console_window
+	bool show_console_window = false;	//CHANGE/FIX: Delete here and in cpp, imgui console is the same but better
+	bool show_heriarchy_window = false;	//TODO
+	bool show_assets_window = false;	//TODO
+	bool show_inspector_window = false;	//TODO
+	bool show_scene_window = false;		//TODO
+	bool show_game_window = false;		//TODO
+
+	// Debug window bools
+	bool show_demo_window = false;
+	bool show_another_window = false;
+
 	//UI values
 	float standard_text_width = 600.0f;	//Default/max text width
 

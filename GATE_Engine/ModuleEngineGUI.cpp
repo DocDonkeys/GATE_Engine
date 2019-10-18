@@ -47,7 +47,7 @@ update_status ModuleEngineGUI::Update(float dt)
 		show_console_window = !show_console_window;
 	//Configuration 4
 	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
-		show_configuration_window = !show_configuration_window;
+		show_settings_window = !show_settings_window;
 
 	// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -170,7 +170,7 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			// MenuItem - Settings: Engine confiuration settings
 			if (ImGui::MenuItem("Settings...")) {
-				show_configuration_window = !show_configuration_window;
+				show_settings_window = !show_settings_window;
 			}
 
 			ImGui::EndMenu();
@@ -385,9 +385,9 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 	
 	// Window - Configuration: Engine settings
-	if (show_configuration_window)
+	if (show_settings_window)
 	{
-		ImGui::Begin("Configuration", &show_configuration_window, ImGuiWindowFlags_MenuBar);
+		ImGui::Begin("Configuration", &show_settings_window, ImGuiWindowFlags_MenuBar);
 
 		ImGui::BeginMenuBar();
 
@@ -420,7 +420,7 @@ update_status ModuleEngineGUI::Update(float dt)
 		}
 
 		if (ImGui::MenuItem("Close")) {
-			show_configuration_window = false;
+			show_settings_window = false;
 		}
 
 		ImGui::EndMenuBar();
