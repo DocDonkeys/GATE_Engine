@@ -484,8 +484,9 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 
 	//Camera
 	camera->camMovSpeed = obj["Camera"]["Movement Speed"].get<float>();
-	camera->camRotSpeed = obj["Camera"]["Rotation Speed"].get<float>();
 	camera->camMovMultiplier = obj["Camera"]["Movement Multiplier"].get<float>();
+	camera->camMaxMovSpeed = obj["Camera"]["Max Movement Speed"].get<float>();
+	camera->camRotSpeed = obj["Camera"]["Rotation Speed"].get<float>();
 	camera->camRotMultiplier = obj["Camera"]["Rotation Multiplier"].get<float>();
 	camera->camMouseSensivility = obj["Camera"]["Mouse Sensitivity"].get<float>();
 
@@ -551,8 +552,9 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 
 		{"Camera", {
 			{"Movement Speed", camera->camMovSpeed},
-			{"Rotation Speed", camera->camRotSpeed},
 			{"Movement Multiplier", camera->camMovMultiplier},
+			{"Max Movement Speed", camera->camMaxMovSpeed},
+			{"Rotation Speed", camera->camRotSpeed},
 			{"Rotation Multiplier", camera->camRotMultiplier},
 			{"Mouse Sensitivity", camera->camMouseSensivility}
 		}},

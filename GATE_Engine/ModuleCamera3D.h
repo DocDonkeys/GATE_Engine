@@ -30,12 +30,13 @@ private:
 	void RotateCamera(rotate_type rotType, float& rotSpeed);
 	void DragCamera(vec3& mov, float delta_x, float delta_y);
 	void MouseRotate(rotate_type type, float delta_x, float delta_y);
-	void FirstPersonCamera(vec3& mov, float& movSpeed, float& rotSpeed, float& dt);
+	bool FirstPersonCamera(vec3& mov, float& movSpeed);
 
 	// Double Tap Checks
 	void ProcessBoost(bool& boostType, float& currSpeed, void(ModuleCamera3D::*fPtr)(void));
 	void MovBoostInput();
 	void RotBoostInput();
+	void FirstPersonBoostInput();
 	void CheckStartBoost(int currKey, bool& boostType);
 
 	// Camera Rotations
@@ -56,6 +57,7 @@ public:
 	// Camera Movement
 	float camMovMultiplier;		// Movement speed multiplier for percentage boosts
 	float camMovSpeed;			// Movement speed for keyboard inputs
+	float camMaxMovSpeed;		// Maximum movement speed
 
 	// Camera Rotation
 	float camRotMultiplier;		// Rotation speed multiplier for percentage boosts

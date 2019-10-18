@@ -47,9 +47,9 @@ void log(const char file[], int line, const char* format, ...);
 
 //Utilities
 #define IN_RANGE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )	//Returns if within range
-#define CLAMP(x, upper, lower) (MIN(upper, MAX(x, lower)))	//If X is between lower and upper, returns X. Else, if X < lower, returns lower. Else, if X > upper, returns upper.
 #define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )
 #define MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )
+#define CLAMP(x, upper, lower) (MIN(upper, MAX(x, lower)))	//If X is between lower and upper, returns X. Else, if X < lower, returns lower. Else, if X > upper, returns upper.
 #define TO_BOOL( a )  ( (a != 0) ? true : false )
 
 // Standard string size

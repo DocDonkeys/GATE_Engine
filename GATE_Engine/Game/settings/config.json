@@ -8,8 +8,9 @@
   },
   "Camera": {
     "Mouse Sensitivity": 0.25,
-    "Movement Multiplier": 1.5,
-    "Movement Speed": 3.0,
+    "Movement Multiplier": 2.0,
+    "Movement Speed": 5.0,
+    "Max Movement Speed" :  30.0,
     "Rotation Multiplier": 1.5,
     "Rotation Speed": 1.0
   },
@@ -33,8 +34,8 @@
       "PointSmooth": false,
       "PolygonSmooth": false,
       "PolygonStipple": false,
-      "Texture2D": false,
-      "TextureCubeMap": true
+      "Texture2D": true,
+      "TextureCubeMap": false
     },
     "VSync": true
   },
