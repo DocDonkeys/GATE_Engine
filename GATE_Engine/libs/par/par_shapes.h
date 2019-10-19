@@ -1081,8 +1081,6 @@ par_shapes_mesh* par_shapes_create_primitive_cube()
 	par_shapes_translate(meshes[5], 0.f, 1.f, 1.f);
 
 	
-	
-	
 	//Merge
 	for (int i = 0; i < 5; ++i)
 	{
@@ -1090,7 +1088,7 @@ par_shapes_mesh* par_shapes_create_primitive_cube()
 	}
 	cube_mesh = meshes[0];
 
-	par_shapes_weld(cube_mesh,0,nullptr);
+	par_shapes_weld(cube_mesh,0,nullptr); // We weld the mesh to optimize
 	return cube_mesh;
 }
 

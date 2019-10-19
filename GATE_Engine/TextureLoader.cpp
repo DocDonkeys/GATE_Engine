@@ -100,8 +100,15 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	}
 	else if (filterType == GL_NEAREST) {		// Nearest filter method makes the image pixelated when made bigger
 		filterStr.assign("Nearest");
-		glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST/*GL_NEAREST*/);	//WARNING! Originally was GL_Nearest for the last parameter, revert in case of texture trouble
+		if (!defaultTex)
+		{
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST/*GL_NEAREST*/);	//WARNING! Originally was GL_Nearest for the last parameter, revert in case of texture trouble
+		} 
+		else {
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		}
 	}
 	else {
 		LOG("[Error]: Texture loading was done with a filter type that wasn't GL_NEAREST nor GL_LINEAR.")

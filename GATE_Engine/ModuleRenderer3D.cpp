@@ -148,7 +148,7 @@ bool ModuleRenderer3D::Start()
 
 	test_tex_id = App->texture_loader->LoadTextureFile("Assets/Textures/Lenna_(test_image).png");
 	house_test_tex = App->texture_loader->LoadTextureFile("Assets/Textures/Baker_house.png");
-
+	checkers_test_tex = App->texture_loader->LoadDefaultTex();
 	
 	return ret;
 }
@@ -370,7 +370,7 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindTexture(GL_TEXTURE_2D, house_test_tex);
+		glBindTexture(GL_TEXTURE_2D, checkers_test_tex);
 		glActiveTexture(GL_TEXTURE0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_coords);

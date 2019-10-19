@@ -81,6 +81,7 @@ public:
 
 	uint test_tex_id = 0;
 	uint house_test_tex = 0;
+	uint checkers_test_tex = 0;
 };
 
 

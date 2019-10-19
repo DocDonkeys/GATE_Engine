@@ -219,7 +219,7 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	//Generate Buffers
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
 	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
-	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords,new_mesh->tex_coords);
+	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
 	//Push into the meshes vector
 	meshes.push_back(new_mesh);
 }
