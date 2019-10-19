@@ -214,9 +214,7 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 
 	//Copy the par_shapes texture coordinates
 	for (int i = 0; i < new_mesh->num_tex_coords * 2; ++i)
-	{
 		new_mesh->tex_coords[i] = p_mesh->tcoords[i];
-	}
 	
 	//Generate Buffers
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -236,7 +234,7 @@ void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float 
 		primitive_mesh = par_shapes_create_plane(slices,stacks);
 		break;
 	case PRIMITIVE::CUBE:
-		primitive_mesh = par_shapes_create_cube();
+		primitive_mesh = par_shapes_create_primitive_cube();
 		break;
 	case PRIMITIVE::SPHERE:
 		primitive_mesh = par_shapes_create_parametric_sphere(slices, stacks);
