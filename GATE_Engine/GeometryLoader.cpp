@@ -190,10 +190,12 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	//Get sizes
 	new_mesh->num_vertex = p_mesh->npoints;
 	new_mesh->num_index = p_mesh->ntriangles * 3;
+	new_mesh->num_tex_coords = p_mesh->npoints;
 
 	//Alloc memory
 	new_mesh->vertex = new float3[new_mesh->num_vertex];
 	new_mesh->index = new uint[new_mesh->num_index];
+	new_mesh->tex_coords = new float[new_mesh->num_tex_coords * 2];
 
 	//Copy the par_shape_mesh vertex array and index array into Mesh_Data
 	for (int i = 0; i < new_mesh->num_vertex; i++)
@@ -210,10 +212,16 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	}
 	App->ConsoleLOG("Created Primitive with %d vertices & %d indices.", new_mesh->num_vertex, new_mesh->num_index);
 
+	//Copy the par_shapes texture coordinates
+	for (int i = 0; i < new_mesh->num_tex_coords * 2; ++i)
+	{
+		new_mesh->tex_coords[i] = p_mesh->tcoords[i];
+	}
+	
 	//Generate Buffers
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
 	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
-
+	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords,new_mesh->tex_coords);
 	//Push into the meshes vector
 	meshes.push_back(new_mesh);
 }
