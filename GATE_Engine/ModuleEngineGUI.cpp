@@ -307,11 +307,11 @@ update_status ModuleEngineGUI::Update(float dt)
 					App->RequestBrowser("https://www.opengl.org/");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("DevIL (1.8.0)")) {
+				if (ImGui::SmallButton("DevIL (v1.8.0)")) {
 					App->RequestBrowser("http://openil.sourceforge.net/");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("Assimp (5.0.0)")) {
+				if (ImGui::SmallButton("Assimp (v5.0.0)")) {
 					App->RequestBrowser("http://assimp.org/");
 				}
 				ImGui::Bullet();
@@ -327,7 +327,7 @@ update_status ModuleEngineGUI::Update(float dt)
 					App->RequestBrowser("https://github.com/juj/MathGeoLib");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("Par (N/A)")) {
+				if (ImGui::SmallButton("Par (vN/A)")) {
 					App->RequestBrowser("https://github.com/prideout/par");
 				}
 				ImGui::Bullet();
@@ -339,7 +339,7 @@ update_status ModuleEngineGUI::Update(float dt)
 					App->RequestBrowser("http://www.brofiler.com/");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("mmgr (N/A)")) {
+				if (ImGui::SmallButton("mmgr (vN/A)")) {
 					App->RequestBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
 				}
 
@@ -378,6 +378,28 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 
 	ImGui::EndMainMenuBar();
+
+	if (show_top_bar_window) {
+		ImGui::Begin("Top Bar", &show_heriarchy_window, ImGuiWindowFlags_NoDecoration);
+
+		/*ImGui::SameLine(50);
+		ImGui::ImageButton("Drag"); ImGui::SameLine();
+		ImGui::ImageButton("Move"); ImGui::SameLine();
+		ImGui::ImageButton("Rotate"); ImGui::SameLine();
+		ImGui::ImageButton("Rect"); ImGui::SameLine();
+		ImGui::ImageButton("All");
+
+		ImGui::SameLine(50);
+		ImGui::Button("Pivot"); ImGui::SameLine();
+		ImGui::Button("Local"); ImGui::SameLine();
+
+		ImGui::SameLine(500);
+		ImGui::ImageButton("Play"); ImGui::SameLine();
+		ImGui::ImageButton("Pause"); ImGui::SameLine();
+		ImGui::ImageButton("Frame"); ImGui::SameLine();*/
+
+		ImGui::End();
+	}
 
 	// Main Windows
 	if (show_imgui_console)	//TEST IMGUI CONSOLE	//CHANGE/FIX: Should we improve this?

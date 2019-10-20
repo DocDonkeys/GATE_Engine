@@ -66,6 +66,7 @@ public: // Members
 
 private:
 	// Bools to open/close windows
+	bool show_top_bar_window = false;
 	bool show_settings_window = false;
 	bool show_imgui_console = false;	//CHANGE/FIX: To show_console_window
 	bool show_console_window = false;	//CHANGE/FIX: Delete here and in cpp, imgui console is the same but better
