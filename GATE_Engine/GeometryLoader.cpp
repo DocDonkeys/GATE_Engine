@@ -57,6 +57,13 @@ bool GeometryLoader::CleanUp()
 bool GeometryLoader::Load3DFile(const char* full_path)
 {
 	bool ret = true;
+	//We extract the Absolute path from the full path (everything until the actual file)
+	std::string str = full_path;
+	std::string absolute_path;
+
+	std::size_t found = str.find_last_of("/\\"); //Find last\\  (right before the filename) //
+	absolute_path = str.substr(0, found + 1);
+
 	//We call assimp to import the file
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
@@ -157,10 +164,23 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			//Generate the buffer for the tex_coordinates
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2, new_mesh->tex_coords);
 
+			if (scene->HasMaterials())
+			{
+				aiString tex_path;
+				aiMaterial* material = scene->mMaterials[loaded_mesh->mMaterialIndex]; // For now we are just required to use 1 diffse texture
+
+				material->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
+
+				std::string relative_path = tex_path.C_Str();
+				std::string texture_path = absolute_path.data() + relative_path;
+				new_mesh->id_texture = App->texture_loader->LoadTextureFile(texture_path.data());
+			}
+			else
+				App->ConsoleLOG("Error loading scene materials %s", full_path);
+
 			//Finally add the new mesh to the vector
 			meshes.push_back(new_mesh);
 		}
-
 
 		//Once finished we release the original file
 		aiReleaseImport(scene);
@@ -168,17 +188,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	else
 		App->ConsoleLOG("Error loading scene meshes %s", full_path);
 
-	if (scene->HasMaterials())
-	{
-		aiString* tex_path;
-		aiMaterial* material = scene->mMaterials[0]; // For now we are just required to use 1 diffse texture
-
-		//material->GetTexture(aiTextureType_DIFFUSE,0, tex_path);
-
-		//App->texture_loader->LoadTextureFile(tex_path.C_Str());
-	}
-	else
-		App->ConsoleLOG("Error loading scene materials %s", full_path);
+	
 
 	return ret;
 }
