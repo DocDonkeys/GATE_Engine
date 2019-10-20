@@ -30,21 +30,37 @@ enum class texture_mode {
 	MAX_MODES
 };
 
+enum class byte_size_mode {
+	KB,
+	MB,
+	GB,
+
+	MAX_MODES
+};
+
 class ModuleEngineGUI : public Module
 {
 public:
 	ModuleEngineGUI(Application* app, const char* name = "null", bool start_enabled = true);
 	~ModuleEngineGUI();
 
-public:
 	bool Init();
 	bool Start();
 	update_status Update(float dt);
+
+public:
 	void RenderGUI();
 
+private:
+	// Modes & Radio Buttons (Note: The existence of this methods avoids code repetition and future additions only have to be made on a single spot)
+	void DrawModeChange();
+	void TextureModeChange();
+	void ByteSizeModeChange();
+
 public: // Members
-	int drawMode = (int)draw_mode::MESH;
+	int drawMode = (int)draw_mode::MESH;	//IMPROVE: Each mode should be in it's correspondant module or be left here if no other seems fitting, this for example should go to Renderer3D?
 	int textureMode = (int)texture_mode::TWO_D;
+	int byteSizeMode = (int)byte_size_mode::KB;
 
 	AppConsole console;
 
@@ -65,6 +81,9 @@ private:
 
 	//UI values
 	float standard_text_width = 600.0f;	//Default/max text width
+
+	float byteAlt;
+	std::string byteText;
 
 	//UI flags
 	bool show_about_window = true;

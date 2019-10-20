@@ -19,6 +19,7 @@
     "Rotation Speed": 1.0
   },
   "GUI": {
+    "Byte Size Mode": 1,
     "Draw Mode": 0,
     "Texture Mode": 0
   },

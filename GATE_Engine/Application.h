@@ -36,7 +36,7 @@ struct GPU_info
 {
 	struct VRAM_info
 	{
-		int budget, usage, available;
+		float budget, usage, available;
 	};
 
 	unsigned char* vendor = nullptr;
@@ -46,9 +46,16 @@ struct GPU_info
 	VRAM_info VRAM;
 };
 
+struct DevIL_info
+{
+	unsigned char* vendor = nullptr;
+	unsigned char* version = nullptr;
+};
+
 struct hardware_info  //Struct to keep data more organized and not add a lot of vars in the class
 {
 	SDL_version sdl_version;
+	DevIL_info devil_info;
 
 	Uint8 CPU_logic_cores;
 	float RAM;

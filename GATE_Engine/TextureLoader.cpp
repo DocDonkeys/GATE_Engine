@@ -40,6 +40,9 @@ bool TextureLoader::Init()
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);	// Initialize ILUT with OpenGL support
 
+	App->hardware.devil_info.vendor = (unsigned char*)ilGetString(IL_VENDOR);
+	App->hardware.devil_info.version = (unsigned char*)ilGetString(IL_VERSION_NUM);
+
 	return ret;
 }
 

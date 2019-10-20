@@ -66,7 +66,7 @@ bool Application::Init()
 
 	//Collect hardware info
 	hardware.CPU_logic_cores = SDL_GetCPUCount();
-	hardware.RAM = (float)SDL_GetSystemRAM() / 1024;
+	hardware.RAM = (float)(SDL_GetSystemRAM() * 1024);	// MB -> KB
 	SDL_GetVersion(&hardware.sdl_version);
 
 	//GPU
@@ -164,14 +164,15 @@ void Application::PrepareUpdate()
 
 	//Update Hardware info such as VRAM usage
 	GLint nTotalMemoryInKB = 0;
-	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &hardware.GPU.VRAM.available); // Total Available Memory in KB
-	//hardware.GPU.VRAM.available / 1024; // Convert to MB
+	int temp;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &temp); // Total Available Memory in KB
+	hardware.GPU.VRAM.available = (float)temp;
 
-	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTION_COUNT_NVX, &hardware.GPU.VRAM.usage); // Dedicated VRAM in KB
-	//hardware.GPU.VRAM.usage /= 1024; // Convert to MB
+	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTION_COUNT_NVX, &temp); // Dedicated VRAM in KB
+	hardware.GPU.VRAM.usage = (float)temp;
 
-	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &hardware.GPU.VRAM.budget); // Total VRAM Memory in KB
-	//hardware.GPU.VRAM.budget /= 1024; // Convert to MB
+	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &temp); // Total VRAM Memory in KB
+	hardware.GPU.VRAM.budget = (float)temp;
 }
 
 // Called each loop iteration
@@ -523,6 +524,7 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 	//GUI
 	engineGUI->drawMode = obj["GUI"]["Draw Mode"].get<int>();
 	engineGUI->textureMode = obj["GUI"]["Texture Mode"].get<int>();
+	engineGUI->byteSizeMode = obj["GUI"]["Byte Size Mode"].get<int>();
 
 	return ret;
 }
@@ -594,7 +596,8 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 
 		{"GUI", {
 			{"Draw Mode", engineGUI->drawMode},
-			{"Texture Mode", engineGUI->textureMode}
+			{"Texture Mode", engineGUI->textureMode},
+			{"Byte Size Mode", engineGUI->byteSizeMode}
 		}},
 	};
 

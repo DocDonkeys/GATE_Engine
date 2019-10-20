@@ -31,7 +31,11 @@ bool ModuleEngineGUI::Init()
 
 bool ModuleEngineGUI::Start()
 {
-	
+	// After loading the mode value (integer ID) from JSON, we actually apply the needed changes depending on the current mode
+	DrawModeChange();
+	TextureModeChange();
+	ByteSizeModeChange();
+
 	return true;
 }
 
@@ -262,16 +266,11 @@ update_status ModuleEngineGUI::Update(float dt)
 
 			if (ImGui::BeginMenu("Draw Mode")) {
 				
-				if (ImGui::RadioButton("Mesh", &drawMode, (int)draw_mode::MESH)) {
-					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				}
-
-				if (ImGui::RadioButton("Wireframe", &drawMode, (int)draw_mode::WIREFRAME)) {
-					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				}
-
-				if (ImGui::RadioButton("Vertexs", &drawMode, (int)draw_mode::VERTEX)) {
-					glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+				if (ImGui::RadioButton("Mesh", &drawMode, (int)draw_mode::MESH)
+					|| ImGui::RadioButton("Wireframe", &drawMode, (int)draw_mode::WIREFRAME)
+					|| ImGui::RadioButton("Vertexs", &drawMode, (int)draw_mode::VERTEX))
+				{
+					DrawModeChange();
 				}
 
 				ImGui::EndMenu();
@@ -308,27 +307,39 @@ update_status ModuleEngineGUI::Update(float dt)
 					App->RequestBrowser("https://www.opengl.org/");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("Brofiler (v1.1.2)")) {
-					App->RequestBrowser("http://www.brofiler.com/");
+				if (ImGui::SmallButton("DevIL (1.8.0)")) {
+					App->RequestBrowser("http://openil.sourceforge.net/");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("Assimp (5.0.0)")) {
+					App->RequestBrowser("http://assimp.org/");
 				}
 				ImGui::Bullet();
 				if (ImGui::SmallButton("Dear ImGui (v1.72b)")) {
 					App->RequestBrowser("https://github.com/ocornut/imgui");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("JSON for Modern C++ (v3.7.0)")) {
-					App->RequestBrowser("https://github.com/nlohmann/json");
+				if (ImGui::SmallButton("glew (v2.0)")) {
+					App->RequestBrowser("http://glew.sourceforge.net/");
 				}
 				ImGui::Bullet();
 				if (ImGui::SmallButton("MathGeoLib (v1.5)")) {
 					App->RequestBrowser("https://github.com/juj/MathGeoLib");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("glew (v2.0)")) {
-					App->RequestBrowser("http://glew.sourceforge.net/");
+				if (ImGui::SmallButton("Par (N/A)")) {
+					App->RequestBrowser("https://github.com/prideout/par");
 				}
 				ImGui::Bullet();
-				if (ImGui::SmallButton("mmgr")) {
+				if (ImGui::SmallButton("JSON for Modern C++ (v3.7.0)")) {
+					App->RequestBrowser("https://github.com/nlohmann/json");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("Brofiler (v1.1.2)")) {
+					App->RequestBrowser("http://www.brofiler.com/");
+				}
+				ImGui::Bullet();
+				if (ImGui::SmallButton("mmgr (N/A)")) {
 					App->RequestBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
 				}
 
@@ -604,13 +615,13 @@ update_status ModuleEngineGUI::Update(float dt)
 				ImGui::BulletText("Textures");
 
 				if (ImGui::RadioButton("2D", &textureMode, (int)texture_mode::TWO_D)) {
-					App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_Texture2D, App->renderer3D->GL_Texture2D.group);
+					TextureModeChange();
 				}
 
 				ImGui::SameLine();
 
 				if (ImGui::RadioButton("Cube Map", &textureMode, (int)texture_mode::CUBEMAP)) {
-					App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_TextureCubeMap, App->renderer3D->GL_TextureCubeMap.group);
+					TextureModeChange();
 				}
 
 				//------------------------------------------------------------
@@ -673,48 +684,92 @@ update_status ModuleEngineGUI::Update(float dt)
 			}
 
 			// Hardware Tab
-			if (ImGui::BeginTabItem("Hardware"))
+			if (ImGui::BeginTabItem("System"))
 			{
-				ImGui::Text("SDL Version: ");
-				ImGui::SameLine();
-				ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
+				if (ImGui::CollapsingHeader("Software")) {
+					ImGui::Text("SDL: ");
+					ImGui::BulletText("Version: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(255.0f, 0.0f, 255.0f, 255.00f), "%d.%d.%d", (int)App->hardware.sdl_version.major, (int)App->hardware.sdl_version.minor, (int)App->hardware.sdl_version.patch);
 
-				ImGui::Text("CPUs: %d", App->hardware.CPU_logic_cores);
-				ImGui::Text("System RAM: %f Gb", (float)App->hardware.RAM);
+					ImGui::Text("OpenGL: ");
+					ImGui::BulletText("Version: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
 
-				ImGui::Text("CPU has Features: ");
-				for (int i = 0; i < App->CPU_features.size(); ++i)
-				{
-					ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%s,", App->CPU_features[i].data());
-					if (i == 0 || (float)(i % 4) != 0.0f)
-						ImGui::SameLine();
+					ImGui::BulletText("Vendor: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.vendor);
+
+					ImGui::Text("DevIL: ");
+					ImGui::BulletText("Version: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(255.0f, 0.0f, 0.0f, 255.00f), "%s", App->hardware.devil_info.version);
+
+					ImGui::BulletText("Vendor: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(255.0f, 0.0f, 0.0f, 255.00f), "%s", App->hardware.devil_info.vendor);
 				}
 
-				ImGui::Separator();
+				if (ImGui::CollapsingHeader("Hardware")) {
+					
+					ImGui::Text("CPU: ");
 
-				ImGui::Text("GPU: ");
-				ImGui::SameLine();
-				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.version);
+					ImGui::BulletText("Cores: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), "%d", App->hardware.CPU_logic_cores);
 
-				ImGui::Text("Brand: ");
-				ImGui::SameLine();
-				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s %s", App->hardware.GPU.vendor, App->hardware.GPU.renderer);
+					ImGui::BulletText("Includes Features: ");
+					for (int i = 0; i < App->CPU_features.size(); ++i)
+					{
+						ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.0f), "%s,", App->CPU_features[i].data());
+						if (i == 0 || (float)(i % 4) != 0.0f)
+							ImGui::SameLine();
+					}
 
-				ImGui::Separator();
+					ImGui::Separator();
 
-				ImGui::Text("VRAM Budget: ");
-				ImGui::SameLine();
-				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.budget);
+					ImGui::Text("GPU: ");
+					ImGui::BulletText("Renderer: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%s", App->hardware.GPU.renderer);
 
-				ImGui::Text("VRAM Usage: ");
-				ImGui::SameLine();
-				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.usage);
+					ImGui::Separator();
 
-				ImGui::Text("VRAM Available: ");
-				ImGui::SameLine();
-				ImGui::TextColored(ImVec4(0.0f, 255.0f, 0.0f, 255.00f), "%d", App->hardware.GPU.VRAM.available);
+					ImGui::Text("RAM: ");
 
-				ImGui::Text("VRAM Reserved: ");
+					ImGui::SameLine(250);
+					if (ImGui::RadioButton("KB", &byteSizeMode, (int)byte_size_mode::KB)) {
+						ByteSizeModeChange();
+					}
+					ImGui::SameLine();
+					if (ImGui::RadioButton("MB", &byteSizeMode, (int)byte_size_mode::MB)) {
+						ByteSizeModeChange();
+					}
+					ImGui::SameLine();
+					if (ImGui::RadioButton("GB", &byteSizeMode, (int)byte_size_mode::GB)) {
+						ByteSizeModeChange();
+					}
+
+					ImGui::BulletText("RAM: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%f %s", (float)(App->hardware.RAM * byteAlt), byteText.c_str());
+
+					ImGui::Text("VRAM: ");
+					ImGui::BulletText("VRAM Budget: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%f %s", (float)(App->hardware.GPU.VRAM.budget * byteAlt), byteText.c_str());
+
+					ImGui::BulletText("VRAM Usage: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%f %s", (float)(App->hardware.GPU.VRAM.usage * byteAlt), byteText.c_str());
+
+					ImGui::BulletText("VRAM Available: ");
+					ImGui::SameLine();
+					ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "%f %s", (float)(App->hardware.GPU.VRAM.available * byteAlt), byteText.c_str());
+
+					//ImGui::BulletText("VRAM Reserved: ");	//CHANGE/FIX: Until this has an actual value it will remain commented
+				}
 
 				ImGui::EndTabItem();
 			}
@@ -754,6 +809,8 @@ update_status ModuleEngineGUI::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
+// ---------------------------------
+
 void ModuleEngineGUI::RenderGUI()
 {
 	ImGuiIO& test_io = *io;
@@ -764,4 +821,50 @@ void ModuleEngineGUI::RenderGUI()
 	//glClear(GL_COLOR_BUFFER_BIT);	//DIDAC/CARLES: This line renders a plain color over the axis + grid plane of SceneIntro Module
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+// Modes & Radio Buttons
+void ModuleEngineGUI::DrawModeChange()
+{
+	switch (drawMode) {
+	case (int)draw_mode::MESH:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		break;
+	case (int)draw_mode::WIREFRAME:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		break;
+	case (int)draw_mode::VERTEX:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		break;
+	}
+}
+
+void ModuleEngineGUI::TextureModeChange()
+{
+	switch (textureMode) {
+	case (int)texture_mode::TWO_D:
+		App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_Texture2D, App->renderer3D->GL_Texture2D.group);
+		break;
+	case (int)texture_mode::CUBEMAP:
+		App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_TextureCubeMap, App->renderer3D->GL_TextureCubeMap.group);
+		break;
+	}
+}
+
+void ModuleEngineGUI::ByteSizeModeChange()
+{
+	switch (byteSizeMode) {
+	case (int)byte_size_mode::KB:
+		byteAlt = 1.0;
+		byteText.assign("KB");
+		break;
+	case (int)byte_size_mode::MB:
+		byteAlt = 1.0 / 1024.0;
+		byteText.assign("MB");
+		break;
+	case (int)byte_size_mode::GB:
+		byteAlt = 1.0 / 1024.0 / 1024.0;
+		byteText.assign("GB");
+		break;
+	}
 }
