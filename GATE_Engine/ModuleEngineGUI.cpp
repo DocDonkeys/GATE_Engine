@@ -224,11 +224,11 @@ update_status ModuleEngineGUI::Update(float dt)
 		// Menu - GameObjects: Create premade objects and primitives
 		if (ImGui::BeginMenu("GameObjects", true)) {
 
-			if (ImGui::BeginMenu("3D Object")) {
+			if (ImGui::BeginMenu("Create...")) {
 				
 				if (ImGui::MenuItem("Plane"))
 				{
-					App->geometry_loader->CreatePrimitive(PRIMITIVE::PLANE, 10,10);
+					App->geometry_loader->CreatePrimitive(PRIMITIVE::PLANE, 10, 10);
 				}
 
 				if (ImGui::MenuItem("Cube"))
