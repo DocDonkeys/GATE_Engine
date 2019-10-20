@@ -364,26 +364,10 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 	//Draw VERTICES with INDICES
 	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
 	{
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-		glBindTexture(GL_TEXTURE_2D, checkers_test_tex);
-		glActiveTexture(GL_TEXTURE0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_coords);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
-		glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, nullptr);
-		//Unbind
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		glDisableClientState(GL_VERTEX_ARRAY);
+		if (mesh->id_texture != 0) // The mesh has a texture to be printed
+			PrintTexturedMesh(mesh);
+		else
+			PrintSimpleMesh(mesh);
 	}
 	else
 		App->ConsoleLOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
@@ -400,4 +384,44 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glColor3f(1, 1, 1);
 	}
+}
+
+//DRAW a Mesh with only vertices and indices data
+void ModuleRenderer3D::PrintSimpleMesh(const Mesh_Data* mesh)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	//Bind buffers
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_index);
+
+	//Draw
+	glDrawElements(GL_TRIANGLES, mesh->num_index, GL_UNSIGNED_INT, nullptr);
+
+	//Unbind buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+//DRAW a mesh that contains textures using it's texture coordinates
+void ModuleRenderer3D::PrintTexturedMesh(const Mesh_Data * mesh)
+{
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	//Bind Buffers
+	glBindTexture(GL_TEXTURE_2D, mesh->id_texture); // Texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_coords); // Texture Coordinates
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	PrintSimpleMesh(mesh);
+
+	//Unbind Buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
