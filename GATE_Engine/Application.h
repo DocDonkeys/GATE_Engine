@@ -148,7 +148,7 @@ public:
 
 	std::vector<float>			ms_log;
 	std::vector<float>			fps_log;
-	std::vector<std::string>	console_LOG;
+	std::vector<std::string>	LOG;
 	std::vector<std::string>	CPU_features;
 	int							max_FPS = -1;
 

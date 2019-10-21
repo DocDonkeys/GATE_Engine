@@ -105,7 +105,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		aiReleaseImport(scene);
 	}
 	else
-		App->ConsoleLOG("Error loading scene meshes %s", full_path);
+		LOG("Error loading scene meshes %s", full_path);
 
 	return ret;
 }
@@ -137,7 +137,7 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	{
 		new_mesh->index[i] = (uint)p_mesh->triangles[i];
 	}
-	App->ConsoleLOG("Created Primitive with %d vertices & %d indices.", new_mesh->num_vertex, new_mesh->num_index);
+	LOG("Created Primitive with %d vertices & %d indices.", new_mesh->num_vertex, new_mesh->num_index);
 
 	//Copy the par_shapes texture coordinates
 	for (int i = 0; i < new_mesh->num_tex_coords * 2; ++i)
@@ -186,7 +186,7 @@ void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float 
 	if (primitive_mesh != nullptr)
 		LoadPrimitiveShape(primitive_mesh);
 	else
-		App->ConsoleLOG("Failed to create primitive! Invalid primitive enum value received");
+		LOG("Failed to create primitive! Invalid primitive enum value received");
 }
 
 bool GeometryLoader::Init()

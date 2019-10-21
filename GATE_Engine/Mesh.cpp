@@ -17,7 +17,7 @@ void Mesh::LoadVertices(const aiMesh* loaded_mesh)
 	num_vertex = loaded_mesh->mNumVertices;
 	vertex = new float3[num_vertex];
 	memcpy(vertex, loaded_mesh->mVertices, sizeof(float3) * num_vertex);
-	App->ConsoleLOG("New mesh with %d vertices loaded", num_vertex);
+	LOG("New mesh with %d vertices loaded", num_vertex);
 }
 
 void Mesh::LoadIndices(const aiMesh* loaded_mesh)
@@ -31,11 +31,13 @@ void Mesh::LoadIndices(const aiMesh* loaded_mesh)
 		for (uint j = 0; j < loaded_mesh->mNumFaces; ++j)
 		{
 			if (loaded_mesh->mFaces[j].mNumIndices != 3)
-				App->ConsoleLOG("WARNING, geometry face with != 3 indices! Export your 3D file with triangularized faces/polys!");
+			{
+				LOG("WARNING, geometry face with != 3 indices! Export your 3D file with triangularized faces/polys!");
+			}
 			else
 				memcpy(&index[j * 3], loaded_mesh->mFaces[j].mIndices, 3 * sizeof(uint));
 		}
-		App->ConsoleLOG("Mesh has %d indices loaded & %d polys", num_index, num_index / 3);
+		LOG("Mesh has %d indices loaded & %d polys", num_index, num_index / 3);
 	}
 }
 
@@ -106,5 +108,5 @@ void Mesh::LoadMaterials(const aiScene * scene, const aiMesh* loaded_mesh, const
 		id_texture = App->texture_loader->LoadTextureFile(texture_path.data());
 	}
 	else
-		App->ConsoleLOG("Error loading scene materials from %s", absolute_path);
+		LOG("Error loading scene materials from %s", absolute_path);
 }

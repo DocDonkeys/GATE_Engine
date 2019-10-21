@@ -26,14 +26,14 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init()
 {
-	App->ConsoleLOG("Creating 3D Renderer context");
+	LOG("Creating 3D Renderer context");
 	bool ret = true;
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 	if(context == NULL)
 	{
-		App->ConsoleLOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_assert(context != NULL);
 		ret = false;
 	}
@@ -44,7 +44,7 @@ bool ModuleRenderer3D::Init()
 		if (App->renderer3D->vSync) {
 			int swapInt = SDL_GL_SetSwapInterval(1);
 			if (swapInt < 0) {
-				App->ConsoleLOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+				LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 				SDL_assert(swapInt >= 0);
 			}
 		}
@@ -54,19 +54,19 @@ bool ModuleRenderer3D::Init()
 
 		if (err != GLEW_OK) // glewInit error
 		{
-			App->ConsoleLOG("Could not Initialize Glew, %s", glewGetErrorString(err));
+			LOG("Could not Initialize Glew, %s", glewGetErrorString(err));
 			return false;
 		}
 		else // Success!
 		{
-			App->ConsoleLOG("Succesfully initialized Glew!");
-			App->ConsoleLOG("Using Glew %s", glewGetString(GLEW_VERSION));
+			LOG("Succesfully initialized Glew!");
+			LOG("Using Glew %s", glewGetString(GLEW_VERSION));
 
 			//LOG Hardware
-			App->ConsoleLOG("Vendor: %s", glGetString(GL_VENDOR));
-			App->ConsoleLOG("Renderer: %s", glGetString(GL_RENDERER));
-			App->ConsoleLOG("OpenGL version supported %s", glGetString(GL_VERSION));
-			App->ConsoleLOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+			LOG("Vendor: %s", glGetString(GL_VENDOR));
+			LOG("Renderer: %s", glGetString(GL_RENDERER));
+			LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+			LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
 
 
@@ -78,7 +78,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
@@ -91,7 +91,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
@@ -106,7 +106,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
@@ -211,7 +211,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
-	App->ConsoleLOG("Destroying 3D Renderer");
+	LOG("Destroying 3D Renderer");
 
 	SDL_GL_DeleteContext(context);
 
@@ -332,7 +332,7 @@ void ModuleRenderer3D::DrawMesh(const Mesh* mesh)
 			PrintSimpleMesh(mesh);
 	}
 	else
-		App->ConsoleLOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
+		LOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
 
 	//Draw NORMALS TODO: only in DEBUG MODE!
 	if (mesh->normals_vector != nullptr)

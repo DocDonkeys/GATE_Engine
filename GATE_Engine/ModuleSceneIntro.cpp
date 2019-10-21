@@ -17,7 +17,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	//LOG("Loading Intro assets");
-	App->ConsoleLOG("Loading Intro assets");
+	LOG("Loading Intro assets");
 	bool ret = true;
 
 	//Rand seed based on current time
@@ -33,7 +33,7 @@ bool ModuleSceneIntro::Start()
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
-	App->ConsoleLOG("Unloading Intro scene");
+	LOG("Unloading Intro scene");
 	RELEASE(sphere);
 
 	return true;
