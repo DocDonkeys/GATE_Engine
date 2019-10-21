@@ -33,6 +33,8 @@ enum main_states
 	MAIN_EXIT
 };
 
+Application* App = NULL;
+
 int main(int argc, char ** argv)
 {
 	LOG("Starting Engine...");

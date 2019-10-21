@@ -184,4 +184,6 @@ private:
 
 };
 
+extern Application* App;
+
 #endif //APP_H
