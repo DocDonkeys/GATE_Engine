@@ -334,16 +334,35 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 		App->ConsoleLOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
 
 	//Draw NORMALS TODO: only in DEBUG MODE!
-	if (mesh->normals_vertex != nullptr)
+	if (mesh->normals_vector != nullptr)
 	{
-		glColor3f(1,0,1);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		//Had a lot of problems with buffers so we draw in direct mode, we can save some VRAM space
+		/*glBegin(GL_LINES);
+		glColor3f(1, 0, 1);
 
-		glDrawArrays(GL_LINES, 0, mesh->num_vertex);
-		glDisableClientState(GL_VERTEX_ARRAY);
+		for (int i = 0; i < mesh->num_vertex; ++i)
+		{
+			glVertex3f(mesh->vertex[i].x, mesh->vertex[i].y, mesh->vertex[i].z);
+			glVertex3f(mesh->vertex[i].x + mesh->normals_vector[i].x,
+				mesh->vertex[i].y + mesh->normals_vector[i].y,
+				mesh->vertex[i].z + mesh->normals_vector[i].z);
+		}
 		glColor3f(1, 1, 1);
+		glEnd();*/
+
+		//Print faces normals
+		glBegin(GL_LINES);
+		glColor3f(0, 1, 0);
+
+		for (int i = 0; i < mesh->num_vertex; ++i)
+		{
+			glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
+			glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,
+				mesh->normals_faces[i].y + mesh->normals_faces_vector[i].y,
+				mesh->normals_faces[i].z + mesh->normals_faces_vector[i].z);
+		}
+		glColor3f(1, 1, 1);
+		glEnd();
 	}
 }
 

@@ -7,6 +7,10 @@
 #include "libs/Assimp/include/postprocess.h"
 #include "libs/Assimp/include/cfileio.h"
 
+#include "libs/MathGeoLib/include/MathGeoLib.h"
+#include "libs/MathGeoLib/include/MathBuildConfig.h"
+
+
 #pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
 
 #include "libs/par/par_shapes.h"
@@ -92,9 +96,9 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 				new_mesh->index = new uint[new_mesh->num_index]; // assuming each face is a triangle
 				for (uint j = 0; j < loaded_mesh->mNumFaces; ++j)
 				{
-					if(loaded_mesh->mFaces[j].mNumIndices != 3)
+					/*if(loaded_mesh->mFaces[j].mNumIndices != 3)
 						App->ConsoleLOG("WARNING, geometry face with != 3 indices! Export your 3D file with triangularized faces/polys!");
-					else
+					else*/
 						memcpy(&new_mesh->index[j*3], loaded_mesh->mFaces[j].mIndices, 3 * sizeof(uint));
 				}
 				App->ConsoleLOG("Mesh has %d indices loaded & %d polys", new_mesh->num_index, new_mesh->num_index/3);
@@ -104,35 +108,34 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			if (loaded_mesh->HasNormals())
 			{
 				new_mesh->normals_vector = new float3[new_mesh->num_vertex];
+				memcpy(new_mesh->normals_vector, loaded_mesh->mNormals, sizeof(float3) * new_mesh->num_vertex);
+
+				//Calculate the positions and vectors of the face Normals
+				new_mesh->num_faces = loaded_mesh->mNumFaces;
+				new_mesh->normals_faces = new float3[new_mesh->num_vertex];
+				new_mesh->normals_faces_vector = new float3[new_mesh->num_vertex];
 				for (int j = 0; j < new_mesh->num_vertex; ++j)
 				{
-					new_mesh->normals_vector[j].x = loaded_mesh->mNormals[j].x;
-					new_mesh->normals_vector[j].y = loaded_mesh->mNormals[j].y;
-					new_mesh->normals_vector[j].z = loaded_mesh->mNormals[j].z;
+					// 3 points of the triangle/face
+					float3 vert1 = new_mesh->vertex[new_mesh->index[j]];
+					float3 vert2 = new_mesh->vertex[new_mesh->index[j + 1]];
+					float3 vert3 = new_mesh->vertex[new_mesh->index[j + 2]];
+
+					//Calculate starting point of the normal
+					new_mesh->normals_faces[j] = (vert1 + vert2 + vert3) / 3;
+					
+					//Calculate Cross product of 2 edges of the triangle to obtain Normal vector
+					float3 edge_a = vert2 - vert1;
+					float3 edge_b = vert3 - vert1;
+
+					float3 normal;
+					normal = Cross(edge_a, edge_b);
+					normal.Normalize();
+
+					new_mesh->normals_faces_vector[j] = normal * 0.25f;
 				}
-
-				//The normals are just the vectors of each point, so we must add them to the position of each vertex
-				new_mesh->normals_vertex = new float3[new_mesh->num_vertex * 2];
-				for (int j = 0; j < new_mesh->num_vertex; ++j)
-				{
-					int k = j * 2; //Since the array we fill will be double the size we multiply by 2 make things easier when placing data onto the array
-
-					new_mesh->normals_vertex[k] = new_mesh->vertex[j]; // Original position of the line
-
-					//Position of the line + vector (this way we can )
-					new_mesh->normals_vertex[k + 1].x = new_mesh->vertex[j].x + new_mesh->normals_vector[j].x;
-					new_mesh->normals_vertex[k + 1].y = new_mesh->vertex[j].y + new_mesh->normals_vector[j].y;
-					new_mesh->normals_vertex[k + 1].z = new_mesh->vertex[j].z + new_mesh->normals_vector[j].z;
-				}
+				
 			}
-
-			//ASK: We should try and make a system to actually load all possible tex coords for each texture
-			/*for (int j = 0; j < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++j)
-			{
-				if (loaded_mesh->HasTextureCoords(j))
-				{
-				}
-			}*/
 
 			if (loaded_mesh->HasTextureCoords(0)) // Check only the fisrt texture tex_coords
 			{
@@ -154,12 +157,6 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 
 			if (new_mesh->index != nullptr)
 				App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
-
-			//Generate buffer for Normals
-			glGenBuffers(1, (GLuint*) &(new_mesh->id_normals));
-			glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_normals);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * new_mesh->num_vertex, new_mesh->normals_vertex, GL_STATIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			//Generate the buffer for the tex_coordinates
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2, new_mesh->tex_coords);
