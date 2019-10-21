@@ -14,6 +14,7 @@
 #pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
 
 #include "libs/par/par_shapes.h"
+#include "Mesh.h"
 
 //#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")		//CHANGE/FIX: Remove? @Didac do we need to keep this here just in case?
 /*
@@ -42,7 +43,7 @@ bool GeometryLoader::CleanUp()
 	//Delete data
 	for (int i = 0; i < meshes.size(); ++i)
 	{
-		Mesh_Data* m_todestroy = meshes[i];
+		Mesh* m_todestroy = meshes[i];
 		//Delete the allocated memory data inside the mesh
 		App->renderer3D->DeleteBuffer(m_todestroy->id_index);
 		RELEASE_ARRAY(m_todestroy->index);
@@ -61,6 +62,7 @@ bool GeometryLoader::CleanUp()
 bool GeometryLoader::Load3DFile(const char* full_path)
 {
 	bool ret = true;
+
 	//We extract the Absolute path from the full path (everything until the actual file)
 	std::string str = full_path;
 	std::string absolute_path;
@@ -79,77 +81,17 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		int nmeshes = scene->mNumMeshes;
 		for (int i = 0; i < nmeshes; ++i)
 		{
-			Mesh_Data* new_mesh = new Mesh_Data;
+			Mesh* new_mesh = new Mesh();
 
 			aiMesh* loaded_mesh = scene->mMeshes[i];
 
-			// Copy VERTICES data (vertex)
-			new_mesh->num_vertex = loaded_mesh->mNumVertices;
-			new_mesh->vertex = new float3[new_mesh->num_vertex];
-			memcpy(new_mesh->vertex, loaded_mesh->mVertices, sizeof(float3) * new_mesh->num_vertex);
-			App->ConsoleLOG("New mesh with %d vertices loaded", new_mesh->num_vertex);
+			new_mesh->LoadVertices(loaded_mesh);
 
-			// Copy INDICES/FACES data (index) (Faces as used in assimp)
-			if (loaded_mesh->HasFaces())
-			{
-				new_mesh->num_index = loaded_mesh->mNumFaces * 3;
-				new_mesh->index = new uint[new_mesh->num_index]; // assuming each face is a triangle
-				for (uint j = 0; j < loaded_mesh->mNumFaces; ++j)
-				{
-					/*if(loaded_mesh->mFaces[j].mNumIndices != 3)
-						App->ConsoleLOG("WARNING, geometry face with != 3 indices! Export your 3D file with triangularized faces/polys!");
-					else*/
-						memcpy(&new_mesh->index[j*3], loaded_mesh->mFaces[j].mIndices, 3 * sizeof(uint));
-				}
-				App->ConsoleLOG("Mesh has %d indices loaded & %d polys", new_mesh->num_index, new_mesh->num_index/3);
-			}
+			new_mesh->LoadIndices(loaded_mesh);
 
-			// Copy NORMALS (Vertices)
-			if (loaded_mesh->HasNormals())
-			{
-				new_mesh->normals_vector = new float3[new_mesh->num_vertex];
-				memcpy(new_mesh->normals_vector, loaded_mesh->mNormals, sizeof(float3) * new_mesh->num_vertex);
+			new_mesh->LoadNormals(loaded_mesh);
 
-				//Calculate the positions and vectors of the face Normals
-				new_mesh->num_faces = loaded_mesh->mNumFaces;
-				new_mesh->normals_faces = new float3[new_mesh->num_vertex];
-				new_mesh->normals_faces_vector = new float3[new_mesh->num_vertex];
-				for (int j = 0; j < new_mesh->num_vertex; ++j)
-				{
-					// 3 points of the triangle/face
-					float3 vert1 = new_mesh->vertex[new_mesh->index[j]];
-					float3 vert2 = new_mesh->vertex[new_mesh->index[j + 1]];
-					float3 vert3 = new_mesh->vertex[new_mesh->index[j + 2]];
-
-					//Calculate starting point of the normal
-					new_mesh->normals_faces[j] = (vert1 + vert2 + vert3) / 3;
-					
-					//Calculate Cross product of 2 edges of the triangle to obtain Normal vector
-					float3 edge_a = vert2 - vert1;
-					float3 edge_b = vert3 - vert1;
-
-					float3 normal;
-					normal = Cross(edge_a, edge_b);
-					normal.Normalize();
-
-					new_mesh->normals_faces_vector[j] = normal * 0.25f;
-				}
-				
-			}
-
-			if (loaded_mesh->HasTextureCoords(0)) // Check only the fisrt texture tex_coords
-			{
-				new_mesh->num_tex_coords = new_mesh->num_vertex;
-				new_mesh->tex_coords = new float[new_mesh->num_tex_coords * 2]; // Since each vertex will have a U and a V value we use double the size
-
-				int k = 0;
-				for (int j = 0; j < new_mesh->num_tex_coords; ++j)
-				{
-					k = j * 2;
-					new_mesh->tex_coords[k] = loaded_mesh->mTextureCoords[0][j].x;
-					new_mesh->tex_coords[k + 1] = loaded_mesh->mTextureCoords[0][j].y;
-				}
-			}
+			new_mesh->LoadTexCoords(loaded_mesh);
 
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
@@ -161,19 +103,20 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			//Generate the buffer for the tex_coordinates
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2, new_mesh->tex_coords);
 
-			if (scene->HasMaterials())
-			{
-				aiString tex_path;
-				aiMaterial* material = scene->mMaterials[loaded_mesh->mMaterialIndex]; // For now we are just required to use 1 diffse texture
+			new_mesh->LoadMaterials(scene,loaded_mesh,absolute_path);
+			//if (scene->HasMaterials())
+			//{
+			//	aiString tex_path;
+			//	aiMaterial* material = scene->mMaterials[loaded_mesh->mMaterialIndex]; // For now we are just required to use 1 diffse texture
 
-				material->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
+			//	material->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
 
-				std::string relative_path = tex_path.C_Str();
-				std::string texture_path = absolute_path.data() + relative_path;
-				new_mesh->id_texture = App->texture_loader->LoadTextureFile(texture_path.data());
-			}
-			else
-				App->ConsoleLOG("Error loading scene materials %s", full_path);
+			//	std::string relative_path = tex_path.C_Str();
+			//	std::string texture_path = absolute_path.data() + relative_path;
+			//	new_mesh->id_texture = App->texture_loader->LoadTextureFile(texture_path.data());
+			//}
+			//else
+			//	App->ConsoleLOG("Error loading scene materials %s", full_path);
 
 			//Finally add the new mesh to the vector
 			meshes.push_back(new_mesh);
@@ -228,7 +171,7 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
 	//Push into the meshes vector
-	meshes.push_back(new_mesh);
+	//meshes.push_back(mesh_toload);
 }
 
 void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float radius)

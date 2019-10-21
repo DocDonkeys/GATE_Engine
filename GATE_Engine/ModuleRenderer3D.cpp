@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "Mesh.h"
 
 
 #include "libs/glew/include/GL/glew.h"
@@ -320,7 +321,7 @@ void ModuleRenderer3D::DeleteBuffer(uint & id)
 }
 
 //Pass a Mesh_Data to be drawn using glDrawElements
-void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
+void ModuleRenderer3D::DrawMesh(const Mesh* mesh)
 {
 	//Draw VERTICES with INDICES
 	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
@@ -367,7 +368,7 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 }
 
 //DRAW a Mesh with only vertices and indices data
-void ModuleRenderer3D::PrintSimpleMesh(const Mesh_Data* mesh)
+void ModuleRenderer3D::PrintSimpleMesh(const Mesh* mesh)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -387,7 +388,7 @@ void ModuleRenderer3D::PrintSimpleMesh(const Mesh_Data* mesh)
 }
 
 //DRAW a mesh that contains textures using it's texture coordinates
-void ModuleRenderer3D::PrintTexturedMesh(const Mesh_Data * mesh)
+void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh)
 {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 

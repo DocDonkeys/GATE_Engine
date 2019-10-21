@@ -10,6 +10,7 @@
 #include "libs/Assimp/include/cimport.h"
 
 struct par_shapes_mesh_s;
+class Mesh;
 
 enum class PRIMITIVE
 {
@@ -67,7 +68,7 @@ public:
 
 public: // Vars
 	aiLogStream stream;
-	std::vector<Mesh_Data*> meshes;
+	std::vector<Mesh*> meshes;
 };
 
 

@@ -85,6 +85,7 @@
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="libs\par\par_shapes.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="JsonLoader.h" />
@@ -135,6 +136,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModulePhysics.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleEngineGUI.cpp" />

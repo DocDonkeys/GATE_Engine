@@ -84,6 +84,9 @@
     <ClCompile Include="GeometryLoader.cpp">
       <Filter>Sources\Tools\Loaders</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Sources\Tools\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -196,6 +199,9 @@
     <ClInclude Include="GeometryLoader.h">
       <Filter>Sources\Tools\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Sources\Tools\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -242,6 +248,9 @@
     </Filter>
     <Filter Include="Sources\Tools\Loaders">
       <UniqueIdentifier>{2d1268be-23c1-429f-b07b-461cf872e673}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Mesh">
+      <UniqueIdentifier>{a4641500-2f58-483e-9798-dfbed57c74ac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
