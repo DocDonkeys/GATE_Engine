@@ -62,7 +62,6 @@ bool GeometryLoader::CleanUp()
 bool GeometryLoader::Load3DFile(const char* full_path)
 {
 	bool ret = true;
-
 	//We extract the Absolute path from the full path (everything until the actual file)
 	std::string str = full_path;
 	std::string absolute_path;
@@ -76,7 +75,6 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		//We loaded the 3D file successfully!
-
 		//We iterate the meshes array
 		int nmeshes = scene->mNumMeshes;
 		for (int i = 0; i < nmeshes; ++i)
@@ -84,15 +82,12 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			Mesh* new_mesh = new Mesh();
 
 			aiMesh* loaded_mesh = scene->mMeshes[i];
-
-			new_mesh->LoadVertices(loaded_mesh);
-
-			new_mesh->LoadIndices(loaded_mesh);
-
-			new_mesh->LoadNormals(loaded_mesh);
-
-			new_mesh->LoadTexCoords(loaded_mesh);
-
+			//LOAD!
+			new_mesh->LoadVertices(loaded_mesh); //Vertices
+			new_mesh->LoadIndices(loaded_mesh); //Indices
+			new_mesh->LoadNormals(loaded_mesh); //Normals
+			new_mesh->LoadTexCoords(loaded_mesh); // UV's
+			new_mesh->LoadMaterials(scene, loaded_mesh, absolute_path); //Materials
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -103,39 +98,21 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			//Generate the buffer for the tex_coordinates
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2, new_mesh->tex_coords);
 
-			new_mesh->LoadMaterials(scene,loaded_mesh,absolute_path);
-			//if (scene->HasMaterials())
-			//{
-			//	aiString tex_path;
-			//	aiMaterial* material = scene->mMaterials[loaded_mesh->mMaterialIndex]; // For now we are just required to use 1 diffse texture
-
-			//	material->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
-
-			//	std::string relative_path = tex_path.C_Str();
-			//	std::string texture_path = absolute_path.data() + relative_path;
-			//	new_mesh->id_texture = App->texture_loader->LoadTextureFile(texture_path.data());
-			//}
-			//else
-			//	App->ConsoleLOG("Error loading scene materials %s", full_path);
-
 			//Finally add the new mesh to the vector
 			meshes.push_back(new_mesh);
 		}
-
 		//Once finished we release the original file
 		aiReleaseImport(scene);
 	}
 	else
 		App->ConsoleLOG("Error loading scene meshes %s", full_path);
 
-	
-
 	return ret;
 }
 
 void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 {
-	Mesh_Data* new_mesh = new Mesh_Data();
+	Mesh* new_mesh = new Mesh();
 
 	//Get sizes
 	new_mesh->num_vertex = p_mesh->npoints;
@@ -171,7 +148,7 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
 	//Push into the meshes vector
-	//meshes.push_back(mesh_toload);
+	meshes.push_back(new_mesh);
 }
 
 void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float radius)
@@ -216,8 +193,8 @@ bool GeometryLoader::Init()
 {
 	// Stream log messages to Debug window
 
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
+	log_stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	aiAttachLogStream(&log_stream);
 
 	return true;
 }
