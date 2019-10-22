@@ -18,6 +18,6 @@ void log(const char file[], int line, const char* format, ...)
 	if (App != NULL)
 	{
 		sprintf_s(tmp_string2, 4096, "\n%s", tmp_string);
-		App->LOG.push_back(tmp_string2);
+		App->ConsoleLOG(tmp_string2);
 	}
 }
