@@ -805,16 +805,16 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 
 	//CONSOLE MENU
-	if (show_console_window)		//CHANGE/FIX: Delete, imgui console is the same but better
-	{
-		ImGui::Begin("Console", &show_console_window);
+	//if (show_console_window)		//CHANGE/FIX: Delete, imgui console is the same but better
+	//{
+	//	ImGui::Begin("Console", &show_console_window);
 
-		for (int i = 0; i < App->console_LOG.size(); ++i)
-			ImGui::Text(App->console_LOG[i].data());
+	//	for (int i = 0; i < App->console_LOG.size(); ++i)
+	//		ImGui::Text(App->console_LOG[i].data());
 
-		ImGui::End();
+	//	ImGui::End();
 
-	}
+	//}
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window)
@@ -843,7 +843,7 @@ bool ModuleEngineGUI::BeginRootWindow(char* id, bool docking, ImGuiWindowFlags w
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 	winFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 	winFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-	winFlags |= ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground;	// Docking-related
+	winFlags |= ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground;
 
 	bool temp = true;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
