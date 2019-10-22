@@ -99,6 +99,11 @@ update_status ModuleCamera3D::Update(float dt)
 				RotateCamera(rotate_type::SELF, currRotSpeed);		// Rotate self
 		}
 
+		// Center camera to object
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {	// Focus camera to position from a certain distance and angle
+			GoLook({ 0.0f, 0.0f, 0.0f }, 10.0f, { 1.0f, 1.0f, 1.0f });
+		}
+
 		// Apply changes and recalculate matrix
 		Move(newPos);
 	}
@@ -357,7 +362,21 @@ void ModuleCamera3D::GoLook(const vec3 &Position, const vec3 &Reference, bool Ro
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::LookAt( const vec3 &Spot)	// Rotates camera to position and sets is as camera reference
+void ModuleCamera3D::GoLook(const vec3 &Reference, float Distance, const vec3 &direction)	// Rotates camera to desired angle (based on world axis)
+{
+	vec3 unitDirect = normalize(direction);
+
+	this->Position = Reference + unitDirect * Distance;
+	this->Reference = Reference;
+
+	Z = unitDirect;
+	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
+	Y = cross(Z, X);
+
+	CalculateViewMatrix();
+}
+
+void ModuleCamera3D::LookAt(const vec3 &Spot)	// Rotates camera to position and sets is as camera reference
 {
 	Reference = Spot;
 
