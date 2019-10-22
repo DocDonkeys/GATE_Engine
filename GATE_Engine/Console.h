@@ -1,8 +1,8 @@
 #ifndef __CONSOLE_H__
 #define __CONSOLE_H__
 
-#include "libs/imgui-1.72b/imgui.h"
-#include "libs/imgui-1.72b/imgui_internal.h"
+#include "libs/imgui/imgui.h"
+#include "libs/imgui/imgui_internal.h"
 #include <ctype.h>
 
 // This header contains the App Console struct which will be used as the console

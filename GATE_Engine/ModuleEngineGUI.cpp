@@ -19,12 +19,29 @@ bool ModuleEngineGUI::Init()
 	ImGui::CreateContext();
 	io = &ImGui::GetIO(); (void)io;
 
+	//io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	//io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+	//io.ConfigViewportsNoAutoMerge = true;
+	//io.ConfigViewportsNoTaskBarIcon = true;
+
+	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsClassic();
+
+	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+	/*ImGuiStyle& style = ImGui::GetStyle();
+	if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		style.WindowRounding = 0.0f;
+		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	}*/
 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init();
 
-	bool show_another_window = false;
+	bool show_another_window = false;	//CHANGE/FIX: Remove
 	
 	return true;
 }
@@ -69,334 +86,319 @@ update_status ModuleEngineGUI::Update(float dt)
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	//Main toolbar
-	if (ImGui::BeginMainMenuBar()) {
+	if (BeginRootWindow("Root Window 1", main_dockSpace, ImGuiWindowFlags_MenuBar)) {	//CHANGE/FIX: Make so that root windows have an editable bool docking value
 
-		// Menu - File: Options for file and App management
-		if (ImGui::BeginMenu("File", true)) {
+		//Main toolbar
+		if (ImGui::BeginMenuBar()) {
 
-			if (ImGui::MenuItem("New Scene", "Ctrl+N")) {
+			// Menu - File: Options for file and App management
+			if (ImGui::BeginMenu("File")) {
 
-			}
+				if (ImGui::MenuItem("New Scene", "Ctrl+N")) {
 
-			if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Save", "Ctrl+S")) {
-
-			}
-
-			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("New Project", "Ctrl+Shift+N")) {
-
-			}
-
-			if (ImGui::MenuItem("Open Project", "Ctrl+Shift+O")) {
-				
-			}
-
-			if (ImGui::MenuItem("Save Project")) {
-				
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Exit", "(Alt+F4)", false)) {
-
-				return update_status::UPDATE_STOP;
-			}
-
-			ImGui::EndMenu();
-		}
-
-		// Menu - Edit: Tools for easier edition
-		if (ImGui::BeginMenu("Edit", true)) {
-
-			if (ImGui::MenuItem("Undo", "Ctrl+Z")) {
-
-			}
-
-			if (ImGui::MenuItem("Redo", "Ctrl+Y")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Select All", "Ctrl+A")) {
-
-			}
-
-			if (ImGui::MenuItem("Deselect All", "Shift+D")) {
-
-			}
-
-			if (ImGui::MenuItem("Select Children", "Shift+C")) {
-
-			}
-
-			if (ImGui::MenuItem("Invert Selection", "Ctrl+I")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Duplicate", "Ctrl+D")) {
-
-			}
-
-			if (ImGui::MenuItem("Delete", "Supr")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Play", "Ctrl+P")) {
-
-			}
-
-			if (ImGui::MenuItem("Pause", "Ctrl+Shift+P")) {
-
-			}
-
-			if (ImGui::MenuItem("Step", "Ctrl+Alt+P")) {
-
-			}
-
-			ImGui::Separator();
-
-			// MenuItem - Settings: Engine confiuration settings
-			if (ImGui::MenuItem("Settings...")) {
-				show_settings_window = !show_settings_window;
-			}
-
-			ImGui::EndMenu();
-		}
-
-		// Menu - Window: View options
-		if (ImGui::BeginMenu("Window", true)) {
-			
-			if (ImGui::BeginMenu("Viewport")) {
-
-				/*ImGui::Checkbox("Framerate", false);
-				ImGui::Checkbox("Polycount", false);
-				ImGui::Checkbox("Base Grid", false);*/
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Menus")) {
-
-				ImGui::MenuItem("Heriarchy", NULL, &show_heriarchy_window);
-				ImGui::MenuItem("Project", NULL, &show_project_window);
-				ImGui::MenuItem("Console", NULL, &show_imgui_console);
-				ImGui::MenuItem("Inspector", NULL, &show_inspector_window);
-				ImGui::MenuItem("Scene", NULL, &show_scene_window);
-				ImGui::MenuItem("Game", NULL, &show_game_window);
-
-				ImGui::EndMenu();
-			}
-			
-
-			ImGui::Separator();
-
-			// Menu: Engine Development Tools
-			if (ImGui::BeginMenu("DevDebug")) {
-				if (ImGui::MenuItem("Show UI Demo"))
-					show_demo_window = !show_demo_window;
-
-				if (ImGui::MenuItem("Generate Random Game"))
-					App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenu();
-		}
-
-		// Menu - GameObjects: Create premade objects and primitives
-		if (ImGui::BeginMenu("GameObjects", true)) {
-
-			if (ImGui::BeginMenu("Create...")) {
-				
-				if (ImGui::MenuItem("Plane"))
-				{
-					App->geometry_loader->CreatePrimitive(PRIMITIVE::PLANE, 10, 10);
 				}
 
-				if (ImGui::MenuItem("Cube"))
-				{
-					App->geometry_loader->CreatePrimitive(PRIMITIVE::CUBE);
-				}
+				if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
 
-				if (ImGui::MenuItem("Sphere"))
-				{
-					App->geometry_loader->CreatePrimitive(PRIMITIVE::SPHERE, 30, 30);
-				}
-
-				if (ImGui::MenuItem("Hemisphere"))
-				{
-					App->geometry_loader->CreatePrimitive(PRIMITIVE::HEMISPHERE, 30, 30);
-				}
-
-				if (ImGui::MenuItem("Cylinder"))
-				{
-					App->geometry_loader->CreatePrimitive(PRIMITIVE::CYLINDER, 30, 30);
-				}
-
-				if (ImGui::MenuItem("Cone"))
-				{
-					App->geometry_loader->CreatePrimitive(PRIMITIVE::CONE, 30, 30);
-				}
-
-				if (ImGui::MenuItem("Torus"))
-				{
-					App->geometry_loader->CreatePrimitive(PRIMITIVE::TORUS, 30, 30, 0.5f);
-				}
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Draw Mode")) {
-				
-				if (ImGui::RadioButton("Mesh", &drawMode, (int)draw_mode::MESH)
-					|| ImGui::RadioButton("Wireframe", &drawMode, (int)draw_mode::WIREFRAME)
-					|| ImGui::RadioButton("Vertexs", &drawMode, (int)draw_mode::VERTEX))
-				{
-					DrawModeChange();
-				}
-
-				ImGui::EndMenu();
-			}
-			
-			ImGui::EndMenu();
-		}
-
-		// Menu - Help: Information & Documentation
-		if (ImGui::BeginMenu("Help"))
-		{
-			if (ImGui::Button("About GATE...")) {
-				show_about_window = true;
-				ImGui::OpenPopup("About this engine...");
-			}
-
-			// PopupModal - About: Information about the engine and its properties
-			if (ImGui::BeginPopupModal("About this engine...", &show_about_window, ImGuiWindowFlags_AlwaysAutoResize))
-			{
-				ImGui::Text("%s\nA simple engine for 3D game development.\nBy %s, %s", App->GetTitle(), App->GetAuthors(), App->GetOrganization());
-				ImGui::Separator();
-
-				ImGui::Text("3rd Party Libraries used:\n");
-				ImGui::Bullet();
-				if (ImGui::SmallButton("STL (C++11)")) {
-					App->RequestBrowser("https://www.geeksforgeeks.org/the-c-standard-template-library-stl/");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("SDL (v2.0.10)")) {
-					App->RequestBrowser("https://www.libsdl.org/");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("OpenGL (v3.1.0)")) {
-					App->RequestBrowser("https://www.opengl.org/");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("DevIL (v1.8.0)")) {
-					App->RequestBrowser("http://openil.sourceforge.net/");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("Assimp (v5.0.0)")) {
-					App->RequestBrowser("http://assimp.org/");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("Dear ImGui (v1.72b)")) {
-					App->RequestBrowser("https://github.com/ocornut/imgui");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("glew (v2.0)")) {
-					App->RequestBrowser("http://glew.sourceforge.net/");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("MathGeoLib (v1.5)")) {
-					App->RequestBrowser("https://github.com/juj/MathGeoLib");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("Par (vN/A)")) {
-					App->RequestBrowser("https://github.com/prideout/par");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("JSON for Modern C++ (v3.7.0)")) {
-					App->RequestBrowser("https://github.com/nlohmann/json");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("Brofiler (v1.1.2)")) {
-					App->RequestBrowser("http://www.brofiler.com/");
-				}
-				ImGui::Bullet();
-				if (ImGui::SmallButton("mmgr (vN/A)")) {
-					App->RequestBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
 				}
 
 				ImGui::Separator();
 
-				ImGui::PushTextWrapPos(standard_text_width);
-				ImGui::Text(App->GetLicense());
-				ImGui::PopTextWrapPos();
+				if (ImGui::MenuItem("Save", "Ctrl+S")) {
 
-				ImGui::EndPopup();
+				}
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
+
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("New Project", "Ctrl+Shift+N")) {
+
+				}
+
+				if (ImGui::MenuItem("Open Project", "Ctrl+Shift+O")) {
+
+				}
+
+				if (ImGui::MenuItem("Save Project")) {
+
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Exit", "(Alt+F4)", false)) {
+
+					return update_status::UPDATE_STOP;
+				}
+
+				ImGui::EndMenu();
 			}
 
-			ImGui::Separator();
+			// Menu - Edit: Tools for easier edition
+			if (ImGui::BeginMenu("Edit")) {
 
-			if (ImGui::MenuItem("Documentation"))
-				App->RequestBrowser("https://github.com/DocDonkeys/GATE/wiki");
+				if (ImGui::MenuItem("Undo", "Ctrl+Z")) {
 
-			if (ImGui::MenuItem("Download Latest Version"))
-				App->RequestBrowser("https://github.com/DocDonkeys/GATE/releases");
+				}
 
-			ImGui::Separator();
+				if (ImGui::MenuItem("Redo", "Ctrl+Y")) {
 
-			if (ImGui::MenuItem("Report Bug / Suggest Feature"))
-				App->RequestBrowser("https://github.com/DocDonkeys/GATE/issues");
+				}
 
-			if (ImGui::MenuItem("Give us Feedback!"))
-				App->RequestBrowser("https://www.youtube.com/watch?v=8o6c1UuoMwI");
+				ImGui::Separator();
 
-			if (ImGui::MenuItem("Contact us!"))
-				App->RequestBrowser("https://github.com/DocDonkeys/");
-	
-			
+				if (ImGui::MenuItem("Select All", "Ctrl+A")) {
 
-			ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("Deselect All", "Shift+D")) {
+
+				}
+
+				if (ImGui::MenuItem("Select Children", "Shift+C")) {
+
+				}
+
+				if (ImGui::MenuItem("Invert Selection", "Ctrl+I")) {
+
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Duplicate", "Ctrl+D")) {
+
+				}
+
+				if (ImGui::MenuItem("Delete", "Supr")) {
+
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Play", "Ctrl+P")) {
+
+				}
+
+				if (ImGui::MenuItem("Pause", "Ctrl+Shift+P")) {
+
+				}
+
+				if (ImGui::MenuItem("Step", "Ctrl+Alt+P")) {
+
+				}
+
+				ImGui::Separator();
+
+				// MenuItem - Settings: Engine confiuration settings
+				if (ImGui::MenuItem("Settings...")) {
+					show_settings_window = !show_settings_window;
+				}
+
+				ImGui::EndMenu();
+			}
+
+			// Menu - Window: View options
+			if (ImGui::BeginMenu("Window")) {
+
+				if (ImGui::BeginMenu("Viewport")) {
+
+					//ImGui::Checkbox("Framerate", false);
+					//ImGui::Checkbox("Polycount", false);
+					//ImGui::Checkbox("Base Grid", false);
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Menus")) {
+
+					ImGui::MenuItem("Heriarchy", NULL, &show_heriarchy_window);
+					ImGui::MenuItem("Project", NULL, &show_project_window);
+					ImGui::MenuItem("Console", NULL, &show_imgui_console);
+					ImGui::MenuItem("Inspector", NULL, &show_inspector_window);
+					ImGui::MenuItem("Scene", NULL, &show_scene_window);
+					ImGui::MenuItem("Game", NULL, &show_game_window);
+
+					ImGui::EndMenu();
+				}
+
+
+				ImGui::Separator();
+
+				// Menu: Engine Development Tools
+				if (ImGui::BeginMenu("DevDebug")) {
+					if (ImGui::MenuItem("Show UI Demo"))
+						show_demo_window = !show_demo_window;
+
+					if (ImGui::MenuItem("Generate Random Game"))
+						App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
+					ImGui::EndMenu();
+				}
+
+				ImGui::EndMenu();
+			}
+
+			// Menu - GameObjects: Create premade objects and primitives
+			if (ImGui::BeginMenu("GameObjects")) {
+
+				if (ImGui::BeginMenu("Create...")) {
+
+					if (ImGui::MenuItem("Plane"))
+					{
+						App->geometry_loader->CreatePrimitive(PRIMITIVE::PLANE, 10, 10);
+					}
+
+					if (ImGui::MenuItem("Cube"))
+					{
+						App->geometry_loader->CreatePrimitive(PRIMITIVE::CUBE);
+					}
+
+					if (ImGui::MenuItem("Sphere"))
+					{
+						App->geometry_loader->CreatePrimitive(PRIMITIVE::SPHERE, 30, 30);
+					}
+
+					if (ImGui::MenuItem("Hemisphere"))
+					{
+						App->geometry_loader->CreatePrimitive(PRIMITIVE::HEMISPHERE, 30, 30);
+					}
+
+					if (ImGui::MenuItem("Cylinder"))
+					{
+						App->geometry_loader->CreatePrimitive(PRIMITIVE::CYLINDER, 30, 30);
+					}
+
+					if (ImGui::MenuItem("Cone"))
+					{
+						App->geometry_loader->CreatePrimitive(PRIMITIVE::CONE, 30, 30);
+					}
+
+					if (ImGui::MenuItem("Torus"))
+					{
+						App->geometry_loader->CreatePrimitive(PRIMITIVE::TORUS, 30, 30, 0.5f);
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Draw Mode")) {
+
+					if (ImGui::RadioButton("Mesh", &drawMode, (int)draw_mode::MESH)
+						|| ImGui::RadioButton("Wireframe", &drawMode, (int)draw_mode::WIREFRAME)
+						|| ImGui::RadioButton("Vertexs", &drawMode, (int)draw_mode::VERTEX))
+					{
+						DrawModeChange();
+					}
+
+					ImGui::EndMenu();
+				}
+
+				ImGui::EndMenu();
+			}
+
+			// Menu - Help: Information & Documentation
+			if (ImGui::BeginMenu("Help")) {
+				if (ImGui::Button("About GATE...")) {
+					show_about_window = true;
+					ImGui::OpenPopup("About this engine...");
+				}
+
+				// PopupModal - About: Information about the engine and its properties
+				if (ImGui::BeginPopupModal("About this engine...", &show_about_window, ImGuiWindowFlags_AlwaysAutoResize))
+				{
+					ImGui::Text("%s\nA simple engine for 3D game development.\nBy %s, %s", App->GetTitle(), App->GetAuthors(), App->GetOrganization());
+					ImGui::Separator();
+
+					ImGui::Text("3rd Party Libraries used:\n");
+					ImGui::Bullet();
+					if (ImGui::SmallButton("STL (C++11)")) {
+						App->RequestBrowser("https://www.geeksforgeeks.org/the-c-standard-template-library-stl/");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("SDL (v2.0.10)")) {
+						App->RequestBrowser("https://www.libsdl.org/");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("OpenGL (v3.1.0)")) {
+						App->RequestBrowser("https://www.opengl.org/");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("DevIL (v1.8.0)")) {
+						App->RequestBrowser("http://openil.sourceforge.net/");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("Assimp (v5.0.0)")) {
+						App->RequestBrowser("http://assimp.org/");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("Dear ImGui (v1.73, Base Code)")) {
+						App->RequestBrowser("https://github.com/ocornut/imgui");
+					} ImGui::SameLine();
+					if (ImGui::SmallButton("Docking Test Branch (Commit 18/10/19)")) {
+						App->RequestBrowser("https://github.com/ocornut/imgui/tree/7feccf9ab2fad261aa873dfa067e64ad9fab8a03");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("glew (v2.0)")) {
+						App->RequestBrowser("http://glew.sourceforge.net/");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("MathGeoLib (v1.5)")) {
+						App->RequestBrowser("https://github.com/juj/MathGeoLib");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("Par (vN/A)")) {
+						App->RequestBrowser("https://github.com/prideout/par");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("JSON for Modern C++ (v3.7.0)")) {
+						App->RequestBrowser("https://github.com/nlohmann/json");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("Brofiler (v1.1.2)")) {
+						App->RequestBrowser("http://www.brofiler.com/");
+					}
+					ImGui::Bullet();
+					if (ImGui::SmallButton("mmgr (vN/A)")) {
+						App->RequestBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
+					}
+
+					ImGui::Separator();
+
+					ImGui::PushTextWrapPos(standard_text_width);
+					ImGui::Text(App->GetLicense());
+					ImGui::PopTextWrapPos();
+
+					ImGui::EndPopup();
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Documentation"))
+					App->RequestBrowser("https://github.com/DocDonkeys/GATE/wiki");
+
+				if (ImGui::MenuItem("Download Latest Version"))
+					App->RequestBrowser("https://github.com/DocDonkeys/GATE/releases");
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Report Bug / Suggest Feature"))
+					App->RequestBrowser("https://github.com/DocDonkeys/GATE/issues");
+
+				if (ImGui::MenuItem("Give us Feedback!"))
+					App->RequestBrowser("https://www.youtube.com/watch?v=8o6c1UuoMwI");
+
+				if (ImGui::MenuItem("Contact us!"))
+					App->RequestBrowser("https://github.com/DocDonkeys/");
+
+
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenuBar();
 		}
-	}
-
-	ImGui::EndMainMenuBar();
-
-	if (show_top_bar_window) {
-		ImGui::Begin("Top Bar", &show_heriarchy_window, ImGuiWindowFlags_NoDecoration);
-
-		/*ImGui::SameLine(50);
-		ImGui::ImageButton("Drag"); ImGui::SameLine();
-		ImGui::ImageButton("Move"); ImGui::SameLine();
-		ImGui::ImageButton("Rotate"); ImGui::SameLine();
-		ImGui::ImageButton("Rect"); ImGui::SameLine();
-		ImGui::ImageButton("All");
-
-		ImGui::SameLine(50);
-		ImGui::Button("Pivot"); ImGui::SameLine();
-		ImGui::Button("Local"); ImGui::SameLine();
-
-		ImGui::SameLine(500);
-		ImGui::ImageButton("Play"); ImGui::SameLine();
-		ImGui::ImageButton("Pause"); ImGui::SameLine();
-		ImGui::ImageButton("Frame"); ImGui::SameLine();*/
 
 		ImGui::End();
 	}
@@ -829,6 +831,41 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 
 	return UPDATE_CONTINUE;
+}
+
+bool ModuleEngineGUI::BeginRootWindow(char* id, bool docking, ImGuiWindowFlags winFlags)
+{
+	ImGuiViewport* viewport = ImGui::GetWindowViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	winFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	winFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	winFlags |= ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground;	// Docking-related
+
+	bool temp = true;
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	temp = ImGui::Begin(id, &temp, winFlags);
+	ImGui::PopStyleVar(3);
+
+	if (docking) {
+		BeginDockingSpace(id, ImGuiDockNodeFlags_PassthruCentralNode);
+		//ImGui::DockSpaceOverViewport(viewport, ImGuiDockNodeFlags_PassthruCentralNode);	//Note: This is an automated way of doing the same, but lacks the capability of having a menuBar
+	}
+
+	return temp;
+}
+
+void ModuleEngineGUI::BeginDockingSpace(char* dockSpaceId, ImGuiDockNodeFlags dockFlags, ImVec2 size)
+{
+	// DockSpace
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+		ImGuiID dockspace_id = ImGui::GetID(dockSpaceId);
+		ImGui::DockSpace(dockspace_id, size, dockFlags);
+	}
 }
 
 // ---------------------------------

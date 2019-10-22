@@ -4,11 +4,11 @@
 #include "Globals.h"
 #include "Module.h"
 
-#include "libs/imgui-1.72b/imgui.h"
-#include "libs/imgui-1.72b/imgui_internal.h"
+#include "libs/imgui/imgui.h"
+#include "libs/imgui/imgui_internal.h"
 
-#include "libs/imgui-1.72b/examples/imgui_impl_sdl.h"
-#include "libs/imgui-1.72b/examples/imgui_impl_opengl3.h"
+#include "libs/imgui/examples/imgui_impl_sdl.h"
+#include "libs/imgui/examples/imgui_impl_opengl3.h"
 
 #include "libs/glew/include/GL/glew.h"
 
@@ -57,6 +57,9 @@ private:
 	void TextureModeChange();
 	void ByteSizeModeChange();
 
+	bool BeginRootWindow(char* id, bool dockSpace = true, ImGuiWindowFlags winFlags = ImGuiWindowFlags_None);	// Manual background window for Main Menu Bars and docking, requires an ImGui::End() afterwards!
+	void BeginDockingSpace(char* dockSpaceId, ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None, ImVec2 size = { 0.0f, 0.0f });
+
 public: // Members
 	int drawMode = (int)draw_mode::MESH;	//IMPROVE: Each mode should be in it's correspondant module or be left here if no other seems fitting, this for example should go to Renderer3D?
 	int textureMode = (int)texture_mode::TWO_D;
@@ -66,7 +69,6 @@ public: // Members
 
 private:
 	// Bools to open/close windows
-	bool show_top_bar_window = false;
 	bool show_settings_window = false;
 	bool show_imgui_console = false;	//CHANGE/FIX: To show_console_window
 	bool show_console_window = false;	//CHANGE/FIX: Delete here and in cpp, imgui console is the same but better
@@ -76,11 +78,16 @@ private:
 	bool show_scene_window = false;		//TODO
 	bool show_game_window = false;		//TODO
 
+	// Window Settings
+	bool viewport_activated = false;
+	bool main_dockSpace = true;
+
 	// Debug window bools
 	bool show_demo_window = false;
 	bool show_another_window = false;
 
 	//UI values
+	int menuBarHeight = 20;
 	float standard_text_width = 600.0f;	//Default/max text width
 
 	float byteAlt;

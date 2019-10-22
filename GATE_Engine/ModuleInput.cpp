@@ -4,7 +4,7 @@
 #include "ModuleInput.h"
 #include "ModuleEngineGUI.h"
 #include "GeometryLoader.h"
-#include "libs/imgui-1.72b/imgui_impl_sdl.h"
+#include "libs/imgui/imgui_impl_sdl.h"
 
 #define MAX_KEYS 300
 
