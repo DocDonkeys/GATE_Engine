@@ -335,7 +335,7 @@ update_status ModuleEngineGUI::Update(float dt)
 					ImGui::Bullet();
 					if (ImGui::SmallButton("Dear ImGui (v1.73, Base Code)")) {
 						App->RequestBrowser("https://github.com/ocornut/imgui");
-					} ImGui::SameLine();
+					}
 					if (ImGui::SmallButton("Docking Test Branch (Commit 18/10/19)")) {
 						App->RequestBrowser("https://github.com/ocornut/imgui/tree/7feccf9ab2fad261aa873dfa067e64ad9fab8a03");
 					}
@@ -366,9 +366,11 @@ update_status ModuleEngineGUI::Update(float dt)
 
 					ImGui::Separator();
 
-					ImGui::PushTextWrapPos(standard_text_width);
-					ImGui::Text(App->GetLicense());
-					ImGui::PopTextWrapPos();
+					if (ImGui::CollapsingHeader("License")) {
+						ImGui::PushTextWrapPos(standard_text_width);
+						ImGui::Text(App->GetLicense());
+						ImGui::PopTextWrapPos();
+					}
 
 					ImGui::EndPopup();
 				}
