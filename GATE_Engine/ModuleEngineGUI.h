@@ -70,11 +70,11 @@ public: // Members
 private:
 	// Bools to open/close windows
 	bool show_settings_window = false;
-	bool show_imgui_console = false;	//CHANGE/FIX: To show_console_window
+	bool show_imgui_console = true;	//CHANGE/FIX: To show_console_window
 	bool show_console_window = false;	//CHANGE/FIX: Delete here and in cpp, imgui console is the same but better
-	bool show_heriarchy_window = false;	//TODO
+	bool show_heriarchy_window = true;	//TODO
 	bool show_project_window = false;	//TODO
-	bool show_inspector_window = false;	//TODO
+	bool show_inspector_window = true;	//TODO
 	bool show_scene_window = false;		//TODO
 	bool show_game_window = false;		//TODO
 

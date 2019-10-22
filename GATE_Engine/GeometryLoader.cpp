@@ -139,6 +139,23 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 	}
 	LOG("Created Primitive with %d vertices & %d indices.", new_mesh->num_vertex, new_mesh->num_index);
 
+	LoadPrimitiveNormals(new_mesh,p_mesh);
+
+
+	//Copy the par_shapes texture coordinates
+	for (int i = 0; i < new_mesh->num_tex_coords * 2; ++i)
+		new_mesh->tex_coords[i] = p_mesh->tcoords[i];
+	
+	//Generate Buffers
+	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
+	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
+	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
+	//Push into the meshes vector
+	meshes.push_back(new_mesh);
+}
+
+void GeometryLoader::LoadPrimitiveNormals(Mesh * new_mesh, const par_shapes_mesh_s * p_mesh)
+{
 	//Load the Normals of the par_shape
 	if (p_mesh->normals != NULL)
 	{
@@ -169,18 +186,6 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 			new_mesh->normals_faces_vector[j] = normal * 0.25f;
 		}
 	}
-
-
-	//Copy the par_shapes texture coordinates
-	for (int i = 0; i < new_mesh->num_tex_coords * 2; ++i)
-		new_mesh->tex_coords[i] = p_mesh->tcoords[i];
-	
-	//Generate Buffers
-	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
-	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
-	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
-	//Push into the meshes vector
-	meshes.push_back(new_mesh);
 }
 
 void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float radius)
