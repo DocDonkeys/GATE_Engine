@@ -6,10 +6,10 @@
 #include <vector>
 
 #include "libs/MathGeoLib/include/Math/float3.h"
-
 #include "libs/Assimp/include/cimport.h"
 
 struct par_shapes_mesh_s;
+class Mesh;
 
 enum class PRIMITIVE
 {
@@ -20,28 +20,6 @@ enum class PRIMITIVE
 	CYLINDER,
 	CONE,
 	TORUS
-};
-
-struct Mesh_Data //Struct to hold info for meshes
-{
-	uint id_index = 0; // index in VRAM 
-	uint num_index = 0; 
-	uint* index = nullptr;
-
-	uint id_vertex = 0; // unique vertex in VRAM 
-	uint num_vertex = 0; 
-	float3* vertex = nullptr;
-
-	uint id_normals = 0; // index in VRAM
-	uint num_normals = 0;
-	float3* normals_vector = nullptr; // Store the Vectors of the normals
-	float3* normals_vertex = nullptr; // Since on resize vertex positions will change we store the position
-
-	uint id_tex_coords = 0; // index in VRAM
-	uint num_tex_coords = 0;
-	float* tex_coords = nullptr;
-
-	uint id_texture = 0; // Texture index in VRAM
 };
 
 class GeometryLoader : public Module
@@ -57,15 +35,17 @@ public:
 	bool CleanUp();
 
 public:
-	bool Load3DFile(const char* full_path); // Load a 3D file such as an FBX, OBJ etc.
-	void LoadPrimitiveShape(par_shapes_mesh_s* p_mesh); // Load a generated primitive (par_shape) into a mesh (Mesh_Data)
+	// Load a 3D file such as an FBX, OBJ etc.
+	bool Load3DFile(const char* full_path); 
+	// Load a generated primitive (par_shape) into a mesh (Mesh)
+	void LoadPrimitiveShape(par_shapes_mesh_s* p_mesh); 
 
-	//Generate a primitive, for CUBE (slices,stacks,radius) will be ignored, for anything else except Torus (radius) will be ignored. Remember radius between 0 & 1.0f
+	//Generate a primitive. For CUBE (slices,stacks,radius) will be ignored, for anything else except Torus (radius) will be ignored. Remember radius between 0 & 1.0f
 	void CreatePrimitive(PRIMITIVE p, int slices = 0, int stacks = 0, float radius = 0.f);
 
 public: // Vars
-	aiLogStream stream;
-	std::vector<Mesh_Data*> meshes;
+	aiLogStream log_stream;
+	std::vector<Mesh*> meshes;
 };
 
 

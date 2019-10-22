@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "Mesh.h"
 
 
 #include "libs/glew/include/GL/glew.h"
@@ -25,14 +26,14 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init()
 {
-	App->ConsoleLOG("Creating 3D Renderer context");
+	LOG("Creating 3D Renderer context");
 	bool ret = true;
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 	if(context == NULL)
 	{
-		App->ConsoleLOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_assert(context != NULL);
 		ret = false;
 	}
@@ -43,7 +44,7 @@ bool ModuleRenderer3D::Init()
 		if (App->renderer3D->vSync) {
 			int swapInt = SDL_GL_SetSwapInterval(1);
 			if (swapInt < 0) {
-				App->ConsoleLOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+				LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 				SDL_assert(swapInt >= 0);
 			}
 		}
@@ -53,19 +54,19 @@ bool ModuleRenderer3D::Init()
 
 		if (err != GLEW_OK) // glewInit error
 		{
-			App->ConsoleLOG("Could not Initialize Glew, %s", glewGetErrorString(err));
+			LOG("Could not Initialize Glew, %s", glewGetErrorString(err));
 			return false;
 		}
 		else // Success!
 		{
-			App->ConsoleLOG("Succesfully initialized Glew!");
-			App->ConsoleLOG("Using Glew %s", glewGetString(GLEW_VERSION));
+			LOG("Succesfully initialized Glew!");
+			LOG("Using Glew %s", glewGetString(GLEW_VERSION));
 
 			//LOG Hardware
-			App->ConsoleLOG("Vendor: %s", glGetString(GL_VENDOR));
-			App->ConsoleLOG("Renderer: %s", glGetString(GL_RENDERER));
-			App->ConsoleLOG("OpenGL version supported %s", glGetString(GL_VERSION));
-			App->ConsoleLOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+			LOG("Vendor: %s", glGetString(GL_VENDOR));
+			LOG("Renderer: %s", glGetString(GL_RENDERER));
+			LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+			LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
 
 
@@ -77,7 +78,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
@@ -90,7 +91,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
@@ -105,7 +106,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->ConsoleLOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			SDL_assert(error == GL_NO_ERROR);
 			ret = false;
 		}
@@ -210,7 +211,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
-	App->ConsoleLOG("Destroying 3D Renderer");
+	LOG("Destroying 3D Renderer");
 
 	SDL_GL_DeleteContext(context);
 
@@ -320,7 +321,7 @@ void ModuleRenderer3D::DeleteBuffer(uint & id)
 }
 
 //Pass a Mesh_Data to be drawn using glDrawElements
-void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
+void ModuleRenderer3D::DrawMesh(const Mesh* mesh)
 {
 	//Draw VERTICES with INDICES
 	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
@@ -331,24 +332,43 @@ void ModuleRenderer3D::DrawMesh(const Mesh_Data* mesh)
 			PrintSimpleMesh(mesh);
 	}
 	else
-		App->ConsoleLOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
+		LOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
 
 	//Draw NORMALS TODO: only in DEBUG MODE!
-	if (mesh->normals_vertex != nullptr)
+	if (mesh->normals_vector != nullptr)
 	{
-		glColor3f(1,0,1);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		//Had a lot of problems with buffers so we draw in direct mode, we can save some VRAM space
+		/*glBegin(GL_LINES);
+		glColor3f(1, 0, 1);
 
-		glDrawArrays(GL_LINES, 0, mesh->num_vertex);
-		glDisableClientState(GL_VERTEX_ARRAY);
+		for (int i = 0; i < mesh->num_vertex; ++i)
+		{
+			glVertex3f(mesh->vertex[i].x, mesh->vertex[i].y, mesh->vertex[i].z);
+			glVertex3f(mesh->vertex[i].x + mesh->normals_vector[i].x,
+				mesh->vertex[i].y + mesh->normals_vector[i].y,
+				mesh->vertex[i].z + mesh->normals_vector[i].z);
+		}
 		glColor3f(1, 1, 1);
+		glEnd();*/
+
+		//Print faces normals
+		glBegin(GL_LINES);
+		glColor3f(0, 1, 0);
+
+		for (int i = 0; i < mesh->num_vertex; ++i)
+		{
+			glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
+			glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,
+				mesh->normals_faces[i].y + mesh->normals_faces_vector[i].y,
+				mesh->normals_faces[i].z + mesh->normals_faces_vector[i].z);
+		}
+		glColor3f(1, 1, 1);
+		glEnd();
 	}
 }
 
 //DRAW a Mesh with only vertices and indices data
-void ModuleRenderer3D::PrintSimpleMesh(const Mesh_Data* mesh)
+void ModuleRenderer3D::PrintSimpleMesh(const Mesh* mesh)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -368,7 +388,7 @@ void ModuleRenderer3D::PrintSimpleMesh(const Mesh_Data* mesh)
 }
 
 //DRAW a mesh that contains textures using it's texture coordinates
-void ModuleRenderer3D::PrintTexturedMesh(const Mesh_Data * mesh)
+void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh)
 {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 

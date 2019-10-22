@@ -47,7 +47,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\DevIL Windows SDK\include;GATE_Engine\libs\Assimp\include\;GATE_Engine\libs\DevIL Windows SDK\include\;E:\ch0m5 Database\ch0m5\Documents\GitHub\GATE\GATE_Engine\libs\DevIL Windows SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -65,7 +65,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\DevIL Windows SDK\include;GATE_Engine\libs\Assimp\include\;GATE_Engine\libs\DevIL Windows SDK\include\;E:\ch0m5 Database\ch0m5\Documents\GitHub\GATE\GATE_Engine\libs\DevIL Windows SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -94,6 +94,7 @@
     <ClInclude Include="libs\imgui\imstb_textedit.h" />
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\par\par_shapes.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="JsonLoader.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModulePhysics.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleEngineGUI.cpp" />

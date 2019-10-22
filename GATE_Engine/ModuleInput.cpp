@@ -24,14 +24,14 @@ ModuleInput::~ModuleInput()
 // Called before render is available
 bool ModuleInput::Init()
 {
-	App->ConsoleLOG("Init SDL input event system");
+	LOG("Init SDL input event system");
 	bool ret = true;
 	SDL_Init(0);
 
 	int initSysRes = SDL_InitSubSystem(SDL_INIT_EVENTS);
 	if (initSysRes < 0)
 	{
-		App->ConsoleLOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
+		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		SDL_assert(initSysRes >= 0);
 		ret = false;
 	}
@@ -132,18 +132,18 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_DROPFILE:     // In case if dropped file	//CHANGE/FIX: Doesn't work consistently, sometimes the drop event is not called
 				dropFileDir = e.drop.file;
 				
-				App->ConsoleLOG("File dropped on window: %s", dropFileDir);
+				LOG("File dropped on window: %s", dropFileDir);
 
 				SDL_free(dropFileDir);
 
 				App->geometry_loader->Load3DFile(dropFileDir);
-				App->ConsoleLOG("File dropped on window: %s", dropFileDir);
+				LOG("File dropped on window: %s", dropFileDir);
 
 				SDL_free(dropFileDir);
 
 				/*CHANGE/FIX:
 				1. DO OPEN FILE OPERATION OR FLAG ITS START
-				2. App->ConsoleLOG("File dropped on window: %s", dropFileDir);
+				2. LOG("File dropped on window: %s", dropFileDir);
 				3. SDL_free(dropFileDir);    // Free dropped_filedir memory
 				*/
 				break;
@@ -190,7 +190,7 @@ update_status ModuleInput::PreUpdate(float dt)
 // Called before quitting
 bool ModuleInput::CleanUp()
 {
-	App->ConsoleLOG("Quitting SDL input event subsystem");
+	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

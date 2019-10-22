@@ -239,7 +239,7 @@ void Application::ConsoleLOG(const char * format, ...)
 	const char* str = tmp_string2;
 	
 	//Now we can pass the string to the vector
-	console_LOG.push_back(str);
+	LOG.push_back(str);
 	engineGUI->console.AddLog(str);
 }
 
