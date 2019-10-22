@@ -355,7 +355,7 @@ void ModuleRenderer3D::DrawMesh(const Mesh* mesh)
 		glBegin(GL_LINES);
 		glColor3f(0, 1, 0);
 
-		for (int i = 0; i < mesh->num_vertex; ++i)
+		for (int i = 0; i < mesh->num_index; ++i)
 		{
 			glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
 			glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,

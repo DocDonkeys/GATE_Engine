@@ -110,7 +110,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	return ret;
 }
 
-void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
+void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 {
 	Mesh* new_mesh = new Mesh();
 
