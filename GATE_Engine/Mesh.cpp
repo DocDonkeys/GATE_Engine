@@ -51,9 +51,9 @@ void Mesh::LoadNormals(const aiMesh * loaded_mesh)
 
 		//Calculate the positions and vectors of the face Normals
 		num_faces = loaded_mesh->mNumFaces;
-		normals_faces = new float3[num_vertex];
-		normals_faces_vector = new float3[num_vertex];
-		for (int j = 0; j < num_vertex; ++j)
+		normals_faces = new float3[num_index];
+		normals_faces_vector = new float3[num_index];
+		for (int j = 0; j < num_index; j+=3)
 		{
 			// 3 points of the triangle/face
 			float3 vert1 = vertex[index[j]];
@@ -102,10 +102,23 @@ void Mesh::LoadMaterials(const aiScene * scene, const aiMesh* loaded_mesh, const
 		aiMaterial* material = scene->mMaterials[loaded_mesh->mMaterialIndex]; // For now we are just required to use 1 diffse texture
 
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
+		
+		if (tex_path.length > 0)
+		{
+			std::string relative_path = tex_path.C_Str();
 
-		std::string relative_path = tex_path.C_Str();
-		std::string texture_path = absolute_path.data() + relative_path;
-		id_texture = App->texture_loader->LoadTextureFile(texture_path.data());
+			std::size_t found = relative_path.find_first_of("/\\");
+			if (found > 0)
+			{
+				relative_path = relative_path.substr(found + 1, relative_path.size());
+			}
+			std::string texture_path = absolute_path.data() + relative_path;
+			id_texture = App->texture_loader->LoadTextureFile(texture_path.data());
+		}
+		else
+		{
+			LOG("Error loading scene materials from %s", absolute_path);
+		}
 	}
 	else
 		LOG("Error loading scene materials from %s", absolute_path);

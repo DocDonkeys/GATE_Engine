@@ -38,7 +38,8 @@ public:
 	// Load a 3D file such as an FBX, OBJ etc.
 	bool Load3DFile(const char* full_path); 
 	// Load a generated primitive (par_shape) into a mesh (Mesh)
-	void LoadPrimitiveShape(par_shapes_mesh_s* p_mesh); 
+	void LoadPrimitiveShape(const par_shapes_mesh_s* p_mesh); 
+	void LoadPrimitiveNormals(Mesh* mesh, const par_shapes_mesh_s* p_mesh);
 
 	//Generate a primitive. For CUBE (slices,stacks,radius) will be ignored, for anything else except Torus (radius) will be ignored. Remember radius between 0 & 1.0f
 	void CreatePrimitive(PRIMITIVE p, int slices = 0, int stacks = 0, float radius = 0.f);

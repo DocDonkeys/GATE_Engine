@@ -110,7 +110,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	return ret;
 }
 
-void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
+void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 {
 	Mesh* new_mesh = new Mesh();
 
@@ -138,6 +138,38 @@ void GeometryLoader::LoadPrimitiveShape(par_shapes_mesh_s * p_mesh)
 		new_mesh->index[i] = (uint)p_mesh->triangles[i];
 	}
 	LOG("Created Primitive with %d vertices & %d indices.", new_mesh->num_vertex, new_mesh->num_index);
+
+	//Load the Normals of the par_shape
+	if (p_mesh->normals != NULL)
+	{
+		new_mesh->normals_vector = new float3[new_mesh->num_vertex];
+		memcpy(new_mesh->normals_vector, p_mesh->normals, sizeof(float3) * new_mesh->num_vertex);
+
+		//Calculate the positions and vectors of the face Normals
+		new_mesh->normals_faces = new float3[new_mesh->num_index];
+		new_mesh->normals_faces_vector = new float3[new_mesh->num_index];
+		for (int j = 0; j < new_mesh->num_index; j += 3)
+		{
+			// 3 points of the triangle/face
+			float3 vert1 = new_mesh->vertex[new_mesh->index[j]];
+			float3 vert2 = new_mesh->vertex[new_mesh->index[j + 1]];
+			float3 vert3 = new_mesh->vertex[new_mesh->index[j + 2]];
+
+			//Calculate starting point of the normal
+			new_mesh->normals_faces[j] = (vert1 + vert2 + vert3) / 3;
+
+			//Calculate Cross product of 2 edges of the triangle to obtain Normal vector
+			float3 edge_a = vert2 - vert1;
+			float3 edge_b = vert3 - vert1;
+
+			float3 normal;
+			normal = Cross(edge_a, edge_b);
+			normal.Normalize();
+
+			new_mesh->normals_faces_vector[j] = normal * 0.25f;
+		}
+	}
+
 
 	//Copy the par_shapes texture coordinates
 	for (int i = 0; i < new_mesh->num_tex_coords * 2; ++i)
