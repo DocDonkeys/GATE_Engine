@@ -33,7 +33,8 @@ bool ModuleCamera3D::CleanUp()
 
 	return true;
 }
-
+#include "GeometryLoader.h"
+#include "Mesh.h"
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
@@ -101,13 +102,20 @@ update_status ModuleCamera3D::Update(float dt)
 
 		// Center camera to object
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {	// Focus camera to position from a certain distance and angle
-			GoLook({ 0.0f, 0.0f, 0.0f }, 10.0f, { 1.0f, 1.0f, 1.0f });
+			LookFrom({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, length({ 10.0f, 10.0f, 10.0f }));	//CHANGE/FIX: Use GameObject.transform.position variable and GameObject.mesh.size
+
+			/*int i = 0;	// Mesh sizes usage test
+			float a = App->geometry_loader->meshes[i]->size_x.width;
+			float b = App->geometry_loader->meshes[i]->size_y.width;
+			float c = App->geometry_loader->meshes[i]->size_z.width;
+
+			LookFrom({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, length({ a * 2.0f, b * 2.0f, c * 2.0f }));*/
 		}
 
 		// Apply changes and recalculate matrix
 		Move(newPos);
 	}
-
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -344,12 +352,12 @@ void ModuleCamera3D::RotateVertical(float angle)
 // -----------------------------------------------------------------
 
 // Camera fetch orders
-void ModuleCamera3D::GoLook(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)	// Changes camera position, reference, and can be rotated around it
+void ModuleCamera3D::GoLook(const vec3 &Position, const vec3 &Spot, bool RotateAroundReference)	// Look at reference from a certain position
 {
 	this->Position = Position;
-	this->Reference = Reference;
+	this->Reference = Spot;
 
-	Z = normalize(Position - Reference);
+	Z = normalize(Position - Spot);
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 
@@ -362,25 +370,37 @@ void ModuleCamera3D::GoLook(const vec3 &Position, const vec3 &Reference, bool Ro
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::GoLook(const vec3 &Reference, float Distance, const vec3 &direction)	// Rotates camera to desired angle (based on world axis)
+void ModuleCamera3D::LookFrom(const vec3 &Spot, const vec3 &Direction, float Distance)	// Look at reference from a certain direction
 {
-	vec3 unitDirect = normalize(direction);
+	vec3 unitDirection = normalize(Direction);
 
-	this->Position = Reference + unitDirect * Distance;
-	this->Reference = Reference;
+	if (Distance > 0.0f) {
+		Position = Spot + unitDirection * Distance;
+	}
+	else {
+		Position = Spot + Direction;
+	}
+	
+	Reference = Spot;
 
-	Z = unitDirect;
+	Z = unitDirection;
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::LookAt(const vec3 &Spot)	// Rotates camera to position and sets is as camera reference
+void ModuleCamera3D::LookAt(const vec3 &Spot, float Distance)	// Look at reference from current direction
 {
 	Reference = Spot;
 
-	Z = normalize(Position - Reference);
+	vec3 unitDirection = normalize(Position - Reference);
+
+	if (Distance > 0.0f) {
+		Position = Spot + unitDirection * Distance;
+	}
+
+	Z = unitDirection;
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 

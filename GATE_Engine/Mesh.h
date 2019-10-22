@@ -16,6 +16,7 @@ public: // Calls
 	void LoadNormals(const aiMesh* loaded_mesh);
 	void LoadTexCoords(const aiMesh* loaded_mesh);
 	void LoadMaterials(const aiScene* scene, const aiMesh* loaded_mesh, const std::string& absolute_path);
+	void LoadMeshSizeData();
 
 public: // Vars
 	uint id_index = 0; // index in VRAM 
@@ -38,5 +39,12 @@ public: // Vars
 	float* tex_coords = nullptr;
 
 	uint id_texture = 0; // Texture index in VRAM
+
+	struct size_data {	// Mesh size data
+		float max = -10.0f;
+		float min = 10.0f;	// Using these initializing values we make sure that both max and min are substituted for vertex pos values, as max is too low and min too high for the usual vertex values
+		float width = 0.0f;
+	};
+	size_data size_x, size_y, size_z;
 };
 #endif

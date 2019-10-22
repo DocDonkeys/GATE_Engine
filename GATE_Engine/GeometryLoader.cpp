@@ -88,6 +88,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			new_mesh->LoadNormals(loaded_mesh); //Normals
 			new_mesh->LoadTexCoords(loaded_mesh); // UV's
 			new_mesh->LoadMaterials(scene, loaded_mesh, absolute_path); //Materials
+			new_mesh->LoadMeshSizeData();
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -132,6 +133,8 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 		new_mesh->vertex[i].y = p_mesh->points[j + 1];
 		new_mesh->vertex[i].z = p_mesh->points[j + 2];
 	}
+
+	new_mesh->LoadMeshSizeData();
 
 	for (int i = 0; i < new_mesh->num_index; i++)
 	{

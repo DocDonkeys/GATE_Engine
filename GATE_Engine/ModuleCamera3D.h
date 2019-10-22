@@ -14,9 +14,9 @@ public:
 	bool CleanUp();
 
 public:
-	void GoLook(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void GoLook(const vec3 &Reference, float Distance, const vec3 &direction);
-	void LookAt(const vec3 &Spot);
+	void GoLook(const vec3 &Position, const vec3 &Spot, bool RotateAroundReference = false);
+	void LookFrom(const vec3 &Spot, const vec3 &Direction, float Distance = 0.0f);
+	void LookAt(const vec3 &Spot, float Distance = 0.0f);
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
 
