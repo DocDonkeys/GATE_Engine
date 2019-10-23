@@ -2,6 +2,12 @@
 #include "Globals.h"
 #include "Application.h"
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 void log(const char file[], int line, const char* format, ...)
 {
 	static char tmp_string[4096];

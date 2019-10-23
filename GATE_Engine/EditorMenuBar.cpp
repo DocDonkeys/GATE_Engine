@@ -1,8 +1,27 @@
-#include "EditorMenu.h"
+#include "EditorMenuBar.h"
 #include "libs/imgui/imgui.h"
 #include "Application.h"
+#include "Globals.h"
 
-void EditorMenu::Update() {
+// Windows
+#include "EditorConfiguration.h"
+#include "EditorConsole.h"
+#include "EditorGame.h"
+#include "EditorHierarchy.h"
+#include "EditorInspector.h"
+#include "EditorProject.h"
+#include "EditorScene.h"
+
+// Elements
+#include "EditorMenuBar.h"
+
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
+void EditorMenuBar::Update() {
 	if (ImGui::BeginMenuBar()) {
 
 		// Menu - File: Options for file and App management

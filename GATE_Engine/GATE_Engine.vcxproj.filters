@@ -108,11 +108,11 @@
     <ClCompile Include="EditorScene.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="EditorMenu.cpp">
-      <Filter>Sources\Modules\Editor\Elements</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources\Component Structure</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorMenuBar.cpp">
+      <Filter>Sources\Modules\Editor\Elements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,11 +241,11 @@
     <ClInclude Include="EditorWindow.h">
       <Filter>Sources\Modules\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="EditorMenu.h">
-      <Filter>Sources\Modules\Editor\Elements</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Sources\Component Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorMenuBar.h">
+      <Filter>Sources\Modules\Editor\Elements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

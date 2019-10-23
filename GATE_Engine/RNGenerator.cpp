@@ -1,6 +1,12 @@
 #include <chrono>
 #include "RNGenerator.h"
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 //Constructor & Destructor
 RNGenerator::RNGenerator() : randEngine(std::chrono::system_clock::now().time_since_epoch().count()) {}
 RNGenerator::RNGenerator(unsigned seed) : randEngine(seed) {}

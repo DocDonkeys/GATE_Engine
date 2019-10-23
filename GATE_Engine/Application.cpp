@@ -1,6 +1,12 @@
 #include "Application.h"
 #include "EditorConsole.h"
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 Application::Application()
 {
 	window = new ModuleWindow(this, "Window");

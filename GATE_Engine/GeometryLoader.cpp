@@ -10,11 +10,16 @@
 #include "libs/MathGeoLib/include/MathGeoLib.h"
 #include "libs/MathGeoLib/include/MathBuildConfig.h"
 
-
 #pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
 
 #include "libs/par/par_shapes.h"
 #include "Mesh.h"
+
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
 
 //#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")		//CHANGE/FIX: Remove? @Didac do we need to keep this here just in case?
 /*
@@ -46,12 +51,12 @@ bool GeometryLoader::CleanUp()
 		Mesh* m_todestroy = meshes[i];
 		//Delete the allocated memory data inside the mesh
 		App->renderer3D->DeleteBuffer(m_todestroy->id_index);
-		RELEASE_ARRAY(m_todestroy->index);
+		delete[] m_todestroy->index;	//CHANGE/FIX: This was RELEASE_ARRAY() before, try to find a way to use it while not angering mmgr
 		App->renderer3D->DeleteBuffer(m_todestroy->id_vertex);
-		RELEASE_ARRAY(m_todestroy->vertex);
+		delete[] m_todestroy->vertex;	//CHANGE/FIX: This was RELEASE_ARRAY() before, try to find a way to use it while not angering mmgr
 
 		//Delete the allocated memory data for the mesh
-		RELEASE(meshes[i]);
+		delete meshes[i];		//CHANGE/FIX: This was RELEASE() before, try to find a way to use it while not angering mmgr
 	}
 
 	meshes.clear();

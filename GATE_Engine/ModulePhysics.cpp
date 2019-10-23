@@ -1,6 +1,12 @@
 #include "Application.h"
 #include "ModulePhysics.h"
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 ModulePhysics::ModulePhysics(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 }

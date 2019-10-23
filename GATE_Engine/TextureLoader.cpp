@@ -12,6 +12,12 @@
 #pragma comment (lib, "libs/DevIL Windows SDK/lib/x86/Release/ILU.lib")
 #pragma comment (lib, "libs/DevIL Windows SDK/lib/x86/Release/ILUT.lib")
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 // Default texture data
 #define CHECKERS_HEIGHT 64
 #define CHECKERS_WIDTH 64

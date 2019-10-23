@@ -3,6 +3,12 @@
 #include "libs/Assimp/include/mesh.h"
 #include "libs/Assimp/include/scene.h"
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 Mesh::Mesh()
 {
 }

@@ -3,6 +3,12 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 ModuleCamera3D::ModuleCamera3D(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 	CalculateViewMatrix();
