@@ -108,6 +108,9 @@
     <ClCompile Include="EditorScene.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="EditorMenuBar.cpp">
+      <Filter>Sources\Modules\Editor\Elements</Filter>
+    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources\Component Structure</Filter>
     </ClCompile>
@@ -122,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>Sources\Component Structure\Components</Filter>
-    <ClCompile Include="EditorMenuBar.cpp">
-      <Filter>Sources\Modules\Editor\Elements</Filter>
-    </ClCompile>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
