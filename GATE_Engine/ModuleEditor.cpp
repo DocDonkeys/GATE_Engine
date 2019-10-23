@@ -67,13 +67,6 @@ update_status ModuleEditor::Update(float dt)
 
 	//Before we start with ImGui menus & stuff, we check for windows and menus that can be opened or closed with keyboard keys
 
-	////Console 1
-	//if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)	//CHANGE/FIX: Remove
-	//	show_console_window = !show_console_window;
-	////Configuration 4
-	//if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)	//CHANGE/FIX: Remove
-	//	show_configuration_window = !show_configuration_window;
-
 	// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
 		// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.

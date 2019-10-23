@@ -44,7 +44,7 @@ void EditorMenu::Update() {
 
 			if (ImGui::MenuItem("Exit", "(Alt+F4)", false)) {
 
-				//return update_status::UPDATE_STOP;	//CHANGE/FIX: Create an App bool which flags the desire of shutting down the app
+				App->mustShutDown = false;	//CHANGE/FIX: Create a bool flag that indicates unsaved changes and prompt an alert before quitting
 			}
 
 			ImGui::EndMenu();
