@@ -1,7 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "SolidSphere.h" //CHANGE/FIX if we end up having a primitives header change this
+#include "GameObject.h"
 
 enum class tool_mode {
 	DRAG,	//Q
@@ -29,6 +29,6 @@ public:
 
 public:
 	//members
-	SolidSphere* sphere = nullptr;
 	tool_mode currMode = tool_mode::DRAG;
+	std::vector<GameObject*> game_objects; // We will replace this with root_go (Root GameObject) when we have a tree based Hierarchy
 };

@@ -42,7 +42,7 @@ public:
 
 	// OpenGL Settings
 	struct GL_Setting {
-		GLenum id;
+		uint id;
 		std::vector<GL_Setting*>* group;	//Used for grouping settings that are mutually exclusive
 		bool status;
 	};
