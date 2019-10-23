@@ -27,35 +27,35 @@ void EditorMenuBar::Update() {
 		// Menu - File: Options for file and App management
 		if (ImGui::BeginMenu("File")) {
 
-			if (ImGui::MenuItem("New Scene", "Ctrl+N")) {
+			if (ImGui::MenuItem("New Scene", "Ctrl+N", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Save", "Ctrl+S")) {
-
-			}
-
-			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
+			if (ImGui::MenuItem("Open Scene", "Ctrl+O", false, false)) {
 
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("New Project", "Ctrl+Shift+N")) {
+			if (ImGui::MenuItem("Save", "Ctrl+S", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Open Project", "Ctrl+Shift+O")) {
+			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Save Project")) {
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("New Project", "Ctrl+Shift+N", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Open Project", "Ctrl+Shift+O", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Save Project", NULL, false, false)) {
 
 			}
 
@@ -72,53 +72,53 @@ void EditorMenuBar::Update() {
 		// Menu - Edit: Tools for easier edition
 		if (ImGui::BeginMenu("Edit")) {
 
-			if (ImGui::MenuItem("Undo", "Ctrl+Z")) {
+			if (ImGui::MenuItem("Undo", "Ctrl+Z", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Redo", "Ctrl+Y")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Select All", "Ctrl+A")) {
-
-			}
-
-			if (ImGui::MenuItem("Deselect All", "Shift+D")) {
-
-			}
-
-			if (ImGui::MenuItem("Select Children", "Shift+C")) {
-
-			}
-
-			if (ImGui::MenuItem("Invert Selection", "Ctrl+I")) {
+			if (ImGui::MenuItem("Redo", "Ctrl+Y", false, false)) {
 
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("Duplicate", "Ctrl+D")) {
+			if (ImGui::MenuItem("Select All", "Ctrl+A", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Delete", "Supr")) {
+			if (ImGui::MenuItem("Deselect All", "Shift+D", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Select Children", "Shift+C", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Invert Selection", "Ctrl+I", false, false)) {
 
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("Play", "Ctrl+P")) {
+			if (ImGui::MenuItem("Duplicate", "Ctrl+D", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Pause", "Ctrl+Shift+P")) {
+			if (ImGui::MenuItem("Delete", "Supr", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Step", "Ctrl+Alt+P")) {
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Play", "Ctrl+P", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Pause", "Ctrl+Shift+P", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Step", "Ctrl+Alt+P", false, false)) {
 
 			}
 
@@ -135,7 +135,7 @@ void EditorMenuBar::Update() {
 		// Menu - Window: View options
 		if (ImGui::BeginMenu("Window")) {
 
-			if (ImGui::BeginMenu("Viewport")) {
+			if (ImGui::BeginMenu("Viewport", false)) {
 
 				//ImGui::Checkbox("Framerate", false);
 				//ImGui::Checkbox("Polycount", false);
@@ -146,7 +146,7 @@ void EditorMenuBar::Update() {
 
 			if (ImGui::BeginMenu("Menus")) {
 
-				ImGui::MenuItem("hierarchy", NULL, &App->editor->editor_hierarchy.show_window);
+				ImGui::MenuItem("Hierarchy", NULL, &App->editor->editor_hierarchy.show_window);
 				ImGui::MenuItem("Project", NULL, &App->editor->editor_project.show_window);
 				ImGui::MenuItem("Console", NULL, &App->editor->editor_console.show_window);
 				ImGui::MenuItem("Inspector", NULL, &App->editor->editor_inspector.show_window);
