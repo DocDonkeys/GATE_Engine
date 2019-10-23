@@ -65,6 +65,8 @@ public: // Members
 	int textureMode = (int)texture_mode::TWO_D;
 	int byteSizeMode = (int)byte_size_mode::KB;
 
+	bool using_menu = false;
+
 	AppConsole console;
 
 private:
@@ -72,7 +74,7 @@ private:
 	bool show_settings_window = false;
 	bool show_imgui_console = true;	//CHANGE/FIX: To show_console_window
 	bool show_console_window = false;	//CHANGE/FIX: Delete here and in cpp, imgui console is the same but better
-	bool show_heriarchy_window = true;	//TODO
+	bool show_hierarchy_window = true;	//TODO
 	bool show_project_window = false;	//TODO
 	bool show_inspector_window = true;	//TODO
 	bool show_scene_window = false;		//TODO

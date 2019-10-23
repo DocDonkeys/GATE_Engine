@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "ModuleEngineGUI.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -40,7 +41,7 @@ update_status ModuleCamera3D::Update(float dt)
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
 
-	if (true) {	//CHANGE/FIX: Should only work if Scene Window was the last window the user interacted with
+	if (App->engineGUI->using_menu == false) {	//CHANGE/FIX: Should only work if Scene Window was the last window the user interacted with
 		
 		vec3 newPos(0, 0, 0);
 		float currMovSpeed = camMovSpeed * dt;

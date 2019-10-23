@@ -213,7 +213,7 @@ update_status ModuleEngineGUI::Update(float dt)
 
 				if (ImGui::BeginMenu("Menus")) {
 
-					ImGui::MenuItem("Heriarchy", NULL, &show_heriarchy_window);
+					ImGui::MenuItem("hierarchy", NULL, &show_hierarchy_window);
 					ImGui::MenuItem("Project", NULL, &show_project_window);
 					ImGui::MenuItem("Console", NULL, &show_imgui_console);
 					ImGui::MenuItem("Inspector", NULL, &show_inspector_window);
@@ -247,7 +247,7 @@ update_status ModuleEngineGUI::Update(float dt)
 
 					if (ImGui::MenuItem("Plane"))
 					{
-						App->geometry_loader->CreatePrimitive(PRIMITIVE::PLANE, 10, 10);
+						App->geometry_loader->CreatePrimitive(PRIMITIVE::PLANE, 1, 1);
 					}
 
 					if (ImGui::MenuItem("Cube"))
@@ -410,8 +410,8 @@ update_status ModuleEngineGUI::Update(float dt)
 	if (show_imgui_console)	//TEST IMGUI CONSOLE	//CHANGE/FIX: Should we improve this?
 		console.Draw("GATE Console", &show_imgui_console);
 
-	if (show_heriarchy_window) {
-		ImGui::Begin("Heriarchy", &show_heriarchy_window);
+	if (show_hierarchy_window) {
+		ImGui::Begin("Hierarchy", &show_hierarchy_window);
 
 		ImGui::End();
 	}
@@ -832,6 +832,9 @@ update_status ModuleEngineGUI::Update(float dt)
 			show_another_window = false;
 		ImGui::End();
 	}
+
+	//If we are using a Imgui Menu, we update the bool
+	 using_menu = io->WantCaptureMouse;
 
 	return UPDATE_CONTINUE;
 }
