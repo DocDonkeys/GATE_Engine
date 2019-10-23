@@ -215,7 +215,7 @@ update_status ModuleEngineGUI::Update(float dt)
 
 					ImGui::MenuItem("hierarchy", NULL, &show_hierarchy_window);
 					ImGui::MenuItem("Project", NULL, &show_project_window);
-					ImGui::MenuItem("Console", NULL, &show_imgui_console);
+					ImGui::MenuItem("Console", NULL, &show_console_window);
 					ImGui::MenuItem("Inspector", NULL, &show_inspector_window);
 					ImGui::MenuItem("Scene", NULL, &show_scene_window);
 					ImGui::MenuItem("Game", NULL, &show_game_window);
@@ -407,8 +407,8 @@ update_status ModuleEngineGUI::Update(float dt)
 	}
 
 	// Main Windows
-	if (show_imgui_console)	//TEST IMGUI CONSOLE	//CHANGE/FIX: Should we improve this?
-		console.Draw("GATE Console", &show_imgui_console);
+	if (show_console_window)	//TEST IMGUI CONSOLE	//CHANGE/FIX: Should we improve this?
+		console.Draw("GATE Console", &show_console_window);
 
 	if (show_hierarchy_window) {
 		ImGui::Begin("Hierarchy", &show_hierarchy_window);
@@ -806,18 +806,6 @@ update_status ModuleEngineGUI::Update(float dt)
 
 		ImGui::End();
 	}
-
-	//CONSOLE MENU
-	//if (show_console_window)		//CHANGE/FIX: Delete, imgui console is the same but better
-	//{
-	//	ImGui::Begin("Console", &show_console_window);
-
-	//	for (int i = 0; i < App->console_LOG.size(); ++i)
-	//		ImGui::Text(App->console_LOG[i].data());
-
-	//	ImGui::End();
-
-	//}
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window)

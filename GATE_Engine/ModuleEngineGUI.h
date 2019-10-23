@@ -72,8 +72,7 @@ public: // Members
 private:
 	// Bools to open/close windows
 	bool show_settings_window = false;
-	bool show_imgui_console = true;	//CHANGE/FIX: To show_console_window
-	bool show_console_window = false;	//CHANGE/FIX: Delete here and in cpp, imgui console is the same but better
+	bool show_console_window = true;	//CHANGE/FIX: Initial values should be in SAVE&LOAD
 	bool show_hierarchy_window = true;	//TODO
 	bool show_project_window = false;	//TODO
 	bool show_inspector_window = true;	//TODO
