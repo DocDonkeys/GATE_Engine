@@ -111,8 +111,20 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources\Component Structure</Filter>
     </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\Component Structure</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>Sources\Component Structure\Components</Filter>
     <ClCompile Include="EditorMenuBar.cpp">
       <Filter>Sources\Modules\Editor\Elements</Filter>
+    </ClCompile>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,14 +250,26 @@
     <ClInclude Include="EditorProject.h">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="EditorMenuBar.h">
+      <Filter>Sources\Modules\Editor\Elements</Filter>
+    </ClInclude>
     <ClInclude Include="EditorWindow.h">
       <Filter>Sources\Modules\Editor</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Sources\Component Structure</Filter>
     </ClInclude>
-    <ClInclude Include="EditorMenuBar.h">
-      <Filter>Sources\Modules\Editor\Elements</Filter>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\Component Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>Sources\Component Structure\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +329,9 @@
     </Filter>
     <Filter Include="Sources\Modules\Editor\Windows">
       <UniqueIdentifier>{998e5a12-042e-47bb-810f-e17247897594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Component Structure\Components">
+      <UniqueIdentifier>{c4436a83-8da3-4eec-b0a2-68bc76ce0620}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
