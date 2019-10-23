@@ -86,6 +86,7 @@
     <ClInclude Include="EditorMenu.h" />
     <ClInclude Include="EditorProject.h" />
     <ClInclude Include="EditorScene.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="EditorWindow.h" />
     <ClInclude Include="GeometryLoader.h" />
     <ClInclude Include="glmath.h" />
@@ -130,6 +131,7 @@
     <ClCompile Include="EditorMenu.cpp" />
     <ClCompile Include="EditorProject.cpp" />
     <ClCompile Include="EditorScene.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeometryLoader.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />

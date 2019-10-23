@@ -111,6 +111,9 @@
     <ClCompile Include="EditorMenu.cpp">
       <Filter>Sources\Modules\Editor\Elements</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Sources\Component Structure</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -241,6 +244,9 @@
     <ClInclude Include="EditorMenu.h">
       <Filter>Sources\Modules\Editor\Elements</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Sources\Component Structure</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -290,6 +296,9 @@
     </Filter>
     <Filter Include="Sources\Tools\Libs\ImGui\glew">
       <UniqueIdentifier>{238f8e61-acd8-478e-8135-657e40efcc66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Component Structure">
+      <UniqueIdentifier>{a9846231-f7aa-41b1-8ac5-8a0ab1218d66}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Modules\Editor\Elements">
       <UniqueIdentifier>{96d80fa6-dbf7-46f2-8521-2803950057db}</UniqueIdentifier>

@@ -34,7 +34,6 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-	RELEASE(sphere);
 
 	return true;
 }
