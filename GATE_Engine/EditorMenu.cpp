@@ -44,7 +44,7 @@ void EditorMenu::Update() {
 
 			if (ImGui::MenuItem("Exit", "(Alt+F4)", false)) {
 
-				App->mustShutDown = false;	//CHANGE/FIX: Create a bool flag that indicates unsaved changes and prompt an alert before quitting
+				App->mustShutDown = true;	//CHANGE/FIX: Create a bool flag that indicates unsaved changes and prompt an alert before quitting
 			}
 
 			ImGui::EndMenu();
@@ -127,12 +127,12 @@ void EditorMenu::Update() {
 
 			if (ImGui::BeginMenu("Menus")) {
 
-				/*ImGui::MenuItem("hierarchy", NULL, &show_hierarchy_window);
-				ImGui::MenuItem("Project", NULL, &show_project_window);
-				ImGui::MenuItem("Console", NULL, &show_console_window);
-				ImGui::MenuItem("Inspector", NULL, &show_inspector_window);
-				ImGui::MenuItem("Scene", NULL, &show_scene_window);
-				ImGui::MenuItem("Game", NULL, &show_game_window);*/
+				ImGui::MenuItem("hierarchy", NULL, &App->editor->editor_hierarchy.show_window);
+				ImGui::MenuItem("Project", NULL, &App->editor->editor_project.show_window);
+				ImGui::MenuItem("Console", NULL, &App->editor->editor_console.show_window);
+				ImGui::MenuItem("Inspector", NULL, &App->editor->editor_inspector.show_window);
+				ImGui::MenuItem("Scene", NULL, &App->editor->editor_scene.show_window);
+				ImGui::MenuItem("Game", NULL, &App->editor->editor_game.show_window);
 
 				ImGui::EndMenu();
 			}
