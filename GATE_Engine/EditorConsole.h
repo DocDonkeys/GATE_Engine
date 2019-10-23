@@ -5,14 +5,17 @@
 #include "libs/imgui/imgui_internal.h"
 #include <ctype.h>
 
-class EditorConsole
+#include "EditorWindow.h"
+
+class EditorConsole : public EditorWindow
 {
 public:
-	EditorConsole();
+	EditorConsole(const char* name = "null", bool startEnabled = false, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
 	~EditorConsole();
 
 public:
-	void Draw(const char* title, bool* p_open);
+	void PreUpdate();
+	void Update();
 
 	void ClearLog();
 	void AddLog(const char* fmt, ...) IM_FMTARGS(2);

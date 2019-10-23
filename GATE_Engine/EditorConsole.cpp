@@ -1,6 +1,6 @@
 #include "EditorConsole.h"
 
-EditorConsole::EditorConsole()
+EditorConsole::EditorConsole(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags)
 {
 	ClearLog();
 	memset(InputBuf, 0, sizeof(InputBuf));
@@ -11,7 +11,7 @@ EditorConsole::EditorConsole()
 	Commands.push_back("CLASSIFY");  // "classify" is only here to provide an example of "C"+[tab] completing to "CL" and displaying matches.
 	AutoScroll = true;
 	ScrollToBottom = false;
-	AddLog("Welcome to Dear ImGui!");
+	AddLog("Welcome to GATE!");
 }
 
 EditorConsole::~EditorConsole()
@@ -40,21 +40,19 @@ void EditorConsole::AddLog(const char* fmt, ...) IM_FMTARGS(2)
 	Items.push_back(Strdup(buf));
 }
 
-void EditorConsole::Draw(const char* title, bool* p_open)
+void EditorConsole::PreUpdate()
 {
 	ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin(title, p_open))
-	{
-		ImGui::End();
-		return;
-	}
+}
 
+void EditorConsole::Update()
+{
 	// As a specific feature guaranteed by the library, after calling Begin() the last Item represent the title bar. So e.g. IsItemHovered() will return true when hovering the title bar.
 	// Here we create a context menu only available from the title bar.
 	if (ImGui::BeginPopupContextItem())
 	{
 		if (ImGui::MenuItem("Close Console"))
-			*p_open = false;
+			show_window = false;
 		ImGui::EndPopup();
 	}
 
@@ -143,8 +141,6 @@ void EditorConsole::Draw(const char* title, bool* p_open)
 	ImGui::SetItemDefaultFocus();
 	if (reclaim_focus)
 		ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
-
-	ImGui::End();
 }
 
 void EditorConsole::ExecCommand(const char* command_line)

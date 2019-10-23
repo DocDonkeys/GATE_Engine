@@ -81,10 +81,19 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Sources\Tools\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleEditor.cpp">
+      <Filter>Sources\Modules\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Sources\Helpers</Filter>
+    </ClCompile>
     <ClCompile Include="EditorConfiguration.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClCompile>
     <ClCompile Include="EditorConsole.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorGame.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClCompile>
     <ClCompile Include="EditorHierarchy.cpp">
@@ -93,20 +102,14 @@
     <ClCompile Include="EditorInspector.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleEditor.cpp">
-      <Filter>Sources\Modules\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Sources\Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="EditorProject.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClCompile>
     <ClCompile Include="EditorScene.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="EditorGame.cpp">
-      <Filter>Sources\Modules\Editor\Windows</Filter>
+    <ClCompile Include="EditorMenu.cpp">
+      <Filter>Sources\Modules\Editor\Elements</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources\Component Structure</Filter>
@@ -220,10 +223,22 @@
     <ClInclude Include="Mesh.h">
       <Filter>Sources\Tools\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleEditor.h">
+      <Filter>Sources\Modules\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorScene.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="EditorConfiguration.h">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
     <ClInclude Include="EditorConsole.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorGame.h">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
     <ClInclude Include="EditorHierarchy.h">
@@ -232,20 +247,14 @@
     <ClInclude Include="EditorInspector.h">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleEditor.h">
-      <Filter>Sources\Modules\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="EditorProject.h">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="EditorScene.h">
-      <Filter>Sources\Modules\Editor\Windows</Filter>
+    <ClInclude Include="EditorWindow.h">
+      <Filter>Sources\Modules\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="EditorGame.h">
-      <Filter>Sources\Modules\Editor\Windows</Filter>
+    <ClInclude Include="EditorMenu.h">
+      <Filter>Sources\Modules\Editor\Elements</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Sources\Component Structure</Filter>
@@ -297,9 +306,6 @@
     <Filter Include="Sources\Helpers\Timers">
       <UniqueIdentifier>{61bea379-fbac-400a-b9cb-23c2a43f70b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Modules\Editor\Windows">
-      <UniqueIdentifier>{96d80fa6-dbf7-46f2-8521-2803950057db}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Tools\Libs">
       <UniqueIdentifier>{b90591f8-c2c8-48b3-8bbb-f599c5f08c5b}</UniqueIdentifier>
     </Filter>
@@ -318,8 +324,11 @@
     <Filter Include="Sources\Component Structure">
       <UniqueIdentifier>{a9846231-f7aa-41b1-8ac5-8a0ab1218d66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Component Structure\Components">
-      <UniqueIdentifier>{007af459-81cd-4cb6-8677-1d08fd30c888}</UniqueIdentifier>
+    <Filter Include="Sources\Modules\Editor\Elements">
+      <UniqueIdentifier>{96d80fa6-dbf7-46f2-8521-2803950057db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Editor\Windows">
+      <UniqueIdentifier>{998e5a12-042e-47bb-810f-e17247897594}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

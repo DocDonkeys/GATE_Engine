@@ -240,7 +240,7 @@ void Application::ConsoleLOG(const char * format, ...)
 	
 	//Now we can pass the string to the vector
 	LOG.push_back(str);
-	editor->console.AddLog(str);
+	editor->editor_console.AddLog(str);
 }
 
 // PreUpdate all modules in App

@@ -83,3 +83,13 @@ enum update_status
 //Only arbitrary value that can't be managed by JSON
 #define CONFIG_FILENAME "settings/config.json"
 #define DEFAULT_CONFIG_FILENAME "settings/default_config.json"
+
+//COMMENTS DOCUMENTATION
+/*
+--> TODO: Usual "needs to be done", but instead we use the following one as many other imported libraries use the same keywords.
+--> CHANGE/FIX: Personal flag for something that needs to change pronto, either important or directly non-optional.
+--> IMPROVE: Flag for a piece of code that could be improved, however it is not essential and can be ignored without much trouble.
+--> NOTE: Important information about a piece of code, system, or functionality.
+--> WARNING: Warning about a malfunction, a potential problem if code is edited carelessly, or any other information which can prevent future mistakes.
+--> ALERT: Same as above.
+*/
