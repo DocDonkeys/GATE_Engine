@@ -123,3 +123,34 @@ void Mesh::LoadMaterials(const aiScene * scene, const aiMesh* loaded_mesh, const
 	else
 		LOG("Error loading scene materials from %s", absolute_path);
 }
+
+void Mesh::LoadMeshSizeData()
+{
+	for (int i = 0; i < num_vertex; i++)
+	{
+		if (vertex[i].x > size_x.max) {
+			size_x.max = vertex[i].x;
+		}
+		else if (vertex[i].x < size_x.min) {
+			size_x.min = vertex[i].x;
+		}
+
+		if (vertex[i].y > size_y.max) {
+			size_y.max = vertex[i].y;
+		}
+		else if (vertex[i].y < size_y.min) {
+			size_y.min = vertex[i].y;
+		}
+
+		if (vertex[i].z > size_z.max) {
+			size_z.max = vertex[i].z;
+		}
+		else if (vertex[i].z < size_z.min) {
+			size_z.min = vertex[i].z;
+		}
+	}
+
+	size_x.width = abs(size_x.max - size_x.min);
+	size_y.width = abs(size_y.max - size_y.min);
+	size_z.width = abs(size_z.max - size_z.min);
+}
