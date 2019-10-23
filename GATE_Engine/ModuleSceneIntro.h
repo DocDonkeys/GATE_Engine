@@ -23,6 +23,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void CreateEmptyGameObject();
+
 public:
 	//methods
 	tool_mode CheckToolMode() const;

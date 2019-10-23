@@ -4,6 +4,14 @@
 #include <string>
 #include <vector>
 
+class Component;
+
+enum class COMPONENT_TYPE
+{
+	TRANSFORM = 0,
+	MESH,
+	MATERIAL
+};
 class GameObject
 {
 public:
@@ -12,11 +20,11 @@ public:
 
 public: //Methods
 	void Update();
-	//Component* CreateComponent();
+	Component* CreateComponent(COMPONENT_TYPE type);
 
 public: //Vars
 	std::string name;
-	//std::vector<Component*> 
+	std::vector<Component*> components;
 
 	//Gameobject hierarchy tree related Vars
 	GameObject* parent = nullptr;

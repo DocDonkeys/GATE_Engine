@@ -27,6 +27,9 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 1.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	//Create an empty gameobject for test purposes
+	CreateEmptyGameObject();
+
 	return ret;
 }
 
@@ -38,6 +41,13 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
+void ModuleSceneIntro::CreateEmptyGameObject()
+{
+	GameObject* go = new GameObject();
+
+	game_objects.push_back(go);
+}
+
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
@@ -47,6 +57,9 @@ update_status ModuleSceneIntro::Update(float dt)
 	/*Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();*/
+
+	for (int i = 0; i < game_objects.size(); ++i)
+		game_objects[i]->Update();
 
 	return UPDATE_CONTINUE;
 }

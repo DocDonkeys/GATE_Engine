@@ -111,6 +111,18 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources\Component Structure</Filter>
     </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\Component Structure</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -238,6 +250,18 @@
     <ClInclude Include="GameObject.h">
       <Filter>Sources\Component Structure</Filter>
     </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\Component Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -293,6 +317,9 @@
     </Filter>
     <Filter Include="Sources\Component Structure">
       <UniqueIdentifier>{a9846231-f7aa-41b1-8ac5-8a0ab1218d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Component Structure\Components">
+      <UniqueIdentifier>{007af459-81cd-4cb6-8677-1d08fd30c888}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
