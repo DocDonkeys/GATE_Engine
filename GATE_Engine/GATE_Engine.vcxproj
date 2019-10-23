@@ -80,10 +80,16 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
-    <ClInclude Include="Console.h" />
+    <ClInclude Include="EditorConfiguration.h" />
+    <ClInclude Include="EditorConsole.h" />
+    <ClInclude Include="EditorGame.h" />
+    <ClInclude Include="EditorProject.h" />
+    <ClInclude Include="EditorScene.h" />
     <ClInclude Include="GeometryLoader.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="EditorHierarchy.h" />
+    <ClInclude Include="EditorInspector.h" />
     <ClInclude Include="libs\imgui\imconfig.h" />
     <ClInclude Include="libs\imgui\imgui.h" />
     <ClInclude Include="libs\imgui\imgui_impl_opengl2.h" />
@@ -104,9 +110,8 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="ModulePhysics.h" />
     <ClInclude Include="ModuleCamera3D.h" />
-    <ClInclude Include="ModuleEngineGUI.h" />
+    <ClInclude Include="ModuleEditor.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
-    <ClInclude Include="p2Defs.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleSceneIntro.h" />
@@ -119,8 +124,15 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="EditorGame.cpp" />
+    <ClCompile Include="EditorProject.cpp" />
+    <ClCompile Include="EditorScene.cpp" />
     <ClCompile Include="GeometryLoader.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="EditorConfiguration.cpp" />
+    <ClCompile Include="EditorConsole.cpp" />
+    <ClCompile Include="EditorHierarchy.cpp" />
+    <ClCompile Include="EditorInspector.cpp" />
     <ClCompile Include="JsonLoader.cpp" />
     <ClCompile Include="libs\glew\src\glew.c" />
     <ClCompile Include="libs\imgui\imgui.cpp" />
@@ -137,7 +149,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModulePhysics.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
-    <ClCompile Include="ModuleEngineGUI.cpp" />
+    <ClCompile Include="ModuleEditor.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />

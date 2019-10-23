@@ -128,14 +128,14 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 		if (target == GL_TEXTURE_2D) {	// Change GL_Setting related to texture mode depending on the texture loaded
 			if (!App->renderer3D->GL_Texture2D.status) {
 				App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_Texture2D, App->renderer3D->GL_Texture2D.group);
-				App->engineGUI->textureMode = (int)texture_mode::TWO_D;
+				App->editor->textureMode = (int)texture_mode::TWO_D;
 			}
 		}
 		else if (target == GL_TEXTURE_CUBE_MAP) {
 			texType.assign("Cube Map");
 			if (!App->renderer3D->GL_TextureCubeMap.status) {
 				App->renderer3D->SwitchGroupGLSetting(App->renderer3D->GL_TextureCubeMap, App->renderer3D->GL_TextureCubeMap.group);
-				App->engineGUI->textureMode = (int)texture_mode::CUBEMAP;
+				App->editor->textureMode = (int)texture_mode::CUBEMAP;
 			}
 		}
 		else {

@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "ModuleEngineGUI.h"
+#include "EditorConsole.h"
 
 Application::Application()
 {
@@ -10,7 +10,7 @@ Application::Application()
 	scene_intro = new ModuleSceneIntro(this, "Scene");
 	renderer3D = new ModuleRenderer3D(this, "Renderer");
 	camera = new ModuleCamera3D(this, "Camera");
-	engineGUI = new ModuleEngineGUI(this, "EngineUI");
+	editor = new ModuleEditor(this, "Editor");
 	physics = new ModulePhysics(this, "Physics");
 
 	// The order of calls is very important!
@@ -29,7 +29,7 @@ Application::Application()
 	AddModule(scene_intro);
 	
 	//Engine UI
-	AddModule(engineGUI);
+	AddModule(editor);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -240,7 +240,7 @@ void Application::ConsoleLOG(const char * format, ...)
 	
 	//Now we can pass the string to the vector
 	LOG.push_back(str);
-	engineGUI->console.AddLog(str);
+	editor->console.AddLog(str);
 }
 
 // PreUpdate all modules in App
@@ -521,10 +521,10 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 	renderer3D->GL_MinMax = { GL_MINMAX, nullptr, obj["Renderer3D"]["GL_Settings"]["MinMax"].get<bool>() };
 	renderer3D->GL_MultiSample = { GL_MULTISAMPLE, nullptr, obj["Renderer3D"]["GL_Settings"]["MultiSample"].get<bool>() };
 
-	//GUI
-	engineGUI->drawMode = obj["GUI"]["Draw Mode"].get<int>();
-	engineGUI->textureMode = obj["GUI"]["Texture Mode"].get<int>();
-	engineGUI->byteSizeMode = obj["GUI"]["Byte Size Mode"].get<int>();
+	//Editor
+	editor->drawMode = obj["Editor"]["Draw Mode"].get<int>();
+	editor->textureMode = obj["Editor"]["Texture Mode"].get<int>();
+	editor->byteSizeMode = obj["Editor"]["Byte Size Mode"].get<int>();
 
 	return ret;
 }
@@ -594,10 +594,10 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 			}}
 		}},
 
-		{"GUI", {
-			{"Draw Mode", engineGUI->drawMode},
-			{"Texture Mode", engineGUI->textureMode},
-			{"Byte Size Mode", engineGUI->byteSizeMode}
+		{"Editor", {
+			{"Draw Mode", editor->drawMode},
+			{"Texture Mode", editor->textureMode},
+			{"Byte Size Mode", editor->byteSizeMode}
 		}},
 	};
 

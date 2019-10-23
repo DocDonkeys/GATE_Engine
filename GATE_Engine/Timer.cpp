@@ -18,6 +18,12 @@ void Timer::Start()
 	started_at = SDL_GetTicks();
 }
 
+void Timer::StartFrom(uint secs)
+{
+	running = true;
+	started_at = SDL_GetTicks() + secs * 1.000f;
+}
+
 void Timer::Stop()
 {
 	running = false;

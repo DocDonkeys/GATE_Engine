@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "ModuleEngineGUI.h"
+#include "ModuleEditor.h"
 #include "GeometryLoader.h"
 #include "libs/imgui/imgui_impl_sdl.h"
 

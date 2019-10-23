@@ -3,9 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Light.cpp">
-      <Filter>Sources\Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Sources\Containers</Filter>
     </ClCompile>
@@ -34,22 +31,19 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="libs\glew\src\glew.c">
-      <Filter>Sources\Tools\ImGui\glew</Filter>
+      <Filter>Sources\Tools\Libs\ImGui\glew</Filter>
     </ClCompile>
     <ClCompile Include="RNGenerator.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="libs\mmgr\mmgr.cpp">
-      <Filter>Sources\Tools\mmgr</Filter>
+      <Filter>Sources\Tools\Libs\mmgr</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Sources\Tools\Timers</Filter>
+      <Filter>Sources\Helpers\Timers</Filter>
     </ClCompile>
     <ClCompile Include="PerfTimer.cpp">
-      <Filter>Sources\Tools\Timers</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleEngineGUI.cpp">
-      <Filter>Sources\Modules\GUI</Filter>
+      <Filter>Sources\Helpers\Timers</Filter>
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Tools\Primitives</Filter>
@@ -64,36 +58,60 @@
       <Filter>Sources\Tools\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_impl_sdl.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_widgets.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_demo.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_draw.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_impl_opengl2.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-    <Filter>Sources\Tools\Mesh</Filter>
+      <Filter>Sources\Tools\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorConfiguration.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorConsole.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorHierarchy.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorInspector.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleEditor.cpp">
+      <Filter>Sources\Modules\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Sources\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorProject.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorScene.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorGame.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="Light.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
@@ -118,35 +136,26 @@
     <ClInclude Include="ModuleSceneIntro.h">
       <Filter>Sources\Modules\Game</Filter>
     </ClInclude>
-    <ClInclude Include="p2Defs.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="ModulePhysics.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="libs\glew\include\GL\glew.h">
-      <Filter>Sources\Tools\ImGui\glew</Filter>
+      <Filter>Sources\Tools\Libs\ImGui\glew</Filter>
     </ClInclude>
     <ClInclude Include="RNGenerator.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="libs\mmgr\mmgr.h">
-      <Filter>Sources\Tools\mmgr</Filter>
+      <Filter>Sources\Tools\Libs\mmgr</Filter>
     </ClInclude>
     <ClInclude Include="libs\mmgr\nommgr.h">
-      <Filter>Sources\Tools\mmgr</Filter>
+      <Filter>Sources\Tools\Libs\mmgr</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Sources\Tools\Timers</Filter>
+      <Filter>Sources\Helpers\Timers</Filter>
     </ClInclude>
     <ClInclude Include="PerfTimer.h">
-      <Filter>Sources\Tools\Timers</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleEngineGUI.h">
-      <Filter>Sources\Modules\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Console.h">
-      <Filter>Sources\Modules\GUI\GUI_Elements</Filter>
+      <Filter>Sources\Helpers\Timers</Filter>
     </ClInclude>
     <ClInclude Include="SolidSphere.h">
       <Filter>Sources\Tools\Primitives</Filter>
@@ -161,40 +170,67 @@
       <Filter>Sources\Tools\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="libs\par\par_shapes.h">
-      <Filter>Sources\Tools\Par</Filter>
+      <Filter>Sources\Tools\Libs\Par</Filter>
     </ClInclude>
     <ClInclude Include="GeometryLoader.h">
       <Filter>Sources\Tools\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_impl_opengl2.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_impl_opengl3.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_impl_sdl.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_internal.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imstb_rectpack.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imstb_textedit.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imstb_truetype.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imconfig.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Sources\Tools\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorConfiguration.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorConsole.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorHierarchy.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorInspector.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleEditor.h">
+      <Filter>Sources\Modules\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorProject.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorScene.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorGame.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,9 +239,6 @@
     </Filter>
     <Filter Include="Sources\Containers">
       <UniqueIdentifier>{b9a42893-a637-46ac-a940-2ac43186c8d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Helpers">
-      <UniqueIdentifier>{5c11a52d-29e9-4892-bbec-6d763f821995}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Modules">
       <UniqueIdentifier>{2fc1a543-0df1-4422-8cdc-f56daf8c43d4}</UniqueIdentifier>
@@ -216,35 +249,41 @@
     <Filter Include="Sources\Tools">
       <UniqueIdentifier>{a93fdf8f-5af4-489e-9abf-802f317db977}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\ImGui">
-      <UniqueIdentifier>{5b9ae843-4d6b-4b37-ad4c-7ed445fba370}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools\ImGui\glew">
-      <UniqueIdentifier>{238f8e61-acd8-478e-8135-657e40efcc66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools\mmgr">
-      <UniqueIdentifier>{60846bfd-1b9f-4fc4-ada3-13f0ed061bd1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools\Timers">
-      <UniqueIdentifier>{61bea379-fbac-400a-b9cb-23c2a43f70b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Modules\GUI">
-      <UniqueIdentifier>{61858fd1-2fe6-4273-ba32-d55dfc1409bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Modules\GUI\GUI_Elements">
-      <UniqueIdentifier>{96d80fa6-dbf7-46f2-8521-2803950057db}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Tools\Primitives">
       <UniqueIdentifier>{e27285dc-d11e-4471-a423-94ceb6e61b8d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools\Par">
-      <UniqueIdentifier>{60121fa4-d3c0-4110-967e-98d6d65d1b3e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Tools\Loaders">
       <UniqueIdentifier>{2d1268be-23c1-429f-b07b-461cf872e673}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Tools\Mesh">
       <UniqueIdentifier>{a4641500-2f58-483e-9798-dfbed57c74ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Editor">
+      <UniqueIdentifier>{61858fd1-2fe6-4273-ba32-d55dfc1409bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Helpers">
+      <UniqueIdentifier>{b6e88ebf-cf0f-4c49-9b34-e86f302164e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Helpers\Timers">
+      <UniqueIdentifier>{61bea379-fbac-400a-b9cb-23c2a43f70b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Editor\Windows">
+      <UniqueIdentifier>{96d80fa6-dbf7-46f2-8521-2803950057db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Libs">
+      <UniqueIdentifier>{b90591f8-c2c8-48b3-8bbb-f599c5f08c5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Libs\Par">
+      <UniqueIdentifier>{60121fa4-d3c0-4110-967e-98d6d65d1b3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Libs\mmgr">
+      <UniqueIdentifier>{60846bfd-1b9f-4fc4-ada3-13f0ed061bd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Libs\ImGui">
+      <UniqueIdentifier>{5b9ae843-4d6b-4b37-ad4c-7ed445fba370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Libs\ImGui\glew">
+      <UniqueIdentifier>{238f8e61-acd8-478e-8135-657e40efcc66}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

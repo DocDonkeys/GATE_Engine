@@ -1,19 +1,19 @@
-#include "ModuleEngineGUI.h"
+#include "ModuleEditor.h"
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
 #include "GeometryLoader.h"
 
-ModuleEngineGUI::ModuleEngineGUI(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
+ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 }
 
-ModuleEngineGUI::~ModuleEngineGUI()
+ModuleEditor::~ModuleEditor()
 {
 }
 
-bool ModuleEngineGUI::Init()
+bool ModuleEditor::Init()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -46,7 +46,7 @@ bool ModuleEngineGUI::Init()
 	return true;
 }
 
-bool ModuleEngineGUI::Start()
+bool ModuleEditor::Start()
 {
 	// After loading the mode value (integer ID) from JSON, we actually apply the needed changes depending on the current mode
 	DrawModeChange();
@@ -56,7 +56,7 @@ bool ModuleEngineGUI::Start()
 	return true;
 }
 
-update_status ModuleEngineGUI::Update(float dt)
+update_status ModuleEditor::Update(float dt)
 {
 	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::Green);
 
@@ -827,7 +827,7 @@ update_status ModuleEngineGUI::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-bool ModuleEngineGUI::BeginRootWindow(char* id, bool docking, ImGuiWindowFlags winFlags)
+bool ModuleEditor::BeginRootWindow(char* id, bool docking, ImGuiWindowFlags winFlags)
 {
 	ImGuiViewport* viewport = ImGui::GetWindowViewport();
 	ImGui::SetNextWindowPos(viewport->Pos);
@@ -852,7 +852,7 @@ bool ModuleEngineGUI::BeginRootWindow(char* id, bool docking, ImGuiWindowFlags w
 	return temp;
 }
 
-void ModuleEngineGUI::BeginDockingSpace(char* dockSpaceId, ImGuiDockNodeFlags dockFlags, ImVec2 size)
+void ModuleEditor::BeginDockingSpace(char* dockSpaceId, ImGuiDockNodeFlags dockFlags, ImVec2 size)
 {
 	// DockSpace
 	ImGuiIO& io = ImGui::GetIO();
@@ -864,7 +864,7 @@ void ModuleEngineGUI::BeginDockingSpace(char* dockSpaceId, ImGuiDockNodeFlags do
 
 // ---------------------------------
 
-void ModuleEngineGUI::RenderGUI()
+void ModuleEditor::RenderEditorUI()
 {
 	ImGuiIO& test_io = *io;
 	// Rendering
@@ -877,7 +877,7 @@ void ModuleEngineGUI::RenderGUI()
 }
 
 // Modes & Radio Buttons
-void ModuleEngineGUI::DrawModeChange()
+void ModuleEditor::DrawModeChange()
 {
 	switch (drawMode) {
 	case (int)draw_mode::MESH:
@@ -892,7 +892,7 @@ void ModuleEngineGUI::DrawModeChange()
 	}
 }
 
-void ModuleEngineGUI::TextureModeChange()
+void ModuleEditor::TextureModeChange()
 {
 	switch (textureMode) {
 	case (int)texture_mode::TWO_D:
@@ -904,7 +904,7 @@ void ModuleEngineGUI::TextureModeChange()
 	}
 }
 
-void ModuleEngineGUI::ByteSizeModeChange()
+void ModuleEditor::ByteSizeModeChange()
 {
 	switch (byteSizeMode) {
 	case (int)byte_size_mode::KB:

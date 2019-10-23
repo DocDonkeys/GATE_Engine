@@ -17,7 +17,7 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-#include "ModuleEngineGUI.h"
+#include "ModuleEditor.h"
 #include "ModulePhysics.h"
 #include "GeometryLoader.h"
 #include "TextureLoader.h"
@@ -136,7 +136,7 @@ public:
 	ModuleSceneIntro*	scene_intro;
 	ModuleRenderer3D*	renderer3D;
 	ModuleCamera3D*		camera;
-	ModuleEngineGUI*	engineGUI;
+	ModuleEditor*		editor;
 	ModulePhysics*		physics;
 	GeometryLoader*		geometry_loader;
 	TextureLoader*		texture_loader;

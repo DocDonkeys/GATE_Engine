@@ -18,7 +18,7 @@
     "Rotation Multiplier": 1.5,
     "Rotation Speed": 1.0
   },
-  "GUI": {
+  "Editor": {
     "Byte Size Mode": 1,
     "Draw Mode": 0,
     "Texture Mode": 0

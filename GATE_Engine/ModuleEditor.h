@@ -1,5 +1,5 @@
-#ifndef __MODULEENGINEGUI_H__
-#define __MODULEENGINEGUI_H__
+#ifndef MODULEEDITOR_H
+#define MODULEEDITOR_H
 
 #include "Globals.h"
 #include "Module.h"
@@ -12,7 +12,7 @@
 
 #include "libs/glew/include/GL/glew.h"
 
-#include "Console.h"
+#include "EditorConsole.h"
 
 enum class draw_mode {
 	MESH = 0,
@@ -38,18 +38,18 @@ enum class byte_size_mode {
 	MAX_MODES
 };
 
-class ModuleEngineGUI : public Module
+class ModuleEditor : public Module
 {
 public:
-	ModuleEngineGUI(Application* app, const char* name = "null", bool start_enabled = true);
-	~ModuleEngineGUI();
+	ModuleEditor(Application* app, const char* name = "null", bool start_enabled = true);
+	~ModuleEditor();
 
 	bool Init();
 	bool Start();
 	update_status Update(float dt);
 
 public:
-	void RenderGUI();
+	void RenderEditorUI();
 
 private:
 	// Modes & Radio Buttons (Note: The existence of this methods avoids code repetition and future additions only have to be made on a single spot)
@@ -67,7 +67,7 @@ public: // Members
 
 	bool using_menu = false;
 
-	AppConsole console;
+	EditorConsole console;
 
 private:
 	// Bools to open/close windows

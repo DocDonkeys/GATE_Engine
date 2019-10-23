@@ -200,7 +200,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Debug Draw (Render)
 
 	//Render GUI
-	App->engineGUI->RenderGUI();
+	App->editor->RenderEditorUI();
 
 	//Swap Window
 	SDL_GL_SwapWindow(App->window->window);

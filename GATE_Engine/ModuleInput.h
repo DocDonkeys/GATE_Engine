@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MODULEINPUT_H
+#define MODULEINPUT_H
+
 #include "Module.h"
 #include "Globals.h"
 #include <vector>
@@ -97,3 +99,5 @@ private:
 	unsigned char key_repeat[7] = "REPEAT";
 	unsigned char key_up[3] = "UP";
 };
+
+#endif //!MODULEINPUT_H
