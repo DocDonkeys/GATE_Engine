@@ -7,7 +7,7 @@ class Component
 {
 public:
 	Component();
-	virtual ~Component();
+	virtual ~Component() = 0;
 
 public: //Methods
 	virtual void Enable() = 0;

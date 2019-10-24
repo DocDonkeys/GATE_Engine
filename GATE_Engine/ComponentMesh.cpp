@@ -10,6 +10,7 @@ ComponentMesh::ComponentMesh() : Component()
 
 ComponentMesh::~ComponentMesh()
 {
+	delete mesh;
 }
 
 void ComponentMesh::Enable()

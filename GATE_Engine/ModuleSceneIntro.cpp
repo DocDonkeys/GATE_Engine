@@ -44,6 +44,11 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
+	for (int i = 0; i < game_objects.size(); ++i)
+		delete game_objects[i];
+	
+	game_objects.clear();
+
 	return true;
 }
 

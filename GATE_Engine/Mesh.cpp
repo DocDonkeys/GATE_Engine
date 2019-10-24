@@ -15,6 +15,21 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
+	//Delete Buffer & data
+	App->renderer3D->DeleteBuffer(id_vertex);
+	RELEASE_ARRAY(vertex);
+
+	App->renderer3D->DeleteBuffer(id_index);
+	RELEASE_ARRAY(index);
+
+	App->renderer3D->DeleteBuffer(id_normals);
+	RELEASE_ARRAY(normals_faces);
+	RELEASE_ARRAY(normals_faces_vector);
+	RELEASE_ARRAY(normals_vector);
+	
+
+	App->renderer3D->DeleteBuffer(id_tex_coords);
+	RELEASE_ARRAY(tex_coords);
 }
 
 void Mesh::LoadVertices(const aiMesh* loaded_mesh)
