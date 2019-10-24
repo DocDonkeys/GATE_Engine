@@ -3,6 +3,12 @@
 #include <gl/GL.h>
 //#include <gl/GLU.h>
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 Light::Light() : ref(-1), on(false), position(0.0f, 0.0f, 0.0f)
 {}
 

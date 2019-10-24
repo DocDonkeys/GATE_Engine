@@ -1,4 +1,11 @@
 #include "EditorConsole.h"
+#include "Globals.h"
+
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
 
 EditorConsole::EditorConsole(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags)
 {
@@ -20,6 +27,12 @@ EditorConsole::~EditorConsole()
 	for (int i = 0; i < History.Size; i++)
 		free(History[i]);
 }
+
+// Portable helpers
+int   EditorConsole::Stricmp(const char* str1, const char* str2) { int d; while ((d = toupper(*str2) - toupper(*str1)) == 0 && *str1) { str1++; str2++; } return d; }
+int   EditorConsole::Strnicmp(const char* str1, const char* str2, int n) { int d = 0; while (n > 0 && (d = toupper(*str2) - toupper(*str1)) == 0 && *str1) { str1++; str2++; n--; } return d; }
+char* EditorConsole::Strdup(const char *str) { size_t len = strlen(str) + 1; void* buf = malloc(len); IM_ASSERT(buf); return (char*)memcpy(buf, (const void*)str, len); }
+void  EditorConsole::Strtrim(char* str) { char* str_end = str + strlen(str); while (str_end > str && str_end[-1] == ' ') str_end--; *str_end = 0; }
 
 void EditorConsole::ClearLog()
 {

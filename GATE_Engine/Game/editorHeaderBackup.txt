@@ -12,7 +12,7 @@
 
 #include "libs/glew/include/GL/glew.h"
 
-// UI Windows
+// Windows
 class EditorConfiguration;
 class EditorConsole;
 class EditorGame;
@@ -20,7 +20,6 @@ class EditorHierarchy;
 class EditorInspector;
 class EditorProject;
 class EditorScene;
-class EditorToolbar;
 
 // UI Elements
 class EditorMenuBar;
@@ -74,7 +73,6 @@ public:
 
 public:
 	// UI Windows
-	EditorToolbar* editor_toolbar = nullptr;
 	EditorConfiguration* editor_configuration = nullptr;
 	EditorConsole* editor_console = nullptr;
 	EditorGame* editor_game = nullptr;

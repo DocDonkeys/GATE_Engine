@@ -6,6 +6,12 @@
 #include <fstream>
 #include <iomanip>
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 bool JsonLoader::Save(json obj, const char* file) const
 {
 	bool ret = true;

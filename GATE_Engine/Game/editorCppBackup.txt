@@ -13,7 +13,6 @@
 #include "EditorInspector.h"
 #include "EditorProject.h"
 #include "EditorScene.h"
-#include "EditorToolbar.h"
 
 // Elements
 #include "EditorMenuBar.h"
@@ -24,9 +23,7 @@
 #endif
 #endif
 
-ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
-{
-	// Windows
+ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled) {
 	editor_configuration = new EditorConfiguration("Configuration", false, ImGuiWindowFlags_MenuBar);
 	editor_console = new EditorConsole("Console", true);
 	editor_game = new EditorGame("Game", false);
@@ -34,15 +31,11 @@ ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabl
 	editor_inspector = new EditorInspector("Inspector", true);
 	editor_project = new EditorProject("Project", false);
 	editor_scene = new EditorScene("Scene", false);
-	editor_toolbar = new EditorToolbar("Toolbar", false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-
-	// Elements
 	editor_menu_bar = new EditorMenuBar();
-}
+};
 
 ModuleEditor::~ModuleEditor()
 {
-	// Windows
 	delete editor_configuration;
 	delete editor_console;
 	delete editor_game;
@@ -50,9 +43,6 @@ ModuleEditor::~ModuleEditor()
 	delete editor_inspector;
 	delete editor_project;
 	delete editor_scene;
-	delete editor_toolbar;
-
-	// Elements
 	delete editor_menu_bar;
 }
 
@@ -127,7 +117,6 @@ update_status ModuleEditor::Update(float dt)
 	}
 
 	// Check all windows for updates if they're activated
-	editor_toolbar->RequestUpdate();
 	editor_configuration->RequestUpdate();
 	editor_console->RequestUpdate();
 	editor_game->RequestUpdate();

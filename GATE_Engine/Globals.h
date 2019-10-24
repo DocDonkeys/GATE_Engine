@@ -21,7 +21,7 @@ void log(const char file[], int line, const char* format, ...);
 //#ifdef NULL
 //#undef NULL
 //#endif
-//#define NULL  0
+//#define NULL 0
 
 // Deletes a buffer
 #define RELEASE( x ) \
@@ -78,6 +78,7 @@ enum update_status
 };
 
 //Memory Leak Detection
+#define _MMGR_MEM_LEAK
 //#define _VISUAL_MEM_LEAK
 
 //Only arbitrary value that can't be managed by JSON

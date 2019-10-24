@@ -6,6 +6,12 @@
 #include "GeometryLoader.h"
 #include "libs/imgui/imgui_impl_sdl.h"
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)

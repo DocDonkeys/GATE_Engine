@@ -5,12 +5,14 @@
 // Old school memory leak detector (mmgr)
 #ifdef _DEBUG
 
+#ifdef _MMGR_MEM_LEAK
+//#define TEST_MEMORY_MANAGER
+#include "libs/mmgr/mmgr.h"
+#else
 #ifdef _VISUAL_MEM_LEAK
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
-#else
-//#define TEST_MEMORY_MANAGER
-#include "libs/mmgr/mmgr.h"
+#endif
 #endif
 
 #endif
@@ -20,7 +22,7 @@
 #pragma comment( lib, "libs/SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "libs/SDL/libx86/SDL2main.lib" )
 
-//Profiler
+// Profiler
 #include "libs/Brofiler/Brofiler.h"
 #pragma comment( lib, "libs/Brofiler/ProfilerCore32.lib" )
 
@@ -38,7 +40,7 @@ Application* App = NULL;
 int main(int argc, char ** argv)
 {
 	LOG("Starting Engine...");
-
+	
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
 
@@ -109,12 +111,14 @@ int main(int argc, char ** argv)
 	//mmgr Mem Leak Detector
 #ifdef _DEBUG
 
-#ifdef _VISUAL_MEM_LEAK
-	_CrtDumpMemoryLeaks();
-#else
-	int leaks = MAX(0, m_getMemoryStatistics().totalAllocUnitCount - 23);
+#ifdef _MMGR_MEM_LEAK
+	int leaks = MAX(0, m_getMemoryStatistics().totalAllocUnitCount/* - 23*/);
 	LOG("With %d memory leaks!\n", (leaks > 0) ? leaks : 0);
 	SDL_assert(leaks <= 0);
+#else
+#ifdef _VISUAL_MEM_LEAK
+	_CrtDumpMemoryLeaks();
+#endif
 #endif
 
 #endif	

@@ -6,6 +6,12 @@
 #include "PerfTimer.h"
 #include "libs/SDL/include/SDL_timer.h"
 
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
 ulong PerfTimer::frequency = 0;
 
 // ---------------------------------------------

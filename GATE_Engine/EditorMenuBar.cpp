@@ -1,42 +1,62 @@
-#include "EditorMenu.h"
+#include "EditorMenuBar.h"
 #include "libs/imgui/imgui.h"
 #include "Application.h"
+#include "Globals.h"
 
-void EditorMenu::Update() {
+// Windows
+#include "EditorConfiguration.h"
+#include "EditorConsole.h"
+#include "EditorGame.h"
+#include "EditorHierarchy.h"
+#include "EditorInspector.h"
+#include "EditorProject.h"
+#include "EditorScene.h"
+#include "EditorToolbar.h"
+
+// Elements
+#include "EditorMenuBar.h"
+
+#ifdef _DEBUG
+#ifdef _MMGR_MEM_LEAK
+#include "libs/mmgr/mmgr.h"
+#endif
+#endif
+
+void EditorMenuBar::Update() {
 	if (ImGui::BeginMenuBar()) {
 
 		// Menu - File: Options for file and App management
 		if (ImGui::BeginMenu("File")) {
 
-			if (ImGui::MenuItem("New Scene", "Ctrl+N")) {
+			if (ImGui::MenuItem("New Scene", "Ctrl+N", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Save", "Ctrl+S")) {
-
-			}
-
-			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
+			if (ImGui::MenuItem("Open Scene", "Ctrl+O", false, false)) {
 
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("New Project", "Ctrl+Shift+N")) {
+			if (ImGui::MenuItem("Save", "Ctrl+S", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Open Project", "Ctrl+Shift+O")) {
+			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Save Project")) {
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("New Project", "Ctrl+Shift+N", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Open Project", "Ctrl+Shift+O", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Save Project", NULL, false, false)) {
 
 			}
 
@@ -53,53 +73,53 @@ void EditorMenu::Update() {
 		// Menu - Edit: Tools for easier edition
 		if (ImGui::BeginMenu("Edit")) {
 
-			if (ImGui::MenuItem("Undo", "Ctrl+Z")) {
+			if (ImGui::MenuItem("Undo", "Ctrl+Z", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Redo", "Ctrl+Y")) {
-
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Select All", "Ctrl+A")) {
-
-			}
-
-			if (ImGui::MenuItem("Deselect All", "Shift+D")) {
-
-			}
-
-			if (ImGui::MenuItem("Select Children", "Shift+C")) {
-
-			}
-
-			if (ImGui::MenuItem("Invert Selection", "Ctrl+I")) {
+			if (ImGui::MenuItem("Redo", "Ctrl+Y", false, false)) {
 
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("Duplicate", "Ctrl+D")) {
+			if (ImGui::MenuItem("Select All", "Ctrl+A", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Delete", "Supr")) {
+			if (ImGui::MenuItem("Deselect All", "Shift+D", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Select Children", "Shift+C", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Invert Selection", "Ctrl+I", false, false)) {
 
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("Play", "Ctrl+P")) {
+			if (ImGui::MenuItem("Duplicate", "Ctrl+D", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Pause", "Ctrl+Shift+P")) {
+			if (ImGui::MenuItem("Delete", "Supr", false, false)) {
 
 			}
 
-			if (ImGui::MenuItem("Step", "Ctrl+Alt+P")) {
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Play", "Ctrl+P", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Pause", "Ctrl+Shift+P", false, false)) {
+
+			}
+
+			if (ImGui::MenuItem("Step", "Ctrl+Alt+P", false, false)) {
 
 			}
 
@@ -107,7 +127,7 @@ void EditorMenu::Update() {
 
 			// MenuItem - Settings: Engine confiuration settings
 			if (ImGui::MenuItem("Settings...")) {
-				App->editor->editor_configuration.show_window = !App->editor->editor_configuration.show_window;
+				App->editor->editor_configuration->show_window = !App->editor->editor_configuration->show_window;
 			}
 
 			ImGui::EndMenu();
@@ -116,7 +136,7 @@ void EditorMenu::Update() {
 		// Menu - Window: View options
 		if (ImGui::BeginMenu("Window")) {
 
-			if (ImGui::BeginMenu("Viewport")) {
+			if (ImGui::BeginMenu("Viewport", false)) {
 
 				//ImGui::Checkbox("Framerate", false);
 				//ImGui::Checkbox("Polycount", false);
@@ -127,12 +147,13 @@ void EditorMenu::Update() {
 
 			if (ImGui::BeginMenu("Menus")) {
 
-				ImGui::MenuItem("hierarchy", NULL, &App->editor->editor_hierarchy.show_window);
-				ImGui::MenuItem("Project", NULL, &App->editor->editor_project.show_window);
-				ImGui::MenuItem("Console", NULL, &App->editor->editor_console.show_window);
-				ImGui::MenuItem("Inspector", NULL, &App->editor->editor_inspector.show_window);
-				ImGui::MenuItem("Scene", NULL, &App->editor->editor_scene.show_window);
-				ImGui::MenuItem("Game", NULL, &App->editor->editor_game.show_window);
+				ImGui::MenuItem("Toolbar", NULL, &App->editor->editor_toolbar->show_window, false);
+				ImGui::MenuItem("Hierarchy", NULL, &App->editor->editor_hierarchy->show_window);
+				ImGui::MenuItem("Project", NULL, &App->editor->editor_project->show_window, false);
+				ImGui::MenuItem("Console", NULL, &App->editor->editor_console->show_window);
+				ImGui::MenuItem("Inspector", NULL, &App->editor->editor_inspector->show_window);
+				ImGui::MenuItem("Scene", NULL, &App->editor->editor_scene->show_window, false);
+				ImGui::MenuItem("Game", NULL, &App->editor->editor_game->show_window, false);
 
 				ImGui::EndMenu();
 			}
@@ -145,7 +166,7 @@ void EditorMenu::Update() {
 				if (ImGui::MenuItem("Show UI Demo"))
 					App->editor->show_demo_window = !App->editor->show_demo_window;
 
-				if (ImGui::MenuItem("Generate Random Game"))
+				if (ImGui::MenuItem("Generate Game"))
 					App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
 				ImGui::EndMenu();
