@@ -147,7 +147,7 @@ void EditorMenuBar::Update() {
 
 			if (ImGui::BeginMenu("Menus")) {
 
-				ImGui::MenuItem("Toolbar", NULL, &App->editor->editor_toolbar->show_window, true);
+				ImGui::MenuItem("Toolbar", NULL, &App->editor->editor_toolbar->show_window, false);
 				ImGui::MenuItem("Hierarchy", NULL, &App->editor->editor_hierarchy->show_window);
 				ImGui::MenuItem("Project", NULL, &App->editor->editor_project->show_window, false);
 				ImGui::MenuItem("Console", NULL, &App->editor->editor_console->show_window);

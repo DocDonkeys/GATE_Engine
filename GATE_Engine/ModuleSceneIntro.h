@@ -31,6 +31,6 @@ public:
 
 public:
 	//members
-	int toolMode = (int)tool_mode::DRAG;
+	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 	std::vector<GameObject*> game_objects; // We will replace this with root_go (Root GameObject) when we have a tree based Hierarchy
 };
