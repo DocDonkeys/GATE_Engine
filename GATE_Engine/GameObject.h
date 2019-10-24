@@ -21,8 +21,10 @@ public:
 public: //Methods
 	void Update();
 	Component* CreateComponent(COMPONENT_TYPE type);
+	Component* GetComponent(COMPONENT_TYPE type);
 
 public: //Vars
+	bool active = true;
 	std::string name;
 	std::vector<Component*> components;
 

@@ -54,3 +54,15 @@ Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 	components.push_back(c);
 	return c;
 }
+
+Component * GameObject::GetComponent(COMPONENT_TYPE type)
+{
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->type == type)
+		{
+			return components[i];
+		}
+	}
+	return nullptr;
+}

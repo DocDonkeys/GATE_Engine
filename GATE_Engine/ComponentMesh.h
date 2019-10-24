@@ -2,6 +2,7 @@
 #define __COMPONENTMESH_H__
 
 #include "Component.h"
+#include "Mesh.h"
 
 class ComponentMesh : public Component
 {
@@ -13,6 +14,9 @@ public:
 	void Enable() override;
 	void Update() override;
 	void Disable() override;
+
+public:
+	Mesh* mesh;
 };
 
 #endif // !__COMPONENTMESH_H__
