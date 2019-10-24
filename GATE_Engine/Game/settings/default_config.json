@@ -19,9 +19,20 @@
     "Rotation Speed": 1.0
   },
   "Editor": {
-    "Byte Size Mode": 1,
-    "Draw Mode": 0,
-    "Texture Mode": 0
+    "Modes": {
+      "Byte Size": 1,
+      "Mesh Draw": 0,
+      "Texture": 0
+    },
+    "Windows": {
+      "Configuration": false,
+      "Console": true,
+      "Game": false,
+      "Hierarchy": true,
+      "Inspector": true,
+      "Project": false,
+      "Scene": false
+    }
   },
   "Input": null,
   "Renderer3D": {

@@ -506,7 +506,7 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 	//Renderer
 	renderer3D->vSync = obj["Renderer3D"]["VSync"].get<bool>();
 
-	//GL_Settings Loading (GL Id, mutually exclusive group linking, initial status)
+	// -> GL_Settings Loading (GL Id, mutually exclusive group linking, initial status)
 	renderer3D->GL_DepthTest = { GL_DEPTH_TEST, nullptr, obj["Renderer3D"]["GL_Settings"]["DepthTest"].get<bool>() };
 	renderer3D->GL_CullFace = { GL_CULL_FACE, nullptr, obj["Renderer3D"]["GL_Settings"]["CullFace"].get<bool>() };
 	renderer3D->GL_Lighting = { GL_LIGHTING, nullptr, obj["Renderer3D"]["GL_Settings"]["Lightning"].get<bool>() };
@@ -528,9 +528,19 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 	renderer3D->GL_MultiSample = { GL_MULTISAMPLE, nullptr, obj["Renderer3D"]["GL_Settings"]["MultiSample"].get<bool>() };
 
 	//Editor
-	editor->drawMode = obj["Editor"]["Draw Mode"].get<int>();
-	editor->textureMode = obj["Editor"]["Texture Mode"].get<int>();
-	editor->byteSizeMode = obj["Editor"]["Byte Size Mode"].get<int>();
+	// -> Windows
+	editor->editor_configuration.show_window = obj["Editor"]["Windows"]["Configuration"].get<bool>();
+	editor->editor_console.show_window = obj["Editor"]["Windows"]["Console"].get<bool>();
+	editor->editor_game.show_window = obj["Editor"]["Windows"]["Game"].get<bool>();
+	editor->editor_hierarchy.show_window = obj["Editor"]["Windows"]["Hierarchy"].get<bool>();
+	editor->editor_inspector.show_window = obj["Editor"]["Windows"]["Inspector"].get<bool>();
+	editor->editor_project.show_window = obj["Editor"]["Windows"]["Project"].get<bool>();
+	editor->editor_scene.show_window = obj["Editor"]["Windows"]["Scene"].get<bool>();
+
+	// -> RadioButton Modes
+	editor->drawMode = obj["Editor"]["Modes"]["Mesh Draw"].get<int>();
+	editor->textureMode = obj["Editor"]["Modes"]["Texture"].get<int>();
+	editor->byteSizeMode = obj["Editor"]["Modes"]["Byte Size"].get<int>();
 
 	return ret;
 }
@@ -601,10 +611,21 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 		}},
 
 		{"Editor", {
-			{"Draw Mode", editor->drawMode},
-			{"Texture Mode", editor->textureMode},
-			{"Byte Size Mode", editor->byteSizeMode}
-		}},
+			{"Modes", {
+				{"Mesh Draw", editor->drawMode},
+				{"Texture", editor->textureMode},
+				{"Byte Size", editor->byteSizeMode}
+			}},
+			{"Windows", {
+				{"Configuration", editor->editor_configuration.show_window},
+				{"Console", editor->editor_console.show_window},
+				{"Game", editor->editor_game.show_window},
+				{"Hierarchy", editor->editor_hierarchy.show_window},
+				{"Inspector", editor->editor_inspector.show_window},
+				{"Project", editor->editor_project.show_window},
+				{"Scene", editor->editor_scene.show_window}
+			}},
+		}}
 	};
 
 	jLoad.Save(config, editableConfig.c_str());
