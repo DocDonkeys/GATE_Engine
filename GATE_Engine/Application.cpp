@@ -1,6 +1,21 @@
 #include "Application.h"
 #include "EditorConsole.h"
 
+// ----------------	//CHANGE/FIX: This shouldn't be here! Upgrade Save&Load so it's done on every module for their data.
+// Windows
+#include "EditorConfiguration.h"
+#include "EditorConsole.h"
+#include "EditorGame.h"
+#include "EditorHierarchy.h"
+#include "EditorInspector.h"
+#include "EditorProject.h"
+#include "EditorScene.h"
+#include "EditorToolbar.h"
+
+// Elements
+#include "EditorMenuBar.h"
+// ----------------
+
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
 #include "libs/mmgr/mmgr.h"
@@ -246,7 +261,7 @@ void Application::ConsoleLOG(const char * format, ...)
 	
 	//Now we can pass the string to the vector
 	LOG.push_back(str);
-	editor->editor_console.AddLog(str);
+	editor->editor_console->AddLog(str);
 }
 
 // PreUpdate all modules in App
@@ -532,13 +547,13 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 
 	//Editor
 	// -> Windows
-	editor->editor_configuration.show_window = obj["Editor"]["Windows"]["Configuration"].get<bool>();
-	editor->editor_console.show_window = obj["Editor"]["Windows"]["Console"].get<bool>();
-	editor->editor_game.show_window = obj["Editor"]["Windows"]["Game"].get<bool>();
-	editor->editor_hierarchy.show_window = obj["Editor"]["Windows"]["Hierarchy"].get<bool>();
-	editor->editor_inspector.show_window = obj["Editor"]["Windows"]["Inspector"].get<bool>();
-	editor->editor_project.show_window = obj["Editor"]["Windows"]["Project"].get<bool>();
-	editor->editor_scene.show_window = obj["Editor"]["Windows"]["Scene"].get<bool>();
+	editor->editor_configuration->show_window = obj["Editor"]["Windows"]["Configuration"].get<bool>();
+	editor->editor_console->show_window = obj["Editor"]["Windows"]["Console"].get<bool>();
+	editor->editor_game->show_window = obj["Editor"]["Windows"]["Game"].get<bool>();
+	editor->editor_hierarchy->show_window = obj["Editor"]["Windows"]["Hierarchy"].get<bool>();
+	editor->editor_inspector->show_window = obj["Editor"]["Windows"]["Inspector"].get<bool>();
+	editor->editor_project->show_window = obj["Editor"]["Windows"]["Project"].get<bool>();
+	editor->editor_scene->show_window = obj["Editor"]["Windows"]["Scene"].get<bool>();
 
 	// -> RadioButton Modes
 	editor->drawMode = obj["Editor"]["Modes"]["Mesh Draw"].get<int>();
@@ -620,13 +635,13 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 				{"Byte Size", editor->byteSizeMode}
 			}},
 			{"Windows", {
-				{"Configuration", editor->editor_configuration.show_window},
-				{"Console", editor->editor_console.show_window},
-				{"Game", editor->editor_game.show_window},
-				{"Hierarchy", editor->editor_hierarchy.show_window},
-				{"Inspector", editor->editor_inspector.show_window},
-				{"Project", editor->editor_project.show_window},
-				{"Scene", editor->editor_scene.show_window}
+				{"Configuration", editor->editor_configuration->show_window},
+				{"Console", editor->editor_console->show_window},
+				{"Game", editor->editor_game->show_window},
+				{"Hierarchy", editor->editor_hierarchy->show_window},
+				{"Inspector", editor->editor_inspector->show_window},
+				{"Project", editor->editor_project->show_window},
+				{"Scene", editor->editor_scene->show_window}
 			}},
 		}}
 	};

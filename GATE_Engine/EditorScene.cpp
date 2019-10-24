@@ -7,6 +7,7 @@
 #include "libs/mmgr/mmgr.h"
 #endif
 #endif
+
 EditorScene::EditorScene(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags) {};
 
 void EditorScene::Update()

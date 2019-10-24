@@ -12,17 +12,18 @@
 
 #include "libs/glew/include/GL/glew.h"
 
-// Windows
-#include "EditorConfiguration.h"
-#include "EditorConsole.h"
-#include "EditorGame.h"
-#include "EditorHierarchy.h"
-#include "EditorInspector.h"
-#include "EditorProject.h"
-#include "EditorScene.h"
+// UI Windows
+class EditorConfiguration;
+class EditorConsole;
+class EditorGame;
+class EditorHierarchy;
+class EditorInspector;
+class EditorProject;
+class EditorScene;
+class EditorToolbar;
 
-// Elements
-#include "EditorMenuBar.h"
+// UI Elements
+class EditorMenuBar;
 
 enum class draw_mode {
 	MESH = 0,
@@ -73,16 +74,17 @@ public:
 
 public:
 	// UI Windows
-	EditorConfiguration editor_configuration;
-	EditorConsole editor_console;
-	EditorGame editor_game;
-	EditorHierarchy editor_hierarchy;
-	EditorInspector editor_inspector;
-	EditorProject editor_project;
-	EditorScene editor_scene;
+	EditorToolbar* editor_toolbar = nullptr;
+	EditorConfiguration* editor_configuration = nullptr;
+	EditorConsole* editor_console = nullptr;
+	EditorGame* editor_game = nullptr;
+	EditorHierarchy* editor_hierarchy = nullptr;
+	EditorInspector* editor_inspector = nullptr;
+	EditorProject* editor_project = nullptr;
+	EditorScene* editor_scene = nullptr;
 
 	// UI Elements
-	EditorMenuBar editor_menu_bar;
+	EditorMenuBar* editor_menu_bar = nullptr;
 
 	// Window Settings
 	bool viewport_activated = false;

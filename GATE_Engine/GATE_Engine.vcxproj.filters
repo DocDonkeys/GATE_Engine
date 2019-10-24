@@ -126,6 +126,9 @@
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>Sources\Component Structure\Components</Filter>
     </ClCompile>
+    <ClCompile Include="EditorToolbar.cpp">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -270,6 +273,9 @@
     </ClInclude>
     <ClInclude Include="ComponentTransform.h">
       <Filter>Sources\Component Structure\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorToolbar.h">
+      <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

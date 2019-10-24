@@ -72,7 +72,7 @@ update_status ModuleCamera3D::Update(float dt)
 			float mouse_y = (float)-App->input->GetMouseYMotion() * camMouseSens;
 
 			if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
-				|| App->scene_intro->currMode == tool_mode::DRAG && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {	// Drag Camera
+				|| App->scene_intro->toolMode == (int)tool_mode::DRAG && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {	// Drag Camera
 				DragCamera(newPos, mouse_x / 5.0f, mouse_y / 5.0f);
 			}
 			if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {

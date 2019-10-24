@@ -5,24 +5,56 @@
 #include "ModuleInput.h"
 #include "GeometryLoader.h"
 
+// Windows
+#include "EditorConfiguration.h"
+#include "EditorConsole.h"
+#include "EditorGame.h"
+#include "EditorHierarchy.h"
+#include "EditorInspector.h"
+#include "EditorProject.h"
+#include "EditorScene.h"
+#include "EditorToolbar.h"
+
+// Elements
+#include "EditorMenuBar.h"
+
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
 #include "libs/mmgr/mmgr.h"
 #endif
 #endif
 
-ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled),
-editor_configuration("Configuration", false, ImGuiWindowFlags_MenuBar),
-editor_console("Console", true),
-editor_game("Game", false),
-editor_hierarchy("Hierarchy", true),
-editor_inspector("Inspector", true),
-editor_project("Project", false),
-editor_scene("Scene", false)
-{};
+ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
+{
+	// Windows
+	editor_configuration = new EditorConfiguration("Configuration", false, ImGuiWindowFlags_MenuBar);
+	editor_console = new EditorConsole("Console", true);
+	editor_game = new EditorGame("Game", false);
+	editor_hierarchy = new EditorHierarchy("Hierarchy", true);
+	editor_inspector = new EditorInspector("Inspector", true);
+	editor_project = new EditorProject("Project", false);
+	editor_scene = new EditorScene("Scene", false);
+	editor_toolbar = new EditorToolbar("Toolbar", false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+
+	// Elements
+	editor_menu_bar = new EditorMenuBar();
+}
 
 ModuleEditor::~ModuleEditor()
-{}
+{
+	// Windows
+	delete editor_configuration;
+	delete editor_console;
+	delete editor_game;
+	delete editor_hierarchy;
+	delete editor_inspector;
+	delete editor_project;
+	delete editor_scene;
+	delete editor_toolbar;
+
+	// Elements
+	delete editor_menu_bar;
+}
 
 bool ModuleEditor::Init()
 {
@@ -90,18 +122,19 @@ update_status ModuleEditor::Update(float dt)
 	ImGui::NewFrame();
 
 	if (BeginRootWindow("Root Window 1", main_dockSpace, ImGuiWindowFlags_MenuBar)) {	//CHANGE/FIX: Create a root window class with docking that can be turned on/off?
-		editor_menu_bar.Update();
+		editor_menu_bar->Update();
 		ImGui::End();
 	}
 
 	// Check all windows for updates if they're activated
-	editor_configuration.RequestUpdate();
-	editor_console.RequestUpdate();
-	editor_game.RequestUpdate();
-	editor_hierarchy.RequestUpdate();
-	editor_inspector.RequestUpdate();
-	editor_project.RequestUpdate();
-	editor_scene.RequestUpdate();
+	editor_toolbar->RequestUpdate();
+	editor_configuration->RequestUpdate();
+	editor_console->RequestUpdate();
+	editor_game->RequestUpdate();
+	editor_hierarchy->RequestUpdate();
+	editor_inspector->RequestUpdate();
+	editor_project->RequestUpdate();
+	editor_scene->RequestUpdate();
 
 	// Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()!
 	if (show_demo_window)

@@ -57,7 +57,7 @@ void ModuleSceneIntro::CreateEmptyGameObject()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
-	currMode = CheckToolMode();
+	toolMode = CheckToolMode();
 
 	//Ground Render	(Used the Primitives Container)
 	/*Plane p(0, 1, 0, 0);
@@ -83,22 +83,22 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-tool_mode ModuleSceneIntro::CheckToolMode() const
+int ModuleSceneIntro::CheckToolMode() const
 {
-	tool_mode ret = currMode;
+	int ret = toolMode;
 
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
-		ret = tool_mode::DRAG;
+		ret = (int)tool_mode::DRAG;
 	else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
-		ret = tool_mode::MOVE;
+		ret = (int)tool_mode::MOVE;
 	else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
-		ret = tool_mode::ROTATE;
+		ret = (int)tool_mode::ROTATE;
 	else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
-		ret = tool_mode::SCALE;
+		ret = (int)tool_mode::SCALE;
 	else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
-		ret = tool_mode::RECT;
+		ret = (int)tool_mode::RECT;
 	else if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
-		ret = tool_mode::MULTI;
+		ret = (int)tool_mode::MULTI;
 
 	return ret;
 }

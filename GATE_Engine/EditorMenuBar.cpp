@@ -11,6 +11,7 @@
 #include "EditorInspector.h"
 #include "EditorProject.h"
 #include "EditorScene.h"
+#include "EditorToolbar.h"
 
 // Elements
 #include "EditorMenuBar.h"
@@ -126,7 +127,7 @@ void EditorMenuBar::Update() {
 
 			// MenuItem - Settings: Engine confiuration settings
 			if (ImGui::MenuItem("Settings...")) {
-				App->editor->editor_configuration.show_window = !App->editor->editor_configuration.show_window;
+				App->editor->editor_configuration->show_window = !App->editor->editor_configuration->show_window;
 			}
 
 			ImGui::EndMenu();
@@ -146,12 +147,13 @@ void EditorMenuBar::Update() {
 
 			if (ImGui::BeginMenu("Menus")) {
 
-				ImGui::MenuItem("Hierarchy", NULL, &App->editor->editor_hierarchy.show_window);
-				ImGui::MenuItem("Project", NULL, &App->editor->editor_project.show_window, false);
-				ImGui::MenuItem("Console", NULL, &App->editor->editor_console.show_window);
-				ImGui::MenuItem("Inspector", NULL, &App->editor->editor_inspector.show_window);
-				ImGui::MenuItem("Scene", NULL, &App->editor->editor_scene.show_window, false);
-				ImGui::MenuItem("Game", NULL, &App->editor->editor_game.show_window, false);
+				ImGui::MenuItem("Toolbar", NULL, &App->editor->editor_toolbar->show_window, true);
+				ImGui::MenuItem("Hierarchy", NULL, &App->editor->editor_hierarchy->show_window);
+				ImGui::MenuItem("Project", NULL, &App->editor->editor_project->show_window, false);
+				ImGui::MenuItem("Console", NULL, &App->editor->editor_console->show_window);
+				ImGui::MenuItem("Inspector", NULL, &App->editor->editor_inspector->show_window);
+				ImGui::MenuItem("Scene", NULL, &App->editor->editor_scene->show_window, false);
+				ImGui::MenuItem("Game", NULL, &App->editor->editor_game->show_window, false);
 
 				ImGui::EndMenu();
 			}
@@ -164,7 +166,7 @@ void EditorMenuBar::Update() {
 				if (ImGui::MenuItem("Show UI Demo"))
 					App->editor->show_demo_window = !App->editor->show_demo_window;
 
-				if (ImGui::MenuItem("Generate Random Game"))
+				if (ImGui::MenuItem("Generate Game"))
 					App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
 				ImGui::EndMenu();
