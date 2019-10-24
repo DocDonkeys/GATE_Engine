@@ -15,6 +15,8 @@ public:
 	void Update() override;
 	void Disable() override;
 
+	void Draw();
+
 public:
 	Mesh* mesh;
 };

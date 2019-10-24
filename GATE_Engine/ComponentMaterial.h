@@ -16,10 +16,10 @@ public:
 	void Disable() override;
 
 public:
-	uint active_texture_id = 0;
+	uint active_texture_id = 0; //Currently used texture (either texture ID or checkers ID)
+	uint texture_id = 0; //Loaded texture Id
 
 private:
-	uint texture_id = 0;
 	uint checkers_texture_id = 0; //Checkers texture is our debug Texture
 };
 

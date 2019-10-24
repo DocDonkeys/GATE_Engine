@@ -326,13 +326,13 @@ void ModuleRenderer3D::DeleteBuffer(uint & id)
 }
 
 //Pass a Mesh_Data to be drawn using glDrawElements
-void ModuleRenderer3D::DrawMesh(const Mesh* mesh)
+void ModuleRenderer3D::DrawMesh(const Mesh* mesh, const uint texture_id)
 {
 	//Draw VERTICES with INDICES
 	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
 	{
-		if (mesh->id_texture != 0) // The mesh has a texture to be printed
-			PrintTexturedMesh(mesh);
+		if (texture_id != 0) // The mesh has a texture to be printed
+			PrintTexturedMesh(mesh, texture_id);
 		else
 			PrintSimpleMesh(mesh);
 	}
@@ -393,7 +393,7 @@ void ModuleRenderer3D::PrintSimpleMesh(const Mesh* mesh)
 }
 
 //DRAW a mesh that contains textures using it's texture coordinates
-void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh)
+void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh, const uint texture_id)
 {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 

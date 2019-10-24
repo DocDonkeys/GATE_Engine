@@ -23,7 +23,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void CreateEmptyGameObject();
+	GameObject* CreateEmptyGameObject();
 	void CreateEmptyGameObject(int num_of_go);
 
 public:

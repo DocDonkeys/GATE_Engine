@@ -1,4 +1,7 @@
 #include "ComponentMesh.h"
+#include "Application.h"
+#include "ModuleRenderer3D.h"
+#include "ComponentMaterial.h"
 
 ComponentMesh::ComponentMesh() : Component()
 {
@@ -16,9 +19,22 @@ void ComponentMesh::Enable()
 
 void ComponentMesh::Update()
 {
+	Draw();
 }
 
 void ComponentMesh::Disable()
 {
 	active = false;
+}
+
+void ComponentMesh::Draw()
+{
+	ComponentMaterial* material = (ComponentMaterial*)my_go->GetComponent(COMPONENT_TYPE::MATERIAL);
+
+	const uint tex_id = material->texture_id;
+
+	if (tex_id != 0)
+		App->renderer3D->DrawMesh(mesh, tex_id);
+	else
+		App->renderer3D->DrawMesh(mesh);
 }

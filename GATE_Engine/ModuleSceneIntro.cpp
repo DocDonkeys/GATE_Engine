@@ -47,11 +47,12 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
-void ModuleSceneIntro::CreateEmptyGameObject()
+GameObject* ModuleSceneIntro::CreateEmptyGameObject()
 {
 	GameObject* go = new GameObject();
 
 	game_objects.push_back(go);
+	return go;
 }
 
 void ModuleSceneIntro::CreateEmptyGameObject(int num_of_go)

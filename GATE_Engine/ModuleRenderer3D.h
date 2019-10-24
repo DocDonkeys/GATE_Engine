@@ -34,11 +34,11 @@ public:
 	void GenerateIndexBuffer(uint& id_index, const int& size, const uint* index);
 	void DeleteBuffer(uint& id);
 	//Draw a given mesh
-	void DrawMesh(const Mesh* mesh);
+	void DrawMesh(const Mesh* mesh, const uint texture_id = 0);
 	//Print the Mesh with vertices and indices only
 	void PrintSimpleMesh(const Mesh* mesh);
 	//DRAW a mesh that contains textures using its texture coordinates
-	void PrintTexturedMesh(const Mesh* mesh);
+	void PrintTexturedMesh(const Mesh* mesh, const uint texture_id);
 
 	// OpenGL Settings
 	struct GL_Setting {
