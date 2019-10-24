@@ -28,7 +28,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	//Create an empty gameobject for test purposes
-	CreateEmptyGameObject();
+	CreateEmptyGameObject(10);
 
 	return ret;
 }
@@ -46,6 +46,14 @@ void ModuleSceneIntro::CreateEmptyGameObject()
 	GameObject* go = new GameObject();
 
 	game_objects.push_back(go);
+}
+
+void ModuleSceneIntro::CreateEmptyGameObject(int num_of_go)
+{
+	for (int i = 0; i < num_of_go; ++i)
+	{
+		CreateEmptyGameObject();
+	}
 }
 
 // Update

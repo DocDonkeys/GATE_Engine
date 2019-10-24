@@ -24,6 +24,7 @@ public:
 	bool CleanUp();
 
 	void CreateEmptyGameObject();
+	void CreateEmptyGameObject(int num_of_go);
 
 public:
 	//methods
