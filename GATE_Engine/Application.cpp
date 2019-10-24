@@ -490,16 +490,19 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 	//Input
 
 	//Camera
+	// -> Movement
 	camera->camMovSpeed = obj["Camera"]["Movement Speed"].get<float>();
 	camera->maxMovSpeed = obj["Camera"]["Max Movement Speed"].get<float>();
 	camera->camMovMultiplier = obj["Camera"]["Movement Multiplier"].get<float>();
 	camera->maxMovMultiplier = obj["Camera"]["Max Movement Multiplier"].get<float>();
 
+	// -> Rotation
 	camera->camRotSpeed = obj["Camera"]["Rotation Speed"].get<float>();
 	camera->maxRotSpeed = obj["Camera"]["Max Rotation Speed"].get<float>();
 	camera->camRotMultiplier = obj["Camera"]["Rotation Multiplier"].get<float>();
 	camera->maxRotMultiplier = obj["Camera"]["Max Rotation Multiplier"].get<float>();
 	
+	// -> Mouse Sensibility
 	camera->camMouseSens = obj["Camera"]["Mouse Sensitivity"].get<float>();
 	camera->maxMouseSens = obj["Camera"]["Max Mouse Sensitivity"].get<float>();
 
@@ -591,7 +594,7 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 
 		{"Renderer3D", {
 			{"VSync", renderer3D->vSync},
-			{"GL_Settings", {	//GL_Settings Saving
+			{"GL_Settings", {
 				{"DepthTest", renderer3D->GL_DepthTest.status},
 				{"CullFace", renderer3D->GL_CullFace.status},
 				{"Lightning", renderer3D->GL_Lighting.status},
