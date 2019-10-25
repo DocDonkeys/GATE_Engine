@@ -35,6 +35,7 @@ bool ModuleSceneIntro::Start()
 
 	//Create an empty gameobject for test purposes
 	CreateEmptyGameObject(10);
+	App->geometry_loader->Load3DFile("E:\\UPC University\\3rd year\\1st quatri\\3D Engines\\3D Models\\Baker_house\\BakerHouse.fbx");
 
 	return ret;
 }
