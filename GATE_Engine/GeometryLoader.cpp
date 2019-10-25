@@ -48,22 +48,6 @@ bool GeometryLoader::CleanUp()
 	// detach log stream
 	aiDetachAllLogStreams();
 
-	//Delete data
-	for (int i = 0; i < meshes.size(); ++i)
-	{
-		Mesh* m_todestroy = meshes[i];
-		//Delete the allocated memory data inside the mesh
-		App->renderer3D->DeleteBuffer(m_todestroy->id_index);
-		delete[] m_todestroy->index;	//CHANGE/FIX: This was RELEASE_ARRAY() before, try to find a way to use it while not angering mmgr
-		App->renderer3D->DeleteBuffer(m_todestroy->id_vertex);
-		delete[] m_todestroy->vertex;	//CHANGE/FIX: This was RELEASE_ARRAY() before, try to find a way to use it while not angering mmgr
-
-		//Delete the allocated memory data for the mesh
-		delete meshes[i];		//CHANGE/FIX: This was RELEASE() before, try to find a way to use it while not angering mmgr
-	}
-
-	meshes.clear();
-
 	return ret;
 }
 
@@ -95,7 +79,6 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			new_mesh->LoadIndices(loaded_mesh); //Indices
 			new_mesh->LoadNormals(loaded_mesh); //Normals
 			new_mesh->LoadTexCoords(loaded_mesh); // UV's
-			new_mesh->LoadMaterials(scene, loaded_mesh, absolute_path); //Materials
 			new_mesh->LoadMeshSizeData();
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
@@ -170,8 +153,12 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
 	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
-	//Push into the meshes vector
-	meshes.push_back(new_mesh);
+
+	//We create a game object for the current mesh
+	GameObject* go = App->scene_intro->CreateEmptyGameObject();
+
+	ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
+	mesh_component->mesh = new_mesh;
 }
 
 void GeometryLoader::LoadPrimitiveNormals(Mesh * new_mesh, const par_shapes_mesh_s * p_mesh)
@@ -295,8 +282,6 @@ bool GeometryLoader::Start()
 
 update_status GeometryLoader::Update(float dt)
 {
-	for (int i = 0; i < meshes.size(); ++i)
-		App->renderer3D->DrawMesh(meshes[i]);
 
 	return UPDATE_CONTINUE;
 }

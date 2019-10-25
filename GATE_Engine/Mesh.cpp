@@ -115,36 +115,6 @@ void Mesh::LoadTexCoords(const aiMesh * loaded_mesh)
 	}
 }
 
-void Mesh::LoadMaterials(const aiScene * scene, const aiMesh* loaded_mesh, const std::string & absolute_path)
-{
-	if (scene->HasMaterials())
-	{
-		aiString tex_path;
-		aiMaterial* material = scene->mMaterials[loaded_mesh->mMaterialIndex]; // For now we are just required to use 1 diffse texture
-
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
-		
-		if (tex_path.length > 0)
-		{
-			std::string relative_path = tex_path.C_Str();
-
-			std::size_t found = relative_path.find_first_of("/\\");
-			if (found > 0)
-			{
-				relative_path = relative_path.substr(found + 1, relative_path.size());
-			}
-			std::string texture_path = absolute_path.data() + relative_path;
-			id_texture = App->texture_loader->LoadTextureFile(texture_path.data());
-		}
-		else
-		{
-			LOG("Error loading scene materials from %s", absolute_path);
-		}
-	}
-	else
-		LOG("Error loading scene materials from %s", absolute_path);
-}
-
 void Mesh::LoadMeshSizeData()
 {
 	for (int i = 0; i < num_vertex; i++)

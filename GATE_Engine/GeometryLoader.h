@@ -50,7 +50,6 @@ public:
 
 public: // Vars
 	aiLogStream log_stream;
-	std::vector<Mesh*> meshes;
 };
 
 

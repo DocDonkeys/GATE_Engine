@@ -15,7 +15,6 @@ public: // Calls
 	void LoadIndices(const aiMesh* loaded_mesh);
 	void LoadNormals(const aiMesh* loaded_mesh);
 	void LoadTexCoords(const aiMesh* loaded_mesh);
-	void LoadMaterials(const aiScene* scene, const aiMesh* loaded_mesh, const std::string& absolute_path);
 	void LoadMeshSizeData();
 
 public: // Vars
@@ -37,8 +36,6 @@ public: // Vars
 	uint id_tex_coords = 0; // index in VRAM
 	uint num_tex_coords = 0;
 	float* tex_coords = nullptr;
-
-	uint id_texture = 0; // Texture index in VRAM
 
 	struct size_data {	// Mesh size data
 		float max = -10.0f;

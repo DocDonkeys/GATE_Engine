@@ -32,7 +32,11 @@ void ComponentMesh::Draw()
 {
 	ComponentMaterial* material = (ComponentMaterial*)my_go->GetComponent(COMPONENT_TYPE::MATERIAL);
 
-	const uint tex_id = material->texture_id;
+	uint tex_id;
+	if (material != nullptr)
+		 tex_id = material->texture_id;
+	else
+		tex_id = 0;
 
 	if (tex_id != 0)
 		App->renderer3D->DrawMesh(mesh, tex_id);

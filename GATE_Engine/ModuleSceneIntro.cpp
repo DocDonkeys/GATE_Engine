@@ -87,12 +87,6 @@ update_status ModuleSceneIntro::Update(float dt)
 // Update
 update_status ModuleSceneIntro::PostUpdate(float dt)
 {
-	//Ground Render	(Used the Primitives Container)
-	/*Plane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();*/
-
-	//sphere->draw(0,0,0);
 
 	return UPDATE_CONTINUE;
 }

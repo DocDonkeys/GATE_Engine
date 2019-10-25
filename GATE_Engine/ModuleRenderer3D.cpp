@@ -398,7 +398,7 @@ void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh, const uint texture_i
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	//Bind Buffers
-	glBindTexture(GL_TEXTURE_2D, mesh->id_texture); // Texture
+	glBindTexture(GL_TEXTURE_2D, texture_id); // Texture
 	glActiveTexture(GL_TEXTURE0);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_tex_coords); // Texture Coordinates
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
