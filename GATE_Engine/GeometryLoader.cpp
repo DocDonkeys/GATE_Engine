@@ -14,6 +14,7 @@
 
 #include "libs/par/par_shapes.h"
 #include "Mesh.h"
+#include "Texture.h"
 #include "GameObject.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
@@ -100,7 +101,10 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			mesh_component->mesh = new_mesh;
 
 			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			material_component->texture_id = LoadMaterial(scene, loaded_mesh, absolute_path);
+			material_component->loaded_texture = LoadMaterial(scene, loaded_mesh, absolute_path);
+			if (material_component->loaded_texture->id == 0) {
+				LOG("[Warning]: The FBX embeded texture was not found or could not be loaded!");
+			}
 		}
 		//Once finished we release the original file
 		aiReleaseImport(scene);
@@ -195,9 +199,9 @@ void GeometryLoader::LoadPrimitiveNormals(Mesh * new_mesh, const par_shapes_mesh
 	}
 }
 
-uint GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * loaded_mesh, const std::string & absolute_path)
+Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * loaded_mesh, const std::string & absolute_path)
 {
-	uint ret = 0;
+	Texture* ret = nullptr;
 	if (scene->HasMaterials())
 	{
 		aiString tex_path;

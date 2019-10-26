@@ -83,10 +83,6 @@ public:
 	GL_Setting GL_ColorMaterial;	//Have one or more material parameters track the current color.
 	GL_Setting GL_MinMax;			//Compute the minimum and maximum values of incoming RGBA color values.
 	GL_Setting GL_MultiSample;		//Use multiple fragment samples in computing the final color of a pixel.
-
-	uint test_tex_id = 0;
-	uint house_test_tex = 0;
-	uint checkers_test_tex = 0;
 };
 
 

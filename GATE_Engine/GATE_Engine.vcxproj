@@ -83,6 +83,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentMesh.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="EditorConfiguration.h" />
     <ClInclude Include="EditorConsole.h" />

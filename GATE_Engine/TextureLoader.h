@@ -1,8 +1,10 @@
 #ifndef TEXTURELOADER_H
 #define TEXTURELOADER_H
 
+#include <vector>
 #include "Globals.h"
 #include "Module.h"
+#include "Texture.h"
 #include "libs/glew/include/GL/glew.h"
 
 class TextureLoader : public Module
@@ -17,7 +19,7 @@ public:
 	bool CleanUp();
 
 public:
-	uint LoadTextureFile(const char* path,
+	Texture* LoadTextureFile(const char* path,
 		uint target = GL_TEXTURE_2D,		// GL_TEXTURE_2D, GL_TEXTURE_CUBE_MAP
 		int filterType = GL_NEAREST,		// GL_NEAREST, GL_LINEAR
 		int fillingType = GL_REPEAT) const;	// GL_REPEAT, GL_CLAMP_TO_EDGE, GL_MIRRORED_REPEAT);
@@ -33,7 +35,9 @@ public:
 	uint LoadDefaultTex() const;
 	uint GetDefaultTex() const;
 
+	
 private:
+	std::vector<Texture*> textures;
 	uint defaultTex = 0;
 };
 

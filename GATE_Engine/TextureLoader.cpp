@@ -66,6 +66,12 @@ bool TextureLoader::CleanUp()
 	if (defaultTex > 0)
 		glDeleteTextures(1, (GLuint*)&defaultTex);
 
+	for (int i = 0; i < textures.size(); i++)
+		if (textures[i] != nullptr) {
+			glDeleteTextures(1, (GLuint*)&textures[i]->id);
+			delete textures[i];
+		}
+
 	LOG("[Info]: Shutting down DevIL.");
 	ilShutDown();
 
@@ -162,7 +168,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	return texId;
 }
 
-uint TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const
+Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const
 {
 	if (path == nullptr)
 	{
@@ -170,9 +176,16 @@ uint TextureLoader::LoadTextureFile(const char* path, uint target, int filterTyp
 		SDL_assert(path != nullptr);
 		return 0;
 	}
+	else {	// If the path of the texture already exists in the saved arrays, use the same id	// CHANGE/FIX: Only compare the file name, not the entire path
+		for (int i = 0; i < textures.size(); i++) {
+			if (textures[i]->filename == path) {
+				return textures[i];
+			}
+		}
+	}
 
+	Texture* tex = new Texture(0, path);
 	uint imgId = 0;
-	uint texId = 0;
 
 	ilGenImages(1, (ILuint*)&imgId);	// Generate image inside DevIL
 	ilBindImage(imgId);					// Bind our image Id to DevIL's
@@ -195,7 +208,7 @@ uint TextureLoader::LoadTextureFile(const char* path, uint target, int filterTyp
 		if (ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 		{
 			// Create texture and assign ID
-			texId = CreateTexture(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_FORMAT), target, filterType, fillingType);
+			tex->id = CreateTexture(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_FORMAT), target, filterType, fillingType);
 			LOG("[Success]: Loaded texture from path %s", path);	//IMPROVE: Add error call here related to texId?
 		}
 		else {
@@ -205,12 +218,12 @@ uint TextureLoader::LoadTextureFile(const char* path, uint target, int filterTyp
 	}
 	else {
 		LOG("[Error]: Image loading failed. Cause: %s", iluErrorString(ilGetError()));
-		SDL_assert(false);
 	}
 
 	ilDeleteImages(1, (const ILuint*)&imgId);	// Delete image inside DevIL
+	App->texture_loader->textures.push_back(tex);
 
-	return texId;
+	return tex;
 }
 
 // ---------------------------------------------

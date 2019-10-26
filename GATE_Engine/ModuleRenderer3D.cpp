@@ -152,9 +152,9 @@ bool ModuleRenderer3D::Start()
 {
 	bool ret = true;
 
-	test_tex_id = App->texture_loader->LoadTextureFile("Assets/Textures/Lenna_(test_image).png");
-	house_test_tex = App->texture_loader->LoadTextureFile("Assets/Textures/Baker_house.png");
-	checkers_test_tex = App->texture_loader->LoadDefaultTex();
+	App->texture_loader->LoadTextureFile("Assets/Textures/Lenna_(test_image).png");	//CHANGE/FIX: Hardcoded, either put it on a JSON file to load as "default textures" or just erase it
+	App->texture_loader->LoadTextureFile("Assets/Textures/Baker_house.png");
+	App->texture_loader->LoadDefaultTex();
 	
 	return ret;
 }

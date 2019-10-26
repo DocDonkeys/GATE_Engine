@@ -4,6 +4,8 @@
 #include "Component.h"
 #include "Globals.h"
 
+class Texture;
+
 class ComponentMaterial : public Component
 {
 public:
@@ -16,9 +18,9 @@ public:
 	void Disable() override;
 
 public:
-	uint active_texture_id = 0; //Currently used texture (either texture ID or checkers ID)
-	uint texture_id = 0; //Loaded texture Id
-
+	Texture* active_texture; //Currently used texture (either texture ID or checkers ID)
+	Texture* loaded_texture; //Loaded texture Id
+	
 private:
 	uint checkers_texture_id = 0; //Checkers texture is our debug Texture
 };

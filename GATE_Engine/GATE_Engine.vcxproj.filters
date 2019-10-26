@@ -277,6 +277,9 @@
     <ClInclude Include="EditorToolbar.h">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Sources\Tools\Loaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">

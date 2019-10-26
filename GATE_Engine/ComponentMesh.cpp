@@ -34,7 +34,7 @@ void ComponentMesh::Draw()
 
 	uint tex_id;
 	if (material != nullptr)
-		 tex_id = material->texture_id;
+		 tex_id = material->loaded_texture->id;
 	else
 		tex_id = 0;
 
