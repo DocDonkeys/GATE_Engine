@@ -98,6 +98,9 @@ private:
 	unsigned char key_down[5] = "DOWN";
 	unsigned char key_repeat[7] = "REPEAT";
 	unsigned char key_up[3] = "UP";
+
+	std::vector<const char*> extension_3D_file;
+	std::vector<const char*> extension_texture;
 };
 
 #endif //!MODULEINPUT_H
