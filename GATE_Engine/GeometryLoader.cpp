@@ -98,12 +98,13 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			GameObject* go = App->scene_intro->CreateEmptyGameObject();
 
 			ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
+			mesh_component->filename = App->SubtractString(std::string(full_path), "\\", true, false);
 			mesh_component->mesh = new_mesh;
 
 			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			material_component->AssignTexture(LoadMaterial(scene, loaded_mesh, absolute_path));
 			if (material_component->loaded_texture != nullptr /*|| material_component->loaded_texture->id == 0*/) {
-				LOG("[Warning]: The FBX embeded texture was not found or could not be loaded!");
+				LOG("[Warning]: The FBX has no embeded texture, could was not found, or could not be loaded!");
 			}
 		}
 		//Once finished we release the original file

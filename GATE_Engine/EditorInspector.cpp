@@ -134,6 +134,8 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 
 	if (ImGui::TreeNodeEx("Mesh", base_flags))
 	{
+		ImGui::Text("File: "); ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), mesh->filename.c_str());
 
 		ImGui::TreePop();
 	}
