@@ -4,6 +4,7 @@
 #include "GeometryLoader.h"
 #include <math.h>
 #include "Application.h"
+#include "ComponentMaterial.h"
 
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
@@ -63,6 +64,32 @@ void ModuleSceneIntro::CreateEmptyGameObject(int num_of_go)
 	{
 		CreateEmptyGameObject();
 	}
+}
+
+bool ModuleSceneIntro::AddTextureToGameObject(GameObject * go, const char* path)
+{
+	bool has_material_component = false;
+
+	Texture* texture = App->texture_loader->LoadTextureFile(path);
+
+	for (int i = 0; i < go->components.size(); ++i)
+	{
+		if (go->components[i]->type == COMPONENT_TYPE::MATERIAL)
+		{
+			ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(COMPONENT_TYPE::MATERIAL);
+			material->AssignTexture(texture);
+			return true;
+		}
+	}
+
+	if (!has_material_component)
+	{
+		ComponentMaterial* material = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
+		material->AssignTexture(texture);
+		return true;
+	}
+
+	return false;
 }
 
 // Update

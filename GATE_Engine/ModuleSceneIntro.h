@@ -26,6 +26,8 @@ public:
 	GameObject* CreateEmptyGameObject();
 	void CreateEmptyGameObject(int num_of_go);
 
+	bool  AddTextureToGameObject(GameObject* go, const char* path);
+
 public:
 	//methods
 	int CheckToolMode() const;
@@ -34,4 +36,5 @@ public:
 	//members
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 	std::vector<GameObject*> game_objects; // We will replace this with root_go (Root GameObject) when we have a tree based Hierarchy
+	GameObject* selected_go = nullptr;
 };

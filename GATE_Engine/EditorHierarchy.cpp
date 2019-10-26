@@ -32,7 +32,10 @@ void EditorHierarchy::Update()
 		} 
 		
 		if (ImGui::IsItemClicked())
+		{
 			focus_node = i;
+			App->scene_intro->selected_go = App->scene_intro->game_objects[i];
+		}
 	}
 	
 }

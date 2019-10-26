@@ -51,7 +51,7 @@ bool ModuleInput::Init()
 	extension_texture.push_back("PNG");
 	extension_texture.push_back("dds");
 	extension_texture.push_back("DDS");
-	
+
 	return ret;
 }
 
@@ -63,7 +63,7 @@ update_status ModuleInput::PreUpdate(float dt)
 	SDL_PumpEvents();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
-	
+
 	for(int i = 0; i < MAX_KEYS; ++i)
 	{
 		if(keys[i] == 1)
@@ -150,7 +150,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_DROPFILE:     // In case if dropped file	//CHANGE/FIX: Doesn't work consistently, sometimes the drop event is not called
 				dropFileDir = e.drop.file;
-				
+
 				LOG("File dropped on window: %s", dropFileDir);
 
 				SDL_free(dropFileDir);	//CHANGE/FIX: Should this be here?
@@ -163,15 +163,18 @@ update_status ModuleInput::PreUpdate(float dt)
 					if (extension_3D_file[i] == file_extension) {
 						App->geometry_loader->Load3DFile(dropFileDir);
 						break;
-					}				
+					}
 				}
-				
-				for (int i = 0; i < extension_texture.size(); ++i) {	//Check if the extension is a texture
-					if (extension_texture[i] == file_extension) {
-						App->texture_loader->LoadTextureFile(dropFileDir);
-						//App->scene_intro->selected_object
-						// CHANGE/FIX: Apply texture to selected object, if any
-						break;
+
+				for (int i = 0; i < extension_texture.size(); ++i)	//Check if the extension is a texture
+				{
+					if (extension_texture[i] == file_extension)
+					{
+						if (App->scene_intro->selected_go != nullptr)
+							App->scene_intro->AddTextureToGameObject(App->scene_intro->selected_go, dropFileDir);
+						else
+							LOG("Tried to drag & drop a texture, but no Game Object is selected! Please select a Game Object.");
+							break;
 					}
 				}
 
