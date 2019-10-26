@@ -18,7 +18,8 @@ public:
 	void Draw();
 
 public:
-	Mesh* mesh;
+	Mesh* mesh = nullptr;
+	std::string filename;
 };
 
 #endif // !__COMPONENTMESH_H__

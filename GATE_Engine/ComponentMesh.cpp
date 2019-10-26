@@ -20,7 +20,8 @@ void ComponentMesh::Enable()
 
 void ComponentMesh::Update()
 {
-	Draw();
+	if (mesh != nullptr)
+		Draw();
 }
 
 void ComponentMesh::Disable()

@@ -1,8 +1,10 @@
 #include "EditorInspector.h"
 #include "ModuleEditor.h"
+#include "EditorHierarchy.h"
+
 #include "Application.h"
 #include "ModuleSceneIntro.h"
-#include "EditorHierarchy.h"
+
 #include "Component.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
@@ -70,11 +72,59 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 {
 	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-	if (ImGui::TreeNodeEx("Transform",base_flags))
+	if (ImGui::TreeNodeEx("Transform", base_flags))
 	{
+		float width = ImGui::GetWindowWidth() / 7.0f;
 
+		ImGui::Columns(4, "TransformGrid"); // 4-ways, with border
+		
+		ImGui::Separator();
+		ImGui::Text(""); ImGui::NextColumn();
+		ImGui::Text("X"); ImGui::NextColumn();
+		ImGui::Text("Y"); ImGui::NextColumn();
+		ImGui::Text("Z"); ImGui::NextColumn();
+		ImGui::Separator();
+
+		// Position
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("Position"); ImGui::NextColumn();
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##PX", &transform->position.x, 0.005f); ImGui::NextColumn();
+
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##PY", &transform->position.y, 0.005f); ImGui::NextColumn();
+
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##PZ", &transform->position.y, 0.005f); ImGui::NextColumn();
+
+		// Rotation
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("Rotation"); ImGui::NextColumn();
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##RX", &transform->rotation.x, 0.005f); ImGui::NextColumn();
+
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##RY", &transform->rotation.y, 0.005f); ImGui::NextColumn();
+
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##RZ", &transform->rotation.y, 0.005f); ImGui::NextColumn();
+
+		// Scale
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("Scale   "); ImGui::NextColumn();
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##SX", &transform->scale.x, 0.005f); ImGui::NextColumn();
+
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##SY", &transform->scale.y, 0.005f); ImGui::NextColumn();
+
+		ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##SZ", &transform->scale.y, 0.005f);
+
+		ImGui::Columns(1);
 		ImGui::TreePop();
 	}
+
 	ImGui::Separator();
 }
 
@@ -96,6 +146,45 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 
 	if (ImGui::TreeNodeEx("Material", base_flags))
 	{
+		ImGui::Spacing();
+
+		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 4.0f);
+		ImGui::SameLine(150);
+		if (ImGui::BeginCombo("Shader", "Standard")) {
+
+			ImGui::EndCombo();
+		}
+
+		ImGui::Spacing();
+		ImGui::SameLine(150);
+
+		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 4.0f);
+		if (ImGui::BeginCombo("Rendering Mode", "Opaque")) {
+
+			ImGui::EndCombo();
+		}
+
+		ImGui::Text("Main Maps");
+		//ImGui::DragBehavior();
+		bool falseBool = false;
+		/*ImGui::Image();*/ImGui::Checkbox("##placeholder1", &falseBool); ImGui::SameLine();
+		ImGui::Text("Albedo"); ImGui::SameLine(150);
+
+		if (ImGui::ColorButton("Color", { material->color.x, material->color.y, material->color.z, material->color.w })) {
+			ImGui::OpenPopup("Palette");
+		}
+
+		if (ImGui::BeginPopup("Palette")) {
+			float col[4]{ material->color.x, material->color.y, material->color.z, material->color.w };
+			ImGui::ColorPicker4("Color", col);
+
+			material->color.x = col[0];
+			material->color.y = col[1];
+			material->color.z = col[2];
+			material->color.w = col[3];
+
+			ImGui::EndPopup();
+		}
 
 		ImGui::TreePop();
 	}
