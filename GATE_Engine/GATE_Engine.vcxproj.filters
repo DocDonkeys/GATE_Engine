@@ -40,13 +40,13 @@
       <Filter>Sources\Tools\Libs\mmgr</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Sources\Helpers\Timers</Filter>
+      <Filter>Sources\Tools\Timers</Filter>
     </ClCompile>
     <ClCompile Include="PerfTimer.cpp">
-      <Filter>Sources\Helpers\Timers</Filter>
+      <Filter>Sources\Tools\Timers</Filter>
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
-      <Filter>Sources\Tools\Primitives</Filter>
+      <Filter>Sources\Component Structure\Containers\Primitives</Filter>
     </ClCompile>
     <ClCompile Include="JsonLoader.cpp">
       <Filter>Sources\Tools\Loaders</Filter>
@@ -78,14 +78,8 @@
     <ClCompile Include="libs\imgui\imgui_impl_opengl2.cpp">
       <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Sources\Tools\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleEditor.cpp">
       <Filter>Sources\Modules\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="EditorConfiguration.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
@@ -128,6 +122,12 @@
     </ClCompile>
     <ClCompile Include="EditorToolbar.cpp">
       <Filter>Sources\Modules\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Sources\Component Structure\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Sources\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,16 +173,16 @@
       <Filter>Sources\Tools\Libs\mmgr</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Sources\Helpers\Timers</Filter>
+      <Filter>Sources\Tools\Timers</Filter>
     </ClInclude>
     <ClInclude Include="PerfTimer.h">
-      <Filter>Sources\Helpers\Timers</Filter>
+      <Filter>Sources\Tools\Timers</Filter>
     </ClInclude>
     <ClInclude Include="SolidSphere.h">
-      <Filter>Sources\Tools\Primitives</Filter>
+      <Filter>Sources\Component Structure\Containers\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="Primitive.h">
-      <Filter>Sources\Tools\Primitives</Filter>
+      <Filter>Sources\Component Structure\Containers\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="JsonLoader.h">
       <Filter>Sources\Tools\Loaders</Filter>
@@ -223,14 +223,8 @@
     <ClInclude Include="libs\imgui\imgui.h">
       <Filter>Sources\Tools\Libs\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Sources\Tools\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleEditor.h">
       <Filter>Sources\Modules\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Sources\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="EditorScene.h">
       <Filter>Sources\Modules\Editor\Windows</Filter>
@@ -277,8 +271,14 @@
     <ClInclude Include="EditorToolbar.h">
       <Filter>Sources\Modules\Editor\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Sources\Component Structure\Containers</Filter>
+    </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Sources\Tools\Loaders</Filter>
+      <Filter>Sources\Component Structure\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Sources\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -297,23 +297,11 @@
     <Filter Include="Sources\Tools">
       <UniqueIdentifier>{a93fdf8f-5af4-489e-9abf-802f317db977}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\Primitives">
-      <UniqueIdentifier>{e27285dc-d11e-4471-a423-94ceb6e61b8d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Tools\Loaders">
       <UniqueIdentifier>{2d1268be-23c1-429f-b07b-461cf872e673}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\Mesh">
-      <UniqueIdentifier>{a4641500-2f58-483e-9798-dfbed57c74ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Modules\Editor">
       <UniqueIdentifier>{61858fd1-2fe6-4273-ba32-d55dfc1409bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Helpers">
-      <UniqueIdentifier>{b6e88ebf-cf0f-4c49-9b34-e86f302164e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Helpers\Timers">
-      <UniqueIdentifier>{61bea379-fbac-400a-b9cb-23c2a43f70b1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Tools\Libs">
       <UniqueIdentifier>{b90591f8-c2c8-48b3-8bbb-f599c5f08c5b}</UniqueIdentifier>
@@ -341,6 +329,15 @@
     </Filter>
     <Filter Include="Sources\Component Structure\Components">
       <UniqueIdentifier>{c4436a83-8da3-4eec-b0a2-68bc76ce0620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Component Structure\Containers">
+      <UniqueIdentifier>{8f537531-032a-4994-a647-da7fcc1720b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Component Structure\Containers\Primitives">
+      <UniqueIdentifier>{e27285dc-d11e-4471-a423-94ceb6e61b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Timers">
+      <UniqueIdentifier>{61bea379-fbac-400a-b9cb-23c2a43f70b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

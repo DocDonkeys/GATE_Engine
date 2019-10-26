@@ -3,7 +3,7 @@
 #include "Color.h"
 #include "glmath.h"
 
-struct Light
+struct Light	// CHANGE/FIX: Review what are we going to do with these and inside which filter should it be
 {
 	Light();
 

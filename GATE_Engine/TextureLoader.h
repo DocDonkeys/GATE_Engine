@@ -37,7 +37,7 @@ public:
 
 	
 private:
-	std::vector<Texture*> textures;
+	std::vector<Texture*> textures;	// IMPROVE: This class having accessible variables and a list makes it more of a "Manager" rather than a tool, consider changing nomenclature and Filter.
 	uint defaultTex = 0;
 };
 
