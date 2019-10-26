@@ -43,9 +43,11 @@ bool ModuleInput::Init()
 	}
 
 	extension_3D_file.push_back("fbx");
+	extension_3D_file.push_back("FBX");
 	extension_3D_file.push_back("obj");
 
 	extension_texture.push_back("png");
+	extension_texture.push_back("jpg");
 	extension_texture.push_back("dds");
 	
 	return ret;

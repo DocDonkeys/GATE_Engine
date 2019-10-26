@@ -21,8 +21,8 @@ public:
 	void AssignTexture(Texture* texture);
 
 public:
-	Texture* active_texture; //Currently used texture (either texture ID or checkers ID)
-	Texture* loaded_texture; //Loaded texture Id
+	Texture* active_texture = nullptr; //Currently used texture (either texture ID or checkers ID)
+	Texture* loaded_texture = nullptr; //Loaded texture Id
 	
 private:
 	uint checkers_texture_id = 0; //Checkers texture is our debug Texture
