@@ -3,7 +3,6 @@
 #include "ModuleSceneIntro.h"
 #include "GeometryLoader.h"
 #include <math.h>
-#include <ctime>
 #include "Application.h"
 
 #ifdef _DEBUG
@@ -25,9 +24,6 @@ bool ModuleSceneIntro::Start()
 	//LOG("Loading Intro assets");
 	LOG("Loading Intro assets");
 	bool ret = true;
-
-	//Rand seed based on current time
-	srand((uint)time(NULL));
 
 	//Setup camera
 	App->camera->Move(vec3(1.0f, 1.0f, 1.0f));

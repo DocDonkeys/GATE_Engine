@@ -12,7 +12,7 @@
 #endif
 #endif
 
-bool JsonLoader::Save(json obj, const char* file) const
+bool JsonLoader::Save(json& obj, const char* file) const
 {
 	bool ret = true;
 
