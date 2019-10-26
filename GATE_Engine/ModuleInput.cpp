@@ -41,6 +41,12 @@ bool ModuleInput::Init()
 		SDL_assert(initSysRes >= 0);
 		ret = false;
 	}
+
+	extension_3D_file.push_back("fbx");
+	extension_3D_file.push_back("obj");
+
+	extension_texture.push_back("png");
+	extension_texture.push_back("dds");
 	
 	return ret;
 }
@@ -113,6 +119,9 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	mouse_x_motion = mouse_y_motion = 0;
 
+	//This will be used if a file is dragged & dropped into the engine, we will determine which function we call with it
+	std::string file_extension;
+
 	bool quit = false;
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
@@ -142,7 +151,23 @@ update_status ModuleInput::PreUpdate(float dt)
 
 				SDL_free(dropFileDir);
 
-				App->geometry_loader->Load3DFile(dropFileDir);
+				//Chop path to get file extension
+				file_extension = dropFileDir;
+				file_extension = App->SubtractString(file_extension, ".", true, false);
+
+				for (int i = 0; i < extension_3D_file.size(); ++i)	//Check if the extension is a Mesh or 3D object scene
+				{
+					if (extension_3D_file[i] == file_extension)
+					App->geometry_loader->Load3DFile(dropFileDir);
+				}
+				
+				for (int i = 0; i < extension_texture.size(); ++i)	//Check if the extension is a texture
+				{
+					if (extension_texture[i] == file_extension)
+					{
+
+					}
+				}
 				LOG("File dropped on window: %s", dropFileDir);
 
 				SDL_free(dropFileDir);

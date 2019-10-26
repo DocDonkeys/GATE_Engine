@@ -102,6 +102,9 @@ public:
 	//LOG info to both Visual Studio & the editor / Engine UI console
 	void ConsoleLOG(const char* format,...);
 
+	//Subract a part of a string to obtain the desired characters of a path ex: filename, extension, path to a file etc.
+	std::string SubtractString(std::string& str, const char* chars_to_find, bool  reading_backwards, bool subtract_until_char);
+
 private:
 	// Call module cycle phases in order on App Update() phase
 	update_status PreUpdateModules();
