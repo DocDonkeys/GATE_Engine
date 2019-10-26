@@ -42,4 +42,11 @@ void ComponentMesh::Draw()
 		App->renderer3D->DrawMesh(mesh, tex_id);
 	else
 		App->renderer3D->DrawMesh(mesh);
+
+	//If we debug
+	if (debug_vertex_normals)
+		App->renderer3D->DrawMeshVertexNormals(mesh);
+
+	if (debug_face_normals)
+		App->renderer3D->DrawMeshFaceNormals(mesh);
 }

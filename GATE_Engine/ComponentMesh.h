@@ -19,6 +19,9 @@ public:
 
 public:
 	Mesh* mesh;
+
+	bool debug_vertex_normals = false;
+	bool debug_face_normals = false;
 };
 
 #endif // !__COMPONENTMESH_H__

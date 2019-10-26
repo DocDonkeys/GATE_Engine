@@ -40,6 +40,10 @@ public:
 	//DRAW a mesh that contains textures using its texture coordinates
 	void PrintTexturedMesh(const Mesh* mesh, const uint texture_id);
 
+	//Draw Mesh Debug Normals
+	void DrawMeshFaceNormals(Mesh* mesh);
+	void DrawMeshVertexNormals(Mesh* mesh);
+
 	// OpenGL Settings
 	struct GL_Setting {
 		uint id;

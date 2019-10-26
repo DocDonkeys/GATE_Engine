@@ -45,9 +45,6 @@
     <ClCompile Include="PerfTimer.cpp">
       <Filter>Sources\Tools\Timers</Filter>
     </ClCompile>
-    <ClCompile Include="Primitive.cpp">
-      <Filter>Sources\Component Structure\Containers\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="JsonLoader.cpp">
       <Filter>Sources\Tools\Loaders</Filter>
     </ClCompile>
@@ -177,12 +174,6 @@
     </ClInclude>
     <ClInclude Include="PerfTimer.h">
       <Filter>Sources\Tools\Timers</Filter>
-    </ClInclude>
-    <ClInclude Include="SolidSphere.h">
-      <Filter>Sources\Component Structure\Containers\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive.h">
-      <Filter>Sources\Component Structure\Containers\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="JsonLoader.h">
       <Filter>Sources\Tools\Loaders</Filter>
@@ -329,9 +320,6 @@
     </Filter>
     <Filter Include="Sources\Component Structure\Containers">
       <UniqueIdentifier>{8f537531-032a-4994-a647-da7fcc1720b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Component Structure\Containers\Primitives">
-      <UniqueIdentifier>{e27285dc-d11e-4471-a423-94ceb6e61b8d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Tools\Timers">
       <UniqueIdentifier>{61bea379-fbac-400a-b9cb-23c2a43f70b1}</UniqueIdentifier>
