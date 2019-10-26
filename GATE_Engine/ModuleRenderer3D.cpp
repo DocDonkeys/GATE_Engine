@@ -357,18 +357,20 @@ void ModuleRenderer3D::DrawMesh(const Mesh* mesh, const uint texture_id)
 		glEnd();*/
 
 		//Print faces normals
-		glBegin(GL_LINES);
-		glColor3f(0, 1, 0);
+		if (drawNormals) {
+			glBegin(GL_LINES);
+			glColor3f(0, 1, 0);
 
-		for (int i = 0; i < mesh->num_index; ++i)
-		{
-			glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
-			glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,
-				mesh->normals_faces[i].y + mesh->normals_faces_vector[i].y,
-				mesh->normals_faces[i].z + mesh->normals_faces_vector[i].z);
+			for (int i = 0; i < mesh->num_index; ++i)
+			{
+				glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
+				glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,
+					mesh->normals_faces[i].y + mesh->normals_faces_vector[i].y,
+					mesh->normals_faces[i].z + mesh->normals_faces_vector[i].z);
+			}
+			glColor3f(1, 1, 1);
+			glEnd();
 		}
-		glColor3f(1, 1, 1);
-		glEnd();
 	}
 }
 

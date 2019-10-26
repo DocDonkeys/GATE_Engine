@@ -152,7 +152,7 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 	//Copy the par_shapes texture coordinates
 	for (int i = 0; i < new_mesh->num_tex_coords * 2; ++i)
 		new_mesh->tex_coords[i] = p_mesh->tcoords[i];
-	
+
 	//Generate Buffers
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
 	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
@@ -220,14 +220,19 @@ Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * load
 			}
 			std::string texture_path = absolute_path.data() + relative_path;
 			ret = App->texture_loader->LoadTextureFile(texture_path.data());
+
+			if (ret == nullptr || ret->id == 0) {
+				LOG("[Error]: Texture loading failed in path %s.", absolute_path);
+			}
 		}
 		else
 		{
-			LOG("Error loading scene materials from %s", absolute_path);
+			LOG("[Error]: No diffuse texture or path loading failed.");
 		}
 	}
 	else
-		LOG("Error loading scene materials from %s", absolute_path);
+		LOG("[Info]: File has no linked materials to load.");
+
 	return ret;
 }
 

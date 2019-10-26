@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 
 	//Create an empty gameobject for test purposes
 	CreateEmptyGameObject(10);
-	App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
+	//App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
 	return ret;
 }

@@ -227,6 +227,10 @@ void EditorMenuBar::Update() {
 					App->editor->DrawModeChange();
 				}
 
+				ImGui::Separator();
+
+				ImGui::Checkbox("Draw Normals", &App->renderer3D->drawNormals);
+
 				ImGui::EndMenu();
 			}
 
