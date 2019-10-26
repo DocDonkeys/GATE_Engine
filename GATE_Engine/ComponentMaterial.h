@@ -17,6 +17,9 @@ public:
 	void Update() override;
 	void Disable() override;
 
+	//Assign a texture to a Component
+	void AssignTexture(Texture* texture);
+
 public:
 	Texture* active_texture; //Currently used texture (either texture ID or checkers ID)
 	Texture* loaded_texture; //Loaded texture Id

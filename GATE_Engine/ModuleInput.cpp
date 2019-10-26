@@ -165,7 +165,10 @@ update_status ModuleInput::PreUpdate(float dt)
 				{
 					if (extension_texture[i] == file_extension)
 					{
-
+						if (App->scene_intro->selected_go != nullptr)
+							App->scene_intro->AddTextureToGameObject(App->scene_intro->selected_go, dropFileDir);
+						else
+							LOG("Tried to drag & drop a texture, but no Game Object is selected! Please select a Game Object.");
 					}
 				}
 				LOG("File dropped on window: %s", dropFileDir);

@@ -29,3 +29,9 @@ void ComponentMaterial::Disable()
 {
 	active = false;
 }
+
+void ComponentMaterial::AssignTexture(Texture* texture)
+{
+	loaded_texture = texture;
+	active_texture = loaded_texture;
+}
