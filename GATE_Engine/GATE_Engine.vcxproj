@@ -110,8 +110,6 @@
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\par\par_shapes.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Primitive.h" />
-    <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="JsonLoader.h" />
     <ClInclude Include="libs\glew\include\GL\glew.h" />
     <ClInclude Include="libs\mmgr\mmgr.h" />
@@ -171,7 +169,6 @@
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
-    <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="RNGenerator.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Timer.cpp" />

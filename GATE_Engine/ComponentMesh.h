@@ -20,6 +20,9 @@ public:
 public:
 	Mesh* mesh = nullptr;
 	std::string filename;
+
+	bool debug_vertex_normals = false;
+	bool debug_face_normals = false;
 };
 
 #endif // !__COMPONENTMESH_H__

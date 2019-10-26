@@ -101,8 +101,8 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			mesh_component->mesh = new_mesh;
 
 			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			material_component->loaded_texture = LoadMaterial(scene, loaded_mesh, absolute_path);
-			if (material_component->loaded_texture == nullptr || material_component->loaded_texture->id == 0) {
+			material_component->AssignTexture(LoadMaterial(scene, loaded_mesh, absolute_path));
+			if (material_component->loaded_texture != nullptr /*|| material_component->loaded_texture->id == 0*/) {
 				LOG("[Warning]: The FBX embeded texture was not found or could not be loaded!");
 			}
 		}
@@ -152,7 +152,7 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 	//Copy the par_shapes texture coordinates
 	for (int i = 0; i < new_mesh->num_tex_coords * 2; ++i)
 		new_mesh->tex_coords[i] = p_mesh->tcoords[i];
-	
+
 	//Generate Buffers
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
 	App->renderer3D->GenerateIndexBuffer(new_mesh->id_index, new_mesh->num_index, new_mesh->index);
@@ -213,7 +213,7 @@ Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * load
 		{
 			std::string relative_path = tex_path.C_Str();
 
-			std::size_t found = relative_path.find_first_of("/\\");
+			std::size_t found = relative_path.find_last_of("/\\");
 			if (found > 0)
 			{
 				relative_path = relative_path.substr(found + 1, relative_path.size());

@@ -338,40 +338,6 @@ void ModuleRenderer3D::DrawMesh(const Mesh* mesh, const uint texture_id)
 	}
 	else
 		LOG("WARNING! Tried to draw mesh with id_vertex: %d using DrawElements, but the mesh doesn't contain indices!");
-
-	//Draw NORMALS TODO: only in DEBUG MODE!
-	if (mesh->normals_vector != nullptr)
-	{
-		//Had a lot of problems with buffers so we draw in direct mode, we can save some VRAM space
-		/*glBegin(GL_LINES);
-		glColor3f(1, 0, 1);
-
-		for (int i = 0; i < mesh->num_vertex; ++i)
-		{
-			glVertex3f(mesh->vertex[i].x, mesh->vertex[i].y, mesh->vertex[i].z);
-			glVertex3f(mesh->vertex[i].x + mesh->normals_vector[i].x,
-				mesh->vertex[i].y + mesh->normals_vector[i].y,
-				mesh->vertex[i].z + mesh->normals_vector[i].z);
-		}
-		glColor3f(1, 1, 1);
-		glEnd();*/
-
-		//Print faces normals
-		if (drawNormals) {
-			glBegin(GL_LINES);
-			glColor3f(0, 1, 0);
-
-			for (int i = 0; i < mesh->num_index; ++i)
-			{
-				glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
-				glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,
-					mesh->normals_faces[i].y + mesh->normals_faces_vector[i].y,
-					mesh->normals_faces[i].z + mesh->normals_faces_vector[i].z);
-			}
-			glColor3f(1, 1, 1);
-			glEnd();
-		}
-	}
 }
 
 //DRAW a Mesh with only vertices and indices data
@@ -413,4 +379,44 @@ void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh, const uint texture_i
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+}
+
+void ModuleRenderer3D::DrawMeshFaceNormals(Mesh * mesh)
+{
+	//Print faces normals
+	if (drawNormals) {
+		glBegin(GL_LINES);
+		glColor3f(1, 0, 1);
+
+		for (int i = 0; i < mesh->num_index; ++i)
+		{
+			glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
+			glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,
+				mesh->normals_faces[i].y + mesh->normals_faces_vector[i].y,
+				mesh->normals_faces[i].z + mesh->normals_faces_vector[i].z);
+		}
+		glColor3f(1, 1, 1);
+		glEnd();
+	}
+}
+
+void ModuleRenderer3D::DrawMeshVertexNormals(Mesh * mesh)
+{
+	//Draw Vertex Normals
+	if (mesh->normals_vector != nullptr)
+	{
+		//Had a lot of problems with buffers so we draw in direct mode, we can save some VRAM space
+		glBegin(GL_LINES);
+		glColor3f(0, 1, 0);
+
+		for (int i = 0; i < mesh->num_vertex; ++i)
+		{
+			glVertex3f(mesh->vertex[i].x, mesh->vertex[i].y, mesh->vertex[i].z);
+			glVertex3f(mesh->vertex[i].x + mesh->normals_vector[i].x,
+				mesh->vertex[i].y + mesh->normals_vector[i].y,
+				mesh->vertex[i].z + mesh->normals_vector[i].z);
+		}
+		glColor3f(1, 1, 1);
+		glEnd();
+	}
 }

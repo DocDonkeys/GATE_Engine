@@ -49,6 +49,7 @@ bool ModuleInput::Init()
 
 	extension_texture.push_back("png");
 	extension_texture.push_back("PNG");
+	extension_texture.push_back("jpg");
 	extension_texture.push_back("dds");
 	extension_texture.push_back("DDS");
 
