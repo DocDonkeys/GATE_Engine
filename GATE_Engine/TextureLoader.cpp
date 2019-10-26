@@ -126,10 +126,8 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 		}
 	}
 	else {
-		LOG("[Error]: Texture loading was done with a filter type that wasn't GL_NEAREST nor GL_LINEAR.")
-#ifdef _DEBUG
-			SDL_TriggerBreakpoint();
-#endif
+		LOG("[Error]: Texture loading was done with a filter type that wasn't GL_NEAREST nor GL_LINEAR.");
+		SDL_assert(false);
 	}
 
 	// Specify a two-dimensional texture image (https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexImage2D.xhtml)
@@ -151,10 +149,8 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 			}
 		}
 		else {
-			LOG("[Error]: Texture loading was done with a target type that wasn't GL_TEXTURE_2D nor GL_TEXTURE_CUBE_MAP.")
-#ifdef _DEBUG
-				SDL_TriggerBreakpoint();
-#endif
+			LOG("[Error]: Texture loading was done with a target type that wasn't GL_TEXTURE_2D nor GL_TEXTURE_CUBE_MAP.");
+			SDL_assert(false);
 		}
 		
 		glGenerateMipmap(target);
@@ -184,7 +180,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 		}
 	}
 
-	Texture* tex = new Texture(0, path);
+	Texture* tex = nullptr;
 	uint imgId = 0;
 
 	ilGenImages(1, (ILuint*)&imgId);	// Generate image inside DevIL
@@ -208,8 +204,17 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 		if (ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 		{
 			// Create texture and assign ID
-			tex->id = CreateTexture(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_FORMAT), target, filterType, fillingType);
-			LOG("[Success]: Loaded texture from path %s", path);	//IMPROVE: Add error call here related to texId?
+			uint tempId = 0;
+			tempId = CreateTexture(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_FORMAT), target, filterType, fillingType);
+			
+			if (tempId == 0) {
+				LOG("[Error]: Texture ID creation failed.");
+			}
+			else {
+				tex = new Texture(tempId, path);
+				App->texture_loader->textures.push_back(tex);
+				LOG("[Success]: Loaded texture from path %s", path);
+			}
 		}
 		else {
 			LOG("[Error]: Image conversion failed. Cause: %s", iluErrorString(ilGetError()));
@@ -221,7 +226,6 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 	}
 
 	ilDeleteImages(1, (const ILuint*)&imgId);	// Delete image inside DevIL
-	App->texture_loader->textures.push_back(tex);
 
 	return tex;
 }

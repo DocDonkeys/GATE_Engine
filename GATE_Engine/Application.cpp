@@ -469,7 +469,7 @@ bool Application::SaveProject(const char* file) const
 	return ret;
 }
 
-std::string  Application::SubtractString(std::string & str, const char * chars_to_find, bool reading_backwards, bool subtract_until_char)
+std::string  Application::SubtractString(std::string & str, const char * chars_to_find, bool reading_backwards, bool subtract_until_char)	//IMPROVE: Make it into a helper/tool file
 {
 	std::string ret = "error substracting string";
 	std::size_t found;

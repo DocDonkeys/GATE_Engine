@@ -102,7 +102,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 
 			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			material_component->loaded_texture = LoadMaterial(scene, loaded_mesh, absolute_path);
-			if (material_component->loaded_texture->id == 0) {
+			if (material_component->loaded_texture == nullptr || material_component->loaded_texture->id == 0) {
 				LOG("[Warning]: The FBX embeded texture was not found or could not be loaded!");
 			}
 		}
@@ -220,14 +220,19 @@ Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * load
 			}
 			std::string texture_path = absolute_path.data() + relative_path;
 			ret = App->texture_loader->LoadTextureFile(texture_path.data());
+
+			if (ret == nullptr || ret->id == 0) {
+				LOG("[Error]: Texture loading failed in path %s.", absolute_path);
+			}
 		}
 		else
 		{
-			LOG("Error loading scene materials from %s", absolute_path);
+			LOG("[Error]: No diffuse texture or path loading failed.");
 		}
 	}
 	else
-		LOG("Error loading scene materials from %s", absolute_path);
+		LOG("[Info]: File has no linked materials to load.");
+
 	return ret;
 }
 

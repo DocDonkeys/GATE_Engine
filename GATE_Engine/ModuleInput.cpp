@@ -43,10 +43,14 @@ bool ModuleInput::Init()
 	}
 
 	extension_3D_file.push_back("fbx");
+	extension_3D_file.push_back("FBX");
 	extension_3D_file.push_back("obj");
+	extension_3D_file.push_back("OBJ");
 
 	extension_texture.push_back("png");
+	extension_texture.push_back("PNG");
 	extension_texture.push_back("dds");
+	extension_texture.push_back("DDS");
 	
 	return ret;
 }
@@ -149,28 +153,27 @@ update_status ModuleInput::PreUpdate(float dt)
 				
 				LOG("File dropped on window: %s", dropFileDir);
 
-				SDL_free(dropFileDir);
+				SDL_free(dropFileDir);	//CHANGE/FIX: Should this be here?
 
 				//Chop path to get file extension
 				file_extension = dropFileDir;
 				file_extension = App->SubtractString(file_extension, ".", true, false);
 
-				for (int i = 0; i < extension_3D_file.size(); ++i)	//Check if the extension is a Mesh or 3D object scene
-				{
-					if (extension_3D_file[i] == file_extension)
-					App->geometry_loader->Load3DFile(dropFileDir);
+				for (int i = 0; i < extension_3D_file.size(); ++i) { //Check if the extension is a Mesh or 3D object scene
+					if (extension_3D_file[i] == file_extension) {
+						App->geometry_loader->Load3DFile(dropFileDir);
+						break;
+					}				
 				}
 				
-				for (int i = 0; i < extension_texture.size(); ++i)	//Check if the extension is a texture
-				{
-					if (extension_texture[i] == file_extension)
-					{
-
+				for (int i = 0; i < extension_texture.size(); ++i) {	//Check if the extension is a texture
+					if (extension_texture[i] == file_extension) {
+						App->texture_loader->LoadTextureFile(dropFileDir);
+						//App->scene_intro->selected_object
+						// CHANGE/FIX: Apply texture to selected object, if any
+						break;
 					}
 				}
-				LOG("File dropped on window: %s", dropFileDir);
-
-				SDL_free(dropFileDir);
 
 				/*CHANGE/FIX:
 				1. DO OPEN FILE OPERATION OR FLAG ITS START

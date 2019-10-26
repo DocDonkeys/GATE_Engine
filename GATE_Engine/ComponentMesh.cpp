@@ -33,7 +33,7 @@ void ComponentMesh::Draw()
 	ComponentMaterial* material = (ComponentMaterial*)my_go->GetComponent(COMPONENT_TYPE::MATERIAL);
 
 	uint tex_id;
-	if (material != nullptr)
+	if (material != nullptr && material->loaded_texture != nullptr)
 		 tex_id = material->loaded_texture->id;
 	else
 		tex_id = 0;
