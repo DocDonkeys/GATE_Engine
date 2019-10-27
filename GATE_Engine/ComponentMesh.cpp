@@ -40,6 +40,9 @@ void ComponentMesh::Draw()
 		else if (material->active_texture != nullptr) {
 			App->renderer3D->DrawMesh(mesh, material->active_texture->id);
 		}
+		else {
+			App->renderer3D->DrawMesh(mesh);
+		}
 	}
 	else
 		App->renderer3D->DrawMesh(mesh);
