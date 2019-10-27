@@ -1,5 +1,5 @@
 ﻿# GATE by Doc Donkeys
-This is a university project made by CITM (https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we made a 3D Game Engine in C & C++ during our 3rd year of Game Development Bachelor's Degree.
+This is a university project made by [CITM](https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we made a 3D Game Engine in C & C++ during our 3rd year of Game Development Bachelor's Degree.
 
 ## Libraries Used
 * [STL (C++11)](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
@@ -43,16 +43,14 @@ feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request and we might look into it. :D
 
-## The Team: Doc Donkeys (https://github.com/DocDonkeys)
+## The Team: [Doc Donkeys](https://github.com/DocDonkeys)
 * Carles Homs 
   * Role: Code
-  * Github: ch0m5 (https://github.com/ch0m5)
+  * Github: [ch0m5](https://github.com/ch0m5)
 
 * Dídac Romero
   * Role: Code
-  * Github: DídacRomero (https://github.com/DidacRomero)
-
-* Repository: https://github.com/DocDonkeys/GATE_Engine
+  * Github: [DídacRomero](https://github.com/DidacRomero)
 
 ## License & Copyright 
 
