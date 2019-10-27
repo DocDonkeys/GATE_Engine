@@ -288,7 +288,7 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		{
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-			ImGui::TextUnformatted("Both Albedo, the color palette, and several other UI widgets are purely aesthetic currently, as the layout is prepared as a showcase of future implementations and UI design. To actually embed a texture on a material, simply Drag&Drop the file to the scene with the desired Game Object selected in the hierarchy.");
+			ImGui::TextUnformatted("Albedo and the color palette are purely aesthetic currently, a UI design showcase of GATE's incoming features. To actually embed a texture on a material, simply Drag&Drop the file to the scene with the desired Game Object selected in the hierarchy.");
 			ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
 		}
