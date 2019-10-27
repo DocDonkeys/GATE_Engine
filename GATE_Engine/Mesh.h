@@ -32,7 +32,6 @@ public: // Vars
 
 	uint id_normals = 0; // index in VRAM
 	uint num_normals = 0;
-	uint num_faces = 0;
 	float3* normals_vector = nullptr; // Store the Vectors of the normals
 	float3* normals_faces = nullptr; // Since on resize vertex positions will change we store the position
 	float3* normals_faces_vector = nullptr;
@@ -50,6 +49,8 @@ public: // Vars
 
 	float normals_length = 1.0f;
 	float normals_last_length = 1.0f;
+
+	unsigned long int num_polys = 0;
 };
 
 #endif //__MESH_H__

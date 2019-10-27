@@ -46,7 +46,8 @@ void Mesh::LoadIndices(const aiMesh* loaded_mesh)
 	// Copy INDICES/FACES data (index) (Faces as used in assimp)
 	if (loaded_mesh->HasFaces())
 	{
-		num_index = loaded_mesh->mNumFaces * 3;
+		num_polys = loaded_mesh->mNumFaces;
+		num_index = num_polys * 3;
 		index = new uint[num_index]; // assuming each face is a triangle
 		
 		for (uint j = 0; j < loaded_mesh->mNumFaces; ++j)
@@ -68,10 +69,10 @@ void Mesh::LoadNormals(const aiMesh * loaded_mesh)
 	if (loaded_mesh->HasNormals())
 	{
 		normals_vector = new float3[num_vertex];
+		num_normals = num_vertex;
 		memcpy(normals_vector, loaded_mesh->mNormals, sizeof(float3) * num_vertex);
 
 		//Calculate the positions and vectors of the face Normals
-		num_faces = loaded_mesh->mNumFaces;
 		normals_faces = new float3[num_index];
 		normals_faces_vector = new float3[num_index];
 		for (int j = 0; j < num_index; j+=3)

@@ -216,7 +216,7 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::Text("Indexes:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_index);
 		ImGui::Text("Normals:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_normals);
 		ImGui::Text("Vertexs:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_vertex);
-		ImGui::Text("Faces:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_faces);
+		ImGui::Text("Faces:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_polys);
 		ImGui::Text("Tex Coords:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_tex_coords);
 
 		ImGui::Separator();
