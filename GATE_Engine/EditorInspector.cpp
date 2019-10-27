@@ -23,13 +23,11 @@ void EditorInspector::Update()
 	GameObject* go = App->scene_intro->selected_go;
 	if (go != nullptr)
 	{
-		GameObject* go = App->scene_intro->game_objects[focused_go];
-
 		ImGui::AlignTextToFramePadding();
 		ImGui::Checkbox("Active", &go->active); ImGui::SameLine();
 
 		//if (!startedEditing)
-			strcpy(objNameBuffer, go->name.c_str());
+		strcpy(objNameBuffer, go->name.c_str());
 
 		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 3.0f);
 		if (ImGui::InputText("##objectName", objNameBuffer, IM_ARRAYSIZE(objNameBuffer)) && !startedEditing) {	//IMPROVE: It feels that this can be done better, memory is copied every frame and doesn't need to be
@@ -46,7 +44,7 @@ void EditorInspector::Update()
 		//	}
 
 		//	if (!repeated)
-				go->name.assign(objNameBuffer);
+		go->name.assign(objNameBuffer);
 
 		//	strcpy(objNameBuffer, "");
 		//	startedEditing = false;
@@ -123,6 +121,7 @@ void EditorInspector::Update()
 				DrawComponentMaterial(material);
 			}
 		}
+	}
 }
 
 void EditorInspector::DrawComponent(Component * c)
