@@ -107,6 +107,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 
 			ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
+			mesh_component->mesh->path = full_path;
 			mesh_component->mesh->filename = filename;
 
 			if (!cameraCentered) {

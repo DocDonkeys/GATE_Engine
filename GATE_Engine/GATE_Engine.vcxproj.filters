@@ -126,6 +126,9 @@
     <ClCompile Include="Light.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Sources\Component Structure\Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />

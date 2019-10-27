@@ -196,7 +196,16 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::Checkbox("Active", &mesh->active); ImGui::NextColumn();
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("File:"); ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), mesh->mesh->filename.c_str()); ImGui::NextColumn();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), mesh->mesh->filename.c_str());
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted(mesh->mesh->path.c_str());
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+		ImGui::NextColumn();
 		ImGui::Separator();
 
 		ImGui::Text("Draw:");
@@ -256,8 +265,17 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("File:"); ImGui::SameLine();
-		if (material->active_texture != nullptr)
+		if (material->active_texture != nullptr) {
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), material->active_texture->filename.c_str());
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::BeginTooltip();
+				ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+				ImGui::TextUnformatted(material->active_texture->path.c_str());
+				ImGui::PopTextWrapPos();
+				ImGui::EndTooltip();
+			}
+		}
 		else
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "None");
 

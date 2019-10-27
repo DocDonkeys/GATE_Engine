@@ -169,9 +169,9 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 		SDL_assert(path != nullptr);
 		return 0;
 	}
-	else {	// If the path of the texture already exists in the saved arrays, use the same id
+	else {	// If a file of the same name exists, use it's id instead
 		for (int i = 0; i < textures.size(); i++) {
-			if (textures[i]->filename == path) {
+			if (textures[i]->filename == App->SubtractString(std::string(path), "\\", true, false).c_str()) {
 				return textures[i];
 			}
 		}
@@ -208,7 +208,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 				LOG("[Error]: Texture ID creation failed.");
 			}
 			else {
-				tex = new Texture(tempId, App->SubtractString(std::string(path), "\\", true, false).c_str());
+				tex = new Texture(tempId, path);
 				App->texture_loader->textures.push_back(tex);
 				LOG("[Success]: Loaded texture from path %s", path);
 			}

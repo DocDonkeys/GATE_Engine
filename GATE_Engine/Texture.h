@@ -6,11 +6,12 @@
 
 class Texture {	//CHANGE/FIX: Move to component system as a part of material
 public:
-	Texture() {};
-	Texture(uint id, const char* filename) : id(id), filename(filename) {};
+	Texture();
+	Texture(uint id, const char* path);
 
 	uint id = 0;
 	std::string filename;
+	std::string path;
 };
 
 #endif	//!TEXTURE_H
