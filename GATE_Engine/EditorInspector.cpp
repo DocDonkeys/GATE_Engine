@@ -190,20 +190,30 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 
 	if (ImGui::TreeNodeEx("Mesh", base_flags))
 	{
-		ImGui::Checkbox("Active", &mesh->active); ImGui::SameLine();
-
+		ImGui::Columns(2, "MeshGird"); // 2-ways, with border
+		
+		ImGui::Separator();
+		ImGui::Checkbox("Active", &mesh->active); ImGui::NextColumn();
 		ImGui::AlignTextToFramePadding();
-		ImGui::Text("    File:"); ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), mesh->mesh->filename.c_str());
-
-		ImGui::Spacing();
+		ImGui::Text("File:"); ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), mesh->mesh->filename.c_str()); ImGui::NextColumn();
+		ImGui::Separator();
 
 		ImGui::Text("Draw:");
 		ImGui::Checkbox("Vertex Normals", &mesh->debug_vertex_normals);
-		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals);
+		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals); ImGui::SameLine(200);
+
+		ImGui::NextColumn();
+		ImGui::Text("Indexes:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_index);
+		ImGui::Text("Normals:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_normals);
+		ImGui::Text("Vertexs:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_vertex);
+		ImGui::Text("Faces:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_faces);
+		ImGui::Text("Tex Coords:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_tex_coords);
+
+		ImGui::Separator();
+		ImGui::Columns(1);
 
 		//Normals Length
-		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Normals length:"); ImGui::NextColumn();
 		if (ImGui::DragFloat("##PX", &mesh->mesh->normals_length, 0.005f))
 		{
@@ -251,8 +261,6 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		else
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "None");
 
-		ImGui::SameLine(); ImGui::Checkbox("Use Default Texture", &material->use_default_texture);
-
 		bool falseBool = false;
 		/*ImGui::Image();*/ImGui::Checkbox("##placeholder1", &falseBool); ImGui::SameLine(); /*ImGui::DragBehavior();*/
 		ImGui::Text("Albedo"); ImGui::SameLine();
@@ -283,6 +291,8 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 
 			ImGui::EndPopup();
 		}
+
+		ImGui::Checkbox("Use Default Texture", &material->use_default_texture);
 
 		ImGui::TreePop();
 	}
