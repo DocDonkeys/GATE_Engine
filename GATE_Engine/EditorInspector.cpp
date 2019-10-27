@@ -142,6 +142,15 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::Checkbox("Vertex Normals", &mesh->debug_vertex_normals);
 		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals);
 
+		//Normals Length
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("Normals length:"); ImGui::NextColumn();
+		if (ImGui::DragFloat("##PX", &mesh->mesh->normals_length, 0.005f))
+		{
+			ImGui::NextColumn();
+			mesh->mesh->ChangeNormalsLength(mesh->mesh->normals_length);
+		}
+
 		ImGui::TreePop();
 	}
 	ImGui::Separator();

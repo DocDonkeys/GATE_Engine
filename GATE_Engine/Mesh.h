@@ -15,6 +15,7 @@ public: // Calls
 	void LoadIndices(const aiMesh* loaded_mesh);
 	void LoadNormals(const aiMesh* loaded_mesh);
 	void LoadTexCoords(const aiMesh* loaded_mesh);
+	void ChangeNormalsLength(float new_length);
 	void LoadMeshSizeData();
 
 public: // Vars
@@ -45,5 +46,9 @@ public: // Vars
 		float width = 0.0f;
 	};
 	size_data size_x, size_y, size_z;
+
+	float normals_length = 1.0f;
+	float normals_last_length = 1.0f;
 };
-#endif
+
+#endif //__MESH_H__
