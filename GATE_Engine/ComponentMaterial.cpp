@@ -16,9 +16,7 @@ void ComponentMaterial::Enable()
 	active = true;
 
 	if (checkers_texture_id == 0)
-	{
-		checkers_texture_id = App->texture_loader->GetDefaultTex();
-	}
+		checkers_texture_id = App->texture_loader->GetDefaultId();
 }
 
 void ComponentMaterial::Update()

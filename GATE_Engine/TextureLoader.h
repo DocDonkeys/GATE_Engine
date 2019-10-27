@@ -32,13 +32,14 @@ public:
 		int fillingType = GL_REPEAT,	// GL_REPEAT, GL_CLAMP_TO_EDGE, GL_MIRRORED_REPEAT
 		bool defaultTex = false) const;
 
-	uint LoadDefaultTex() const;
-	uint GetDefaultTex() const;
+	Texture* LoadDefaultTex() const;
+	Texture* GetDefaultTex();
+	uint GetDefaultId() const;
 
 	
 private:
 	std::vector<Texture*> textures;	// IMPROVE: This class having accessible variables and a list makes it more of a "Manager" rather than a tool, consider changing nomenclature and Filter.
-	uint defaultTex = 0;
+	Texture* defaultTex;
 };
 
 #endif //TEXTURELOADER_H

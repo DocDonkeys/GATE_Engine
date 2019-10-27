@@ -229,7 +229,8 @@ void EditorMenuBar::Update() {
 
 				ImGui::Separator();
 
-				ImGui::Checkbox("Draw Normals", &App->renderer3D->drawNormals);
+				ImGui::Checkbox("Vertex Normals", &App->renderer3D->drawVertexNormals);
+				ImGui::Checkbox("Face Normals", &App->renderer3D->drawFaceNormals);
 
 				ImGui::EndMenu();
 			}

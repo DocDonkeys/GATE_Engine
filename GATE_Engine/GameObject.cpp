@@ -1,4 +1,7 @@
 #include "GameObject.h"
+#include "Application.h"
+#include "ModuleSceneIntro.h"
+
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
@@ -6,8 +9,14 @@
 
 GameObject::GameObject()
 {
-	name = "GameObject";
+	name = "GameObject_" + std::to_string(App->scene_intro->game_objects.size());
+	
+	//All Game Objects must have a transform component, so we assign it from creation
+	CreateComponent(COMPONENT_TYPE::TRANSFORM);
+}
 
+GameObject::GameObject(const char* name) : name(name)
+{
 	//All Game Objects must have a transform component, so we assign it from creation
 	CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }

@@ -24,6 +24,7 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateEmptyGameObject();
+	GameObject* CreateEmptyGameObject(const char* name);
 	void CreateEmptyGameObject(int num_of_go);
 
 	bool  AddTextureToGameObject(GameObject* go, const char* path);
