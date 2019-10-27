@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
+#include "ComponentTransform.h"
+#include "ComponentMesh.h"
 
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
@@ -109,14 +111,12 @@ update_status ModuleCamera3D::Update(float dt)
 
 		// Center camera to object
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {	// Focus camera to position from a certain distance and angle
-			LookFrom({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, length({ 10.0f, 10.0f, 10.0f }));	//CHANGE/FIX: Use GameObject.transform.position variable and GameObject.mesh.size
-
-			/*int i = 0;	// Mesh sizes usage test
-			float a = App->geometry_loader->meshes[i]->size_x.width;
-			float b = App->geometry_loader->meshes[i]->size_y.width;
-			float c = App->geometry_loader->meshes[i]->size_z.width;
-
-			LookFrom({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, length({ a * 2.0f, b * 2.0f, c * 2.0f }));*/
+			if (App->scene_intro->selected_go == nullptr) {
+				LOG("[Warning] You must select an object before centering to it!")
+			}
+			else {
+				CenterToObject(App->scene_intro->selected_go);
+			}
 		}
 
 		// Apply changes and recalculate matrix
@@ -424,4 +424,22 @@ void ModuleCamera3D::CalculateViewMatrix()
 {
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
+}
+
+void ModuleCamera3D::CenterToObject(GameObject* obj)
+{
+	if (obj != nullptr) {
+		vec3 pos = { 0.0f, 0.0f, 0.0f };
+		float dist = length({ 10.0f, 10.0f, 10.0f });
+
+		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(COMPONENT_TYPE::TRANSFORM);
+		if (transform != nullptr)
+			pos = { transform->position.x, transform->position.y, transform->position.z };
+
+		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(COMPONENT_TYPE::MESH);
+		if (mesh != nullptr)
+			dist = length({ mesh->mesh->size_x.width, mesh->mesh->size_y.width, mesh->mesh->size_z.width });
+
+		LookFrom(pos, { 1.0f, 1.0f, 1.0f }, dist);
+	}
 }

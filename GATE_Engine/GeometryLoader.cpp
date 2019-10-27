@@ -56,6 +56,8 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 {
 	bool ret = true;
 
+	bool cameraCentered = false;
+
 	//Default GameObject names based on trimmed filename
 	std::string filename = App->SubtractString(std::string(full_path), "\\", true, false);
 	std::string objName = App->SubtractString(std::string(filename), ".", false, true) + "_";
@@ -106,6 +108,11 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
 			mesh_component->mesh->filename = filename;
+
+			if (!cameraCentered) {
+				App->camera->CenterToObject(go);
+				cameraCentered = true;
+			}
 
 			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);			
