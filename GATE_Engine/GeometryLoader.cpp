@@ -52,6 +52,12 @@ bool GeometryLoader::CleanUp()
 	return ret;
 }
 
+void AssimpLOGCallback(const char * msg, char * userData)
+{
+	//We LOG to Console
+	LOG(msg,userData);
+}
+
 bool GeometryLoader::Load3DFile(const char* full_path)
 {
 	bool ret = true;
@@ -134,7 +140,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	return ret;
 }
 
-void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
+void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const char* name)
 {
 	Mesh* new_mesh = new Mesh();
 
@@ -178,10 +184,12 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh)
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
 
 	//We create a game object for the current mesh
-	GameObject* go = App->scene_intro->CreateEmptyGameObject();
+	GameObject* go = App->scene_intro->CreateEmptyGameObject(name);
 
 	ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 	mesh_component->mesh = new_mesh;
+
+	go->CreateComponent(COMPONENT_TYPE::MATERIAL); //Create default material (will have checkers if Teacher wants to us it to check uv's)
 }
 
 void GeometryLoader::LoadPrimitiveNormals(Mesh * new_mesh, const par_shapes_mesh_s * p_mesh)
@@ -258,29 +266,36 @@ Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * load
 void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float radius)
 {
 	par_shapes_mesh* primitive_mesh = nullptr;
-
+	const char* name;
 	switch (p)
 	{
 	case PRIMITIVE::PLANE:
 		primitive_mesh = par_shapes_create_plane(slices,stacks);
+		name = "Plane";
 		break;
 	case PRIMITIVE::CUBE:
 		primitive_mesh = par_shapes_create_primitive_cube();
+		name = "Cube";
 		break;
 	case PRIMITIVE::SPHERE:
 		primitive_mesh = par_shapes_create_parametric_sphere(slices, stacks);
+		name = "Sphere";
 		break;
 	case PRIMITIVE::HEMISPHERE:
 		primitive_mesh = par_shapes_create_hemisphere(slices, stacks);
+		name = "Hemisphere";
 		break;
 	case PRIMITIVE::CYLINDER:
 		primitive_mesh = par_shapes_create_cylinder(slices, stacks);
+		name = "Cylinder";
 		break;
 	case PRIMITIVE::CONE:
 		primitive_mesh = par_shapes_create_cone(slices, stacks);
+		name = "Cone";
 		break;
 	case PRIMITIVE::TORUS:
 		primitive_mesh = par_shapes_create_torus(slices, stacks,radius);
+		name = "Torus";
 		break;
 	default:
 		break;
@@ -288,7 +303,7 @@ void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float 
 
 	//Push into the meshes vector
 	if (primitive_mesh != nullptr)
-		LoadPrimitiveShape(primitive_mesh);
+		LoadPrimitiveShape(primitive_mesh, name);
 	else
 		LOG("Failed to create primitive! Invalid primitive enum value received");
 }
@@ -296,9 +311,9 @@ void GeometryLoader::CreatePrimitive(PRIMITIVE p, int slices, int stacks, float 
 bool GeometryLoader::Init()
 {
 	// Stream log messages to Debug window
-
-	log_stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&log_stream);
+	//struct aiLogStream log_stream; //ASSIMP DEBUG IS CRASHING CODE for Joints message!
+	//log_stream.callback = AssimpLOGCallback;
+	//aiAttachLogStream(&log_stream);
 
 	return true;
 }

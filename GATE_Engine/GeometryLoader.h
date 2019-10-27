@@ -42,7 +42,7 @@ public:
 	// Load a 3D file such as an FBX, OBJ etc.
 	bool Load3DFile(const char* full_path); 
 	// Load a generated primitive (par_shape) into a mesh (Mesh)
-	void LoadPrimitiveShape(const par_shapes_mesh_s* p_mesh); 
+	void LoadPrimitiveShape(const par_shapes_mesh_s* p_mesh, const char* name); 
 	void LoadPrimitiveNormals(Mesh* mesh, const par_shapes_mesh_s* p_mesh);
 	Texture* LoadMaterial(const aiScene * scene, const aiMesh* loaded_mesh, const std::string & absolute_path);
 
@@ -50,8 +50,9 @@ public:
 	void CreatePrimitive(PRIMITIVE p, int slices = 0, int stacks = 0, float radius = 0.f);
 
 public: // Vars
-	aiLogStream log_stream;
+	//aiLogStream log_stream;
 };
 
-
+//Function for Assimp calllback
+void AssimpLOGCallback(const char * msg, char * userData);
 #endif //__GEOMETRYLOADER_H__
