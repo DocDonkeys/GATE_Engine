@@ -6,6 +6,7 @@
 #include "Application.h"
 #include "ComponentMaterial.h"
 
+
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
 #include "libs/mmgr/mmgr.h"
@@ -64,6 +65,25 @@ void ModuleSceneIntro::CreateEmptyGameObject(int num_of_go)
 	{
 		CreateEmptyGameObject();
 	}
+}
+
+void ModuleSceneIntro::DestroyGameObject(GameObject * go)
+{
+	//Set all possible references to the gaemObject to nullptr or out of the array
+	if (selected_go == go)
+		selected_go = nullptr;
+
+	
+	for (int i = 0; i < game_objects.size(); ++i)
+	{
+		if (game_objects[i] == go)
+		{
+			game_objects.erase(game_objects.begin() + i);
+			break;
+		}	
+	}
+
+	delete go;
 }
 
 bool ModuleSceneIntro::AddTextureToGameObject(GameObject * go, const char* path)

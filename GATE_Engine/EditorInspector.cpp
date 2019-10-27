@@ -20,34 +20,33 @@ EditorInspector::EditorInspector(const char* name, bool startEnabled, ImGuiWindo
 
 void EditorInspector::Update()
 {
-	int focused_go = App->editor->editor_hierarchy->focus_node;
-	if (focused_go > -1)
-	{
-		GameObject* go = App->scene_intro->game_objects[focused_go];
-		//First show on editor the Gameobject class editables
-		ImGui::Checkbox("",&go->active); //ImGui::SameLine();
-		//ImGui::InputText((const char*)go->name.data(), input_buffer, IM_ARRAYSIZE(input_buffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory);
-
-
-		//For now we will only have 1 Component of each type, must move to arrays and create gameobject function to return all components of a type in an array
-		ComponentTransform* transform = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-		if (transform != nullptr)
+		GameObject* go = App->scene_intro->selected_go;
+		if (go != nullptr)
 		{
-			DrawComponentTransform(transform);
-		}
+			//First show on editor the Gameobject class editables
+			ImGui::Checkbox("", &go->active); //ImGui::SameLine();
+			//ImGui::InputText((const char*)go->name.data(), input_buffer, IM_ARRAYSIZE(input_buffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory);
 
-		ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(COMPONENT_TYPE::MESH);
-		if (mesh != nullptr)
-		{
-			DrawComponentMesh(mesh);
-		}
 
-		ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(COMPONENT_TYPE::MATERIAL);
-		if (material != nullptr)
-		{
-			DrawComponentMaterial(material);
+			//For now we will only have 1 Component of each type, must move to arrays and create gameobject function to return all components of a type in an array
+			ComponentTransform* transform = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+			if (transform != nullptr)
+			{
+				DrawComponentTransform(transform);
+			}
+
+			ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(COMPONENT_TYPE::MESH);
+			if (mesh != nullptr)
+			{
+				DrawComponentMesh(mesh);
+			}
+
+			ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(COMPONENT_TYPE::MATERIAL);
+			if (material != nullptr)
+			{
+				DrawComponentMaterial(material);
+			}
 		}
-	}
 }
 
 void EditorInspector::DrawComponent(Component * c)

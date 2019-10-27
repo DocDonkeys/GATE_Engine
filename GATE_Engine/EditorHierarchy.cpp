@@ -13,10 +13,12 @@ EditorHierarchy::EditorHierarchy(const char* name, bool startEnabled, ImGuiWindo
 
 void EditorHierarchy::Update()
 {
+	if (open_pop_up)
+		DrawPopUpWindow();
+
 	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth; //| ImGuiTreeNodeFlags_Selected;
 	for (int i = 0; i < App->scene_intro->game_objects.size(); ++i)
 	{
-		bool node_open = false;
 		ImGuiTreeNodeFlags tmp_flags = base_flags;
 		if (focus_node == i)
 		{
@@ -26,16 +28,40 @@ void EditorHierarchy::Update()
 		bool is_open = ImGui::TreeNodeEx((void*)(intptr_t)i, tmp_flags, App->scene_intro->game_objects[i]->name.data());
 
 		if (is_open)
-		{
-			node_open = true;
 			ImGui::TreePop();
-		} 
 		
-		if (ImGui::IsItemClicked())
+		if (ImGui::IsItemClicked(0))
 		{
+			focus_node = i;
+			App->scene_intro->selected_go = App->scene_intro->game_objects[i];
+		} else if(ImGui::IsItemClicked(1) && ImGui::IsWindowHovered()){
+			open_pop_up = true;
 			focus_node = i;
 			App->scene_intro->selected_go = App->scene_intro->game_objects[i];
 		}
 	}
+
 	
+	
+}
+
+void EditorHierarchy::DrawPopUpWindow()
+{
+	if (ImGui::IsMouseReleased(0) || ImGui::IsMouseReleased(2))
+		open_pop_up = false;
+	else if (ImGui::IsMouseClicked(1))
+		open_pop_up = false;
+
+	ImGui::OpenPopup("Hierarchy Tools");
+		if (ImGui::BeginPopup("Hierarchy Tools"))
+		{
+			if (ImGui::MenuItem("Delete"))
+			{
+				if (App->scene_intro->selected_go != nullptr)
+				App->scene_intro->DestroyGameObject(App->scene_intro->selected_go);
+				open_pop_up = false;
+			}
+
+			ImGui::EndPopup();
+		}
 }

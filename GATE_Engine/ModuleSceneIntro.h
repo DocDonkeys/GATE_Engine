@@ -25,6 +25,7 @@ public:
 
 	GameObject* CreateEmptyGameObject();
 	void CreateEmptyGameObject(int num_of_go);
+	void DestroyGameObject(GameObject* go);
 
 	bool  AddTextureToGameObject(GameObject* go, const char* path);
 
