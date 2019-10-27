@@ -426,7 +426,7 @@ void ModuleCamera3D::CalculateViewMatrix()
 	ViewMatrixInverse = inverse(ViewMatrix);
 }
 
-void ModuleCamera3D::CenterToObject(GameObject* obj)
+void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)
 {
 	if (obj != nullptr) {
 		vec3 pos = { 0.0f, 0.0f, 0.0f };
@@ -440,6 +440,6 @@ void ModuleCamera3D::CenterToObject(GameObject* obj)
 		if (mesh != nullptr)
 			dist = length({ mesh->mesh->size_x.width, mesh->mesh->size_y.width, mesh->mesh->size_z.width });
 
-		LookFrom(pos, { 1.0f, 1.0f, 1.0f }, dist);
+		LookFrom(pos, { 1.0f, 1.0f, 1.0f }, dist * multiplier);
 	}
 }

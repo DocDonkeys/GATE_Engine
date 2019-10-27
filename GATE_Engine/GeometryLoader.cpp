@@ -62,7 +62,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 {
 	bool ret = true;
 
-	bool cameraCentered = false;
+	float biggestMeshSize = -1.0f;
 
 	//Default GameObject names based on trimmed filename
 	std::string filename = App->SubtractString(std::string(full_path), "\\", true, false);
@@ -116,9 +116,10 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			mesh_component->mesh->path = full_path;
 			mesh_component->mesh->filename = filename;
 
-			if (!cameraCentered) {
+			float currMeshSize = length({ new_mesh->size_x.width, new_mesh->size_y.width, new_mesh->size_z.width });
+			if (biggestMeshSize < currMeshSize) {
 				App->camera->CenterToObject(go);
-				cameraCentered = true;
+				biggestMeshSize = currMeshSize;
 			}
 
 			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);

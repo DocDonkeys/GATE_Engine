@@ -20,7 +20,7 @@ public:
 	void LookFrom(const vec3 &Spot, const vec3 &Direction, float Distance = 0.0f);
 	void LookAt(const vec3 &Spot, float Distance = 0.0f);
 	void Move(const vec3 &Movement);
-	void CenterToObject(GameObject* obj);
+	void CenterToObject(GameObject* obj, float multiplier = 1.0f);
 	float* GetViewMatrix();
 
 private:
