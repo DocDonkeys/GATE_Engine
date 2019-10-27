@@ -2,40 +2,38 @@
 This is a university project made by CITM (https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we made a 3D Game Engine in C & C++ during our 3rd year of Game Development Bachelor's Degree.
 
 ## Libraries Used
-* [STL](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
-* [OPEN GL](https://www.opengl.org/)
-* [SDL](https://www.libsdl.org/)
-* [JSON for Modern C++](https://github.com/nlohmann/json)
-* [MathGeoLib](https://github.com/juj/MathGeoLib)
-* [Brofiler](http://www.brofiler.com/)
+* [STL (C++11)](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
+* [SDL (v2.0.10)](https://www.libsdl.org/)
+* [OpenGL (v3.1.0)](https://www.opengl.org/)
+* [DevIL (v1.8.0)](http://openil.sourceforge.net/)
+* [Assimp (v5.0.0)](http://assimp.org/)
+* [Dear ImGui v1.73, Docking Test Branch](https://github.com/ocornut/imgui)
+* [glew (v2.0)](http://glew.sourceforge.net/)
+* [MathGeoLib (v1.5)](https://github.com/juj/MathGeoLib)
+* [Par (vN/A)](https://github.com/prideout/par)
+* [JSON for Modern C++ (v3.7.0)](https://github.com/nlohmann/json)
+* [Brofiler (v1.1.2)](http://www.brofiler.com/)
+* [mmgr (vN/A)](http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml)
 
 ## Installation
 No previous installations is required to use the engine, just download and execute the .exe file *GATE_Engine* from releases.
 
-/////OVERWRITE BELOW!
-## Usage
-### General Controls
-* ESC: Exit Game
-* R: Restart Game
+## Camera Controls
+### Mouse
+* MiddleButtonClickDrag: Move the camera in the plane of the camera frame.
+* MouseWheel: Move camera forwards of backwards.
+* LeftClickDrag: Move the camera in the plane of the camera frame.
+* RightClickDrag: Rotate on itself.
+* Left Alt + LeftClickDrag: Rotate around reference point.
+* Left Alt + RightClickDrag: Move camera forwards of backwards.
 
-### Controls
-* Move: Up/Down/Left/Right
-* Handbrake: Spacebar
-* E: Flip vehicle
-
-### Debug Controls
-* F1 3D debug (rigidbodies, sensors, elements axis etc.)
-* F2 Toggle In-Game camera with Free View Camera (to look freely around the map)
-* F3 Add 30 seconds to the time left.
-
-## Free View Camera controls
-* W A S D To move around in x-z plane
-* F To move upwards in the Y axis
-* C To move downwards in the Y axis
-* SHIFT to move faster
-
-* Right click to look around
-/////
+### Keyboard
+* RightMouseClick + W/S, A/D, Q/E: Move camera forwards, backwards, sideways, and vertically.
+* Movement + MouseWheel: Increase or decrease camera speed.
+* Up/Down, Left/Right Arrows: Move camera forwards, backwards, and sideways.
+* Shift + Movement: Boost camera speed (multiplier).
+* Double Tap Movement Key: Boost camera speed (multiplier).
+* Keypad 8/2/4/6, 7/1: Rotate camera on itself and move it vertically.
 
 ## Contributing
 1. Fork it!
@@ -58,7 +56,7 @@ feature'`
 
 ## License & Copyright 
 
-MIT License
+[MIT License](https://github.com/DocDonkeys/GATE/blob/master/LICENSE)
 
 Copyright (c) 2018 DocDonkeys
 
