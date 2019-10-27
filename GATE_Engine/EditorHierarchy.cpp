@@ -21,13 +21,13 @@ void EditorHierarchy::Update()
 	{
 		ImGuiTreeNodeFlags tmp_flags = base_flags;
 		if (focus_node == i)
-		{
 			tmp_flags = base_flags | ImGuiTreeNodeFlags_Selected;
-		}
+		
+		if (App->scene_intro->game_objects[i]->children.size() == 0)
+			tmp_flags = tmp_flags | ImGuiTreeNodeFlags_Leaf;
 
-		bool is_open = ImGui::TreeNodeEx((void*)(intptr_t)i, tmp_flags, App->scene_intro->game_objects[i]->name.data());
-
-		if (is_open)
+		//Print GameObjects Hierarchy
+		if (ImGui::TreeNodeEx((void*)(intptr_t)i, tmp_flags, App->scene_intro->game_objects[i]->name.data()))
 			ImGui::TreePop();
 		
 		if (ImGui::IsItemClicked(0))
