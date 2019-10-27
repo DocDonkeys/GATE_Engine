@@ -180,6 +180,16 @@ void EditorMenuBar::Update() {
 
 			if (ImGui::BeginMenu("Create...")) {
 
+				if (ImGui::MenuItem("Create Empty"))
+				{
+					App->scene_intro->CreateEmptyGameObject();
+				}
+
+				if (ImGui::MenuItem("Create Empty x10"))
+				{
+					App->scene_intro->CreateEmptyGameObject(10);
+				}
+
 				if (ImGui::MenuItem("Plane"))
 				{
 					App->geometry_loader->CreatePrimitive(PRIMITIVE::PLANE, 1, 1);

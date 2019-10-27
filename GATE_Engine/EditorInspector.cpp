@@ -20,8 +20,8 @@ EditorInspector::EditorInspector(const char* name, bool startEnabled, ImGuiWindo
 
 void EditorInspector::Update()
 {
-	int focused_go = App->editor->editor_hierarchy->focus_node;
-	if (focused_go > -1)
+	GameObject* go = App->scene_intro->selected_go;
+	if (go != nullptr)
 	{
 		GameObject* go = App->scene_intro->game_objects[focused_go];
 
@@ -99,9 +99,30 @@ void EditorInspector::Update()
 		ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(COMPONENT_TYPE::MATERIAL);
 		if (material != nullptr)
 		{
-			DrawComponentMaterial(material);
+			//First show on editor the Gameobject class editables
+			ImGui::Checkbox("", &go->active); //ImGui::SameLine();
+			//ImGui::InputText((const char*)go->name.data(), input_buffer, IM_ARRAYSIZE(input_buffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory);
+
+
+			//For now we will only have 1 Component of each type, must move to arrays and create gameobject function to return all components of a type in an array
+			ComponentTransform* transform = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+			if (transform != nullptr)
+			{
+				DrawComponentTransform(transform);
+			}
+
+			ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(COMPONENT_TYPE::MESH);
+			if (mesh != nullptr)
+			{
+				DrawComponentMesh(mesh);
+			}
+
+			ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(COMPONENT_TYPE::MATERIAL);
+			if (material != nullptr)
+			{
+				DrawComponentMaterial(material);
+			}
 		}
-	}
 }
 
 void EditorInspector::DrawComponent(Component * c)
@@ -131,7 +152,7 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		float width = ImGui::GetWindowWidth() / 7.0f;
 
 		ImGui::Columns(4, "TransformGrid"); // 4-ways, with border
-		
+
 		ImGui::Separator();
 		ImGui::Checkbox("Active", &transform->active); ImGui::NextColumn();
 		ImGui::Text("X"); ImGui::NextColumn();
@@ -197,6 +218,15 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::Checkbox("Vertex Normals", &mesh->debug_vertex_normals);
 		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals);
 
+		//Normals Length
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("Normals length:"); ImGui::NextColumn();
+		if (ImGui::DragFloat("##PX", &mesh->mesh->normals_length, 0.005f))
+		{
+			ImGui::NextColumn();
+			mesh->mesh->ChangeNormalsLength(mesh->mesh->normals_length);
+		}
+
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
@@ -227,7 +257,7 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		}
 
 		ImGui::Text("Main Maps");
-		
+
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("File:"); ImGui::SameLine();
 		if (material->active_texture != nullptr)

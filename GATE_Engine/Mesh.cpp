@@ -92,7 +92,7 @@ void Mesh::LoadNormals(const aiMesh * loaded_mesh)
 			normal = Cross(edge_a, edge_b);
 			normal.Normalize();
 
-			normals_faces_vector[j] = normal * 0.25f;
+			normals_faces_vector[j] = normal;
 		}
 
 	}
@@ -112,6 +112,24 @@ void Mesh::LoadTexCoords(const aiMesh * loaded_mesh)
 			tex_coords[k] = loaded_mesh->mTextureCoords[0][j].x;
 			tex_coords[k + 1] = loaded_mesh->mTextureCoords[0][j].y;
 		}
+	}
+}
+
+void Mesh::ChangeNormalsLength(float new_length)
+{
+	if (new_length > 0.01f)
+	{
+		for (int i = 0; i < num_vertex; ++i)
+		{
+			normals_vector[i] /= normals_last_length;
+			normals_vector[i] *= new_length;
+		}
+		for (int i = 0; i < num_index; ++i)
+		{
+			normals_faces_vector[i] /= normals_last_length;
+			normals_faces_vector[i] *= new_length;
+		}
+		normals_last_length = new_length;
 	}
 }
 
