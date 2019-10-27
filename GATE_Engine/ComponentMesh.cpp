@@ -33,13 +33,14 @@ void ComponentMesh::Draw()
 {
 	ComponentMaterial* material = (ComponentMaterial*)my_go->GetComponent(COMPONENT_TYPE::MATERIAL);
 
-	if (material != nullptr)
+	if (material != nullptr && material->active) {
 		if (material->use_default_texture) {
 			App->renderer3D->DrawMesh(mesh, material->checkers_texture_id);
 		}
 		else if (material->active_texture != nullptr) {
 			App->renderer3D->DrawMesh(mesh, material->active_texture->id);
 		}
+	}
 	else
 		App->renderer3D->DrawMesh(mesh);
 

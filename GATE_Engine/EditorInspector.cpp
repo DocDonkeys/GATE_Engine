@@ -97,24 +97,6 @@ void EditorInspector::Update()
 		ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(COMPONENT_TYPE::MATERIAL);
 		if (material != nullptr)
 		{
-			//First show on editor the Gameobject class editables
-			ImGui::Checkbox("", &go->active); //ImGui::SameLine();
-			//ImGui::InputText((const char*)go->name.data(), input_buffer, IM_ARRAYSIZE(input_buffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory);
-
-
-			//For now we will only have 1 Component of each type, must move to arrays and create gameobject function to return all components of a type in an array
-			ComponentTransform* transform = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-			if (transform != nullptr)
-			{
-				DrawComponentTransform(transform);
-			}
-
-			ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(COMPONENT_TYPE::MESH);
-			if (mesh != nullptr)
-			{
-				DrawComponentMesh(mesh);
-			}
-
 			ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(COMPONENT_TYPE::MATERIAL);
 			if (material != nullptr)
 			{
@@ -208,7 +190,10 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 
 	if (ImGui::TreeNodeEx("Mesh", base_flags))
 	{
-		ImGui::Text("File: "); ImGui::SameLine();
+		ImGui::Checkbox("Active", &mesh->active); ImGui::SameLine();
+
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("    File:"); ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), mesh->mesh->filename.c_str());
 
 		ImGui::Spacing();
@@ -238,6 +223,8 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 	if (ImGui::TreeNodeEx("Material", base_flags))
 	{
 		ImGui::Spacing();
+
+		ImGui::Checkbox("Active", &material->active); ImGui::SameLine();
 
 		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 4.0f);
 		ImGui::SameLine(150);
