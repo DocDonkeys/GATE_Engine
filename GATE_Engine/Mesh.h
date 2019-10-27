@@ -18,6 +18,8 @@ public: // Calls
 	void LoadMeshSizeData();
 
 public: // Vars
+	std::string filename;
+
 	uint id_index = 0; // index in VRAM 
 	uint num_index = 0;
 	uint* index = nullptr;

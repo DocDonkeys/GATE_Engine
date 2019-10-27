@@ -133,6 +133,14 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 
 	if (ImGui::TreeNodeEx("Mesh", base_flags))
 	{
+		ImGui::Text("File: "); ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), mesh->mesh->filename.c_str());
+
+		ImGui::Spacing();
+
+		ImGui::Text("Draw:");
+		ImGui::Checkbox("Vertex Normals", &mesh->debug_vertex_normals);
+		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals);
 
 		ImGui::TreePop();
 	}
@@ -164,9 +172,18 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		}
 
 		ImGui::Text("Main Maps");
-		//ImGui::DragBehavior();
+		
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("File: "); ImGui::SameLine();
+		if (material->active_texture != nullptr)
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), material->active_texture->filename.c_str());
+		else
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "None");
+
+		ImGui::SameLine(); ImGui::Checkbox("Use Default Texture", &material->use_default_texture);
+
 		bool falseBool = false;
-		/*ImGui::Image();*/ImGui::Checkbox("##placeholder1", &falseBool); ImGui::SameLine();
+		/*ImGui::Image();*/ImGui::Checkbox("##placeholder1", &falseBool); ImGui::SameLine(); /*ImGui::DragBehavior();*/
 		ImGui::Text("Albedo"); ImGui::SameLine(150);
 
 		if (ImGui::ColorButton("Color", { material->color.x, material->color.y, material->color.z, material->color.w })) {

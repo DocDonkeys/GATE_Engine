@@ -469,7 +469,7 @@ bool Application::SaveProject(const char* file) const
 	return ret;
 }
 
-std::string  Application::SubtractString(std::string & str, const char * chars_to_find, bool reading_backwards, bool subtract_until_char)	//IMPROVE: Make it into a helper/tool file
+std::string  Application::SubtractString(std::string & str, const char * chars_to_find, bool reading_backwards, bool subtract_until_char, bool include_char)	//IMPROVE: Make it into a helper/tool file
 {
 	std::string ret = "error substracting string";
 	std::size_t found;
@@ -479,9 +479,15 @@ std::string  Application::SubtractString(std::string & str, const char * chars_t
 		found = str.find_first_of(chars_to_find);
 
 	if (subtract_until_char) // subtract from beginning to char
-		ret = str.substr(0, found + 1);
+		if (include_char)
+			ret = str.substr(0, found + 1);
+		else
+			ret = str.substr(0, found);
 	else					// subtract from char to beginning
-		ret = str.substr(found + 1, str.size());
+		if (include_char)
+			ret = str.substr(found, str.size());
+		else
+			ret = str.substr(found + 1, str.size());
 
 	return ret;
 }

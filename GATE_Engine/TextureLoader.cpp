@@ -63,9 +63,6 @@ bool TextureLoader::Start()
 bool TextureLoader::CleanUp()
 {
 	LOG("[Info]: Deleting Textures.");
-	if (defaultTex > 0)
-		glDeleteTextures(1, (GLuint*)&defaultTex);
-
 	for (int i = 0; i < textures.size(); i++)
 		if (textures[i] != nullptr) {
 			glDeleteTextures(1, (GLuint*)&textures[i]->id);
@@ -172,7 +169,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 		SDL_assert(path != nullptr);
 		return 0;
 	}
-	else {	// If the path of the texture already exists in the saved arrays, use the same id	// CHANGE/FIX: Only compare the file name, not the entire path
+	else {	// If the path of the texture already exists in the saved arrays, use the same id
 		for (int i = 0; i < textures.size(); i++) {
 			if (textures[i]->filename == path) {
 				return textures[i];
@@ -211,7 +208,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 				LOG("[Error]: Texture ID creation failed.");
 			}
 			else {
-				tex = new Texture(tempId, path);
+				tex = new Texture(tempId, App->SubtractString(std::string(path), "\\", true, false).c_str());
 				App->texture_loader->textures.push_back(tex);
 				LOG("[Success]: Loaded texture from path %s", path);
 			}
@@ -232,7 +229,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 
 // ---------------------------------------------
 
-uint TextureLoader::LoadDefaultTex() const
+Texture* TextureLoader::LoadDefaultTex() const
 {
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
@@ -245,10 +242,17 @@ uint TextureLoader::LoadDefaultTex() const
 		}
 	}
 
-	return CreateTexture(checkImage, CHECKERS_WIDTH, CHECKERS_HEIGHT, GL_RGBA, GL_RGBA, GL_TEXTURE_2D, GL_NEAREST, GL_REPEAT, true);
+	Texture* tex = new Texture(CreateTexture(checkImage, CHECKERS_WIDTH, CHECKERS_HEIGHT, GL_RGBA, GL_RGBA, GL_TEXTURE_2D, GL_NEAREST, GL_REPEAT, true), "Default");
+	App->texture_loader->textures.push_back(tex);
+	return tex;
 }
 
-uint TextureLoader::GetDefaultTex() const
+Texture* TextureLoader::GetDefaultTex()
 {
 	return defaultTex;
+}
+
+uint TextureLoader::GetDefaultId() const
+{
+	return defaultTex->id;
 }

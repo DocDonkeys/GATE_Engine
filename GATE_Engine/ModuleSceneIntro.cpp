@@ -33,7 +33,7 @@ bool ModuleSceneIntro::Start()
 
 	//Create an empty gameobject for test purposes
 	CreateEmptyGameObject(10);
-	//App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
+	App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
 	return ret;
 }
@@ -54,6 +54,14 @@ bool ModuleSceneIntro::CleanUp()
 GameObject* ModuleSceneIntro::CreateEmptyGameObject()
 {
 	GameObject* go = new GameObject();
+
+	game_objects.push_back(go);
+	return go;
+}
+
+GameObject* ModuleSceneIntro::CreateEmptyGameObject(const char* name)
+{
+	GameObject* go = new GameObject(name);
 
 	game_objects.push_back(go);
 	return go;

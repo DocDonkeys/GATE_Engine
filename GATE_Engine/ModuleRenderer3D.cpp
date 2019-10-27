@@ -152,8 +152,8 @@ bool ModuleRenderer3D::Start()
 {
 	bool ret = true;
 
-	App->texture_loader->LoadTextureFile("Assets/Textures/Lenna_(test_image).png");	//CHANGE/FIX: Hardcoded, either put it on a JSON file to load as "default textures" or just erase it
-	App->texture_loader->LoadTextureFile("Assets/Textures/Baker_house.png");
+	App->texture_loader->LoadTextureFile("Assets\\Textures\\Lenna_(test_image).png");	//CHANGE/FIX: Hardcoded, either put it on a JSON file to load as "default textures" or just erase it
+	App->texture_loader->LoadTextureFile("Assets\\Textures\\Baker_house.png");
 	App->texture_loader->LoadDefaultTex();
 	
 	return ret;
@@ -384,7 +384,7 @@ void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh, const uint texture_i
 void ModuleRenderer3D::DrawMeshFaceNormals(Mesh * mesh)
 {
 	//Print faces normals
-	if (drawNormals) {
+	if (drawFaceNormals) {
 		glBegin(GL_LINES);
 		glColor3f(1, 0, 1);
 
@@ -403,7 +403,7 @@ void ModuleRenderer3D::DrawMeshFaceNormals(Mesh * mesh)
 void ModuleRenderer3D::DrawMeshVertexNormals(Mesh * mesh)
 {
 	//Draw Vertex Normals
-	if (mesh->normals_vector != nullptr)
+	if (drawVertexNormals && mesh->normals_vector != nullptr)
 	{
 		//Had a lot of problems with buffers so we draw in direct mode, we can save some VRAM space
 		glBegin(GL_LINES);

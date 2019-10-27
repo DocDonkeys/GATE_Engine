@@ -16,6 +16,7 @@ class GameObject
 {
 public:
 	GameObject();
+	GameObject(const char* name);
 	~GameObject();
 
 public: //Methods

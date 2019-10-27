@@ -55,6 +55,12 @@ bool GeometryLoader::CleanUp()
 bool GeometryLoader::Load3DFile(const char* full_path)
 {
 	bool ret = true;
+
+	//Default GameObject names based on trimmed filename
+	std::string filename = App->SubtractString(std::string(full_path), "\\", true, false);
+	std::string objName = App->SubtractString(std::string(filename), ".", false, true) + "_";
+	uint counter = 0;
+
 	//We extract the Absolute path from the full path (everything until the actual file)
 	std::string str = full_path;
 	std::string absolute_path;
@@ -95,15 +101,20 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			//meshes.push_back(new_mesh);
 
 			//We create a game object for the current mesh
-			GameObject* go = App->scene_intro->CreateEmptyGameObject();
+			GameObject* go = App->scene_intro->CreateEmptyGameObject(std::string(objName + std::to_string(counter++)).c_str());
 
 			ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
+			mesh_component->mesh->filename = filename;
 
 			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			material_component->AssignTexture(LoadMaterial(scene, loaded_mesh, absolute_path));
-			if (material_component->loaded_texture != nullptr /*|| material_component->loaded_texture->id == 0*/) {
-				LOG("[Warning]: The FBX embeded texture was not found or could not be loaded!");
+			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);			
+			if (tex == nullptr || tex->id == 0) {
+				LOG("[Warning]: The FBX has no embeded texture, could was not found, or could not be loaded!");
+				//material_component->AssignTexture(App->texture_loader->GetDefaultTex());	//IMPROVE: What flag should we abilitate so that checkers are loaded instead of having no texture?
+			}
+			else {
+				material_component->AssignTexture(tex);
 			}
 		}
 		//Once finished we release the original file

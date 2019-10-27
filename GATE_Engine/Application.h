@@ -103,7 +103,7 @@ public:
 	void ConsoleLOG(const char* format,...);
 
 	//Subract a part of a string to obtain the desired characters of a path ex: filename, extension, path to a file etc.
-	std::string SubtractString(std::string& str, const char* chars_to_find, bool  reading_backwards, bool subtract_until_char);
+	std::string SubtractString(std::string& str, const char* chars_to_find, bool reading_backwards, bool subtract_until_char, bool include_char = false);
 
 private:
 	// Call module cycle phases in order on App Update() phase

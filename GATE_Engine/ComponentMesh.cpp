@@ -33,18 +33,17 @@ void ComponentMesh::Draw()
 {
 	ComponentMaterial* material = (ComponentMaterial*)my_go->GetComponent(COMPONENT_TYPE::MATERIAL);
 
-	uint tex_id;
-	if (material != nullptr && material->active_texture != nullptr)
-		 tex_id = material->active_texture->id;
-	else
-		tex_id = 0;
-
-	if (tex_id != 0)
-		App->renderer3D->DrawMesh(mesh, tex_id);
+	if (material != nullptr)
+		if (material->use_default_texture) {
+			App->renderer3D->DrawMesh(mesh, material->checkers_texture_id);
+		}
+		else if (material->active_texture != nullptr) {
+			App->renderer3D->DrawMesh(mesh, material->active_texture->id);
+		}
 	else
 		App->renderer3D->DrawMesh(mesh);
 
-	//If we debug
+	// Debug Draw
 	if (debug_vertex_normals)
 		App->renderer3D->DrawMeshVertexNormals(mesh);
 
