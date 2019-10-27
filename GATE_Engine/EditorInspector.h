@@ -24,7 +24,8 @@ public: //Methods
 	void DrawComponentMaterial(ComponentMaterial* c);
 
 private:
-	char input_buffer[256];
+	bool startedEditing = false;
+	char objNameBuffer[256];
 };
 
 #endif // !EditorInspector

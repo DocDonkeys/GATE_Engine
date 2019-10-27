@@ -20,7 +20,7 @@ void ComponentMesh::Enable()
 
 void ComponentMesh::Update()
 {
-	if (mesh != nullptr)
+	if (my_go->active && active && mesh != nullptr)
 		Draw();
 }
 

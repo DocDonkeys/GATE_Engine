@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#define OBJ_MAX_CHARS 50	//IMPROVE: This is far from perfect
+
 class Component;
 
 enum class COMPONENT_TYPE
@@ -26,6 +28,7 @@ public: //Methods
 
 public: //Vars
 	bool active = true;
+	bool staticObj = true;
 	std::string name;
 	std::vector<Component*> components;
 

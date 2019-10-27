@@ -24,10 +24,64 @@ void EditorInspector::Update()
 	if (focused_go > -1)
 	{
 		GameObject* go = App->scene_intro->game_objects[focused_go];
-		//First show on editor the Gameobject class editables
-		ImGui::Checkbox("",&go->active); //ImGui::SameLine();
-		//ImGui::InputText((const char*)go->name.data(), input_buffer, IM_ARRAYSIZE(input_buffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory);
 
+		ImGui::AlignTextToFramePadding();
+		ImGui::Checkbox("Active", &go->active); ImGui::SameLine();
+
+		//if (!startedEditing)
+			strcpy(objNameBuffer, go->name.c_str());
+
+		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 3.0f);
+		if (ImGui::InputText("##objectName", objNameBuffer, IM_ARRAYSIZE(objNameBuffer)) && !startedEditing) {	//IMPROVE: It feels that this can be done better, memory is copied every frame and doesn't need to be
+				//startedEditing = true;
+		}
+		//else if (startedEditing && App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		//	bool repeated = false;
+
+		//	for (int i = 0; i < App->scene_intro->game_objects.size(); i++) {
+		//		if (App->scene_intro->game_objects[i] != go && App->scene_intro->game_objects[i]->name == objNameBuffer) {
+		//			LOG("A different GameObject is already using this name!");
+		//			repeated = true;
+		//		}
+		//	}
+
+		//	if (!repeated)
+				go->name.assign(objNameBuffer);
+
+		//	strcpy(objNameBuffer, "");
+		//	startedEditing = false;
+		//}
+
+		//ImGui::SameLine();
+		//ImGui::TextDisabled("(?)");	//CHANGE/FIX: Make HelpTip(const char*) function.
+		//if (ImGui::IsItemHovered())
+		//{
+		//	ImGui::BeginTooltip();
+		//	ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		//	ImGui::TextUnformatted("Press Enter to confirm your name change.");
+		//	ImGui::PopTextWrapPos();
+		//	ImGui::EndTooltip();
+		//}
+		ImGui::SameLine();
+		ImGui::Checkbox("Static", &go->staticObj);
+
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("Tag"); ImGui::SameLine();
+		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 3.0f);
+		if (ImGui::BeginCombo("##Tag", "Untagged")) {
+
+			ImGui::EndCombo();
+		}
+		ImGui::SameLine();
+
+		ImGui::Text("Layer"); ImGui::SameLine();
+		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 3.0f);
+		if (ImGui::BeginCombo("##Layer", "Default")) {
+
+			ImGui::EndCombo();
+		}
+
+		ImGui::Separator();
 
 		//For now we will only have 1 Component of each type, must move to arrays and create gameobject function to return all components of a type in an array
 		ComponentTransform* transform = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
@@ -79,7 +133,7 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::Columns(4, "TransformGrid"); // 4-ways, with border
 		
 		ImGui::Separator();
-		ImGui::Text(""); ImGui::NextColumn();
+		ImGui::Checkbox("Active", &transform->active); ImGui::NextColumn();
 		ImGui::Text("X"); ImGui::NextColumn();
 		ImGui::Text("Y"); ImGui::NextColumn();
 		ImGui::Text("Z"); ImGui::NextColumn();
@@ -175,7 +229,7 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		ImGui::Text("Main Maps");
 		
 		ImGui::AlignTextToFramePadding();
-		ImGui::Text("File: "); ImGui::SameLine();
+		ImGui::Text("File:"); ImGui::SameLine();
 		if (material->active_texture != nullptr)
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), material->active_texture->filename.c_str());
 		else
@@ -185,7 +239,18 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 
 		bool falseBool = false;
 		/*ImGui::Image();*/ImGui::Checkbox("##placeholder1", &falseBool); ImGui::SameLine(); /*ImGui::DragBehavior();*/
-		ImGui::Text("Albedo"); ImGui::SameLine(150);
+		ImGui::Text("Albedo"); ImGui::SameLine();
+
+		ImGui::TextDisabled("(?)");	//CHANGE/FIX: Make HelpTip(const char*) function.
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted("Both Albedo, the color palette, and several other UI widgets currently serve no functionality, but the layout is prepared as a showcase of future implementations and UI design. To embed a texture on a material, simply Drag&Drop the file on the scene with the desired object selected.");
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+		ImGui::SameLine(150);
 
 		if (ImGui::ColorButton("Color", { material->color.x, material->color.y, material->color.z, material->color.w })) {
 			ImGui::OpenPopup("Palette");
