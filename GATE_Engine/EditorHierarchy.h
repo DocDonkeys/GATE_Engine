@@ -3,12 +3,17 @@
 
 #include "EditorWindow.h"
 
+class GameObject;
+
 class EditorHierarchy : public EditorWindow
 {
 public:
 	EditorHierarchy(const char* name = "null", bool startEnabled = false, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
 	void Update();
 	void DrawPopUpWindow();
+
+	//Manage the draw and selction of Game Objects in the hierarchy
+	void ManageGameObject(GameObject* go);
 
 public:
 	int focus_node = -1;

@@ -17,6 +17,8 @@ void EditorHierarchy::Update()
 		DrawPopUpWindow();
 
 	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth; //| ImGuiTreeNodeFlags_Selected;
+	
+	//ManageGameObject(App->scene_intro.g);
 	for (int i = 0; i < App->scene_intro->game_objects.size(); ++i)
 	{
 		ImGuiTreeNodeFlags tmp_flags = base_flags;
@@ -64,4 +66,9 @@ void EditorHierarchy::DrawPopUpWindow()
 
 			ImGui::EndPopup();
 		}
+}
+
+void EditorHierarchy::ManageGameObject(GameObject* go)
+{
+
 }

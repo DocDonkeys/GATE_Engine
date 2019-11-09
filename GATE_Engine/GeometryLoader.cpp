@@ -82,13 +82,33 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		//We loaded the 3D file successfully!
-		//We iterate the meshes array
-		int nmeshes = scene->mNumMeshes;
+		//We load all nodes inside the root node, respecting parenting in gameobjects
+		aiNode* root = scene->mRootNode;
+		LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
+
+		//Once finished we release the original file
+		aiReleaseImport(scene);
+	}
+	else
+		LOG("Error loading scene meshes %s", full_path);
+
+	return ret;
+}
+
+void GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* node,
+	const char* absolute_path, const char* filename, const char* full_path, 
+	const char* objName, uint counter)
+{
+	float biggestMeshSize = -1.0f;
+
+	if (node != nullptr && node->mNumMeshes > 0)
+	{
+		int nmeshes = node->mNumMeshes;
 		for (int i = 0; i < nmeshes; ++i)
 		{
 			Mesh* new_mesh = new Mesh();
+			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
 
-			aiMesh* loaded_mesh = scene->mMeshes[i];
 			//LOAD!
 			new_mesh->LoadVertices(loaded_mesh); //Vertices
 			new_mesh->LoadIndices(loaded_mesh); //Indices
@@ -123,7 +143,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 			}
 
 			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);			
+			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
 			if (tex == nullptr || tex->id == 0) {
 				LOG("[Warning]: The FBX has no embeded texture, could was not found, or could not be loaded!");
 				//material_component->AssignTexture(App->texture_loader->GetDefaultTex());	//IMPROVE: What flag should we abilitate so that checkers are loaded instead of having no texture?
@@ -132,13 +152,11 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 				material_component->AssignTexture(tex);
 			}
 		}
-		//Once finished we release the original file
-		aiReleaseImport(scene);
 	}
-	else
-		LOG("Error loading scene meshes %s", full_path);
 
-	return ret;
+	if (node->mNumChildren > 0)
+		for (int i = 0; i < node->mNumChildren; ++i)
+			LoadAssimpNode(scene, node->mChildren[i], absolute_path, filename, full_path, objName, counter);
 }
 
 void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const char* name)
