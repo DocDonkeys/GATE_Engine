@@ -15,6 +15,7 @@ struct aiScene;
 struct aiNode;
 class Mesh;
 class Texture;
+class GameObject;
 
 enum class PRIMITIVE
 {
@@ -44,7 +45,7 @@ public:
 	bool Load3DFile(const char* full_path); 
 
 	//Load a node of ASSIMP, this will create a gameobject for the node and manage the parenting and hierarchy of this new gameobject
-	void LoadAssimpNode(const aiScene* scene, const aiNode* node, 
+	GameObject* LoadAssimpNode(const aiScene* scene, const aiNode* node, 
 		const char* absolute_path, const char* filename, const char* full_path, const char* objName, const uint counter);
 
 	// Load a generated primitive (par_shape) into a mesh (Mesh)

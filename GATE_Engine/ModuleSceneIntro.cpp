@@ -27,6 +27,9 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	//Create the Root node for Game Objects
+	root = new GameObject();
+
 	//Setup camera
 	App->camera->Move(vec3(1.0f, 1.0f, 1.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -42,10 +45,7 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
-	for (int i = 0; i < game_objects.size(); ++i)
-		delete game_objects[i];
-	
-	game_objects.clear();
+	delete root;
 
 	return true;
 }
@@ -53,16 +53,12 @@ bool ModuleSceneIntro::CleanUp()
 GameObject* ModuleSceneIntro::CreateEmptyGameObject()
 {
 	GameObject* go = new GameObject();
-
-	game_objects.push_back(go);
 	return go;
 }
 
 GameObject* ModuleSceneIntro::CreateEmptyGameObject(const char* name)
 {
 	GameObject* go = new GameObject(name);
-
-	game_objects.push_back(go);
 	return go;
 }
 
@@ -128,9 +124,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	/*Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();*/
-
-	for (int i = 0; i < game_objects.size(); ++i)
-		game_objects[i]->Update();
 
 	return UPDATE_CONTINUE;
 }

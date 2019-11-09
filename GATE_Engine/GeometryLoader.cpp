@@ -84,8 +84,8 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		//We loaded the 3D file successfully!
 		//We load all nodes inside the root node, respecting parenting in gameobjects
 		aiNode* root = scene->mRootNode;
-		LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
-
+		GameObject* go = LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
+		go->ReParent(App->scene_intro->root);
 		//Once finished we release the original file
 		aiReleaseImport(scene);
 	}
@@ -95,11 +95,14 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	return ret;
 }
 
-void GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* node,
+GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* node,
 	const char* absolute_path, const char* filename, const char* full_path, 
 	const char* objName, uint counter)
 {
 	float biggestMeshSize = -1.0f;
+
+	//We create the gameobject for the node
+	GameObject* ret_go = App->scene_intro->CreateEmptyGameObject(node->mName.C_Str());
 
 	if (node != nullptr && node->mNumMeshes > 0)
 	{
@@ -130,6 +133,7 @@ void GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* node,
 
 			//We create a game object for the current mesh
 			GameObject* go = App->scene_intro->CreateEmptyGameObject(std::string(objName + std::to_string(counter++)).c_str());
+			go->ReParent(ret_go);
 
 			ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
@@ -156,7 +160,12 @@ void GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* node,
 
 	if (node->mNumChildren > 0)
 		for (int i = 0; i < node->mNumChildren; ++i)
-			LoadAssimpNode(scene, node->mChildren[i], absolute_path, filename, full_path, objName, counter);
+		{
+			GameObject* child = LoadAssimpNode(scene, node->mChildren[i], absolute_path, filename, full_path, objName, counter);
+			child->ReParent(ret_go);
+		}
+
+	return ret_go;
 }
 
 void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const char* name)

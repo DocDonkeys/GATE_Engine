@@ -26,6 +26,9 @@ public: //Methods
 	Component* CreateComponent(COMPONENT_TYPE type);
 	Component* GetComponent(COMPONENT_TYPE type);
 
+	//Change the parent of the GamObject with its new parent
+	void ReParent(GameObject* new_parent);
+
 public: //Vars
 	bool active = true;
 	bool staticObj = true;

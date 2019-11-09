@@ -201,6 +201,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	glLineWidth(1.0f);
 	//Render
+	App->scene_intro->root->Update();
 
 	//Debug Draw (Render)
 

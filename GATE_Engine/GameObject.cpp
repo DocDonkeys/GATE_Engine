@@ -45,6 +45,13 @@ void GameObject::Update()
 		if (components[i]->active)
 			components[i]->Update();
 	}
+
+	//Update the children game objects
+	for (int i = 0; i < children.size(); ++i)
+	{
+		if (children[i]->active)
+			children[i]->Update();
+	}
 }
 
 Component * GameObject::CreateComponent(COMPONENT_TYPE type)
@@ -84,4 +91,20 @@ Component * GameObject::GetComponent(COMPONENT_TYPE type)
 		}
 	}
 	return nullptr;
+}
+
+void GameObject::ReParent(GameObject * new_parent)
+{
+	//Get ourselves out of our current parent's children list
+	if (parent != nullptr)
+	for (int i = 0; i < parent->children.size(); ++i)
+		if (parent->children[i] == this)
+		{
+			parent->children.erase(parent->children.begin() + (i -1));
+			break;
+		}
+	//Assign our new parent and add ourselves into its children list
+	parent = new_parent;
+	if (parent != nullptr)
+	parent->children.push_back(this);
 }
