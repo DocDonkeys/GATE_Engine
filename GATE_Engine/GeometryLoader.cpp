@@ -132,21 +132,21 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			//meshes.push_back(new_mesh);
 
 			//We create a game object for the current mesh
-			GameObject* go = App->scene_intro->CreateEmptyGameObject(std::string(objName + std::to_string(counter++)).c_str());
-			go->ReParent(ret_go);
+			/*GameObject* go = App->scene_intro->CreateEmptyGameObject(std::string(objName + std::to_string(counter++)).c_str());
+			go->ReParent(ret_go);*/
 
-			ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
+			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
 			mesh_component->mesh->path = full_path;
 			mesh_component->mesh->filename = filename;
 
 			float currMeshSize = length({ new_mesh->size_x.width, new_mesh->size_y.width, new_mesh->size_z.width });
 			if (biggestMeshSize < currMeshSize) {
-				App->camera->CenterToObject(go);
+				App->camera->CenterToObject(ret_go);
 				biggestMeshSize = currMeshSize;
 			}
 
-			ComponentMaterial* material_component = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
+			ComponentMaterial* material_component = (ComponentMaterial*)ret_go->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
 			if (tex == nullptr || tex->id == 0) {
 				LOG("[Warning]: The FBX has no embeded texture, could was not found, or could not be loaded!");

@@ -19,6 +19,10 @@ public:
 	int focus_node = -1;
 	bool open_pop_up = false;
 	bool pop_up_hovered = false;
+
+private:
+	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+
 };
 
 #endif // !EDITORHIERARCHY_H
