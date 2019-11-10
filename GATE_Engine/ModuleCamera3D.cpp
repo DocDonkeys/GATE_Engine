@@ -426,7 +426,7 @@ void ModuleCamera3D::CalculateViewMatrix()
 	ViewMatrixInverse = inverse(ViewMatrix);
 }
 
-void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)
+void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)	//IMPROVE: This should not change the camera's angle
 {
 	if (obj != nullptr) {
 		vec3 pos = { 0.0f, 0.0f, 0.0f };
@@ -438,7 +438,7 @@ void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)
 
 		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(COMPONENT_TYPE::MESH);
 		if (mesh != nullptr)
-			dist = length({ mesh->mesh->size_x.width, mesh->mesh->size_y.width, mesh->mesh->size_z.width });
+			dist = length({ mesh->mesh->size.x, mesh->mesh->size.y, mesh->mesh->size.z });
 
 		LookFrom(pos, { 1.0f, 1.0f, 1.0f }, dist * multiplier);
 	}

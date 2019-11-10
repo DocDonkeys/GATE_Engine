@@ -3,6 +3,9 @@
 
 #include "Globals.h"
 #include "GeometryLoader.h"
+
+#include "libs/MathGeoLib/include/Geometry/AABB.h"
+
 struct aiMesh;
 
 class Mesh
@@ -40,12 +43,8 @@ public: // Vars
 	uint num_tex_coords = 0;
 	float* tex_coords = nullptr;
 
-	struct size_data {	// Mesh size data
-		float max = -10.0f;
-		float min = 10.0f;	// Using these initializing values we make sure that both max and min are substituted for vertex pos values, as max is too low and min too high for the usual vertex values
-		float width = 0.0f;
-	};
-	size_data size_x, size_y, size_z;
+	math::AABB bounds;	// In local space of the imported FBX
+	float3 size = { 0.0f, 0.0f, 0.0f };	// Absolute distance between bound max/min points
 
 	float normals_length = 1.0f;
 	float normals_last_length = 1.0f;

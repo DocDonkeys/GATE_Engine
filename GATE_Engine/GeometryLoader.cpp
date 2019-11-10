@@ -140,7 +140,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			mesh_component->mesh->path = full_path;
 			mesh_component->mesh->filename = filename;
 
-			float currMeshSize = length({ new_mesh->size_x.width, new_mesh->size_y.width, new_mesh->size_z.width });
+			float currMeshSize = length({ new_mesh->size.x, new_mesh->size.y, new_mesh->size.z });
 			if (biggestMeshSize < currMeshSize) {
 				App->camera->CenterToObject(ret_go);
 				biggestMeshSize = currMeshSize;
