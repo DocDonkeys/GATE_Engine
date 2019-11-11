@@ -13,7 +13,7 @@ public:
 	void DrawPopUpWindow();
 
 	//Manage the draw and selction of Game Objects in the hierarchy
-	void ManageGameObject(GameObject* go);
+	void ManageGameObject(GameObject* go, int& treenode_id);
 
 public:
 	int focus_node = -1;
@@ -22,6 +22,7 @@ public:
 
 private:
 	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+	bool selected_go_already = false;
 
 };
 
