@@ -19,10 +19,6 @@ void ComponentMaterial::Enable()
 		checkers_texture_id = App->texture_loader->GetDefaultId();
 }
 
-void ComponentMaterial::Update()
-{
-}
-
 void ComponentMaterial::Disable()
 {
 	active = false;

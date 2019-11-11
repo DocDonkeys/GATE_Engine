@@ -11,8 +11,12 @@ public:
 
 public: //Methods
 	virtual void Enable() = 0;
-	virtual void Update() = 0;
 	virtual void Disable() = 0;
+
+	virtual void PreUpdate() {};
+	virtual void Update() {};
+	virtual void PostUpdate() {};
+	virtual void Draw() {};
 
 public: //Members
 	COMPONENT_TYPE type;

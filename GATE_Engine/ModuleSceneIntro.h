@@ -19,6 +19,7 @@ public:
 	~ModuleSceneIntro();
 
 	bool Start();
+	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
@@ -37,7 +38,7 @@ public:
 public:
 	//members
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
-	std::vector<GameObject*> game_objects; // We will replace this with root_go (Root GameObject) when we have a tree based Hierarchy
+	//std::vector<GameObject*> game_objects; // We will replace this with root_go (Root GameObject) when we have a tree based Hierarchy
 	GameObject* root = nullptr;
 	GameObject* selected_go = nullptr;
 };

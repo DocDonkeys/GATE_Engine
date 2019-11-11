@@ -15,7 +15,6 @@ public:
 
 public:
 	void Enable() override;
-	void Update() override;
 	void Disable() override;
 
 	//Assign a texture to a Component

@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 
+#include "libs/MathGeoLib/include/Geometry/AABB.h"
+#include "libs/MathGeoLib/include/Geometry/OBB.h"
+
 #define OBJ_MAX_CHARS 50	//IMPROVE: This is far from perfect
 
 class Component;
@@ -22,7 +25,12 @@ public:
 	~GameObject();
 
 public: //Methods
+	void PreUpdate();
 	void Update();
+	void PostUpdate();
+
+	void Draw();	// This method is called by the renderer
+
 	Component* CreateComponent(COMPONENT_TYPE type);
 	Component* GetComponent(COMPONENT_TYPE type);
 
@@ -38,6 +46,9 @@ public: //Vars
 	//Gameobject hierarchy tree related Vars
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> children;
+
+	math::AABB aabb;
+	math::OBB obb;
 };
 #endif // !__GAMEOBJECT_H__
 

@@ -6,7 +6,6 @@
 #include "Application.h"
 #include "ComponentMaterial.h"
 
-
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
 #include "libs/mmgr/mmgr.h"
@@ -76,15 +75,14 @@ void ModuleSceneIntro::DestroyGameObject(GameObject * go)
 	if (selected_go == go)
 		selected_go = nullptr;
 
-	
-	for (int i = 0; i < game_objects.size(); ++i)
+	/*for (int i = 0; i < game_objects.size(); ++i)
 	{
 		if (game_objects[i] == go)
 		{
 			game_objects.erase(game_objects.begin() + i);
 			break;
 		}	
-	}
+	}*/
 
 	delete go;
 }
@@ -115,10 +113,20 @@ bool ModuleSceneIntro::AddTextureToGameObject(GameObject * go, const char* path)
 	return false;
 }
 
+// PreUpdate
+update_status ModuleSceneIntro::PreUpdate(float dt)
+{
+	root->PreUpdate();
+
+	return UPDATE_CONTINUE;
+}
+
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
 	toolMode = CheckToolMode();
+
+	root->Update();
 
 	//Ground Render	(Used the Primitives Container)
 	/*Plane p(0, 1, 0, 0);
@@ -128,9 +136,10 @@ update_status ModuleSceneIntro::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-// Update
+// PostUpdate
 update_status ModuleSceneIntro::PostUpdate(float dt)
 {
+	root->PostUpdate();
 
 	return UPDATE_CONTINUE;
 }

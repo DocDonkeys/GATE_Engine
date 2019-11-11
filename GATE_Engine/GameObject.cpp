@@ -9,7 +9,7 @@
 
 GameObject::GameObject()
 {
-	name = "GameObject_" + std::to_string(App->scene_intro->game_objects.size());
+	name = "GameObject_";// +std::to_string(App->scene_intro->game_objects.size());
 	
 	//All Game Objects must have a transform component, so we assign it from creation
 	CreateComponent(COMPONENT_TYPE::TRANSFORM);
@@ -35,9 +35,28 @@ GameObject::~GameObject()
 
 }
 
+void GameObject::PreUpdate()
+{
+	//PreUpdate whatever the GameObject itself needs to PreUpdate
+
+	//PreUpdate the components
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->active)
+			components[i]->PreUpdate();
+	}
+
+	//Update the children game objects
+	for (int i = 0; i < children.size(); ++i)
+	{
+		if (children[i]->active)
+			children[i]->PreUpdate();
+	}
+}
+
 void GameObject::Update()
 {
-	//Update whatever the GameObject itself needs to update
+	//Update whatever the GameObject itself needs to Update
 
 	//Update the components
 	for (int i = 0; i < components.size(); ++i)
@@ -51,6 +70,44 @@ void GameObject::Update()
 	{
 		if (children[i]->active)
 			children[i]->Update();
+	}
+}
+
+void GameObject::PostUpdate()
+{
+	//PostUpdate whatever the GameObject itself needs to PostUpdate
+
+	//PostUpdate the components
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->active)
+			components[i]->PostUpdate();
+	}
+
+	//Update the children game objects
+	for (int i = 0; i < children.size(); ++i)
+	{
+		if (children[i]->active)
+			children[i]->PostUpdate();
+	}
+}
+
+void GameObject::Draw()
+{
+	//Draw whatever the GameObject itself needs to draw
+
+	//Draw the components
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->active)
+			components[i]->Draw();
+	}
+
+	//Update the children game objects
+	for (int i = 0; i < children.size(); ++i)
+	{
+		if (children[i]->active)
+			children[i]->Draw();
 	}
 }
 

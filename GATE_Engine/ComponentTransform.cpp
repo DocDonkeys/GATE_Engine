@@ -19,9 +19,9 @@ void ComponentTransform::Enable()
 	active = true;
 }
 
-void ComponentTransform::Update()
+void ComponentTransform::PreUpdate()
 {
-	
+
 }
 
 void ComponentTransform::Disable()
