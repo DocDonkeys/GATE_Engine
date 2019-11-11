@@ -47,8 +47,8 @@ public: //Vars
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> children;
 
-	math::AABB aabb;
-	math::OBB obb;
+	AABB aabb;
+	OBB obb;
 };
 #endif // !__GAMEOBJECT_H__
 

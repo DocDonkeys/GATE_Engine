@@ -4,6 +4,7 @@
 #include "GeometryLoader.h"
 #include <math.h>
 #include "Application.h"
+#include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 
 #ifdef _DEBUG
@@ -28,6 +29,7 @@ bool ModuleSceneIntro::Start()
 
 	//Create the Root node for Game Objects
 	root = new GameObject();
+	ComponentTransform* trans = (ComponentTransform*)root->GetComponent(COMPONENT_TYPE::TRANSFORM);
 
 	//Setup camera
 	App->camera->Move(vec3(1.0f, 1.0f, 1.0f));
@@ -85,6 +87,7 @@ void ModuleSceneIntro::DestroyGameObject(GameObject * go)
 	}*/
 
 	delete go;
+	numObjects--;
 }
 
 bool ModuleSceneIntro::AddTextureToGameObject(GameObject * go, const char* path)
