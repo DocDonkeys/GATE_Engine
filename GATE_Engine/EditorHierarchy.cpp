@@ -13,46 +13,16 @@ EditorHierarchy::EditorHierarchy(const char* name, bool startEnabled, ImGuiWindo
 
 void EditorHierarchy::Update()
 {
+	selected_go_already = false;
 	if (open_pop_up)
 		DrawPopUpWindow();
 
-	 //| ImGuiTreeNodeFlags_Selected;
-	for (int i = 0; i < App->scene_intro->root->children.size(); ++i)
-	{
-
-	}
+	int treenode_id = 0;
 	
 	for (int i = 0; i < App->scene_intro->root->children.size(); ++i)
 	{
-		ManageGameObject(App->scene_intro->root->children[i]);
+		ManageGameObject(App->scene_intro->root->children[i], treenode_id);
 	}
-	
-	//for (int i = 0; i < App->scene_intro->game_objects.size(); ++i)
-	//{
-	//	ImGuiTreeNodeFlags tmp_flags = base_flags;
-	//	if (focus_node == i)
-	//		tmp_flags = base_flags | ImGuiTreeNodeFlags_Selected;
-	//	
-	//	if (App->scene_intro->game_objects[i]->children.size() == 0)
-	//		tmp_flags = tmp_flags | ImGuiTreeNodeFlags_Leaf;
-
-	//	//Print GameObjects Hierarchy
-	//	if (ImGui::TreeNodeEx((void*)(intptr_t)i, tmp_flags, App->scene_intro->game_objects[i]->name.data()))
-	//		ImGui::TreePop();
-	//	
-	//	if (ImGui::IsItemClicked(0))
-	//	{
-	//		focus_node = i;
-	//		App->scene_intro->selected_go = App->scene_intro->game_objects[i];
-	//	} else if(ImGui::IsItemClicked(1) && ImGui::IsWindowHovered()){
-	//		open_pop_up = true;
-	//		focus_node = i;
-	//		App->scene_intro->selected_go = App->scene_intro->game_objects[i];
-	//	}
-	//}
-
-	
-	
 }
 
 void EditorHierarchy::DrawPopUpWindow()
@@ -76,7 +46,7 @@ void EditorHierarchy::DrawPopUpWindow()
 		}
 }
 
-void EditorHierarchy::ManageGameObject(GameObject* go)
+void EditorHierarchy::ManageGameObject(GameObject* go, int& treenode_id)
 {
 	ImGuiTreeNodeFlags tmp_flags = base_flags;
 	if (go == App->scene_intro->selected_go)
@@ -85,25 +55,31 @@ void EditorHierarchy::ManageGameObject(GameObject* go)
 	if (go->children.size() == 0)
 		tmp_flags = tmp_flags | ImGuiTreeNodeFlags_Leaf;
 
+
+	treenode_id++;
+
 	//Print GameObjects Hierarchy
-	if (ImGui::TreeNodeEx((void*)(intptr_t)0, tmp_flags, go->name.data()))
+	if (ImGui::TreeNodeEx((void*)(intptr_t)treenode_id, tmp_flags, go->name.data()))
 	{
+		if (ImGui::IsItemClicked(0) && selected_go_already == false)
+		{
+				App->scene_intro->selected_go = go;
+				selected_go_already = true;
+		}
+		else if (ImGui::IsItemClicked(1) && ImGui::IsWindowHovered() && selected_go_already == false) 
+		{
+			open_pop_up = true;
+			App->scene_intro->selected_go = go;
+		}
+
 		if (go->children.size() > 0)
+		{
 			for (int i = 0; i < go->children.size(); ++i)
 			{
-				ManageGameObject(go->children[i]);
+				ManageGameObject(go->children[i], treenode_id);
 			}
+		}
 
 		ImGui::TreePop();
-	}
-		
-
-	if (ImGui::IsItemClicked(0))
-	{
-		App->scene_intro->selected_go = go;
-	}
-	else if (ImGui::IsItemClicked(1) && ImGui::IsWindowHovered()) {
-		open_pop_up = true;
-		App->scene_intro->selected_go = go;
 	}
 }
