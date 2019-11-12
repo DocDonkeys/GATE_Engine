@@ -57,9 +57,9 @@ GameObject* ModuleSceneIntro::CreateEmptyGameObject()
 	return go;
 }
 
-GameObject* ModuleSceneIntro::CreateEmptyGameObject(const char* name)
+GameObject* ModuleSceneIntro::CreateEmptyGameObject(const char* name, float4x4 local_transform)
 {
-	GameObject* go = new GameObject(name);
+	GameObject* go = new GameObject(name,local_transform);
 	return go;
 }
 

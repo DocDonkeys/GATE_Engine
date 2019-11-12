@@ -21,6 +21,14 @@ GameObject::GameObject(const char* name) : name(name)
 	CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }
 
+GameObject::GameObject(const char * name, float4x4 local_mat) : name(name)
+{
+	//All Game Objects must have a transform component, so we assign it from creation
+	ComponentTransform* trans = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+	// TODO_CARLES: local transformation matrix of the gameobject assigned here
+	trans->localTrs = local_mat; //Assign the local transformation (usually used for imported objects)
+}
+
 GameObject::~GameObject()
 {
 	for (int i = 0; i < children.size(); ++i)

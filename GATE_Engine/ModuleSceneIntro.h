@@ -25,7 +25,7 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateEmptyGameObject();
-	GameObject* CreateEmptyGameObject(const char* name);
+	GameObject* CreateEmptyGameObject(const char* name, float4x4 local_transform);
 	void CreateEmptyGameObject(int num_of_go);
 	void DestroyGameObject(GameObject* go);
 

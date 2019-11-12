@@ -101,8 +101,18 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 {
 	float biggestMeshSize = -1.0f;
 
+	float4x4 local_trs;
+	//Before creating Game Object, obtain local transformation respect parent
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			local_trs[i][j] = node->mTransformation[i][j];
+		}
+	}
+	
 	//We create the gameobject for the node
-	GameObject* ret_go = App->scene_intro->CreateEmptyGameObject(node->mName.C_Str());
+	GameObject* ret_go = App->scene_intro->CreateEmptyGameObject(node->mName.C_Str(),local_trs);
 
 	if (node != nullptr && node->mNumMeshes > 0)
 	{
@@ -163,6 +173,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		{
 			GameObject* child = LoadAssimpNode(scene, node->mChildren[i], absolute_path, filename, full_path, objName, counter);
 			GOFunctions::ReParentGameObject(child,ret_go);
+
 		}
 
 	return ret_go;
@@ -212,7 +223,8 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const 
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
 
 	//We create a game object for the current mesh
-	GameObject* go = App->scene_intro->CreateEmptyGameObject(name);
+	float4x4 mat;
+	GameObject* go = App->scene_intro->CreateEmptyGameObject(name,mat.identity);
 
 	ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 	mesh_component->mesh = new_mesh;

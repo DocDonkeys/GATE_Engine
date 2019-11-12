@@ -22,6 +22,7 @@ class GameObject
 public:
 	GameObject();
 	GameObject(const char* name);
+	GameObject(const char* name, float4x4 local_mat);
 	~GameObject();
 
 public: //Methods
