@@ -1,6 +1,7 @@
 #include "ComponentMesh.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 
 ComponentMesh::ComponentMesh() : Component()
@@ -26,7 +27,12 @@ void ComponentMesh::Disable()
 void ComponentMesh::Draw()
 {
 	if (my_go->active && active && mesh != nullptr) {
+		ComponentTransform* transform = (ComponentTransform*)my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 		ComponentMaterial* material = (ComponentMaterial*)my_go->GetComponent(COMPONENT_TYPE::MATERIAL);
+
+		// Push Transform matrix
+		glPushMatrix();
+		glMultMatrixf(transform->globalTrs.Transposed().ptr());
 
 		if (material != nullptr && material->active) {
 			if (material->use_default_texture) {
@@ -48,5 +54,8 @@ void ComponentMesh::Draw()
 
 		if (debug_face_normals)
 			App->renderer3D->DrawMeshFaceNormals(mesh);
+
+		// Pop transform matrix
+		glPopMatrix();
 	}
 }

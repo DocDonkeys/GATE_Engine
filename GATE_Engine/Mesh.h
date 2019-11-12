@@ -43,7 +43,7 @@ public: // Vars
 	uint num_tex_coords = 0;
 	float* tex_coords = nullptr;
 
-	math::AABB bounds;	// In local space of the imported FBX
+	AABB bounds;	// In local space of the imported FBX
 	float3 size = { 0.0f, 0.0f, 0.0f };	// Absolute distance between bound max/min points
 
 	float normals_length = 1.0f;

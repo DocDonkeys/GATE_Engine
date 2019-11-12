@@ -132,6 +132,10 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 	{
 		float width = ImGui::GetWindowWidth() / 7.0f;
 
+		float3 newPosition = transform->position;
+		float3 newEulerRotation = transform->eulerRotation;
+		float3 newScale = transform->scale;
+
 		ImGui::Columns(4, "TransformGrid"); // 4-ways, with border
 
 		ImGui::Separator();
@@ -145,40 +149,44 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Position"); ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PX", &transform->position.x, 0.005f); ImGui::NextColumn();
+		ImGui::DragFloat("##PX", &newPosition.x, 0.005f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PY", &transform->position.y, 0.005f); ImGui::NextColumn();
+		ImGui::DragFloat("##PY", &newPosition.y, 0.005f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PZ", &transform->position.y, 0.005f); ImGui::NextColumn();
+		ImGui::DragFloat("##PZ", &newPosition.z, 0.005f); ImGui::NextColumn();
 
 		// Rotation
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Rotation"); ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RX", &transform->rotation.x, 0.005f); ImGui::NextColumn();
+		ImGui::DragFloat("##RX", &newEulerRotation.x, 0.005f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RY", &transform->rotation.y, 0.005f); ImGui::NextColumn();
+		ImGui::DragFloat("##RY", &newEulerRotation.y, 0.005f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RZ", &transform->rotation.y, 0.005f); ImGui::NextColumn();
+		ImGui::DragFloat("##RZ", &newEulerRotation.z, 0.005f); ImGui::NextColumn();
 
 		// Scale
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Scale   "); ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SX", &transform->scale.x, 0.005f); ImGui::NextColumn();
+		ImGui::DragFloat("##SX", &newScale.x, 0.005f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SY", &transform->scale.y, 0.005f); ImGui::NextColumn();
+		ImGui::DragFloat("##SY", &newScale.y, 0.005f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SZ", &transform->scale.y, 0.005f);
+		ImGui::DragFloat("##SZ", &newScale.z, 0.005f);
 
 		ImGui::Columns(1);
 		ImGui::TreePop();
+
+		// Data and Matrix Updating
+		if (!App->input->GetMouseWrapping())
+			transform->UpdateValues(newPosition, newEulerRotation, newScale);
 	}
 
 	ImGui::Separator();
@@ -210,7 +218,13 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 
 		ImGui::Text("Draw:");
 		ImGui::Checkbox("Vertex Normals", &mesh->debug_vertex_normals);
-		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals); ImGui::SameLine(200);
+		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals);
+		ImGui::Text("Length:");  ImGui::SameLine();
+		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 7.0f);
+		if (ImGui::DragFloat("##NL", &mesh->mesh->normals_length, 0.005f, 0.1f, 999.0f))
+		{
+			mesh->mesh->ChangeNormalsLength(mesh->mesh->normals_length);
+		}
 
 		ImGui::NextColumn();
 		ImGui::Text("Indexes:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_index);
@@ -219,17 +233,7 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::Text("Faces:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_polys);
 		ImGui::Text("Tex Coords:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_tex_coords);
 
-		ImGui::Separator();
 		ImGui::Columns(1);
-
-		//Normals Length
-		ImGui::Text("Normals length:"); ImGui::NextColumn();
-		if (ImGui::DragFloat("##PX", &mesh->mesh->normals_length, 0.005f))
-		{
-			ImGui::NextColumn();
-			mesh->mesh->ChangeNormalsLength(mesh->mesh->normals_length);
-		}
-
 		ImGui::TreePop();
 	}
 	ImGui::Separator();

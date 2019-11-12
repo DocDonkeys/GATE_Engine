@@ -6,6 +6,8 @@
 #include "GeometryLoader.h"
 #include "libs/imgui/imgui_impl_sdl.h"
 
+#include <Windows.h>
+
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
 #include "libs/mmgr/mmgr.h"
@@ -62,6 +64,25 @@ update_status ModuleInput::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::OrangeRed);
 
+	// Screen Wrapping
+	if (GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {
+
+		// Monitor x goes from 0 to width_x - 1
+		POINT p;
+		if (GetCursorPos(&p))
+		{
+			if (p.x > App->window->monitor_width - 5) {
+				SetCursorPos(10, p.y);
+				wrappedMouse = true;
+			}
+			else if (p.x < 5) {
+				SetCursorPos(App->window->monitor_width - 10, p.y);
+				wrappedMouse = true;
+			}
+		}
+	}
+
+	// Events
 	SDL_PumpEvents();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
@@ -139,11 +160,13 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / App->window->window_scale;
-			mouse_y = e.motion.y / App->window->window_scale;
+				if (!wrappedMouse) {
+					mouse_x = e.motion.x / App->window->window_scale;
+					mouse_y = e.motion.y / App->window->window_scale;
 
-			mouse_x_motion = e.motion.xrel / App->window->window_scale;
-			mouse_y_motion = e.motion.yrel / App->window->window_scale;
+					mouse_x_motion = e.motion.xrel / App->window->window_scale;
+					mouse_y_motion = e.motion.yrel / App->window->window_scale;
+				}
 			break;
 
 			//case SDL_DROPBEGIN:     // Drop Start
@@ -222,6 +245,14 @@ update_status ModuleInput::PreUpdate(float dt)
 		//Pass the event to IMGUI for input and scrolling purposes
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
+
+	return UPDATE_CONTINUE;
+}
+
+// After all updates are done, mark mouse wrapping as over
+update_status ModuleInput::PostUpdate(float dt)
+{
+	wrappedMouse = false;
 
 	return UPDATE_CONTINUE;
 }

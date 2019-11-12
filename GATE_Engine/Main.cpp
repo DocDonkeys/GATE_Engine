@@ -105,14 +105,14 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
-	App = NULL; // Why did the Physics code not have this?????
+	App = NULL; // Why did the Physics code not have this?????	// Because having a nullptr allocation before returning main is kinda pointless
 	LOG("Exiting Engine...");
 
 	//mmgr Mem Leak Detector
 #ifdef _DEBUG
 
 #ifdef _MMGR_MEM_LEAK
-	int leaks = MAX(0, m_getMemoryStatistics().totalAllocUnitCount/* - 23*/);
+	int leaks = max(0, m_getMemoryStatistics().totalAllocUnitCount/* - 23*/);
 	LOG("With %d memory leaks!\n", (leaks > 0) ? leaks : 0);
 	SDL_assert(leaks <= 0);
 #else
