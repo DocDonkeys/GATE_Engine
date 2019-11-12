@@ -185,7 +185,8 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::TreePop();
 
 		// Data and Matrix Updating
-		transform->UpdateValues(newPosition, newEulerRotation, newScale);
+		if (!App->input->GetMouseWrapping())
+			transform->UpdateValues(newPosition, newEulerRotation, newScale);
 	}
 
 	ImGui::Separator();

@@ -32,6 +32,7 @@ public:
 
 	bool Init();
 	update_status PreUpdate(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 
 	KEY_STATE GetKey(int id) const
@@ -69,6 +70,11 @@ public:
 		return mouse_y_motion;
 	}
 
+	bool GetMouseWrapping() const
+	{
+		return wrappedMouse;
+	}
+
 	// Gather relevant win events
 	bool GetWindowEvent(EventWindow ev) {
 		return windowEvents[ev];
@@ -94,6 +100,8 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
+
+	bool wrappedMouse = false;	// Flag to mark an update that musn't update mouse input because of the wrapping mouse teleportation
 
 	unsigned char key_down[5] = "DOWN";
 	unsigned char key_repeat[7] = "REPEAT";

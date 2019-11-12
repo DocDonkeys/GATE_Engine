@@ -35,6 +35,10 @@ public:
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
 
+	// Monitor data
+	int monitor_width;
+	int monitor_height;
+
 	//Window data
 	int window_width = 1280;	//CHANGE/FIX: Save/Load
 	int window_height = 1024;

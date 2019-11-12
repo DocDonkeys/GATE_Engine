@@ -34,6 +34,15 @@ bool ModuleWindow::Init()
 	}
 	else
 	{
+		// Get screen data
+		const HWND hDesktop = GetDesktopWindow();
+		HMONITOR monitor = MonitorFromWindow(hDesktop, MONITOR_DEFAULTTONEAREST);
+		MONITORINFO info;
+		info.cbSize = sizeof(MONITORINFO);
+		GetMonitorInfo(monitor, &info);
+		monitor_width = info.rcMonitor.right - info.rcMonitor.left;
+		monitor_height = info.rcMonitor.bottom - info.rcMonitor.top;
+
 		//Create window
 		int width = App->window->window_width * App->window->window_scale;
 		int height = App->window->window_height * App->window->window_scale;
