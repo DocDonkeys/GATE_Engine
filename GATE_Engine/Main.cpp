@@ -105,7 +105,7 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
-	App = NULL; // Why did the Physics code not have this?????
+	App = NULL; // Why did the Physics code not have this?????	// Because having a nullptr allocation before returning main is kinda pointless
 	LOG("Exiting Engine...");
 
 	//mmgr Mem Leak Detector

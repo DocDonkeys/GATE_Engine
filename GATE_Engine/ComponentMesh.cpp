@@ -32,7 +32,7 @@ void ComponentMesh::Draw()
 
 		// Push Transform matrix
 		glPushMatrix();
-		glMultMatrixf(transform->localTrs.Transposed().ptr());
+		glMultMatrixf(transform->globalTrs.Transposed().ptr());
 
 		if (material != nullptr && material->active) {
 			if (material->use_default_texture) {
