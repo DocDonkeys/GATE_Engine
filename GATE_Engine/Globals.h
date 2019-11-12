@@ -44,17 +44,23 @@ void log(const char file[], int line, const char* format, ...);
                               \
     }
 
-// Old Utility Macros, substituted by inline functions: all of the benefits with none of the problems.
-#define IN_RANGE( value, minimum, maximum ) ( ((value) >= (minimum) && (value) <= (maximum)) ? 1 : 0 )	//Returns if within range
-#define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )
-#define MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )
-#define CLAMP(x, upper, lower) (MIN(upper, MAX(x, lower)))	//If X is between lower and upper, returns X. Else, if X < lower, returns lower. Else, if X > upper, returns upper.
-#define TO_BOOL( a )  ( (a != 0) ? true : false )
+// Utilities (Commented ones have been taken care of by other libraries or are deemed obsolete)
 
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
+//#define IN_RANGE( value, minimum, maximum ) ( ((value) >= (minimum) && (value) <= (maximum)) ? 1 : 0 )	//Returns if within range
+//#define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )
+//#define MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )
+//#define CLAMP(x, upper, lower) (MIN(upper, MAX(x, lower)))	//If X is between lower and upper, returns X. Else, if X < lower, returns lower. Else, if X > upper, returns upper.
+//#define TO_BOOL( a )  ( (a != 0) ? true : false )
 
-// Utilities
+//#define DEGTORAD 0.0174532925199432957f
+//#define RADTODEG 57.295779513082320876f
+
+//template<class T>
+//inline void DegToRad(T& value) { value * 0.0174532925199432957f; }
+
+//template<class T>
+//inline void RadToDeg(T& value) { value * 57.295779513082320876f; }
+
 template<class T>
 inline bool InRange(T& value, T& minimum, T& maximum) { return (value >= minimum && value <= maximum) ? true : false; }
 
@@ -64,17 +70,11 @@ inline T Min(T& a, T& b) { return (a < b) ? a : b; }
 template<class T>
 inline T Max(T& a, T& b) { return (a > b) ? a : b; }
 
-template<class T>
-inline T Clamp(T& x, T& upper, T& lower) { return Min(upper, Max(x, lower)); }
+//template<class T>
+//inline T Clamp(T& x, T& upper, T& lower) { return Min(upper, Max(x, lower)); }
 
 template<class T>
 inline T ToBool(T& a) { return (a != 0) ? true : false; }
-
-template<class T>
-inline void DegToRad(T& value) { value * 0.0174532925199432957f; }
-
-template<class T>
-inline void RadToDeg(T& value) { value * 57.295779513082320876f; }
 
 // Standard string size
 #define SHORT_STR	32

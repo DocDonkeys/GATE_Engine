@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "ComponentTransform.h"
 
+#include "libs/MathGeoLib/include/Math/MathFunc.h"
+
 ComponentTransform::ComponentTransform() : Component()
 {
 	type = COMPONENT_TYPE::TRANSFORM;
@@ -44,7 +46,7 @@ void ComponentTransform::UpdateGlobalMat()
 
 void ComponentTransform::UpdateQuatByEuler(float3& newEuler)
 {
-	float3 rotAng = (newEuler - eulerRotation) * DEGTORAD;
+	float3 rotAng = DegToRad(newEuler - eulerRotation);
 	quatRotation = quatRotation * Quat::FromEulerXYZ(rotAng.x, rotAng.y, rotAng.z);
 }
 
@@ -57,7 +59,7 @@ void ComponentTransform::DataToMat()
 void ComponentTransform::MatToData()
 {
 	localTrs.Decompose(position, quatRotation, scale);
-	eulerRotation = quatRotation.ToEulerXYZ() * RADTODEG;
+	eulerRotation = RadToDeg(quatRotation.ToEulerXYZ());
 }
 
 bool ComponentTransform::UpdateValues(float3& pos, float3& rot, float3& scale)

@@ -90,7 +90,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 				if (FirstPersonCamera(newPos, currMovSpeed)) {	// First Person Controls (if true == there's an input)
 					camMovSpeed += App->input->GetMouseZ();	// Mouse Scroll: Increase/Decrease movement speed
-					camMovSpeed = CLAMP(camMovSpeed, maxMovSpeed, 0.1f);
+					camMovSpeed = math::Clamp(camMovSpeed, 0.1f, maxMovSpeed);
 				}
 				else {
 					newPos -= Z * App->input->GetMouseZ();	// Mouse Scroll: Forward/Backwrads
