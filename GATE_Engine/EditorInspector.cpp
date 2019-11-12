@@ -217,7 +217,13 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 
 		ImGui::Text("Draw:");
 		ImGui::Checkbox("Vertex Normals", &mesh->debug_vertex_normals);
-		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals); ImGui::SameLine(200);
+		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals);
+		ImGui::Text("Length:");  ImGui::SameLine();
+		ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 7.0f);
+		if (ImGui::DragFloat("##NL", &mesh->mesh->normals_length, 0.005f, 0.1f, 999.0f))
+		{
+			mesh->mesh->ChangeNormalsLength(mesh->mesh->normals_length);
+		}
 
 		ImGui::NextColumn();
 		ImGui::Text("Indexes:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_index);
@@ -226,17 +232,7 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::Text("Faces:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_polys);
 		ImGui::Text("Tex Coords:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_tex_coords);
 
-		ImGui::Separator();
 		ImGui::Columns(1);
-
-		//Normals Length
-		ImGui::Text("Normals length:"); ImGui::NextColumn();
-		if (ImGui::DragFloat("##PX", &mesh->mesh->normals_length, 0.005f))
-		{
-			ImGui::NextColumn();
-			mesh->mesh->ChangeNormalsLength(mesh->mesh->normals_length);
-		}
-
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
