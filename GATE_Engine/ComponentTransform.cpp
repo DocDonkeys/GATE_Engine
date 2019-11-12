@@ -76,8 +76,8 @@ bool ComponentTransform::UpdateValues(float3& pos, float3& rot, float3& scale)
 		|| rot.y != this->eulerRotation.y
 		|| rot.z != this->eulerRotation.z)
 	{
+		UpdateQuatByEuler(rot);
 		eulerRotation = rot;
-		UpdateQuatByEuler(eulerRotation);
 		ret = true;
 	}
 
