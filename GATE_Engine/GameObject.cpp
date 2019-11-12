@@ -150,18 +150,18 @@ Component * GameObject::GetComponent(COMPONENT_TYPE type)
 	return nullptr;
 }
 
-void GameObject::ReParent(GameObject * new_parent)
+void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent)
 {
 	//Get ourselves out of our current parent's children list
-	if (parent != nullptr)
-	for (int i = 0; i < parent->children.size(); ++i)
-		if (parent->children[i] == this)
-		{
-			parent->children.erase(parent->children.begin() + (i -1));
-			break;
-		}
+	if (child->parent != nullptr)
+		for (int i = 0; i < child->parent->children.size(); ++i)
+			if (child->parent->children[i]->name == child->name)
+			{
+				child->parent->children.erase(child->parent->children.begin() + i);
+				break;
+			}
 	//Assign our new parent and add ourselves into its children list
-	parent = new_parent;
-	if (parent != nullptr)
-	parent->children.push_back(this);
+	child->parent = new_parent;
+	if (child->parent != nullptr)
+		child->parent->children.push_back(child);
 }

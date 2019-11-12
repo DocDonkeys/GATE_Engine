@@ -23,6 +23,7 @@ public:
 private:
 	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 	bool selected_go_already = false;
+	GameObject* dragged_go = nullptr;
 
 };
 

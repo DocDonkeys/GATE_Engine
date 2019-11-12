@@ -34,9 +34,6 @@ public: //Methods
 	Component* CreateComponent(COMPONENT_TYPE type);
 	Component* GetComponent(COMPONENT_TYPE type);
 
-	//Change the parent of the GamObject with its new parent
-	void ReParent(GameObject* new_parent);
-
 public: //Vars
 	bool active = true;
 	bool staticObj = true;
@@ -50,5 +47,10 @@ public: //Vars
 	math::AABB aabb;
 	math::OBB obb;
 };
+
+//Namespace to carry out operations related to Game Objects
+namespace GOFunctions {
+	void ReParentGameObject(GameObject* child, GameObject* parent);
+}
 #endif // !__GAMEOBJECT_H__
 

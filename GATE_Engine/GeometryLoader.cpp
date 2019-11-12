@@ -85,7 +85,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		//We load all nodes inside the root node, respecting parenting in gameobjects
 		aiNode* root = scene->mRootNode;
 		GameObject* go = LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
-		go->ReParent(App->scene_intro->root);
+		GOFunctions::ReParentGameObject(go,App->scene_intro->root);
 		//Once finished we release the original file
 		aiReleaseImport(scene);
 	}
@@ -162,7 +162,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		for (int i = 0; i < node->mNumChildren; ++i)
 		{
 			GameObject* child = LoadAssimpNode(scene, node->mChildren[i], absolute_path, filename, full_path, objName, counter);
-			child->ReParent(ret_go);
+			GOFunctions::ReParentGameObject(child,ret_go);
 		}
 
 	return ret_go;
