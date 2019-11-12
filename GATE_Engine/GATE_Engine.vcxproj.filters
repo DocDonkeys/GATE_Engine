@@ -129,6 +129,9 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Sources\Component Structure\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -273,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

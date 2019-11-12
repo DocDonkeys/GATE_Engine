@@ -110,6 +110,14 @@ enum update_status
 #define CONFIG_FILENAME "settings/config.json"
 #define DEFAULT_CONFIG_FILENAME "settings/default_config.json"
 
+//Common Directories
+#define ASSETS_FOLDER "/Assets/"
+#define LIBRARY_FOLDER "/Library/"
+#define LIBRARY_TEXTURES_FOLDER "/Library/Textures/"
+#define LIBRARY_MESH_FOLDER "/Library/Meshes/"
+#define LIBRARY_MODEL_FOLDER "/Library/Models/"
+#define LIBRARY_MATERIAL_FOLDER "/Library/Materials/"
+
 //COMMENTS DOCUMENTATION
 /*
 --> TODO: Usual "needs to be done", but instead we use the following one as many other imported libraries use the same keywords.
