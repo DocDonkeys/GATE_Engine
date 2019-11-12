@@ -21,6 +21,7 @@
 #include "ModulePhysics.h"
 #include "GeometryLoader.h"
 #include "TextureLoader.h"
+#include "ModuleFileSystem.h"
 
 // SDL
 #include "libs/SDL/include/SDL.h"
@@ -143,6 +144,7 @@ public:
 	ModulePhysics*		physics;
 	GeometryLoader*		geometry_loader;
 	TextureLoader*		texture_loader;
+	ModuleFileSystem*	file_system;
 
 	//App members
 	hardware_info		hardware;

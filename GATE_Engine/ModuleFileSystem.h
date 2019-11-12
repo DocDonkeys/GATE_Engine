@@ -15,7 +15,7 @@ class ModuleFileSystem : public Module
 {
 public:
 
-	ModuleFileSystem(const char* game_path = nullptr);
+	ModuleFileSystem(Application* app, const char* name = "null", const char* game_path = ASSETS_FOLDER, bool start_enabled = true);
 
 	// Destructor
 	~ModuleFileSystem();

@@ -28,6 +28,7 @@ Application::Application()
 	input = new ModuleInput(this, "Input");
 	geometry_loader = new GeometryLoader(this, "Geometry_Loader");
 	texture_loader = new TextureLoader(this, "Texture_Loader");
+	file_system = new ModuleFileSystem(this, "File_System",ASSETS_FOLDER);
 	scene_intro = new ModuleSceneIntro(this, "Scene");
 	renderer3D = new ModuleRenderer3D(this, "Renderer");
 	camera = new ModuleCamera3D(this, "Camera");
