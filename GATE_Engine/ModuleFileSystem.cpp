@@ -4,6 +4,7 @@
 #include "libs/PhysFS/include/physfs.h"
 #include "libs/Assimp/include/cfileio.h"
 #include "libs/Assimp/include/types.h"
+#include <fstream>
 
 #pragma comment( lib, "libs/PhysFS/libx86/physfs.lib" )
 
@@ -258,6 +259,21 @@ void ModuleFileSystem::NormalizePath(std::string & full_path) const
 	}
 }
 
+void ModuleFileSystem::DuplicateFile(const char * path, const char * destination)
+{
+	std::string full_path, relative_path, filename, extension;
+	SplitFilePath(path,&relative_path,&filename,&extension);
+	full_path = path;
+	NormalizePath(full_path);
+	std::string destPath = std::string(*PHYSFS_getSearchPath()).append("/") + relative_path;
+
+	std::ifstream  src;
+	src.open(full_path.data(), std::ios::binary);
+	std::ofstream  dst(destPath.data(), std::ios::binary);
+
+	int i = 0;
+}
+
 unsigned int ModuleFileSystem::Load(const char * path, const char * file, char ** buffer) const
 {
 	string full_path(path);
@@ -375,7 +391,7 @@ bool ModuleFileSystem::SaveUnique(string& name, const void * buffer, uint size, 
 {
 	char result[250];
 
-	//sprintf_s(result, 250, "%s%s_%llu.%s", path, prefix, App->resources->GenerateNewUID(), extension);
+	sprintf_s(result, 250, "%s%s_%llu.%s", path, prefix, 111/*App->resources->GenerateNewUID()*/, extension);
 	NormalizePath(result);
 	if (Save(result, buffer, size) > 0)
 	{

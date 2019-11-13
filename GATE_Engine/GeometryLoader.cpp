@@ -35,7 +35,7 @@
 */
 
 GeometryLoader::GeometryLoader(Application * app, const char * name, bool start_enabled) : Module(app, name, start_enabled)
-{
+{	
 }
 
 GeometryLoader::~GeometryLoader()
@@ -75,6 +75,8 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 
 	std::size_t found = str.find_last_of("/\\"); //Find last\\  (right before the filename) //
 	absolute_path = str.substr(0, found + 1);
+
+	App->file_system->DuplicateFile(full_path,ASSETS_FOLDER);
 
 	//We call assimp to import the file
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
