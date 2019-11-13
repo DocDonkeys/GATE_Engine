@@ -270,6 +270,7 @@ void GeometryLoader::LoadPrimitiveNormals(Mesh * new_mesh, const par_shapes_mesh
 
 Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * loaded_mesh, const std::string & absolute_path)
 {
+	App->texture_loader->DuplicateTextureAsDDS(); //TEST
 	Texture* ret = nullptr;
 	if (scene->HasMaterials())
 	{

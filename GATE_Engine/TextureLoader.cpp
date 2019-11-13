@@ -130,6 +130,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	// Specify a two-dimensional texture image (https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexImage2D.xhtml)
 	glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, imgData);
 
+
 	if (!defaultTex)	// If texture isn't the default one
 	{
 		if (target == GL_TEXTURE_2D) {	// Change GL_Setting related to texture mode depending on the texture loaded
@@ -221,6 +222,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 	else {
 		LOG("[Error]: Image loading failed. Cause: %s", iluErrorString(ilGetError()));
 	}
+	DuplicateTextureAsDDS();
 
 	ilDeleteImages(1, (const ILuint*)&imgId);	// Delete image inside DevIL
 
@@ -255,4 +257,25 @@ Texture* TextureLoader::GetDefaultTex()
 uint TextureLoader::GetDefaultId() const
 {
 	return defaultTex->id;
+}
+
+bool TextureLoader::DuplicateTextureAsDDS() const
+{
+	bool ret = false;
+	std::string test = "Testing the fucking file system, i want to die";
+
+	ILuint   size; 
+	ILubyte *data; 
+	
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+	size = ilSaveL(IL_DDS, NULL, 0 ); // Get the size of the data buffer
+	if(size > 0) 
+	{    
+		data = new ILubyte[size]; // allocate data buffer   
+		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function        
+			ret = App->file_system->SaveUnique(test, data, size, LIBRARY_TEXTURES_FOLDER, "texture", "dds");
+		RELEASE_ARRAY(data);
+	}
+
+	return ret;
 }
