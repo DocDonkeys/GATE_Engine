@@ -1,5 +1,6 @@
 #include <chrono>
 #include "RNGenerator.h"
+#include "Globals.h"
 
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK

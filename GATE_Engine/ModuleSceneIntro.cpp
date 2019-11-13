@@ -32,8 +32,8 @@ bool ModuleSceneIntro::Start()
 	ComponentTransform* trans = (ComponentTransform*)root->GetComponent(COMPONENT_TYPE::TRANSFORM);
 
 	//Setup camera
-	App->camera->Move(vec3(1.0f, 1.0f, 1.0f));
-	App->camera->LookAt(vec3(0, 0, 0));
+	App->camera->Move(float3(1.0f, 1.0f, 1.0f));
+	App->camera->LookAt(float3(0, 0, 0));
 
 	//Load the Baker House
 	App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");

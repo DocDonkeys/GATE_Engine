@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 
+#include "libs/MathGeoLib/include/Math/float3.h"
+#include "libs/MathGeoLib/include/Math/float4.h"
+#include "libs/MathGeoLib/include/Math/float4x4.h"
+#include "libs/MathGeoLib/include/Math/quat.h"
 #include "libs/MathGeoLib/include/Geometry/AABB.h"
 #include "libs/MathGeoLib/include/Geometry/OBB.h"
 
@@ -45,8 +49,9 @@ public: //Vars
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> children;
 
-	AABB aabb;
 	OBB obb;
+	AABB aabb;
+	float3 size;
 };
 
 //Namespace to carry out operations related to Game Objects

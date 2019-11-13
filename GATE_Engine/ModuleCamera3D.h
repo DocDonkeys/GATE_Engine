@@ -1,7 +1,9 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "glmath.h"
+
+#include "libs/MathGeoLib/include/Math/float3.h"
+#include "libs/MathGeoLib/include/Math/float4x4.h"
 
 class GameObject;
 
@@ -16,11 +18,13 @@ public:
 	bool CleanUp();
 
 public:
-	void GoLook(const vec3 &Position, const vec3 &Spot, bool RotateAroundReference = false);
-	void LookFrom(const vec3 &Spot, const vec3 &Direction, float Distance = 0.0f);
-	void LookAt(const vec3 &Spot, float Distance = 0.0f);
-	void Move(const vec3 &Movement);
+	//void GoLook(const float3 &Position, const float3 &Spot, bool RotateAroundReference = false);
+	void LookFrom(const float3 &Spot, const float3 &Direction, float Distance = 0.0f);
+	void LookAt(const float3 &Spot, float Distance = 0.0f);
+	void Move(const float3 &Movement);
+	void MoveTo(const float3 &position);
 	void CenterToObject(GameObject* obj, float multiplier = 1.0f);
+	
 	float* GetViewMatrix();
 
 private:
@@ -30,11 +34,11 @@ private:
 	};
 
 	// Input Checks
-	void MoveCamera(vec3& mov, float& speed);
+	void MoveCamera(float3& mov, float& speed);
 	void RotateCamera(rotate_type rotType, float& rotSpeed);
-	void DragCamera(vec3& mov, float delta_x, float delta_y);
+	void DragCamera(float3& mov, float delta_x, float delta_y);
 	void MouseRotate(rotate_type type, float delta_x, float delta_y);
-	bool FirstPersonCamera(vec3& mov, float& movSpeed);
+	bool FirstPersonCamera(float3& mov, float& movSpeed);
 
 	// Double Tap Checks
 	void ProcessBoost(bool& boostType, float& currSpeed, void(ModuleCamera3D::*fPtr)(void));
@@ -54,7 +58,8 @@ private:
 	void CalculateViewMatrix();
 
 public:
-	vec3 X, Y, Z, Position, Reference;
+	float4x4 transform = float4x4::identity;
+	float3 reference;
 
 	// Camera Movement
 	float camMovSpeed;			// Movement speed for keyboard inputs
@@ -75,7 +80,7 @@ public:
 	float camDefaultMin = 0.1f;
 
 private:
-	mat4x4 ViewMatrix, ViewMatrixInverse;
+	float4x4 viewMatrix;
 
 	// Dobule Tap
 	Timer doubleTapTimer;

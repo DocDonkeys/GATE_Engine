@@ -3,7 +3,6 @@
 
 #include "Component.h"
 #include "Globals.h"
-#include "libs/MathGeoLib/include/Math/float4.h"
 
 class Texture;
 

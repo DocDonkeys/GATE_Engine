@@ -6,8 +6,6 @@
 #include "GeometryLoader.h"
 #include "libs/imgui/imgui_impl_sdl.h"
 
-#include <Windows.h>
-
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
 #include "libs/mmgr/mmgr.h"

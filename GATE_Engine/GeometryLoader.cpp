@@ -7,8 +7,8 @@
 #include "libs/Assimp/include/postprocess.h"
 #include "libs/Assimp/include/cfileio.h"
 
-#include "libs/MathGeoLib/include/MathGeoLib.h"
-#include "libs/MathGeoLib/include/MathBuildConfig.h"
+//#include "libs/MathGeoLib/include/MathGeoLib.h"
+//#include "libs/MathGeoLib/include/MathBuildConfig.h"
 
 #pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
 
@@ -16,6 +16,7 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "GameObject.h"
+#include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 
@@ -127,7 +128,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			new_mesh->LoadIndices(loaded_mesh); //Indices
 			new_mesh->LoadNormals(loaded_mesh); //Normals
 			new_mesh->LoadTexCoords(loaded_mesh); // UV's
-			new_mesh->LoadMeshSizeData();
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -145,17 +145,27 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			/*GameObject* go = App->scene_intro->CreateEmptyGameObject(std::string(objName + std::to_string(counter++)).c_str());
 			go->ReParent(ret_go);*/
 
+			// Transform
+			ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+			new_mesh->LoadMeshBounds();							// Set mesh AABB
+			ret_go->obb.SetFrom(new_mesh->GetBounds());			// Pass AABB to obj OBB
+			ret_go->obb.Transform(trs_component->globalTrs);	// Transform OBB with transform global matrix
+			ret_go->aabb.SetFrom(ret_go->obb);					// Set object AABB
+
+			// Mesh
 			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
 			mesh_component->mesh->path = full_path;
 			mesh_component->mesh->filename = filename;
+			ret_go->size = mesh_component->mesh->GetSize();
 
-			float currMeshSize = length({ new_mesh->size.x, new_mesh->size.y, new_mesh->size.z });
+			float currMeshSize = Length(new_mesh->GetSize());
 			if (biggestMeshSize < currMeshSize) {
 				App->camera->CenterToObject(ret_go);
 				biggestMeshSize = currMeshSize;
 			}
 
+			// Material
 			ComponentMaterial* material_component = (ComponentMaterial*)ret_go->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
 			if (tex == nullptr || tex->id == 0) {
@@ -202,7 +212,7 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const 
 		new_mesh->vertex[i].z = p_mesh->points[j + 2];
 	}
 
-	new_mesh->LoadMeshSizeData();
+	new_mesh->LoadMeshBounds();
 
 	for (int i = 0; i < new_mesh->num_index; i++)
 	{

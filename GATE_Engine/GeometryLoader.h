@@ -6,7 +6,6 @@
 #include <vector>
 #include <string>
 
-#include "libs/MathGeoLib/include/Math/float3.h"
 #include "libs/Assimp/include/cimport.h"
 
 struct par_shapes_mesh_s;
