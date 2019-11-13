@@ -82,8 +82,9 @@ bool ModuleFileSystem::Init(/*Config* config*/)
 // Called before quitting
 bool ModuleFileSystem::CleanUp()
 {
-	//LOG("Freeing File System subsystem");
-
+	LOG("Freeing File System subsystem");
+	RELEASE(BassIO);
+	RELEASE(AssimpIO);
 	return true;
 }
 
@@ -602,7 +603,7 @@ BOOL CALLBACK BassSeek(QWORD offset, void* file)
 
 void ModuleFileSystem::CreateBassIO()
 {
-	RELEASE(BassIO);
+	delete BassIO;
 
 	BassIO = new BASS_FILEPROCS;
 	BassIO->close = BassClose;

@@ -1,6 +1,7 @@
 #include "GeometryLoader.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "MeshImporter.h"
 
 #include "libs/Assimp/include/cimport.h"
 #include "libs/Assimp/include/scene.h"
@@ -167,6 +168,11 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			else {
 				material_component->AssignTexture(tex);
 			}
+
+			//TEST: Save mesh to library/Meshes/
+			MeshImporter m_imp;
+			std::string output;
+			m_imp.Export(LIBRARY_MESH_FOLDER, output,new_mesh,node->mName.C_Str());
 		}
 	}
 
