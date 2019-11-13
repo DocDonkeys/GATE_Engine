@@ -132,6 +132,9 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Importer.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -280,6 +283,9 @@
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -335,6 +341,9 @@
     </Filter>
     <Filter Include="Sources\Helpers">
       <UniqueIdentifier>{b9a42893-a637-46ac-a940-2ac43186c8d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\File Format">
+      <UniqueIdentifier>{4cd34461-00f2-4933-bc3a-6f12e445cbe6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
