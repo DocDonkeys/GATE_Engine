@@ -37,7 +37,7 @@ public:
 	uint GetDefaultId() const;
 
 	//Save a given texture in DDS format inside the textures library folder
-	bool DuplicateTextureAsDDS() const;
+	bool DuplicateTextureAsDDS(const char* name) const;
 private:
 	std::vector<Texture*> textures;	// IMPROVE: This class having accessible variables and a list makes it more of a "Manager" rather than a tool, consider changing nomenclature and Filter.
 	Texture* defaultTex;

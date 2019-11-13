@@ -222,7 +222,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 	else {
 		LOG("[Error]: Image loading failed. Cause: %s", iluErrorString(ilGetError()));
 	}
-	DuplicateTextureAsDDS();
+	DuplicateTextureAsDDS(tex->filename.data());
 
 	ilDeleteImages(1, (const ILuint*)&imgId);	// Delete image inside DevIL
 
@@ -259,10 +259,13 @@ uint TextureLoader::GetDefaultId() const
 	return defaultTex->id;
 }
 
-bool TextureLoader::DuplicateTextureAsDDS() const
+bool TextureLoader::DuplicateTextureAsDDS(const char* name) const
 {
 	bool ret = false;
-	std::string test = "Testing the fucking file system, i want to die";
+	std::string output, filename;
+
+	filename = name;
+	filename = App->SubtractString(filename,".",true,true);
 
 	ILuint   size; 
 	ILubyte *data; 
@@ -273,7 +276,7 @@ bool TextureLoader::DuplicateTextureAsDDS() const
 	{    
 		data = new ILubyte[size]; // allocate data buffer   
 		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function        
-			ret = App->file_system->SaveUnique(test, data, size, LIBRARY_TEXTURES_FOLDER, "texture", "dds");
+			ret = App->file_system->SaveUnique(output, data, size, LIBRARY_TEXTURES_FOLDER, filename.data(), "dds");
 		RELEASE_ARRAY(data);
 	}
 
