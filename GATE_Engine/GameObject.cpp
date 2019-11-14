@@ -25,7 +25,6 @@ GameObject::GameObject(const char * name, float4x4 local_mat) : name(name)
 {
 	//All Game Objects must have a transform component, so we assign it from creation
 	ComponentTransform* trans = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	// TODO_CARLES: local transformation matrix of the gameobject assigned here
 	trans->localTrs = local_mat; //Assign the local transformation (usually used for imported objects)
 }
 
@@ -223,6 +222,7 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 				child->parent->children.erase(child->parent->children.begin() + i);
 				break;
 			}
+
 	//Assign our new parent and add ourselves into its children list
 	child->parent = new_parent;
 	if (child->parent != nullptr)

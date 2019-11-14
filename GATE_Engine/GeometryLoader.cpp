@@ -116,7 +116,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 	}
 	
 	//We create the gameobject for the node
-	GameObject* ret_go = App->scene_intro->CreateEmptyGameObject(node->mName.C_Str(),local_trs);
+	GameObject* ret_go = App->scene_intro->CreateEmptyGameObject(node->mName.C_Str(), local_trs);
 
 	if (node != nullptr && node->mNumMeshes > 0)
 	{
@@ -158,11 +158,13 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 			// Transform
 			ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+			trs_component->MatToData();
+			trs_component->needsMatUpdate = true;
 			new_mesh->LoadMeshBounds();							// Set mesh AABB
 			ret_go->obb.SetFrom(new_mesh->GetBounds());			// Pass AABB to obj OBB
 			ret_go->obb.Transform(trs_component->globalTrs);	// Transform OBB with transform global matrix
 			ret_go->aabb.SetFrom(ret_go->obb);					// Set object AABB
-
+			
 			// Mesh
 			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
@@ -198,8 +200,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		for (int i = 0; i < node->mNumChildren; ++i)
 		{
 			GameObject* child = LoadAssimpNode(scene, node->mChildren[i], absolute_path, filename, full_path, objName, counter);
-			GOFunctions::ReParentGameObject(child,ret_go);
-
+			GOFunctions::ReParentGameObject(child, ret_go);
 		}
 
 	return ret_go;

@@ -1,7 +1,9 @@
 #include "Globals.h"
+#include "Application.h"
 #include "ComponentTransform.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
+#include "libs/SDL/include/SDL_assert.h"
 
 ComponentTransform::ComponentTransform() : Component()
 {
@@ -24,12 +26,13 @@ void ComponentTransform::Disable()
 
 void ComponentTransform::PreUpdate()
 {
-	if (my_go->parent != nullptr)
-	{
-		if (needsMatUpdate) {
-			UpdateGlobalMat();
-			needsMatUpdate = false;
-		}
+	if (my_go->parent == nullptr) {
+		SDL_assert(my_go == App->scene_intro->root);
+	}
+
+	if (needsMatUpdate) {
+		UpdateGlobalMat();
+		needsMatUpdate = false;
 	}
 }
 
@@ -51,6 +54,11 @@ void ComponentTransform::UpdateQuatByEuler(float3& newEuler)
 	quatRotation = quatRotation * Quat::FromEulerXYZ(rotAng.x, rotAng.y, rotAng.z);
 }
 
+void ComponentTransform::UpdateEulerByQuat(Quat& q)
+{
+	eulerRotation = RadToDeg(q.ToEulerXYZ());
+}
+
 void ComponentTransform::DataToMat()
 {
 	localTrs = float4x4::FromTRS(position, quatRotation, scale);
@@ -60,7 +68,7 @@ void ComponentTransform::DataToMat()
 void ComponentTransform::MatToData()
 {
 	localTrs.Decompose(position, quatRotation, scale);
-	eulerRotation = RadToDeg(quatRotation.ToEulerXYZ());
+	UpdateEulerByQuat(quatRotation);
 }
 
 bool ComponentTransform::UpdateValues(float3& pos, float3& rot, float3& scale)

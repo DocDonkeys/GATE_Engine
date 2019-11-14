@@ -21,6 +21,7 @@ public:
 
 	bool UpdateValues(float3& pos, float3& rot, float3& scale);
 	void UpdateQuatByEuler(float3& newEuler);
+	void UpdateEulerByQuat(Quat& q);
 	void DataToMat();
 	void MatToData();
 
