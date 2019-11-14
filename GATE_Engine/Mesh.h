@@ -19,7 +19,10 @@ public: // Calls
 	void LoadNormals(const aiMesh* loaded_mesh);
 	void LoadTexCoords(const aiMesh* loaded_mesh);
 	void ChangeNormalsLength(float new_length);
-	void LoadMeshSizeData();
+	void LoadMeshBounds();
+
+	AABB GetBounds() { return bounds; }
+	float3 GetSize() { return size; }
 
 public: // Vars
 	std::string path;

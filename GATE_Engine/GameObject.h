@@ -32,6 +32,8 @@ public: //Methods
 
 	void Draw();	// This method is called by the renderer
 
+	void UpdateBoundingBox();
+
 	Component* CreateComponent(COMPONENT_TYPE type);
 	Component* GetComponent(COMPONENT_TYPE type);
 
@@ -47,6 +49,7 @@ public: //Vars
 
 	AABB aabb;
 	OBB obb;
+	float3 size;
 };
 
 //Namespace to carry out operations related to Game Objects

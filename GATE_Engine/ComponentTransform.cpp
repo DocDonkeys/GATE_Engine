@@ -41,6 +41,7 @@ void ComponentTransform::UpdateGlobalMat()
 	for (int i = 0; i < my_go->children.size(); i++) {
 		ComponentTransform* childTrs = (ComponentTransform*)my_go->children[i]->GetComponent(COMPONENT_TYPE::TRANSFORM);
 		childTrs->UpdateGlobalMat();
+		my_go->parent->UpdateBoundingBox();
 	}
 }
 

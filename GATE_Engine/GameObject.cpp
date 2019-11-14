@@ -103,6 +103,54 @@ void GameObject::PostUpdate()
 void GameObject::Draw()
 {
 	//Draw whatever the GameObject itself needs to draw
+	//DIRECT MODE Rendering
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+	glColor3f(1.0, 1.0, 0.0);
+
+	// Bottom 1
+	glVertex3f(aabb.minPoint.x, aabb.minPoint.y, aabb.minPoint.z);
+	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y, aabb.minPoint.z);
+
+	glVertex3f(aabb.minPoint.x, aabb.minPoint.y, aabb.minPoint.z);
+	glVertex3f(aabb.minPoint.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
+
+	glVertex3f(aabb.minPoint.x, aabb.minPoint.y, aabb.minPoint.z);
+	glVertex3f(aabb.minPoint.x, aabb.minPoint.y, aabb.minPoint.z + size.z);
+
+	// Bottom 2
+	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
+	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
+
+	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
+	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y, aabb.maxPoint.z);
+
+	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
+	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z - size.z);
+
+	// Top 1
+	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
+	glVertex3f(aabb.minPoint.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
+
+	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
+	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y, aabb.minPoint.z);
+
+	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
+	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y + size.y, aabb.minPoint.z + size.z);
+
+	// Top 2
+	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y, aabb.maxPoint.z);
+	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y, aabb.maxPoint.z);
+
+	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y, aabb.maxPoint.z);
+	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
+
+	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y, aabb.maxPoint.z);
+	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y, aabb.maxPoint.z - size.z);
+
+	glEnd();
+	glColor3f(1.0, 1.0, 1.0);
+	glLineWidth(1.0f);
 
 	//Draw the components
 	for (int i = 0; i < components.size(); ++i)
@@ -117,6 +165,13 @@ void GameObject::Draw()
 		if (children[i]->active)
 			children[i]->Draw();
 	}
+}
+
+void GameObject::UpdateBoundingBox()
+{
+	ComponentTransform* trs = (ComponentTransform*)GetComponent(COMPONENT_TYPE::TRANSFORM);
+	obb.Transform(trs->globalTrs);	// Transform OBB with transform global matrix
+	aabb.SetFrom(obb);				// Set object AABB
 }
 
 Component * GameObject::CreateComponent(COMPONENT_TYPE type)

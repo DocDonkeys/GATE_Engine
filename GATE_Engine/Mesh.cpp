@@ -133,14 +133,12 @@ void Mesh::ChangeNormalsLength(float new_length)
 	}
 }
 
-void Mesh::LoadMeshSizeData()
+void Mesh::LoadMeshBounds()
 {
-	// Note: This is the "recommended" method, copy-pasted code from a slide which doesn't work, mine does.
-	//bounds.SetNegativeInfinity();
-	//bounds.Enclose((float3*)vertex, num_vertex);
-
-	// We assign the first vertex values to secure that they are within the mesh's bounds
 	if (num_vertex > 0) {
+
+		//My Method
+		/* We assign the first vertex values to secure that they are within the mesh's bounds
 		bounds.maxPoint.x = vertex[0].x;
 		bounds.minPoint.x = vertex[0].x;
 		bounds.maxPoint.y = vertex[0].y;
@@ -170,7 +168,10 @@ void Mesh::LoadMeshSizeData()
 			else if (vertex[i].z < bounds.minPoint.z) {
 				bounds.minPoint.z = vertex[i].z;
 			}
-		}
+		}*/
+
+		// MathGeo Lib Method
+		bounds.SetFrom(vertex, num_vertex);
 
 		// We save to distance between max and min points now so later we just have to access it instead of calculating it
 		size = { abs(bounds.maxPoint.x - bounds.minPoint.x), abs(bounds.maxPoint.y - bounds.minPoint.y), abs(bounds.maxPoint.z - bounds.minPoint.z) };
