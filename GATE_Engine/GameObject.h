@@ -32,7 +32,7 @@ public: //Methods
 
 	void Draw();	// This method is called by the renderer
 
-	void UpdateBoundingBox();
+	void UpdateBoundingBox(float4x4 mat);
 
 	Component* CreateComponent(COMPONENT_TYPE type);
 	Component* GetComponent(COMPONENT_TYPE type);

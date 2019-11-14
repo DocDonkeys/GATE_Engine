@@ -166,11 +166,12 @@ void GameObject::Draw()
 	}
 }
 
-void GameObject::UpdateBoundingBox()
+void GameObject::UpdateBoundingBox(float4x4 globalMat)
 {
-	ComponentTransform* trs = (ComponentTransform*)GetComponent(COMPONENT_TYPE::TRANSFORM);
-	obb.Transform(trs->globalTrs);	// Transform OBB with transform global matrix
-	aabb.SetFrom(obb);				// Set object AABB
+	obb.SetFrom(aabb);
+	obb.Transform(globalMat);	// Transform OBB with transform global matrix
+	aabb.SetFrom(obb);			// Set object AABB
+	size = { abs(aabb.maxPoint.x - aabb.minPoint.x), abs(aabb.maxPoint.y - aabb.minPoint.y), abs(aabb.maxPoint.z - aabb.minPoint.z) };
 }
 
 Component * GameObject::CreateComponent(COMPONENT_TYPE type)
@@ -214,17 +215,36 @@ Component * GameObject::GetComponent(COMPONENT_TYPE type)
 
 void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent)
 {
-	//Get ourselves out of our current parent's children list
-	if (child->parent != nullptr)
-		for (int i = 0; i < child->parent->children.size(); ++i)
-			if (child->parent->children[i]->name == child->name)
-			{
-				child->parent->children.erase(child->parent->children.begin() + i);
-				break;
-			}
+	GameObject* it = new_parent;
+	bool ret = false;
 
-	//Assign our new parent and add ourselves into its children list
-	child->parent = new_parent;
-	if (child->parent != nullptr)
-		child->parent->children.push_back(child);
+	while (it != nullptr && it != App->scene_intro->root) {	// Check if child is parent of new_parent
+		if (it == child) {
+			ret = true;
+			break;
+		}
+		else
+			it = it->parent;
+	}
+
+	if (!ret) {
+		//Get ourselves out of our current parent's children list
+		if (child->parent != nullptr) {
+
+			for (int i = 0; i < child->parent->children.size(); ++i)
+				if (child->parent->children[i]->name == child->name)
+				{
+					child->parent->children.erase(child->parent->children.begin() + i);
+					break;
+				}
+		}
+
+		//Assign our new parent and add ourselves into its children list
+		child->parent = new_parent;
+		if (child->parent != nullptr)
+			child->parent->children.push_back(child);
+	}
+	else {
+		LOG("[Error]: A parent can't be inside the heriarchy of one of his own childs.");
+	}
 }
