@@ -139,7 +139,12 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::Columns(4, "TransformGrid"); // 4-ways, with border
 
 		ImGui::Separator();
-		ImGui::Checkbox("Active", &transform->active); ImGui::NextColumn();
+		if (ImGui::Button("Reset")) {
+			newPosition = float3::zero;
+			newEulerRotation = float3::zero;
+			newScale = float3::one;
+		}
+		ImGui::NextColumn();
 		ImGui::Text("X"); ImGui::NextColumn();
 		ImGui::Text("Y"); ImGui::NextColumn();
 		ImGui::Text("Z"); ImGui::NextColumn();
@@ -205,14 +210,7 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("File:"); ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0.0f, 255.0f, 255.0f, 255.00f), mesh->mesh->filename.c_str());
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::BeginTooltip();
-			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-			ImGui::TextUnformatted(mesh->mesh->path.c_str());
-			ImGui::PopTextWrapPos();
-			ImGui::EndTooltip();
-		}
+		HoverTip(mesh->mesh->path.c_str(), true);
 		ImGui::NextColumn();
 		ImGui::Separator();
 
@@ -271,14 +269,7 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		ImGui::Text("File:"); ImGui::SameLine();
 		if (material->active_texture != nullptr) {
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), material->active_texture->filename.c_str());
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::BeginTooltip();
-				ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-				ImGui::TextUnformatted(material->active_texture->path.c_str());
-				ImGui::PopTextWrapPos();
-				ImGui::EndTooltip();
-			}
+			HoverTip(material->active_texture->path.c_str(), true);
 		}
 		else
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "None");
@@ -286,16 +277,7 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		bool falseBool = false;
 		/*ImGui::Image();*/ImGui::Checkbox("##placeholder1", &falseBool); ImGui::SameLine(); /*ImGui::DragBehavior();*/
 		ImGui::Text("Albedo"); ImGui::SameLine();
-
-		ImGui::TextDisabled("(?)");	//CHANGE/FIX: Make HelpTip(const char*) function.
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::BeginTooltip();
-			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-			ImGui::TextUnformatted("Albedo and the color palette are purely aesthetic currently, a UI design showcase of GATE's incoming features. To actually embed a texture on a material, simply Drag&Drop the file to the scene with the desired Game Object selected in the hierarchy.");
-			ImGui::PopTextWrapPos();
-			ImGui::EndTooltip();
-		}
+		HoverTip("Albedo and the color palette are purely aesthetic currently, a UI design showcase of GATE's incoming features. To actually embed a texture on a material, simply Drag&Drop the file to the scene with the desired Game Object selected in the hierarchy.");
 		ImGui::SameLine(150);
 
 		if (ImGui::ColorButton("Color", { material->color.x, material->color.y, material->color.z, material->color.w })) {

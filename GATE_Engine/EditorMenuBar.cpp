@@ -242,6 +242,11 @@ void EditorMenuBar::Update() {
 				ImGui::Checkbox("Vertex Normals", &App->renderer3D->drawVertexNormals);
 				ImGui::Checkbox("Face Normals", &App->renderer3D->drawFaceNormals);
 
+				ImGui::Separator();
+
+				ImGui::Checkbox("Bounding Boxes", &App->renderer3D->drawObjAABB);
+				//ImGui::Checkbox("OBB Boxes", &App->renderer3D->drawObjOBB);
+
 				ImGui::EndMenu();
 			}
 

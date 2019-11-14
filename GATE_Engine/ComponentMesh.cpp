@@ -49,10 +49,10 @@ void ComponentMesh::Draw()
 			App->renderer3D->DrawMesh(mesh);
 
 		// Debug Draw
-		if (debug_vertex_normals)
+		if (App->renderer3D->drawVertexNormals || debug_vertex_normals)
 			App->renderer3D->DrawMeshVertexNormals(mesh);
 
-		if (debug_face_normals)
+		if (App->renderer3D->drawFaceNormals || debug_face_normals)
 			App->renderer3D->DrawMeshFaceNormals(mesh);
 
 		// Pop transform matrix

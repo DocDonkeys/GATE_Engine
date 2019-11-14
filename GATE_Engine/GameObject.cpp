@@ -102,7 +102,26 @@ void GameObject::PostUpdate()
 void GameObject::Draw()
 {
 	//Draw whatever the GameObject itself needs to draw
-	//DIRECT MODE Rendering
+	if (App->renderer3D->drawObjAABB)
+		DrawAABB();
+
+	//Draw the components
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->active)
+			components[i]->Draw();
+	}
+
+	//Update the children game objects
+	for (int i = 0; i < children.size(); ++i)
+	{
+		if (children[i]->active)
+			children[i]->Draw();
+	}
+}
+
+void GameObject::DrawAABB()
+{
 	glLineWidth(2.0f);
 	glBegin(GL_LINES);
 	glColor3f(1.0, 1.0, 0.0);
@@ -150,25 +169,11 @@ void GameObject::Draw()
 	glEnd();
 	glColor3f(1.0, 1.0, 1.0);
 	glLineWidth(1.0f);
-
-	//Draw the components
-	for (int i = 0; i < components.size(); ++i)
-	{
-		if (components[i]->active)
-			components[i]->Draw();
-	}
-
-	//Update the children game objects
-	for (int i = 0; i < children.size(); ++i)
-	{
-		if (children[i]->active)
-			children[i]->Draw();
-	}
 }
 
 void GameObject::UpdateBoundingBox(float4x4 globalMat)
 {
-	//CHANGE/FIX: Using the mesh is wrong, but I don't have the time to make it better right now
+	//CHANGE/FIX: Using the mesh is wrong, but I don't have the time to make it better right now, it should transform with the global matrix
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(COMPONENT_TYPE::MESH);
 	obb.SetFrom(mesh->mesh->bounds);
 

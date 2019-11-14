@@ -49,6 +49,21 @@ enum class byte_size_mode {
 	MAX_MODES
 };
 
+static void HoverTip(const char* desc, bool hoverTarget = false)
+{
+	if (!hoverTarget)
+		ImGui::TextDisabled("(?)");
+
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		ImGui::TextUnformatted(desc);
+		ImGui::PopTextWrapPos();
+		ImGui::EndTooltip();
+	}
+}
+
 class ModuleEditor : public Module
 {
 public:
@@ -71,6 +86,21 @@ public:
 	void DrawModeChange();
 	void TextureModeChange();
 	void ByteSizeModeChange();
+
+	void HoverText(const char* desc, bool hoverTarget = false)
+	{
+		if (!hoverTarget)
+			ImGui::TextDisabled("(?)");
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted(desc);
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+	}
 
 public:
 	// UI Windows

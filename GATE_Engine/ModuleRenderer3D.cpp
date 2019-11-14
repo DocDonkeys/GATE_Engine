@@ -386,26 +386,24 @@ void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh, const uint texture_i
 void ModuleRenderer3D::DrawMeshFaceNormals(Mesh * mesh)
 {
 	//Print faces normals
-	if (drawFaceNormals) {
-		glBegin(GL_LINES);
-		glColor3f(1, 0, 1);
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 1);
 
-		for (int i = 0; i < mesh->num_index; ++i)
-		{
-			glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
-			glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,
-				mesh->normals_faces[i].y + mesh->normals_faces_vector[i].y,
-				mesh->normals_faces[i].z + mesh->normals_faces_vector[i].z);
-		}
-		glColor3f(1, 1, 1);
-		glEnd();
+	for (int i = 0; i < mesh->num_index; ++i)
+	{
+		glVertex3f(mesh->normals_faces[i].x, mesh->normals_faces[i].y, mesh->normals_faces[i].z);
+		glVertex3f(mesh->normals_faces[i].x + mesh->normals_faces_vector[i].x,
+			mesh->normals_faces[i].y + mesh->normals_faces_vector[i].y,
+			mesh->normals_faces[i].z + mesh->normals_faces_vector[i].z);
 	}
+	glColor3f(1, 1, 1);
+	glEnd();
 }
 
 void ModuleRenderer3D::DrawMeshVertexNormals(Mesh * mesh)
 {
 	//Draw Vertex Normals
-	if (drawVertexNormals && mesh->normals_vector != nullptr)
+	if (mesh->normals_vector != nullptr)
 	{
 		//Had a lot of problems with buffers so we draw in direct mode, we can save some VRAM space
 		glBegin(GL_LINES);

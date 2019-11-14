@@ -31,6 +31,7 @@ public: //Methods
 	void PostUpdate();
 
 	void Draw();	// This method is called by the renderer
+	void DrawAABB();
 
 	void UpdateBoundingBox(float4x4 mat);
 

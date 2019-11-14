@@ -64,8 +64,10 @@ public:
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
 	bool vSync = true;
-	bool drawVertexNormals = true;	//CHANGE/FIX: Save&Load
-	bool drawFaceNormals = true;	//CHANGE/FIX: Save&Load
+	bool drawVertexNormals = false;	//CHANGE/FIX: Save&Load
+	bool drawFaceNormals = false;	//CHANGE/FIX: Save&Load
+	bool drawObjAABB = false;		//CHANGE/FIX: Save&Load
+	bool drawObjOBB = false;		//CHANGE/FIX: Save&Load
 
 	//OpenGL Flags https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glEnable.xml	//IMPROVE: Make a list jesus
 	GL_Setting GL_DepthTest;		//Do depth comparisons and update the depth buffer.

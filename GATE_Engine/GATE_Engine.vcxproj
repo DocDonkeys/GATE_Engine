@@ -65,7 +65,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>C:\Users\didac\Documents\GitHub\GATE\GATE_Engine\libs\DevIL Windows SDK\include;GATE_Engine\libs\Assimp\include\;GATE_Engine\libs\DevIL Windows SDK\include\;E:\ch0m5 Database\ch0m5\Documents\GitHub\GATE\GATE_Engine\libs\DevIL Windows SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
