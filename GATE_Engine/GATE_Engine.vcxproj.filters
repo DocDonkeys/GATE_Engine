@@ -132,7 +132,7 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="MeshImporter.cpp">
+    <ClCompile Include="Importer.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
@@ -283,7 +283,7 @@
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="MeshImporter.h">
+    <ClInclude Include="Importer.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>

@@ -39,6 +39,7 @@ ModuleFileSystem::ModuleFileSystem(Application* app, const char* name, const cha
 		/*LIBRARY_AUDIO_FOLDER, */LIBRARY_MESH_FOLDER,
 		LIBRARY_MATERIAL_FOLDER, /*LIBRARY_SCENE_FOLDER,*/ LIBRARY_MODEL_FOLDER, 
 		LIBRARY_TEXTURES_FOLDER,/* LIBRARY_ANIMATION_FOLDER, LIBRARY_STATE_MACHINE_FOLDER,*/
+		LIBRARY_TRANSFORMATIONS_FOLDER
 	};
 
 	for (uint i = 0; i < sizeof(dirs)/sizeof(const char*); ++i)

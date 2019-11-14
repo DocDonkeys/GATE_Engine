@@ -83,7 +83,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentMesh.h" />
-    <ClInclude Include="MeshImporter.h" />
+    <ClInclude Include="Importer.h" />
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ComponentTransform.h" />
@@ -149,7 +149,7 @@
     <ClCompile Include="EditorConsole.cpp" />
     <ClCompile Include="EditorHierarchy.cpp" />
     <ClCompile Include="EditorInspector.cpp" />
-    <ClCompile Include="MeshImporter.cpp" />
+    <ClCompile Include="Importer.cpp" />
     <ClCompile Include="JsonLoader.cpp" />
     <ClCompile Include="libs\glew\src\glew.c" />
     <ClCompile Include="libs\imgui\imgui.cpp" />
