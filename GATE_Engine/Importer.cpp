@@ -24,7 +24,7 @@ bool Importer::Import(const char * file, const char * path, std::string & output
 
 	if (mesh == nullptr)
 	{
-		LOG("[WARNING] Tried to import a .mesh file into a nullptr mesh, a mesh in memory will be created");
+		LOG("[WARNING] Tried to import a .mesh file into a nullptr mesh, a mesh will be created in memory");
 		mesh = new Mesh;
 	}
 
@@ -76,7 +76,59 @@ bool Importer::Import(const char * file, const char * path, std::string & output
 
 bool Importer::Import(const char * file, const char * path, std::string & output_file, ComponentTransform * transform)
 {
-	return false;
+	bool ret = false;
+
+	output_file = path;
+	output_file += file;
+
+	//Load a buffer to access the data of the .mesh
+	char* buffer = nullptr;
+	App->file_system->Load(output_file.data(), &buffer);
+
+	if (transform == nullptr)
+	{
+		LOG("[WARNING] Tried to import a .trans file into a nullptr Transform component, a transform component in memory will be created");
+		transform = new ComponentTransform;
+	}
+
+	//------------------- Assign data from buffer  -------------------//
+	char* cursor = (char*)buffer;
+	
+	float3 pos_rot_scale[3];
+	uint bytes = sizeof(pos_rot_scale);
+	memcpy(pos_rot_scale, cursor, bytes);
+
+	transform->position = pos_rot_scale[0];										//					Assign transform position					//
+	transform->eulerRotation = pos_rot_scale[1];								//						"			"		  rotation					    //
+	transform->scale = pos_rot_scale[2];											//						"		    "           scale					    //
+
+	float mat4x4[16];
+	cursor += bytes;
+	bytes = sizeof(mat4x4);
+	memcpy(mat4x4,cursor,bytes);
+
+	int k = 0;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+		{
+			transform->localTrs[i][j] = mat4x4[k];									//					Assign local matrix 
+			k++;
+		}
+
+	cursor += bytes;
+	bytes = sizeof(mat4x4);
+	memcpy(mat4x4, cursor, bytes);
+
+	k = 0;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+		{
+			transform->globalTrs[i][j] = mat4x4[k];								//					Assign global matrix 
+			k++;
+		}
+
+
+	return true;
 }
 
 bool Importer::ImportToMesh(const void * buffer, uint size, std::string & output_file, Mesh* mesh)
