@@ -1,17 +1,18 @@
-#include "MeshImporter.h"
+#include "Importer.h"
 #include "Mesh.h"
+#include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleFileSystem.h"
 
-MeshImporter::MeshImporter()
+Importer::Importer()
 {
 }
 
-MeshImporter::~MeshImporter()
+Importer::~Importer()
 {
 }
 
-bool MeshImporter::Import(const char * file, const char * path, std::string & output_file, Mesh* mesh)
+bool Importer::Import(const char * file, const char * path, std::string & output_file, Mesh* mesh)
 {
 	bool ret = false;
 	output_file = path;
@@ -73,7 +74,12 @@ bool MeshImporter::Import(const char * file, const char * path, std::string & ou
 	return ret;
 }
 
-bool MeshImporter::ImportToMesh(const void * buffer, uint size, std::string & output_file, Mesh* mesh)
+bool Importer::Import(const char * file, const char * path, std::string & output_file, ComponentTransform * transform)
+{
+	return false;
+}
+
+bool Importer::ImportToMesh(const void * buffer, uint size, std::string & output_file, Mesh* mesh)
 {
 	bool ret = false;
 	
@@ -84,7 +90,7 @@ bool MeshImporter::ImportToMesh(const void * buffer, uint size, std::string & ou
 }
 
 //Export a Mesh as our own file format .mesh
-bool MeshImporter::Export(const char * path, std::string & output_file,const  Mesh* mesh, const char* filename)
+bool Importer::Export(const char * path, std::string & output_file,const  Mesh* mesh, const char* filename)
 {
 	bool ret = false;
 
@@ -141,6 +147,62 @@ bool MeshImporter::Export(const char * path, std::string & output_file,const  Me
 	}
 	else
 		LOG("Failed to export %s to %s as a .mesh", output_file, path);
+
+	return ret;
+}
+
+bool Importer::Export(const char * path, std::string & output_file, const ComponentTransform * transform, const char * filename)
+{
+	bool ret = false;
+
+	uint size = 0; // This will be the size in bytes that we will need to allocate
+	size += sizeof(float3) * 3  + sizeof(float4x4) * 2;
+
+	char* data = new char[size];
+	char* cursor = data;
+
+	float3 pos_rot_scale[3] = {transform->position, transform->eulerRotation, transform->scale};
+
+	//---------------- Store data ----------------------//
+	uint bytes = sizeof(float3) * 3;
+	memcpy(cursor, pos_rot_scale,bytes);			//transformation, rotation & scale
+
+	//Prepare the 4x4 matrices
+	float local_trs[16];
+	int k = 0;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+		{
+			local_trs[k] = transform->localTrs.At(i, j);
+			k++;
+		}
+
+	float global_trs[16];
+	k = 0;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+		{
+			global_trs[k] = transform->globalTrs.At(i, j);
+			k++;
+		}
+
+	cursor += bytes;
+	bytes = sizeof(local_trs); // Local Transformation
+	memcpy(cursor, local_trs,bytes);
+
+	cursor += bytes;
+	bytes = sizeof(global_trs); // Global Transformation
+	memcpy(cursor, global_trs, bytes);
+
+	//Save the new .trans to disk
+	ret = App->file_system->SaveUnique(output_file, data, size, path, filename, "trans");
+
+	if (ret == true)
+	{
+		LOG("Succesfully exported %s to %s as a .trans", output_file, path);
+	}
+	else
+		LOG("Failed to export %s to %s as a .trans", output_file, path);
 
 	return ret;
 }

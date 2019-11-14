@@ -1,7 +1,7 @@
 #include "GeometryLoader.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-#include "MeshImporter.h"
+#include "Importer.h"
 
 #include "libs/Assimp/include/cimport.h"
 #include "libs/Assimp/include/scene.h"
@@ -127,7 +127,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
 
 			////TEST: Loading a .mesh file
-			//MeshImporter m;
+			//Importer m;
 			//std::string output_debug, namefile;
 			//namefile = node->mName.C_Str();
 			//namefile += ".mesh";
@@ -165,6 +165,10 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			ret_go->obb.Transform(trs_component->globalTrs);	// Transform OBB with transform global matrix
 			ret_go->aabb.SetFrom(ret_go->obb);					// Set object AABB
 			
+			//TEST:
+			Importer imp;
+			std::string output_1;
+			imp.Export(LIBRARY_TRANSFORMATIONS_FOLDER, output_1, trs_component, node->mName.C_Str());
 			// Mesh
 			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
@@ -190,7 +194,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			}
 
 			//TEST: Save mesh to library/Meshes/
-			MeshImporter m_imp;
+			Importer m_imp;
 			std::string output;
 			m_imp.Export(LIBRARY_MESH_FOLDER, output,new_mesh,node->mName.C_Str());
 		}
