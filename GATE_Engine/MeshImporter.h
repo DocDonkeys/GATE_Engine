@@ -11,8 +11,8 @@ public:
 	MeshImporter();
 	~MeshImporter();
 public:
-	bool Import(const char* file, const char* path, std::string& output_file); 
-	bool Import(const void* buffer, uint size, std::string& output_file);
+	bool Import(const char* file, const char* path, std::string& output_file, Mesh* mesh); 
+	bool ImportToMesh(const void* buffer, uint size, std::string& output_file, Mesh* mesh);
 	bool Export(const char* path, std::string& output_file, const Mesh* mesh, const char* filename);
 };
 

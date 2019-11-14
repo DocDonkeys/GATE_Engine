@@ -125,12 +125,20 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			Mesh* new_mesh = new Mesh();
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
 
+			////TEST: Loading a .mesh file
+			//MeshImporter m;
+			//std::string output_debug, namefile;
+			//namefile = node->mName.C_Str();
+			//namefile += ".mesh";
+			//m.Import(namefile.data(), LIBRARY_MESH_FOLDER, output_debug, new_mesh);
+			
 			//LOAD!
 			new_mesh->LoadVertices(loaded_mesh); //Vertices
 			new_mesh->LoadIndices(loaded_mesh); //Indices
 			new_mesh->LoadNormals(loaded_mesh); //Normals
 			new_mesh->LoadTexCoords(loaded_mesh); // UV's
 			new_mesh->LoadMeshSizeData();
+			
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -141,6 +149,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			//Generate the buffer for the tex_coordinates
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2, new_mesh->tex_coords);
 
+			
 			//Finally add the new mesh to the vector
 			//meshes.push_back(new_mesh);
 

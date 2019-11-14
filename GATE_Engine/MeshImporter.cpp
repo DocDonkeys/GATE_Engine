@@ -11,14 +11,76 @@ MeshImporter::~MeshImporter()
 {
 }
 
-bool MeshImporter::Import(const char * file, const char * path, std::string & output_file)
+bool MeshImporter::Import(const char * file, const char * path, std::string & output_file, Mesh* mesh)
 {
-	return false;
+	bool ret = false;
+	output_file = path;
+	output_file += file;
+
+	//Load a buffer to access the data of the .mesh
+	char* buffer = nullptr;
+	App->file_system->Load(output_file.data(), &buffer);
+
+	if (mesh == nullptr)
+	{
+		LOG("[WARNING] Tried to import a .mesh file into a nullptr mesh, a mesh in memory will be created");
+		mesh = new Mesh;
+	}
+
+	//------------------- Assign data from buffer  -------------------//
+	char* cursor = (char*)buffer;
+	// amount of indices / vertices / colors / normals / texture_coords
+	uint ranges[4];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+
+	mesh->num_index = ranges[0];
+	mesh->num_vertex = ranges[1];
+	mesh->num_normals = ranges[2];
+	mesh->num_tex_coords = ranges[3];
+
+	cursor += bytes;																		//																//
+	bytes = sizeof(uint) * mesh->num_index;									//					Copy Indices 						//
+	mesh->index = new uint[mesh->num_index];
+	memcpy(mesh->index, cursor, bytes);										//																//
+
+	cursor += bytes;																		//																//
+	bytes = sizeof(float) * mesh->num_vertex * 3;						//					Copy Vertices   					//
+	mesh->vertex = new float3[mesh->num_vertex];
+	memcpy(mesh->vertex, cursor, bytes);										//																//
+
+	cursor += bytes;																		//																//
+	bytes = sizeof(float) * mesh->num_normals * 3;						//					Copy Normals Vector   			//
+	mesh->normals_vector = new float3[mesh->num_normals];
+	memcpy(mesh->normals_vector, cursor, bytes);						//																//
+
+	cursor += bytes;																		//																//
+	bytes = sizeof(float) * mesh->num_normals * 3;						//					Copy Normals Faces  			//
+	mesh->normals_faces = new float3[mesh->num_normals];		//																//
+	memcpy(mesh->normals_faces, cursor, bytes);							//																//
+
+	cursor += bytes;																							//																					//
+	bytes = sizeof(float) * mesh->num_normals * 3;											//					Copy Normals Faces vectors   					//
+	mesh->normals_faces_vector = new float3[mesh->num_normals];				//																					//
+	memcpy(mesh->normals_faces_vector, cursor, bytes);								//																					//
+	
+	cursor += bytes;																							//																					//
+	bytes = sizeof(float) * mesh->num_tex_coords * 2;										//					Copy Texture Coordinates						//
+	mesh->tex_coords = new float[mesh->num_tex_coords * 2];						//																					//
+	memcpy(mesh->tex_coords, cursor, bytes);													//																					//
+
+
+	return ret;
 }
 
-bool MeshImporter::Import(const void * buffer, uint size, std::string & output_file)
+bool MeshImporter::ImportToMesh(const void * buffer, uint size, std::string & output_file, Mesh* mesh)
 {
-	return false;
+	bool ret = false;
+	
+	
+	
+
+	return ret;
 }
 
 //Export a Mesh as our own file format .mesh
@@ -39,7 +101,6 @@ bool MeshImporter::Export(const char * path, std::string & output_file,const  Me
 	char* cursor = data; // Cursor at start
 
 	//-------------------  Store data  -------------------//
-
 	uint bytes = sizeof(ranges); // First store ranges Bytes is the ammount of bytes to copy or to move the cursor
 	memcpy(cursor, ranges, bytes);
 
