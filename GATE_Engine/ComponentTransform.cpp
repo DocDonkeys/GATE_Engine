@@ -102,6 +102,7 @@ bool ComponentTransform::UpdateValues(float3& pos, float3& rot, float3& scale)
 
 	if (ret) {
 		DataToMat();
+		my_go->UpdateBoundingBox(globalTrs);
 	}
 
 	return ret;

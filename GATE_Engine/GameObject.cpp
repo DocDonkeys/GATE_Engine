@@ -168,7 +168,10 @@ void GameObject::Draw()
 
 void GameObject::UpdateBoundingBox(float4x4 globalMat)
 {
-	obb.SetFrom(aabb);
+	//CHANGE/FIX: Using the mesh is wrong, but I don't have the time to make it better right now
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(COMPONENT_TYPE::MESH);
+	obb.SetFrom(mesh->mesh->bounds);
+
 	obb.Transform(globalMat);	// Transform OBB with transform global matrix
 	aabb.SetFrom(obb);			// Set object AABB
 	size = { abs(aabb.maxPoint.x - aabb.minPoint.x), abs(aabb.maxPoint.y - aabb.minPoint.y), abs(aabb.maxPoint.z - aabb.minPoint.z) };
