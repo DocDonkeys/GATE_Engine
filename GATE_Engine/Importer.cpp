@@ -131,6 +131,43 @@ bool Importer::Import(const char * file, const char * path, std::string & output
 	return true;
 }
 
+bool Importer::ImportModel(const char * path, const char * file)
+{
+	bool ret = false;
+
+	std::string output_file = path;
+	output_file += file;
+
+	//Load a buffer to access the data of the .mesh
+	char* buffer = nullptr;
+	App->file_system->Load(output_file.data(), &buffer);
+
+	GameObject* go = new GameObject;
+
+	//------------------- Assign data from buffer  -------------------//
+	char* cursor = (char*)buffer;
+
+	uint bytes = sizeof(uint32_t);
+	memcpy(&go->UID,cursor,bytes);
+
+	cursor += bytes;
+	bytes = sizeof(bool);
+	memcpy(&go->active, cursor, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(bool);
+	memcpy(&go->staticObj, cursor, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(std::string);
+	memcpy(&go->name,cursor,bytes);
+	go->name._Myproxy() = nullptr;  // The string tries to load a proxy, we must set it to nullptr or on delete std will try to delete out of bounds memory
+
+	GOFunctions::ReParentGameObject(go,App->scene_intro->root);
+
+	return false;
+}
+
 bool Importer::ImportToMesh(const void * buffer, uint size, std::string & output_file, Mesh* mesh)
 {
 	bool ret = false;
@@ -257,4 +294,65 @@ bool Importer::Export(const char * path, std::string & output_file, const Compon
 		LOG("Failed to export %s to %s as a .trans", output_file, path);
 
 	return ret;
+}
+
+bool Importer::Export(const char * path, std::string & output_file, const GameObject * go, const char * filename)
+{
+	bool ret = false;
+
+	//Calculate the total size depending on number of gameobject
+	uint num_gos = 0;
+	TotalGOsNum(go,num_gos); // Get the total count of gameobjects
+
+	uint size = 0; // This will be the size in bytes that we will need to allocate
+	size += sizeof(GameObject) * num_gos;
+	//size -= sizeof(go->children) + sizeof(go->components) * num_gos;  //We subtract the size of the thing swe won't be using (we can't pass )
+
+	char* data = new char[size];
+	char* cursor = data;
+
+	//---------------------- Store the data --------------------------//
+	uint bytes = sizeof(go->UID);
+	uint32_t t = go->UID;
+	memcpy(cursor, &t,bytes);
+
+	cursor += bytes;
+	bytes = sizeof(bool);
+	memcpy(cursor, &go->active,bytes); //store active
+
+	cursor += bytes;
+	bytes = sizeof(bool);
+	memcpy(cursor, &go->staticObj, bytes); //store static
+
+	cursor += bytes;
+	bytes = sizeof(go->name);
+	memcpy(cursor, &go->name, bytes);
+
+	//Save the new .model to disk
+	ret = App->file_system->SaveUnique(output_file, data, size, path, filename, "model");
+
+	if (ret == true)
+	{
+		LOG("Succesfully exported %s to %s as a .model", output_file, path);
+	}
+	else
+		LOG("Failed to export %s to %s as a .model", output_file, path);
+
+
+	return false;
+}
+
+uint Importer::TotalGOsNum(const GameObject * go, uint& num_of_gos)
+{
+		num_of_gos++;
+
+	if (go->children.size() > 0)
+	{
+		for (int i = 0; i < go->children.size(); ++i)
+		{
+			TotalGOsNum(go->children[i], num_of_gos);
+		}
+	}
+
+	return num_of_gos;
 }

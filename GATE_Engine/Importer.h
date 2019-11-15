@@ -6,6 +6,7 @@
 
 class Mesh;
 class ComponentTransform;
+class GameObject;
 
 class Importer { 
 public:
@@ -14,10 +15,14 @@ public:
 public:
 	bool Import(const char* file, const char* path, std::string& output_file, Mesh* mesh);
 	bool Import(const char* file, const char* path, std::string& output_file, ComponentTransform* transform);
+	bool ImportModel(const char* path, const char* file);
 
 	bool ImportToMesh(const void* buffer, uint size, std::string& output_file, Mesh* mesh);
 	bool Export(const char* path, std::string& output_file, const Mesh* mesh, const char* filename);
 	bool Export(const char* path, std::string& output_file, const ComponentTransform* transform, const char* filename);
+	bool Export(const char* path, std::string& output_file, const GameObject* go, const char* filename);
+
+	uint TotalGOsNum(const GameObject* go, uint& num_of_gos);
 };
 
 #endif

@@ -92,6 +92,7 @@ typedef signed __int64		int64;
 typedef unsigned char		uchar;
 typedef unsigned short		ushort;
 typedef unsigned int		uint;
+typedef unsigned __int32	uint32;
 typedef unsigned __int64	ulong;
 
 // Update flags

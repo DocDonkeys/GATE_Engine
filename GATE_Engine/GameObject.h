@@ -1,6 +1,6 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
-
+#include "Globals.h"
 #include <string>
 #include <vector>
 
@@ -39,6 +39,7 @@ public: //Methods
 	Component* GetComponent(COMPONENT_TYPE type);
 
 public: //Vars
+	uint32_t UID = 0;
 	bool active = true;
 	bool staticObj = true;
 	std::string name;

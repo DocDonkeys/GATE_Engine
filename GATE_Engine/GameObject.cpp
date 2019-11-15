@@ -9,6 +9,7 @@
 
 GameObject::GameObject()
 {
+	UID = (uint32)App->rng.RandInt(); //CRITICAL TODO: CHANEG TO RANDOM NUMBER OF 32 bytes
 	name = "GameObject_" + std::to_string(App->scene_intro->numObjects++);
 	
 	//All Game Objects must have a transform component, so we assign it from creation
@@ -17,12 +18,14 @@ GameObject::GameObject()
 
 GameObject::GameObject(const char* name) : name(name)
 {
+	UID = (uint32)App->rng.RandInt(); //CRITICAL TODO: CHANEG TO RANDOM NUMBER OF 32 bytes
 	//All Game Objects must have a transform component, so we assign it from creation
 	CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }
 
 GameObject::GameObject(const char * name, float4x4 local_mat) : name(name)
 {
+	UID = (uint32)App->rng.RandInt(); //CRITICAL TODO: CHANEG TO RANDOM NUMBER OF 32 bytes
 	//All Game Objects must have a transform component, so we assign it from creation
 	ComponentTransform* trans = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 	trans->localTrs = local_mat; //Assign the local transformation (usually used for imported objects)
@@ -30,16 +33,21 @@ GameObject::GameObject(const char * name, float4x4 local_mat) : name(name)
 
 GameObject::~GameObject()
 {
-	for (int i = 0; i < children.size(); ++i)
-		delete children[i];
+	if (children.size() > 0)
+	{
+		for (int i = 0; i < children.size(); ++i)
+		{
+			delete children[i];
+			children[i] = nullptr;
+		}
 
-	children.clear();
+		children.clear();
+	}
 
 	for (int i = 0; i < components.size(); ++i)
 		delete components[i];
 	
 	components.clear();
-
 }
 
 void GameObject::PreUpdate()

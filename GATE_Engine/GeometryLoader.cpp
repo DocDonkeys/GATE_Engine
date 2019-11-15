@@ -83,6 +83,9 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	//We call assimp to import the file
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
+	Importer test;
+	test.ImportModel(LIBRARY_MODEL_FOLDER, "rootnode.model");
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		//We loaded the 3D file successfully!
@@ -90,8 +93,15 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		aiNode* root = scene->mRootNode;
 		GameObject* go = LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
 		GOFunctions::ReParentGameObject(go,App->scene_intro->root);
+		
+		std::string output_1;
+		test.Export(LIBRARY_MODEL_FOLDER, output_1, go, root->mName.C_Str());
+
+		
 		//Once finished we release the original file
 		aiReleaseImport(scene);
+
+		//Test gameobject saving as .model
 	}
 	else
 		LOG("Error loading scene meshes %s", full_path);
