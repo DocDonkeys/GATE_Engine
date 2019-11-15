@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
+#include "GeometryLoader.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 
@@ -13,14 +14,14 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
+	X = float3(1.0f, 0.0f, 0.0f);
+	Y = float3(0.0f, 1.0f, 0.0f);
+	Z = float3(0.0f, 0.0f, 1.0f);
+
+	position = float3(0.0f, 0.0f, 5.0f);
+	reference = float3(0.0f, 0.0f, 0.0f);
+
 	CalculateViewMatrix();
-
-	X = vec3(1.0f, 0.0f, 0.0f);
-	Y = vec3(0.0f, 1.0f, 0.0f);
-	Z = vec3(0.0f, 0.0f, 1.0f);
-
-	Position = vec3(0.0f, 0.0f, 5.0f);
-	Reference = vec3(0.0f, 0.0f, 0.0f);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -42,8 +43,7 @@ bool ModuleCamera3D::CleanUp()
 
 	return true;
 }
-#include "GeometryLoader.h"
-#include "Mesh.h"
+
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
@@ -52,7 +52,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (!App->editor->using_menu) {	//CHANGE/FIX: Should only work if Scene Window was the last window the user interacted with
 		
-		vec3 newPos(0, 0, 0);
+		float3 newPos(0, 0, 0);
 		float currMovSpeed = camMovSpeed * dt;
 		float currRotSpeed = camRotSpeed;
 
@@ -110,7 +110,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		// Center camera to object
-		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {	// Focus camera to position from a certain distance and angle
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {	// Focus camera to position from a certain dist and angle
 			if (App->scene_intro->selected_go == nullptr) {
 				LOG("[Warning] You must select an object before centering to it!")
 			}
@@ -128,7 +128,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 // -----------------------------------------------------------------
 
-void ModuleCamera3D::MoveCamera(vec3& mov, float& speed)
+void ModuleCamera3D::MoveCamera(float3& mov, float& speed)
 {
 	// Forward/Backwards
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) mov += Z * speed;
@@ -163,7 +163,7 @@ void ModuleCamera3D::RotateCamera(rotate_type rotType, float& rotSpeed)
 	RotateFinish(rotType);
 }
 
-bool ModuleCamera3D::FirstPersonCamera(vec3& mov, float& movSpeed)
+bool ModuleCamera3D::FirstPersonCamera(float3& mov, float& movSpeed)
 {
 	bool ret = false;
 
@@ -281,7 +281,7 @@ void ModuleCamera3D::CheckStartBoost(int currKey, bool& boostType)
 	}
 }
 
-void ModuleCamera3D::DragCamera(vec3& mov, float delta_x, float delta_y)
+void ModuleCamera3D::DragCamera(float3& mov, float delta_x, float delta_y)
 {
 	mov += X * delta_x;
 	mov -= Y * delta_y;
@@ -303,10 +303,10 @@ void ModuleCamera3D::MouseRotate(rotate_type type, float delta_x, float delta_y)
 // -----------------------------------------------------------------
 
 //Camera Movement
-void ModuleCamera3D::Move(const vec3 &Movement)
+void ModuleCamera3D::Move(const float3 &mov)
 {
-	Position += Movement;
-	Reference += Movement;
+	position += mov;
+	reference += mov;
 
 	CalculateViewMatrix();
 }
@@ -316,10 +316,10 @@ void ModuleCamera3D::RotateBegin(rotate_type type)	// Used to setup for future r
 {
 	switch (type) {
 	case rotate_type::SELF:
-		Reference += Position;
+		reference += position;
 		break;
 	case rotate_type::AROUND:
-		Position -= Reference;
+		position -= reference;
 		break;
 	}
 }
@@ -328,10 +328,10 @@ void ModuleCamera3D::RotateFinish(rotate_type type)	// Used when all rotations a
 {
 	switch (type) {
 	case rotate_type::SELF:
-		Reference = Position - Z * length(Position);
+		reference = position - Z * Length(position);
 		break;
 	case rotate_type::AROUND:
-		Position = Reference + Z * length(Position);
+		position = reference + Z * Length(position);
 		break;
 	}
 }
@@ -339,77 +339,77 @@ void ModuleCamera3D::RotateFinish(rotate_type type)	// Used when all rotations a
 // Camera Rotations
 void ModuleCamera3D::RotateHorizontal(float angle)
 {
-	X = rotate(X, angle, vec3(0.0f, 1.0f, 0.0f));
-	Y = rotate(Y, angle, vec3(0.0f, 1.0f, 0.0f));
-	Z = rotate(Z, angle, vec3(0.0f, 1.0f, 0.0f));
+	//X = rotate(X, angle, float3(0.0f, 1.0f, 0.0f));
+	//Y = rotate(Y, angle, float3(0.0f, 1.0f, 0.0f));
+	//Z = rotate(Z, angle, float3(0.0f, 1.0f, 0.0f));
 }
 
 void ModuleCamera3D::RotateVertical(float angle)
 {
-	Y = rotate(Y, angle, X);
-	Z = rotate(Z, angle, X);
+	//Y = rotate(Y, angle, X);
+	//Z = rotate(Z, angle, X);
 
 	if (Y.y < 0.0f)
 	{
-		Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-		Y = cross(Z, X);
+		Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+		Y = Cross(Z, X);
 	}
 }
 
 // -----------------------------------------------------------------
 
 // Camera fetch orders
-void ModuleCamera3D::GoLook(const vec3 &Position, const vec3 &Spot, bool RotateAroundReference)	// Look at reference from a certain position
+void ModuleCamera3D::GoLook(const float3 &pos, const float3 &spot, bool rotateAroundReference)	// Look at reference from a certain position
 {
-	this->Position = Position;
-	this->Reference = Spot;
+	position = pos;
+	reference = spot;
 
-	Z = normalize(Position - Spot);
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
+	Z = float3(pos - spot).Normalized();
+	X = Cross(float3(0.0f, 1.0f, 0.0f), Z).Normalized();
+	Y = Cross(Z, X);
 
-	if(!RotateAroundReference)
+	if(!rotateAroundReference)
 	{
-		this->Reference = this->Position;
-		this->Position += Z * 0.05f;
+		reference = position;
+		position += Z * 0.05f;
 	}
 
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::LookFrom(const vec3 &Spot, const vec3 &Direction, float Distance)	// Look at reference from a certain direction
+void ModuleCamera3D::LookFrom(const float3 &spot, const float3 &Direction, float dist)	// Look at reference from a certain direction
 {
-	vec3 unitDirection = normalize(Direction);
+	float3 unitDirection = Direction.Normalized();
 
-	if (Distance > 0.0f) {
-		Position = Spot + unitDirection * Distance;
+	if (dist > 0.0f) {
+		position = spot + unitDirection * dist;
 	}
 	else {
-		Position = Spot + Direction;
+		position = spot + Direction;
 	}
 	
-	Reference = Spot;
+	reference = spot;
 
 	Z = unitDirection;
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
+	X = Cross(float3(0.0f, 1.0f, 0.0f), Z).Normalized();
+	Y = Cross(Z, X);
 
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::LookAt(const vec3 &Spot, float Distance)	// Look at reference from current direction
+void ModuleCamera3D::LookAt(const float3 &spot, float dist)	// Look at reference from current direction
 {
-	Reference = Spot;
+	reference = spot;
 
-	vec3 unitDirection = normalize(Position - Reference);
+	float3 unitDirection = float3(position - reference).Normalized();
 
-	if (Distance > 0.0f) {
-		Position = Spot + unitDirection * Distance;
+	if (dist > 0.0f) {
+		position = spot + unitDirection * dist;
 	}
 
 	Z = unitDirection;
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
+	X = Cross(float3(0.0f, 1.0f, 0.0f), Z).Normalized();
+	Y = Cross(Z, X);
 
 	CalculateViewMatrix();
 }
@@ -417,13 +417,13 @@ void ModuleCamera3D::LookAt(const vec3 &Spot, float Distance)	// Look at referen
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()
 {
-	return &ViewMatrix;
+	return *viewMatrix.v;
 }
 
 void ModuleCamera3D::CalculateViewMatrix()
 {
-	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
-	ViewMatrixInverse = inverse(ViewMatrix);
+	viewMatrix = float4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -Dot(X, position), -Dot(Y, position), -Dot(Z, position), 1.0f);
+	viewMatrixInverse = viewMatrix.Inverted();
 }
 
 void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)	//IMPROVE: This should not change the camera's angle
