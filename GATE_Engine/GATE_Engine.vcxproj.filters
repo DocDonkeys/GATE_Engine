@@ -135,6 +135,9 @@
     <ClCompile Include="Importer.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -285,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="Importer.h">
       <Filter>Sources\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>Sources\Component Structure\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

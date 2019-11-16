@@ -1,7 +1,11 @@
-#pragma once
+#ifndef MODULECAMERA3D
+#define MODULECAMERA3D
+
 #include "Module.h"
 #include "Globals.h"
-#include "glmath.h"
+#include "ComponentCamera.h"
+
+#include "libs/MathGeoLib/include/Math/float4x4.h"
 
 class GameObject;
 
@@ -16,25 +20,28 @@ public:
 	bool CleanUp();
 
 public:
-	void GoLook(const vec3 &Position, const vec3 &Spot, bool RotateAroundReference = false);
-	void LookFrom(const vec3 &Spot, const vec3 &Direction, float Distance = 0.0f);
-	void LookAt(const vec3 &Spot, float Distance = 0.0f);
-	void Move(const vec3 &Movement);
+	// Camera Orders
+	void Move(const float3 &movement);
+	void GoTo(const float3 &pos);
+	void LookAt(const float3 &spot, float dist = 0.0f);
+	void GoLook(const float3 &pos, const float3 &spot);
 	void CenterToObject(GameObject* obj, float multiplier = 1.0f);
-	float* GetViewMatrix();
+
+	// Gets
+	float3 GetPosition() const;
+	float* GetViewMatrix() const;
+	float* GetProjectionMatrix() const;
 
 private:
-	enum class rotate_type {
-		SELF,
-		AROUND
-	};
-
 	// Input Checks
-	void MoveCamera(vec3& mov, float& speed);
-	void RotateCamera(rotate_type rotType, float& rotSpeed);
-	void DragCamera(vec3& mov, float delta_x, float delta_y);
-	void MouseRotate(rotate_type type, float delta_x, float delta_y);
-	bool FirstPersonCamera(vec3& mov, float& movSpeed);
+	void MoveCamera(float& movSpeed);
+	void DragCamera(float delta_x, float delta_y);
+	void Zoom(float delta_z);
+	bool FirstPersonCamera(float& movSpeed);
+
+	// Camera Rotations
+	void Orbit(float motion_x, float motion_y);
+	void Rotate(float motion_x, float motion_y);
 
 	// Double Tap Checks
 	void ProcessBoost(bool& boostType, float& currSpeed, void(ModuleCamera3D::*fPtr)(void));
@@ -43,39 +50,26 @@ private:
 	void FirstPersonBoostInput();
 	void CheckStartBoost(int currKey, bool& boostType);
 
-	// Camera Rotations
-	void RotateBegin(rotate_type type);
-	void RotateFinish(rotate_type type);
-
-	void RotateHorizontal(float angle);
-	void RotateVertical(float angle);
-
-	// Matrix Calc
-	void CalculateViewMatrix();
-
 public:
-	vec3 X, Y, Z, Position, Reference;
-
 	// Camera Movement
 	float camMovSpeed;			// Movement speed for keyboard inputs
 	float maxMovSpeed;			// Maximum movement speed
 	float camMovMultiplier;		// Movement speed multiplier for percentage boosts
 	float maxMovMultiplier;		// Maximum movement multiplier
 
-	// Camera Rotation
-	float camRotSpeed;			// Rotation speed for keyboard inputs
-	float maxRotSpeed;			// Maximum rotation speed
-	float camRotMultiplier;		// Rotation speed multiplier for percentage boosts
-	float maxRotMultiplier;		// Maximum rotation multiplier
-
 	// Mouse input multiplier
-	float camMouseSens;		// Multiplier for mouse input
-	float maxMouseSens;		// Maximum mouse sensibility
+	float mouseSens;
+	float maxMouseSens;
+
+	float scrollSens;
+	float maxScrollSens;
 
 	float camDefaultMin = 0.1f;
 
 private:
-	mat4x4 ViewMatrix, ViewMatrixInverse;
+	float3 reference;
+	bool target = false;	// Flag for object being targeted
+	ComponentCamera* editorCam = nullptr;
 
 	// Dobule Tap
 	Timer doubleTapTimer;
@@ -85,3 +79,5 @@ private:
 	bool boostingSpeed = false;
 	bool boostingRot = false;
 };
+
+#endif	//MODULECAMERA3D
