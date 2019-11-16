@@ -49,7 +49,7 @@ update_status ModuleCamera3D::Update(float dt)
 		
 		//float3 newPos(0, 0, 0);
 		float currMovSpeed = camMovSpeed * dt;
-		float currRotSpeed = camRotSpeed * dt;
+		//float currRotSpeed = camRotSpeed * dt;
 
 		// Double Tap Boosting
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {	// First person keys
@@ -57,22 +57,22 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 		else {	// Regular keys
 				ProcessBoost(boostingSpeed, currMovSpeed, &ModuleCamera3D::MovBoostInput);
-				ProcessBoost(boostingRot, currRotSpeed, &ModuleCamera3D::RotBoostInput);
+				//ProcessBoost(boostingRot, currRotSpeed, &ModuleCamera3D::RotBoostInput);
 		}
 
-		float mouse_z = (float)App->input->GetMouseZ();
-		float mouse_x = (float)-App->input->GetMouseXMotion() * camMouseSens * dt;
-		float mouse_y = (float)-App->input->GetMouseYMotion() * camMouseSens * dt;
+		float mouse_z = (float)App->input->GetMouseZ() * scrollSens * dt;
+		float mouse_x = (float)-App->input->GetMouseXMotion() * mouseSens * dt;
+		float mouse_y = (float)-App->input->GetMouseYMotion() * mouseSens * dt;
 
 		// Mouse Button Controls
 		if (mouse_x != 0.f || mouse_y != 0.f) {
 			if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
 				|| App->scene_intro->toolMode == (int)tool_mode::DRAG && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {	// Drag Camera
-				DragCamera(mouse_x, mouse_y);
+				DragCamera(mouse_x / 5.f, mouse_y / 5.f);
 			}
 			else if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
 				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) Orbit(mouse_x, mouse_y);	// Rotate Camera around Reference
-				else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) Zoom(-mouse_y / dt);		// Zoom Camera
+				else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) Zoom(-mouse_y);		// Zoom Camera
 			}
 			else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {	// Rotate Camera around Self
 				Rotate(mouse_x, mouse_y);
@@ -146,7 +146,7 @@ void ModuleCamera3D::DragCamera(float delta_x, float delta_y)
 
 void ModuleCamera3D::Zoom(float delta_z)
 {
-	editorCam->frustum.pos += editorCam->frustum.front * delta_z;
+	editorCam->frustum.pos += editorCam->frustum.front * delta_z * scrollSens;
 }
 
 bool ModuleCamera3D::FirstPersonCamera(float& movSpeed)
@@ -322,32 +322,12 @@ void ModuleCamera3D::GoTo(const float3 &pos)
 
 void ModuleCamera3D::LookAt(const float3 &spot, float dist)
 {
-	editorCam->LookAt(spot);
 	reference = spot;
+	editorCam->LookAt(reference);
 
 	if (dist > 0.f)
-		editorCam->frustum.pos += editorCam->frustum.front * dist;
+		editorCam->frustum.pos = reference - editorCam->frustum.front * dist;
 }
-
-//void ModuleCamera3D::LookFrom(const float3 &spot, const float3 &Direction, float dist)	// Look at reference from a certain direction
-//{
-//	float3 unitDirection = Direction.Normalized();
-//
-//	if (dist > 0.0f) {
-//		position = spot + unitDirection * dist;
-//	}
-//	else {
-//		position = spot + Direction;
-//	}
-//
-//	reference = spot;
-//
-//	Z = unitDirection;
-//	X = Cross(float3(0.0f, 1.0f, 0.0f), Z).Normalized();
-//	Y = Cross(Z, X);
-//
-//	CalculateViewMatrix();
-//}
 
 void ModuleCamera3D::GoLook(const float3 &pos, const float3 &spot)	// Look at reference from a certain position
 {
@@ -358,18 +338,17 @@ void ModuleCamera3D::GoLook(const float3 &pos, const float3 &spot)	// Look at re
 void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)	//IMPROVE: This should not change the camera's angle
 {
 	if (obj != nullptr) {
-		float3 pos = { 0.0f, 0.0f, 0.0f };
 		float dist = length({ 10.0f, 10.0f, 10.0f });
 
 		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(COMPONENT_TYPE::TRANSFORM);
 		if (transform != nullptr)
-			pos = transform->globalTrs.TranslatePart();
+			reference = transform->globalTrs.TranslatePart();
 
 		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(COMPONENT_TYPE::MESH);
 		if (mesh != nullptr)
 			dist = length({ mesh->mesh->size.x, mesh->mesh->size.y, mesh->mesh->size.z });
 
-		LookAt(pos, dist);
+		LookAt(reference, dist);
 	}
 }
 

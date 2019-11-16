@@ -24,7 +24,6 @@ public:
 	void Move(const float3 &movement);
 	void GoTo(const float3 &pos);
 	void LookAt(const float3 &spot, float dist = 0.0f);
-	//void LookFrom(const float3 &spot, const float3 &direction, float dist = 0.0f);
 	void GoLook(const float3 &pos, const float3 &spot);
 	void CenterToObject(GameObject* obj, float multiplier = 1.0f);
 
@@ -58,15 +57,12 @@ public:
 	float camMovMultiplier;		// Movement speed multiplier for percentage boosts
 	float maxMovMultiplier;		// Maximum movement multiplier
 
-	// Camera Rotation
-	float camRotSpeed;			// Rotation speed for keyboard inputs
-	float maxRotSpeed;			// Maximum rotation speed
-	float camRotMultiplier;		// Rotation speed multiplier for percentage boosts
-	float maxRotMultiplier;		// Maximum rotation multiplier
-
 	// Mouse input multiplier
-	float camMouseSens;		// Multiplier for mouse input
-	float maxMouseSens;		// Maximum mouse sensibility
+	float mouseSens;
+	float maxMouseSens;
+
+	float scrollSens;
+	float maxScrollSens;
 
 	float camDefaultMin = 0.1f;
 

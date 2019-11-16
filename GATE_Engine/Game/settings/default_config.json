@@ -7,16 +7,14 @@
     "Title": "GATE Engine"
   },
   "Camera": {
-    "Max Mouse Sensitivity": 1.5,
+    "Max Mouse Sensitivity": 1.0,
     "Max Movement Multiplier": 4.0,
     "Max Movement Speed": 60.0,
-    "Max Rotation Multiplier": 3.0,
-    "Max Rotation Speed": 6.0,
+    "Max Scroll Sensitivity": 100.0,
     "Mouse Sensitivity": 0.25,
     "Movement Multiplier": 2.0,
     "Movement Speed": 5.0,
-    "Rotation Multiplier": 1.5,
-    "Rotation Speed": 1.0
+    "Scroll Sensitivity": 10.0
   },
   "Editor": {
     "Modes": {

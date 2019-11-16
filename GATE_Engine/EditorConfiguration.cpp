@@ -121,13 +121,11 @@ void EditorConfiguration::Update()
 				ImGui::SliderFloat("Movement Speed", &App->camera->camMovSpeed, App->camera->camDefaultMin, App->camera->maxMovSpeed);
 				ImGui::SliderFloat("Movement Multiplier", &App->camera->camMovMultiplier, App->camera->camDefaultMin, App->camera->maxMovMultiplier);
 
-				ImGui::SliderFloat("Rotation Speed", &App->camera->camRotSpeed, App->camera->camDefaultMin, App->camera->maxRotSpeed);
-				ImGui::SliderFloat("Rotation Multiplier", &App->camera->camRotMultiplier, App->camera->camDefaultMin, App->camera->maxRotMultiplier);
-
 				ImGui::Separator();
 
 				ImGui::Text("Mouse Inputs");
-				ImGui::SliderFloat("Mouse Sensibility", &App->camera->camMouseSens, App->camera->camDefaultMin, App->camera->maxMouseSens);
+				ImGui::SliderFloat("Mouse Sensibility", &App->camera->mouseSens, App->camera->camDefaultMin, App->camera->maxMouseSens);
+				ImGui::SliderFloat("Scroll Sensibility", &App->camera->scrollSens, App->camera->camDefaultMin, App->camera->maxScrollSens);
 			}
 
 			if (ImGui::CollapsingHeader("Data")) {

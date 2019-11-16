@@ -33,7 +33,7 @@ bool ModuleSceneIntro::Start()
 	ComponentTransform* trans = (ComponentTransform*)root->GetComponent(COMPONENT_TYPE::TRANSFORM);
 
 	//Setup camera
-	App->camera->Move(float3(5.0f, 5.0f, 5.0f));
+	App->camera->Move(float3(15.0f, 15.0f, 15.0f));
 	App->camera->LookAt(float3(0.f, 0.f, 0.f));
 
 	//Load the Baker House
