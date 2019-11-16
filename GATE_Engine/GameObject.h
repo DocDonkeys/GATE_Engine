@@ -36,7 +36,7 @@ public: //Methods
 	void UpdateBoundingBox(float4x4 mat);
 
 	Component* CreateComponent(COMPONENT_TYPE type);
-	Component* GetComponent(COMPONENT_TYPE type);
+	Component* GetComponent(COMPONENT_TYPE type) const;
 
 public: //Vars
 	uint32_t UID = 0;
@@ -57,6 +57,10 @@ public: //Vars
 //Namespace to carry out operations related to Game Objects
 namespace GOFunctions {
 	void ReParentGameObject(GameObject* child, GameObject* parent);
+
+	//Returns all gameobjects that are directly or indirectly children of the gameobject, for instance: 
+	// if a children gameobject also has children, it will include its children too, including all nodes of the tree that depend on the gameobject passed
+	void FillArrayWithChildren(std::vector<const GameObject*> &go_array, const GameObject* go, bool add_parent = false, uint count = 0);
 }
 #endif // !__GAMEOBJECT_H__
 

@@ -1,6 +1,8 @@
 #include "Importer.h"
 #include "Mesh.h"
 #include "ComponentTransform.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 #include "Application.h"
 #include "ModuleFileSystem.h"
 
@@ -301,32 +303,64 @@ bool Importer::Export(const char * path, std::string & output_file, const GameOb
 	bool ret = false;
 
 	//Calculate the total size depending on number of gameobject
-	uint num_gos = 0;
-	TotalGOsNum(go,num_gos); // Get the total count of gameobjects
 
+	std::vector<const GameObject*> gos;
+	GOFunctions::FillArrayWithChildren(gos, go, true); // fill an array with go and all its children gameobjects 
+	uint num_gos = gos.size();
+	
 	uint size = 0; // This will be the size in bytes that we will need to allocate
 	size += sizeof(GameObject) * num_gos;
-	//size -= sizeof(go->children) + sizeof(go->components) * num_gos;  //We subtract the size of the thing swe won't be using (we can't pass )
-
+	size -= sizeof(go->children) + sizeof(go->components) * num_gos;  //We subtract the size of the thing swe won't be using (we can't pass )
+	size += sizeof(std::string) * 2 * num_gos; // size for paths of components
 	char* data = new char[size];
 	char* cursor = data;
+	uint bytes = 0;
 
+	const GameObject* go_save = nullptr;
 	//---------------------- Store the data --------------------------//
-	uint bytes = sizeof(go->UID);
-	uint32_t t = go->UID;
-	memcpy(cursor, &t,bytes);
+	for (int i = 0; i < num_gos; ++i)
+	{
+		go_save = gos[i];
+		bytes = sizeof(go_save->UID);
+		uint32_t t = go_save->UID;
+		memcpy(cursor, &t, bytes);
 
-	cursor += bytes;
-	bytes = sizeof(bool);
-	memcpy(cursor, &go->active,bytes); //store active
+		cursor += bytes;
+		bytes = sizeof(bool);
+		memcpy(cursor, &go_save->active, bytes); //store active
 
-	cursor += bytes;
-	bytes = sizeof(bool);
-	memcpy(cursor, &go->staticObj, bytes); //store static
+		cursor += bytes;
+		bytes = sizeof(bool);
+		memcpy(cursor, &go_save->staticObj, bytes); //store static
 
-	cursor += bytes;
-	bytes = sizeof(go->name);
-	memcpy(cursor, &go->name, bytes);
+		cursor += bytes;
+		bytes = sizeof(go_save->name); //Store name
+		memcpy(cursor, &go_save->name, bytes);
+
+		//Save Components
+		std::string output_file_mesh;
+		ComponentMesh* m = (ComponentMesh*)go_save->GetComponent(COMPONENT_TYPE::MESH);
+		if (m != nullptr)
+			Export(LIBRARY_MESH_FOLDER, output_file_mesh, m->mesh);
+		else
+			output_file_mesh = "no_component";
+
+		std::string output_file_trans;
+		ComponentTransform* trans = (ComponentTransform*)go_save->GetComponent(COMPONENT_TYPE::TRANSFORM);
+		if (trans != nullptr)
+			Export(LIBRARY_TRANSFORMATIONS_FOLDER, output_file_trans, trans);
+		else
+			output_file_trans = "no_component";
+
+
+		//Now we save the paths to the components
+		std::string paths[2] = { output_file_mesh, output_file_trans };
+		cursor += bytes;
+		bytes = sizeof(paths);
+		memcpy(cursor,paths,bytes);
+
+		cursor += bytes; //This way we can loop this whole process for multiple gameobjects
+	}
 
 	//Save the new .model to disk
 	ret = App->file_system->SaveUnique(output_file, data, size, path, filename, "model");

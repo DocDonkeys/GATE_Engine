@@ -217,7 +217,7 @@ Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 	return c;
 }
 
-Component * GameObject::GetComponent(COMPONENT_TYPE type)
+Component * GameObject::GetComponent(COMPONENT_TYPE type) const
 {
 	for (int i = 0; i < components.size(); ++i)
 	{
@@ -262,5 +262,20 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 	}
 	else {
 		LOG("[Error]: A parent can't be inside the heriarchy of one of his own childs.");
+	}
+}
+
+void GOFunctions::FillArrayWithChildren(std::vector<const GameObject*> &go_array, const GameObject * go, bool add_parent, uint count)
+{
+	if (count != 0)	//If we're not the parent that was called explicitly in the function
+		go_array.push_back(go);
+	else if (add_parent == true)		// In case we are the parent (Count == 0) & we want to include the parent
+		go_array.push_back(go);
+
+	count++;
+	if (go->children.size() > 0)
+	{
+		for (int i = 0; i < go->children.size(); ++i)
+		FillArrayWithChildren(go_array,go->children[i],add_parent,count);
 	}
 }
