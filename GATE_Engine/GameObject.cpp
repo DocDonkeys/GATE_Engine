@@ -109,15 +109,17 @@ void GameObject::PostUpdate()
 
 void GameObject::Draw()
 {
-	//Draw whatever the GameObject itself needs to draw
-	if (App->renderer3D->drawObjAABB)
-		DrawAABB();
+	if (App->camera->ContainsAABB(aabb)) {	// Camera culling: Objects outside the active camera view are not rendered
+		//Draw whatever the GameObject itself needs to draw
+		if (App->renderer3D->drawObjAABB)
+			DrawAABB();
 
-	//Draw the components
-	for (int i = 0; i < components.size(); ++i)
-	{
-		if (components[i]->active)
-			components[i]->Draw();
+		//Draw the components
+		for (int i = 0; i < components.size(); ++i)
+		{
+			if (components[i]->active)
+				components[i]->Draw();
+		}
 	}
 
 	//Update the children game objects
@@ -181,13 +183,16 @@ void GameObject::DrawAABB()
 
 void GameObject::UpdateBoundingBox(float4x4 globalMat)
 {
-	//CHANGE/FIX: Using the mesh is wrong, but I don't have the time to make it better right now, it should transform with the global matrix
+	//CHANGE/FIX: Using the mesh is wrong(?), but I don't have the time to make it better right now, it should transform with the global matrix
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(COMPONENT_TYPE::MESH);
-	obb.SetFrom(mesh->mesh->bounds);
 
-	obb.Transform(globalMat);	// Transform OBB with transform global matrix
-	aabb.SetFrom(obb);			// Set object AABB
-	size = { abs(aabb.maxPoint.x - aabb.minPoint.x), abs(aabb.maxPoint.y - aabb.minPoint.y), abs(aabb.maxPoint.z - aabb.minPoint.z) };
+	if (mesh != nullptr) {
+		obb.SetFrom(mesh->mesh->bounds);
+
+		obb.Transform(globalMat);	// Transform OBB with transform global matrix
+		aabb.SetFrom(obb);			// Set object AABB
+		size = { abs(aabb.maxPoint.x - aabb.minPoint.x), abs(aabb.maxPoint.y - aabb.minPoint.y), abs(aabb.maxPoint.z - aabb.minPoint.z) };
+	}
 }
 
 Component * GameObject::CreateComponent(COMPONENT_TYPE type)

@@ -4,6 +4,7 @@
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
 #include "libs/MathGeoLib/include/Math/float3x3.h"
 #include "libs/MathGeoLib/include/Math/float4x4.h"
+#include "libs/MathGeoLib/include/Geometry/Plane.h"
 
 ComponentCamera::ComponentCamera() : Component()
 {
@@ -19,8 +20,6 @@ ComponentCamera::ComponentCamera() : Component()
 	frustum.farPlaneDistance = 1000.0f;
 	frustum.verticalFov = DegToRad(60.0f);
 	SetAspectRatio(1.3f);
-
-	projection_changed = true;
 }
 
 ComponentCamera::~ComponentCamera()
@@ -61,7 +60,7 @@ void ComponentCamera::SetNearPlaneDist(float dist)
 	if (dist > 0.0f && dist < frustum.farPlaneDistance)
 	{
 		frustum.nearPlaneDistance = dist;
-		projection_changed = true;
+		needsProjectionUpdate = true;
 	}
 }
 
@@ -70,7 +69,7 @@ void ComponentCamera::SetFarPlaneDist(float dist)
 	if (dist > 0.0f && dist > frustum.nearPlaneDistance)
 	{
 		frustum.farPlaneDistance = dist;
-		projection_changed = true;
+		needsProjectionUpdate = true;
 	}
 }
 
@@ -87,7 +86,7 @@ void ComponentCamera::SetAspectRatio(float aspect_ratio)
 	// More about FOV: http://twgljs.org/examples/fov-checker.html
 	// fieldOfViewX = 2 * atan(tan(fieldOfViewY * 0.5) * aspect)
 	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
-	projection_changed = true;
+	needsProjectionUpdate = true;
 }
 
 void ComponentCamera::LookAt(const float3& position)
@@ -100,24 +99,14 @@ void ComponentCamera::LookAt(const float3& position)
 	frustum.up = m.MulDir(frustum.up).Normalized();
 }
 
-float4x4 ComponentCamera::GetOpenGLViewMatrix() const
+float4x4 ComponentCamera::GetOpenGLView() const
 {
-	float4x4 m;
-
-	m = frustum.ViewMatrix();
-	m.Transpose();
-
-	return m;
+	return float4x4(frustum.ViewMatrix()).Transposed();
 }
 
-float4x4 ComponentCamera::GetOpenGLProjectionMatrix() const
+float4x4 ComponentCamera::GetOpenGLProjection() const
 {
-	float4x4 m;
-
-	m = frustum.ProjectionMatrix();
-	m.Transpose();
-
-	return m;
+	return frustum.ProjectionMatrix().Transposed();
 }
 
 float4x4 ComponentCamera::GetViewMatrix() const
@@ -129,4 +118,31 @@ float4x4 ComponentCamera::GetProjectionMatrix() const
 {
 	//return frustum.ProjectionMatrix();
 	return float4x4::D3DPerspProjRH(frustum.nearPlaneDistance, frustum.farPlaneDistance, frustum.NearPlaneWidth(), frustum.NearPlaneHeight());
+}
+
+bool ComponentCamera::ContainsAABB(const AABB& refBox) const
+{
+	float3 corners[8];
+	refBox.GetCornerPoints(corners);
+
+	uint totalInside = 0;
+
+	for (int i = 0; i < 6; ++i) {	// For each frustum plane
+		int insideCount = 8;
+		Plane& p = frustum.GetPlane(i);
+
+		for (int j = 0; j < 8; ++j)	// For each AABB corner
+			if (p.IsOnPositiveSide(corners[j]))	// Frustum plane normals point outside the Frustum volume, therefore "out = positive side"
+				--insideCount;
+
+		if (insideCount == 0)
+			return false;	// FULLY OUT
+		else
+			totalInside += 1;
+	}
+	
+	if (totalInside == 6)
+		return true;	// FULLY IN
+	else
+		return true;	// PARTLY IN
 }

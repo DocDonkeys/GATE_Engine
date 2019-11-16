@@ -3,11 +3,11 @@
 
 #include "Module.h"
 #include "Globals.h"
-#include "ComponentCamera.h"
 
 #include "libs/MathGeoLib/include/Math/float4x4.h"
 
 class GameObject;
+class ComponentCamera;
 
 class ModuleCamera3D : public Module
 {
@@ -29,8 +29,10 @@ public:
 
 	// Gets
 	float3 GetPosition() const;
-	float* GetViewMatrix() const;
-	float* GetProjectionMatrix() const;
+	float* GetOpenGLView() const;
+	float* GetOpenGLProjection() const;
+	bool* GetProjectionUpdateFlag() const;
+	bool ContainsAABB(const AABB& refBox) const;
 
 private:
 	// Input Checks
@@ -69,7 +71,8 @@ public:
 private:
 	float3 reference;
 	bool target = false;	// Flag for object being targeted
-	ComponentCamera* editorCam = nullptr;
+	ComponentCamera* editorCamera = nullptr;
+	ComponentCamera* activeCamera = nullptr;
 
 	// Dobule Tap
 	Timer doubleTapTimer;

@@ -3,6 +3,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "GeometryLoader.h"
+#include "ComponentCamera.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 
@@ -14,12 +15,12 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
-	editorCam = new ComponentCamera();
+	activeCamera = editorCamera = new ComponentCamera();
 }
 
 ModuleCamera3D::~ModuleCamera3D()
 {
-	delete editorCam;
+	delete editorCamera;
 }
 
 // -----------------------------------------------------------------
@@ -119,8 +120,8 @@ void ModuleCamera3D::MoveCamera(float& movSpeed)
 {
 	float3 mov(float3::zero);
 
-	float3 right(editorCam->frustum.WorldRight());
-	float3 front(editorCam->frustum.front);
+	float3 right(editorCamera->frustum.WorldRight());
+	float3 front(editorCamera->frustum.front);
 
 	// Forward/Backwards
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) mov += front;
@@ -135,7 +136,7 @@ void ModuleCamera3D::MoveCamera(float& movSpeed)
 	//if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_REPEAT) mov += float3::unitY;
 
 	if (!mov.Equals(float3::zero)) {
-		editorCam->frustum.Translate(mov * movSpeed);
+		editorCamera->frustum.Translate(mov * movSpeed);
 	}
 }
 
@@ -143,15 +144,15 @@ void ModuleCamera3D::DragCamera(float delta_x, float delta_y)
 {
 	float3 mov(float3::zero);
 
-	mov += editorCam->frustum.WorldRight() * delta_x;
-	mov -= editorCam->frustum.up * delta_y;
+	mov += editorCamera->frustum.WorldRight() * delta_x;
+	mov -= editorCamera->frustum.up * delta_y;
 
-	editorCam->frustum.Translate(mov * 100.0f);
+	editorCamera->frustum.Translate(mov * 100.0f);
 }
 
 void ModuleCamera3D::Zoom(float delta_z)
 {
-	editorCam->frustum.pos += editorCam->frustum.front * delta_z * scrollSens;
+	editorCamera->frustum.pos += editorCamera->frustum.front * delta_z * scrollSens;
 }
 
 bool ModuleCamera3D::FirstPersonCamera(float& movSpeed)
@@ -159,8 +160,8 @@ bool ModuleCamera3D::FirstPersonCamera(float& movSpeed)
 	bool ret = false;
 	float3 mov(float3::zero);
 
-	float3 right(editorCam->frustum.WorldRight());
-	float3 front(editorCam->frustum.front);
+	float3 right(editorCamera->frustum.WorldRight());
+	float3 front(editorCamera->frustum.front);
 
 	// Boost speed if not already
 	if (!boostingSpeed && App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) movSpeed *= camMovMultiplier;
@@ -178,7 +179,7 @@ bool ModuleCamera3D::FirstPersonCamera(float& movSpeed)
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) mov += float3::unitY;
 
 	if (!mov.Equals(float3::zero)) {
-		editorCam->frustum.Translate(mov * movSpeed);
+		editorCamera->frustum.Translate(mov * movSpeed);
 		ret = true;
 	}
 
@@ -190,15 +191,15 @@ bool ModuleCamera3D::FirstPersonCamera(float& movSpeed)
 // Camera Rotations
 void ModuleCamera3D::Orbit(float dx, float dy)
 {
-	float3 focus = editorCam->frustum.pos - reference;
+	float3 focus = editorCamera->frustum.pos - reference;
 
-	Quat qy(editorCam->frustum.up, dx);
-	Quat qx(editorCam->frustum.WorldRight(), dy);
+	Quat qy(editorCamera->frustum.up, dx);
+	Quat qx(editorCamera->frustum.WorldRight(), dy);
 
 	focus = qx.Transform(focus);
 	focus = qy.Transform(focus);
 
-	editorCam->frustum.pos = focus + reference;
+	editorCamera->frustum.pos = focus + reference;
 
 	LookAt(reference);
 }
@@ -209,20 +210,20 @@ void ModuleCamera3D::Rotate(float dx, float dy)
 	if (dx != 0.f)
 	{
 		Quat q = Quat::RotateY(dx);
-		editorCam->frustum.front = q.Mul(editorCam->frustum.front).Normalized();
-		editorCam->frustum.up = q.Mul(editorCam->frustum.up).Normalized();
+		editorCamera->frustum.front = q.Mul(editorCamera->frustum.front).Normalized();
+		editorCamera->frustum.up = q.Mul(editorCamera->frustum.up).Normalized();
 	}
 
 	// y motion makes the camera rotate in X local axis, with tops
 	if (dy != 0.f)
 	{
-		Quat q = Quat::RotateAxisAngle(editorCam->frustum.WorldRight(), dy);
-		float3 new_up = q.Mul(editorCam->frustum.up).Normalized();
+		Quat q = Quat::RotateAxisAngle(editorCamera->frustum.WorldRight(), dy);
+		float3 new_up = q.Mul(editorCamera->frustum.up).Normalized();
 
 		if (new_up.y > 0.0f)
 		{
-			editorCam->frustum.up = new_up;
-			editorCam->frustum.front = q.Mul(editorCam->frustum.front).Normalized();
+			editorCamera->frustum.up = new_up;
+			editorCamera->frustum.front = q.Mul(editorCamera->frustum.front).Normalized();
 		}
 	}
 }
@@ -314,24 +315,24 @@ void ModuleCamera3D::CheckStartBoost(int currKey, bool& boostType)
 //Camera Orders
 void ModuleCamera3D::Move(const float3 &mov)
 {
-	editorCam->frustum.pos += mov;
+	editorCamera->frustum.pos += mov;
 	reference += mov;
 }
 
 void ModuleCamera3D::GoTo(const float3 &pos)
 {
-	float3 dist = pos - editorCam->frustum.pos;
-	editorCam->frustum.pos = pos;
-	reference = editorCam->frustum.pos + dist;
+	float3 dist = pos - editorCamera->frustum.pos;
+	editorCamera->frustum.pos = pos;
+	reference = editorCamera->frustum.pos + dist;
 }
 
 void ModuleCamera3D::LookAt(const float3 &spot, float dist)
 {
 	reference = spot;
-	editorCam->LookAt(reference);
+	editorCamera->LookAt(reference);
 
 	if (dist > 0.f)
-		editorCam->frustum.pos = reference - editorCam->frustum.front * dist;
+		editorCamera->frustum.pos = reference - editorCamera->frustum.front * dist;
 }
 
 void ModuleCamera3D::GoLook(const float3 &pos, const float3 &spot)	// Look at reference from a certain position
@@ -359,17 +360,25 @@ void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)	//IMPROVE
 
 float3 ModuleCamera3D::GetPosition() const
 {
-	return editorCam->frustum.pos;
+	return activeCamera->frustum.pos;
 }
 
-float* ModuleCamera3D::GetViewMatrix() const
+float* ModuleCamera3D::GetOpenGLView() const
 {
-	float4x4 m = editorCam->frustum.ViewMatrix();
-	return (float*)m.Transposed().v;
+	return *activeCamera->GetOpenGLView().v;
 }
 
-float* ModuleCamera3D::GetProjectionMatrix() const
+float* ModuleCamera3D::GetOpenGLProjection() const
 {
-	float4x4 m = editorCam->frustum.ProjectionMatrix();
-	return (float*)m.Transposed().v;
+	return *activeCamera->GetOpenGLProjection().v;
+}
+
+bool* ModuleCamera3D::GetProjectionUpdateFlag() const
+{
+	return &activeCamera->needsProjectionUpdate;
+}
+
+bool ModuleCamera3D::ContainsAABB(const AABB& refBox) const
+{
+	return activeCamera->ContainsAABB(refBox);
 }

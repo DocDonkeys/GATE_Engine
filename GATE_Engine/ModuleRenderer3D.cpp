@@ -164,20 +164,24 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::Orange);
 
-	//CHANGE/FIX: Check if this operations are needed every frame
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	bool* projFlag = App->camera->GetProjectionUpdateFlag();
+	if (*projFlag) {
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 
-	glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrix());
+		glLoadMatrixf((GLfloat*)App->camera->GetOpenGLProjection());
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		*projFlag = false;
+	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->GetOpenGLView());
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->GetPosition().x, App->camera->GetPosition().y, App->camera->GetPosition().z);
