@@ -72,8 +72,65 @@ bool Importer::Import(const char * file, const char * path, std::string & output
 	mesh->tex_coords = new float[mesh->num_tex_coords * 2];						//																					//
 	memcpy(mesh->tex_coords, cursor, bytes);													//																					//
 
-
 	return ret;
+}
+
+bool Importer::Import(const char* full_path, Mesh * mesh)
+{
+	bool ret = false;
+	//Load a buffer to access the data of the .mesh
+	char* buffer = nullptr;
+	App->file_system->Load(full_path, &buffer);
+
+	if (mesh == nullptr)
+	{
+		LOG("[WARNING] Tried to import a .mesh file into a nullptr mesh, a mesh will be created in memory");
+		mesh = new Mesh;
+	}
+
+	//------------------- Assign data from buffer  -------------------//
+	char* cursor = (char*)buffer;
+	// amount of indices / vertices / colors / normals / texture_coords
+	uint ranges[4];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+
+	mesh->num_index = ranges[0];
+	mesh->num_vertex = ranges[1];
+	mesh->num_normals = ranges[2];
+	mesh->num_tex_coords = ranges[3];
+
+	cursor += bytes;																		//																//
+	bytes = sizeof(uint) * mesh->num_index;									//					Copy Indices 						//
+	mesh->index = new uint[mesh->num_index];
+	memcpy(mesh->index, cursor, bytes);										//																//
+
+	cursor += bytes;																		//																//
+	bytes = sizeof(float) * mesh->num_vertex * 3;						//					Copy Vertices   					//
+	mesh->vertex = new float3[mesh->num_vertex];
+	memcpy(mesh->vertex, cursor, bytes);										//																//
+
+	cursor += bytes;																		//																//
+	bytes = sizeof(float) * mesh->num_normals * 3;						//					Copy Normals Vector   			//
+	mesh->normals_vector = new float3[mesh->num_normals];
+	memcpy(mesh->normals_vector, cursor, bytes);						//																//
+
+	cursor += bytes;																		//																//
+	bytes = sizeof(float) * mesh->num_normals * 3;						//					Copy Normals Faces  			//
+	mesh->normals_faces = new float3[mesh->num_normals];		//																//
+	memcpy(mesh->normals_faces, cursor, bytes);							//																//
+
+	cursor += bytes;																							//																					//
+	bytes = sizeof(float) * mesh->num_normals * 3;											//					Copy Normals Faces vectors   					//
+	mesh->normals_faces_vector = new float3[mesh->num_normals];				//																					//
+	memcpy(mesh->normals_faces_vector, cursor, bytes);								//																					//
+
+	cursor += bytes;																							//																					//
+	bytes = sizeof(float) * mesh->num_tex_coords * 2;										//					Copy Texture Coordinates						//
+	mesh->tex_coords = new float[mesh->num_tex_coords * 2];						//																					//
+	memcpy(mesh->tex_coords, cursor, bytes);													//																					//
+
+	return false;
 }
 
 bool Importer::Import(const char * file, const char * path, std::string & output_file, ComponentTransform * transform)
@@ -143,41 +200,67 @@ bool Importer::ImportModel(const char * path, const char * file)
 	//Load a buffer to access the data of the .mesh
 	char* buffer = nullptr;
 	App->file_system->Load(output_file.data(), &buffer);
-
-	GameObject* go = new GameObject;
-
-	//------------------- Assign data from buffer  -------------------//
 	char* cursor = (char*)buffer;
+	
+	//Read the number of gameobjects present in the model
+	uint num_gos;
 
-	uint bytes = sizeof(uint32_t);
-	memcpy(&go->UID,cursor,bytes);
-
+	uint bytes = sizeof(num_gos);
+	memcpy(&num_gos, cursor, bytes);
 	cursor += bytes;
-	bytes = sizeof(bool);
-	memcpy(&go->active, cursor, bytes);
 
-	cursor += bytes;
-	bytes = sizeof(bool);
-	memcpy(&go->staticObj, cursor, bytes);
+	std::vector<GameObject*> gos;
 
-	cursor += bytes;
-	bytes = sizeof(std::string);
-	memcpy(&go->name,cursor,bytes);
-	go->name._Myproxy() = nullptr;  // The string tries to load a proxy, we must set it to nullptr or on delete std will try to delete out of bounds memory
+	for (int i = 0; i < num_gos; ++i)
+	{
+		//------------------- Assign data from buffer to each game object  -------------------//
+		GameObject* go = new GameObject;
 
-	GOFunctions::ReParentGameObject(go,App->scene_intro->root);
+		bytes = sizeof(uint32_t);
+		memcpy(&go->UID, cursor, bytes);
+
+		cursor += bytes;
+		bytes = sizeof(bool);
+		memcpy(&go->active, cursor, bytes);
+
+		cursor += bytes;
+		bytes = sizeof(bool);
+		memcpy(&go->staticObj, cursor, bytes);
+
+		cursor += bytes;
+		bytes = sizeof(std::string);
+		memcpy(&go->name, cursor, bytes);
+		go->name._Myproxy() = nullptr;  // The string tries to load a proxy, we must set it to nullptr or on delete std will try to delete out of bounds memory
+
+		//Load Components
+		//std::string component_paths[2];
+		//bytes = sizeof(std::string)*2;
+		//memcpy(component_paths,cursor,bytes);
+
+		//Load Mesh Component
+		/*if (component_paths[0].data() != "no_component")
+		{
+			Mesh* m = nullptr;
+			Import(component_paths[0].data(), m);
+			App->renderer3D->GenerateVertexBuffer(m->id_vertex, m->num_vertex, m->vertex);
+			App->renderer3D->GenerateIndexBuffer(m->id_index, m->num_index, m->index);
+			App->renderer3D->GenerateVertexBuffer(m->id_tex_coords, m->num_tex_coords * 2, m->tex_coords);
+
+			ComponentMesh* mesh_comp = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
+			mesh_comp->mesh = m;
+		}*/
+
+		
+
+		gos.push_back(go);
+		cursor += bytes; //prepare cursor to read next gameobject
+	}
+
+	//For now parent all game objects to rot
+	for (int i = 0; i < num_gos; ++i)
+	GOFunctions::ReParentGameObject(gos[i],App->scene_intro->root);
 
 	return false;
-}
-
-bool Importer::ImportToMesh(const void * buffer, uint size, std::string & output_file, Mesh* mesh)
-{
-	bool ret = false;
-	
-	
-	
-
-	return ret;
 }
 
 //Export a Mesh as our own file format .mesh
@@ -309,12 +392,17 @@ bool Importer::Export(const char * path, std::string & output_file, const GameOb
 	uint num_gos = gos.size();
 	
 	uint size = 0; // This will be the size in bytes that we will need to allocate
-	size += sizeof(GameObject) * num_gos;
+	size += sizeof(num_gos) + sizeof(GameObject) * num_gos;
 	size -= sizeof(go->children) + sizeof(go->components) * num_gos;  //We subtract the size of the thing swe won't be using (we can't pass )
-	size += sizeof(std::string) * 2 * num_gos; // size for paths of components
+	//size += sizeof(std::string) * 2 * num_gos; // size for paths of components
 	char* data = new char[size];
 	char* cursor = data;
 	uint bytes = 0;
+
+	//Save the number of gameobjects so when reading we can know the number of iterations we will need to do
+	bytes = sizeof(num_gos);
+	memcpy(cursor,&num_gos,bytes);
+	cursor += bytes;
 
 	const GameObject* go_save = nullptr;
 	//---------------------- Store the data --------------------------//
@@ -338,7 +426,7 @@ bool Importer::Export(const char * path, std::string & output_file, const GameOb
 		memcpy(cursor, &go_save->name, bytes);
 
 		//Save Components
-		std::string output_file_mesh;
+		/*std::string output_file_mesh;
 		ComponentMesh* m = (ComponentMesh*)go_save->GetComponent(COMPONENT_TYPE::MESH);
 		if (m != nullptr)
 			Export(LIBRARY_MESH_FOLDER, output_file_mesh, m->mesh);
@@ -350,14 +438,16 @@ bool Importer::Export(const char * path, std::string & output_file, const GameOb
 		if (trans != nullptr)
 			Export(LIBRARY_TRANSFORMATIONS_FOLDER, output_file_trans, trans);
 		else
-			output_file_trans = "no_component";
+			output_file_trans = "no_component";*/
 
 
 		//Now we save the paths to the components
+		/*output_file_mesh._Myproxy() = nullptr;
+		output_file_trans._Myproxy() = nullptr;
 		std::string paths[2] = { output_file_mesh, output_file_trans };
 		cursor += bytes;
-		bytes = sizeof(paths);
-		memcpy(cursor,paths,bytes);
+		bytes = sizeof(std::string)* 2;
+		memcpy(cursor,paths,bytes);*/
 
 		cursor += bytes; //This way we can loop this whole process for multiple gameobjects
 	}
