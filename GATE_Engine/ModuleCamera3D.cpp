@@ -60,29 +60,34 @@ update_status ModuleCamera3D::Update(float dt)
 				//ProcessBoost(boostingRot, currRotSpeed, &ModuleCamera3D::RotBoostInput);
 		}
 
-		float mouse_z = (float)App->input->GetMouseZ() * scrollSens * dt;
-		float mouse_x = (float)-App->input->GetMouseXMotion() * mouseSens * dt;
-		float mouse_y = (float)-App->input->GetMouseYMotion() * mouseSens * dt;
+		float3 mouseInput = {
+			(float)-App->input->GetMouseXMotion() * mouseSens * dt,
+			(float)-App->input->GetMouseYMotion() * mouseSens * dt,
+			(float)App->input->GetMouseZ() * scrollSens * dt };
 
 		// Mouse Button Controls
-		if (mouse_x != 0.f || mouse_y != 0.f) {
+		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
+			|| App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT
+			|| App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT
+			|| mouseInput.z != 0.f)
+		{
 			if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
 				|| App->scene_intro->toolMode == (int)tool_mode::DRAG && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {	// Drag Camera
-				DragCamera(mouse_x / 5.f, mouse_y / 5.f);
+				DragCamera(mouseInput.x / 5.f, mouseInput.y / 5.f);
 			}
 			else if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
-				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) Orbit(mouse_x, mouse_y);	// Rotate Camera around Reference
-				else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) Zoom(-mouse_y);		// Zoom Camera
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) Orbit(mouseInput.x, mouseInput.y);	// Rotate Camera around Reference
+				else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) Zoom(-mouseInput.y);		// Zoom Camera
 			}
 			else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {	// Rotate Camera around Self
-				Rotate(mouse_x, mouse_y);
+				Rotate(mouseInput.x, mouseInput.y);
 
 				if (FirstPersonCamera(currMovSpeed)) {	// First Person Controls (if true == there's an input)
-					camMovSpeed += mouse_z;	// Mouse Scroll: Increase/Decrease movement speed
+					camMovSpeed += mouseInput.z;	// Mouse Scroll: Increase/Decrease movement speed
 					camMovSpeed = math::Clamp(camMovSpeed, 0.1f, maxMovSpeed);
 				}
 				else {
-					Zoom(mouse_z);	// Mouse Scroll: Forward/Backwrads
+					Zoom(mouseInput.z);	// Mouse Scroll: Forward/Backwrads
 				}
 			}
 		}
@@ -90,7 +95,7 @@ update_status ModuleCamera3D::Update(float dt)
 		// Regular Controls
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT) {	// If First Person disabled...
 			MoveCamera(currMovSpeed);		// Arrow Key Controls
-			Zoom(mouse_z);					// Mouse Scroll: Forward/Backwrads	// Mouse Scroll: Zoom
+			Zoom(mouseInput.z);					// Mouse Scroll: Forward/Backwrads	// Mouse Scroll: Zoom
 		}
 
 		// Center camera to object
@@ -126,8 +131,8 @@ void ModuleCamera3D::MoveCamera(float& movSpeed)
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) mov += right;
 
 	// Up/Down
-	if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_REPEAT) mov -= float3::unitY;
-	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_REPEAT) mov += float3::unitY;
+	//if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_REPEAT) mov -= float3::unitY;
+	//if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_REPEAT) mov += float3::unitY;
 
 	if (!mov.Equals(float3::zero)) {
 		editorCam->frustum.Translate(mov * movSpeed);
