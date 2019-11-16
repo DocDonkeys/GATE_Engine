@@ -164,15 +164,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::Orange);
 
-	// OLD
-	/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
-	*/
-
-	// NEW
+	//CHANGE/FIX: Check if this operations are needed every frame
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
@@ -186,7 +178,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
-	//NEW OVER
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->GetPosition().x, App->camera->GetPosition().y, App->camera->GetPosition().z);

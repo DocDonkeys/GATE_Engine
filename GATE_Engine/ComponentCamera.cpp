@@ -7,13 +7,15 @@
 
 ComponentCamera::ComponentCamera() : Component()
 {
+	type = COMPONENT_TYPE::CAMERA;
+
 	frustum.type = FrustumType::PerspectiveFrustum;
 
 	frustum.pos = float3::zero;
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 
-	frustum.nearPlaneDistance = 0.1f;
+	frustum.nearPlaneDistance = 1.0f;
 	frustum.farPlaneDistance = 1000.0f;
 	frustum.verticalFov = DegToRad(60.0f);
 	SetAspectRatio(1.3f);
