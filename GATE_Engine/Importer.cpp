@@ -229,12 +229,21 @@ bool Importer::ImportModel(const char * path, const char * file)
 
 		cursor += bytes;
 		bytes = sizeof(std::string);
-		memcpy(&go->name, cursor, bytes);
-		go->name._Myproxy() = nullptr;  // The string tries to load a proxy, we must set it to nullptr or on delete std will try to delete out of bounds memory
+		//const char* name[50];
+		std::string dummy;
+		memcpy(&dummy, cursor, bytes);
+
+		const char* name = dummy.data();
+		//go->name = name;
+
+
+		//go->name = *name;
+		//go->name = dummy.data();
+		//go->name._Myproxy() = nullptr;  // The string tries to load a proxy, we must set it to nullptr or on delete std will try to delete out of bounds memory
 
 		//Load Components
-		//std::string component_paths[2];
-		//bytes = sizeof(std::string)*2;
+		/*std::string component_paths[2];
+		bytes = sizeof(std::string)*2;*/
 		//memcpy(component_paths,cursor,bytes);
 
 		//Load Mesh Component
@@ -317,7 +326,7 @@ bool Importer::Export(const char * path, std::string & output_file,const  Mesh* 
 
 	if (ret == true)
 	{
-		LOG("Succesfully exported %s to %s as a .mesh", output_file, path);
+		LOG("Succesfully exported %s", output_file);
 	}
 	else
 		LOG("Failed to export %s to %s as a .mesh", output_file, path);
@@ -393,8 +402,8 @@ bool Importer::Export(const char * path, std::string & output_file, const GameOb
 	
 	uint size = 0; // This will be the size in bytes that we will need to allocate
 	size += sizeof(num_gos) + sizeof(GameObject) * num_gos;
-	size -= sizeof(go->children) + sizeof(go->components) * num_gos;  //We subtract the size of the thing swe won't be using (we can't pass )
-	//size += sizeof(std::string) * 2 * num_gos; // size for paths of components
+	size -= (sizeof(go->children) + sizeof(go->components)) * num_gos;  //We subtract the size of the things we won't be using (we can't pass )
+	size += sizeof(std::string) * 2 * num_gos; // size for paths of components
 	char* data = new char[size];
 	char* cursor = data;
 	uint bytes = 0;
@@ -426,7 +435,7 @@ bool Importer::Export(const char * path, std::string & output_file, const GameOb
 		memcpy(cursor, &go_save->name, bytes);
 
 		//Save Components
-		/*std::string output_file_mesh;
+		std::string output_file_mesh;
 		ComponentMesh* m = (ComponentMesh*)go_save->GetComponent(COMPONENT_TYPE::MESH);
 		if (m != nullptr)
 			Export(LIBRARY_MESH_FOLDER, output_file_mesh, m->mesh);
@@ -438,16 +447,23 @@ bool Importer::Export(const char * path, std::string & output_file, const GameOb
 		if (trans != nullptr)
 			Export(LIBRARY_TRANSFORMATIONS_FOLDER, output_file_trans, trans);
 		else
-			output_file_trans = "no_component";*/
+			output_file_trans = "no_component";
 
 
 		//Now we save the paths to the components
 		/*output_file_mesh._Myproxy() = nullptr;
-		output_file_trans._Myproxy() = nullptr;
-		std::string paths[2] = { output_file_mesh, output_file_trans };
+		output_file_trans._Myproxy() = nullptr;*/
+		
+		/*std::string paths[2] = { output_file_mesh, output_file_trans };
 		cursor += bytes;
-		bytes = sizeof(std::string)* 2;
-		memcpy(cursor,paths,bytes);*/
+		bytes = sizeof(paths);*/
+		/*cursor += bytes;
+		bytes = sizeof(output_file_mesh);
+		memcpy(cursor,output_file_mesh.data(),bytes);
+
+		cursor += bytes;
+		bytes = sizeof(output_file_trans);
+		memcpy(cursor, output_file_trans.data(), bytes);*/
 
 		cursor += bytes; //This way we can loop this whole process for multiple gameobjects
 	}

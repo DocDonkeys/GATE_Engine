@@ -83,9 +83,6 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	//We call assimp to import the file
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
-	Importer test;
-	test.ImportModel(LIBRARY_MODEL_FOLDER, "rootnode.model");
-
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		//We loaded the 3D file successfully!
@@ -93,10 +90,6 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		aiNode* root = scene->mRootNode;
 		GameObject* go = LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
 		GOFunctions::ReParentGameObject(go,App->scene_intro->root);
-		
-		std::string output_1;
-		test.Export(LIBRARY_MODEL_FOLDER, output_1, go, root->mName.C_Str());
-
 		
 		//Once finished we release the original file
 		aiReleaseImport(scene);
@@ -135,13 +128,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		{
 			Mesh* new_mesh = new Mesh();
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
-
-			////TEST: Loading a .mesh file
-			//Importer m;
-			//std::string output_debug, namefile;
-			//namefile = node->mName.C_Str();
-			//namefile += ".mesh";
-			//m.Import(namefile.data(), LIBRARY_MESH_FOLDER, output_debug, new_mesh);
 			
 			//LOAD!
 			new_mesh->LoadVertices(loaded_mesh); //Vertices
@@ -175,10 +161,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			ret_go->obb.Transform(trs_component->globalTrs);	// Transform OBB with transform global matrix
 			ret_go->aabb.SetFrom(ret_go->obb);					// Set object AABB
 			
-			//TEST:
-			Importer imp;
-			std::string output_1;
-			imp.Export(LIBRARY_TRANSFORMATIONS_FOLDER, output_1, trs_component, node->mName.C_Str());
 			// Mesh
 			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
@@ -202,11 +184,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			else {
 				material_component->AssignTexture(tex);
 			}
-
-			//TEST: Save mesh to library/Meshes/
-			Importer m_imp;
-			std::string output;
-			m_imp.Export(LIBRARY_MESH_FOLDER, output,new_mesh,node->mName.C_Str());
 		}
 	}
 
