@@ -197,6 +197,9 @@ Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 	case COMPONENT_TYPE::MATERIAL:
 		c = new ComponentMaterial();
 		break;
+	case COMPONENT_TYPE::CAMERA:
+		c = new ComponentMaterial();
+		break;
 	default:
 		break;
 	}

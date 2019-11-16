@@ -15,7 +15,8 @@ enum class COMPONENT_TYPE
 {
 	TRANSFORM = 0,
 	MESH,
-	MATERIAL
+	MATERIAL,
+	CAMERA
 };
 class GameObject
 {
