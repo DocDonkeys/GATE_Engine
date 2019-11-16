@@ -84,7 +84,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	Importer test;
-	test.ImportModel(LIBRARY_MODEL_FOLDER, "rootnode.model");
+	//test.ImportModel(LIBRARY_MODEL_FOLDER, "rootnode.model");
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
@@ -135,13 +135,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		{
 			Mesh* new_mesh = new Mesh();
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
-
-			////TEST: Loading a .mesh file
-			//Importer m;
-			//std::string output_debug, namefile;
-			//namefile = node->mName.C_Str();
-			//namefile += ".mesh";
-			//m.Import(namefile.data(), LIBRARY_MESH_FOLDER, output_debug, new_mesh);
 			
 			//LOAD!
 			new_mesh->LoadVertices(loaded_mesh); //Vertices
