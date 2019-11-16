@@ -128,7 +128,8 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
-	toolMode = CheckToolMode();
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)	// Avoid conflicting with First Person controls
+		toolMode = CheckToolMode();
 
 	root->Update();
 
@@ -152,20 +153,18 @@ int ModuleSceneIntro::CheckToolMode() const
 {
 	int ret = toolMode;
 
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT) {	// Avoid conflicting with First Person controls
-		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
-			ret = (int)tool_mode::DRAG;
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
-			ret = (int)tool_mode::MOVE;
-		else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
-			ret = (int)tool_mode::ROTATE;
-		else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
-			ret = (int)tool_mode::SCALE;
-		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
-			ret = (int)tool_mode::RECT;
-		else if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_IDLE)	// To avoid calling on Redo (CTRL+Y)
-			ret = (int)tool_mode::MULTI;
-	}
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+		ret = (int)tool_mode::DRAG;
+	else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+		ret = (int)tool_mode::MOVE;
+	else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+		ret = (int)tool_mode::ROTATE;
+	else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+		ret = (int)tool_mode::SCALE;
+	else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		ret = (int)tool_mode::RECT;
+	else if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_IDLE)	// To avoid calling on Redo (CTRL+Y)
+		ret = (int)tool_mode::MULTI;
 
 	return ret;
 }
