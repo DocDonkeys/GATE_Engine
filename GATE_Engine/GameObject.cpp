@@ -195,6 +195,16 @@ void GameObject::UpdateBoundingBox(float4x4 globalMat)
 	}
 }
 
+void GameObject::UpdateStaticStatus(bool newVal)
+{
+	staticObj = newVal;
+
+	for (int i = 0; i < children.size(); i++) {
+		children[i]->UpdateStaticStatus(newVal);
+	}
+}
+
+
 Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 {
 	Component* c = nullptr;

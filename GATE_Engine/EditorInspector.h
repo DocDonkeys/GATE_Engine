@@ -24,6 +24,7 @@ public: //Methods
 	void DrawComponentMaterial(ComponentMaterial* c);
 
 private:
+	bool show_static_modal = false;
 	bool startedEditing = false;
 	char objNameBuffer[256];
 };

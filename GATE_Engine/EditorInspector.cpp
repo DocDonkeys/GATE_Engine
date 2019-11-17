@@ -61,7 +61,27 @@ void EditorInspector::Update()
 		//	ImGui::EndTooltip();
 		//}
 		ImGui::SameLine();
-		ImGui::Checkbox("Static", &go->staticObj);
+		if (ImGui::Checkbox("Static", &go->staticObj) && go->children.size() != 0) {
+			show_static_modal = true;
+			ImGui::OpenPopup("Changing Static State");
+		}
+
+		if (ImGui::BeginPopupModal("Changing Static State", &show_static_modal, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::PushTextWrapPos(300.f);
+			ImGui::Text("Do you want to apply the static state switch to the object's children?");
+			ImGui::PopTextWrapPos();
+			ImGui::Spacing(); ImGui::SameLine(ImGui::GetWindowWidth() / 2.f - 90.f);
+			if (ImGui::Button("Yes", { 90.f, 30.f })) {
+				go->UpdateStaticStatus(go->staticObj);
+				show_static_modal = false;
+			} ImGui::SameLine();
+			if (ImGui::Button("No", { 90.f, 30.f })) {
+				show_static_modal = false;
+			}
+
+			ImGui::EndPopup();
+		}
 
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Tag"); ImGui::SameLine();
@@ -191,8 +211,14 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 
 		// Data and Matrix Updating
 		if (!App->input->GetMouseWrapping())
-			if (transform->UpdateValues(newPosition, newEulerRotation, newScale))
-				transform->my_go->staticObj = false;
+			if (transform->UpdateValues(newPosition, newEulerRotation, newScale)) {
+				/*transform->my_go->staticObj = false;
+
+				if (transform->my_go->children.size() != 0) {
+					show_static_modal = true;
+					ImGui::OpenPopup("Changing Static State");
+				}*/
+			}
 	}
 
 	ImGui::Separator();

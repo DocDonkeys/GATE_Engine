@@ -33,8 +33,9 @@ public: //Methods
 
 	void Draw();	// This method is called by the renderer
 	void DrawAABB();
-
 	void UpdateBoundingBox(float4x4 mat);
+
+	void UpdateStaticStatus(bool newVal);
 
 	Component* CreateComponent(COMPONENT_TYPE type);
 	Component* GetComponent(COMPONENT_TYPE type) const;
