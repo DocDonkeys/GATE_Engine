@@ -42,7 +42,7 @@ public: //Methods
 public: //Vars
 	uint32_t UID = 0;
 	bool active = true;
-	bool staticObj = true;
+	bool staticObj = false;
 	std::string name;
 	std::vector<Component*> components;
 

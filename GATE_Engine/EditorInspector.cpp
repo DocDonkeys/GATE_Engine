@@ -191,7 +191,8 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 
 		// Data and Matrix Updating
 		if (!App->input->GetMouseWrapping())
-			transform->UpdateValues(newPosition, newEulerRotation, newScale);
+			if (transform->UpdateValues(newPosition, newEulerRotation, newScale))
+				transform->my_go->staticObj = false;
 	}
 
 	ImGui::Separator();
