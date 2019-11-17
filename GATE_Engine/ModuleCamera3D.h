@@ -32,6 +32,8 @@ public:
 	float* GetOpenGLView() const;
 	float* GetOpenGLProjection() const;
 	bool* GetProjectionUpdateFlag() const;
+	ComponentCamera* GetActiveCamera() const;
+
 	bool ContainsAABB(const AABB& refBox) const;
 
 private:
@@ -71,7 +73,7 @@ public:
 private:
 	float3 reference;
 	bool target = false;	// Flag for object being targeted
-	ComponentCamera* editorCamera = nullptr;
+	ComponentCamera* editorCamera = nullptr;	// CHANGE/FIX: Save&Load of camera data
 	ComponentCamera* activeCamera = nullptr;
 
 	// Dobule Tap

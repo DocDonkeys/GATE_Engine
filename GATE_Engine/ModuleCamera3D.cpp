@@ -378,6 +378,11 @@ bool* ModuleCamera3D::GetProjectionUpdateFlag() const
 	return &activeCamera->needsProjectionUpdate;
 }
 
+ComponentCamera* ModuleCamera3D::GetActiveCamera() const
+{
+	return activeCamera;
+}
+
 bool ModuleCamera3D::ContainsAABB(const AABB& refBox) const
 {
 	return activeCamera->ContainsAABB(refBox);

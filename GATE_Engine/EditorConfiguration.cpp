@@ -1,6 +1,9 @@
 #include "EditorConfiguration.h"
 #include "ModuleEditor.h"
 #include "Application.h"
+#include "ComponentCamera.h"
+
+#include "libs/MathGeoLib/include/Math/MathFunc.h"
 
 #ifdef _DEBUG
 #ifdef _MMGR_MEM_LEAK
@@ -113,10 +116,10 @@ void EditorConfiguration::Update()
 			ImGui::EndTabItem();
 		}
 
-		// Controls Tab
-		if (ImGui::BeginTabItem("Controls"))
+		// Camera Tab
+		if (ImGui::BeginTabItem("Camera"))
 		{
-			if (ImGui::CollapsingHeader("Camera")) {
+			if (ImGui::CollapsingHeader("Controls")) {
 				ImGui::Text("Keyboard Inputs");
 				ImGui::SliderFloat("Movement Speed", &App->camera->camMovSpeed, App->camera->camDefaultMin, App->camera->maxMovSpeed);
 				ImGui::SliderFloat("Movement Multiplier", &App->camera->camMovMultiplier, App->camera->camDefaultMin, App->camera->maxMovMultiplier);
@@ -128,6 +131,29 @@ void EditorConfiguration::Update()
 				ImGui::SliderFloat("Scroll Sensibility", &App->camera->scrollSens, App->camera->camDefaultMin, App->camera->maxScrollSens);
 			}
 
+			if (ImGui::CollapsingHeader("Display")) {
+				ComponentCamera* camPtr = App->camera->GetActiveCamera();
+				float tempf;
+
+				tempf = camPtr->GetNearPlaneDist();
+				if (ImGui::SliderFloat("Near Plane", &tempf, 0.1f, App->camera->GetActiveCamera()->GetFarPlaneDist())) App->camera->GetActiveCamera()->SetNearPlaneDist(tempf);
+				tempf = camPtr->GetFarPlaneDist();
+				if (ImGui::SliderFloat("Far Plane", &tempf, App->camera->GetActiveCamera()->GetNearPlaneDist(), 1000.f)) App->camera->GetActiveCamera()->SetFarPlaneDist(tempf);
+
+				ImGui::Separator();
+
+				tempf = camPtr->GetFOV();
+				if (ImGui::SliderFloat("Field of View", &tempf, 1.f, 180.f)) App->camera->GetActiveCamera()->SetFOV(tempf);
+				tempf = camPtr->GetAspectRatio();
+				if (ImGui::SliderFloat("Aspect Ratio", &tempf, 0.1f, 10.f)) App->camera->GetActiveCamera()->SetAspectRatio(tempf);
+			}
+
+			ImGui::EndTabItem();
+		}
+
+		// Input Tab
+		if (ImGui::BeginTabItem("Input"))
+		{
 			if (ImGui::CollapsingHeader("Data")) {
 				ImGui::Text("Mouse Position: "); ImGui::SameLine();
 				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
