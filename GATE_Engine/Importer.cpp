@@ -482,6 +482,16 @@ bool Importer::Export(const char * path, std::string & output_file, const GameOb
 	return false;
 }
 
+bool Importer::Export(const char * path, std::string & output_file, const ImportExportData * ie_data, const char * filename)
+{
+	return false;
+}
+
+bool Importer::Load(const char * full_path)
+{
+	return false;
+}
+
 uint Importer::TotalGOsNum(const GameObject * go, uint& num_of_gos)
 {
 		num_of_gos++;

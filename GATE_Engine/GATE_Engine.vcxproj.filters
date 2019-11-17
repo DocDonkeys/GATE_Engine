@@ -132,12 +132,13 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Importer.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>Sources\Component Structure\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Importer.cpp">
+      <Filter>Sources\Tools\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ImporterMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -286,11 +287,14 @@
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Importer.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentCamera.h">
       <Filter>Sources\Component Structure\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Sources\Tools\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImporterMesh.h">
+      <Filter>Sources\Tools\Importers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -348,8 +352,8 @@
     <Filter Include="Sources\Helpers">
       <UniqueIdentifier>{b9a42893-a637-46ac-a940-2ac43186c8d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\File Format">
-      <UniqueIdentifier>{4cd34461-00f2-4933-bc3a-6f12e445cbe6}</UniqueIdentifier>
+    <Filter Include="Sources\Tools\Importers">
+      <UniqueIdentifier>{2f48d414-4ef5-4793-966d-4b6d098680ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

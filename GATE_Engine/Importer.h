@@ -8,6 +8,8 @@ class Mesh;
 class ComponentTransform;
 class GameObject;
 
+struct ImportExportData {}; // We will need to overload some functions with diferent parameters. Inheriting this struct will allow us to do so
+
 class Importer { 
 public:
 	Importer();
@@ -22,6 +24,8 @@ public:
 	bool Export(const char* path, std::string& output_file, const ComponentTransform* transform, const char* filename = "");
 	bool Export(const char* path, std::string& output_file, const GameObject* go, const char* filename);
 
+	virtual bool Export(const char* path, std::string& output_file, const ImportExportData* ie_data, const char* filename = "");
+	virtual bool Load(const char* full_path);
 	uint TotalGOsNum(const GameObject* go, uint& num_of_gos);
 };
 
