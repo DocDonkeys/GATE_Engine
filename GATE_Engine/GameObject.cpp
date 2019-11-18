@@ -279,7 +279,7 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 			child->parent->children.push_back(child);
 	}
 	else {
-		LOG("[Error]: A parent can't be inside the heriarchy of one of his own childs.");
+		LOG("[Error]: A parent can't be inside the hierarchy of one of his own childs.");
 	}
 }
 

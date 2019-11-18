@@ -48,61 +48,52 @@ void ComponentTransform::UpdateGlobalMat()
 	}
 }
 
-void ComponentTransform::UpdateQuatByEuler(float3& newEuler)
-{
-	float3 rotAng = DegToRad(newEuler - eulerRotation);
-	quatRotation = quatRotation * Quat::FromEulerXYZ(rotAng.x, rotAng.y, rotAng.z);
-}
+//void ComponentTransform::UpdateQuatByEuler(float3& newEuler)
+//{
+//	float3 rotAng = DegToRad(newEuler - eulerRotation);
+//	quatRotation = quatRotation * Quat::FromEulerXYZ(rotAng.x, rotAng.y, rotAng.z);
+//}
+//
+//void ComponentTransform::UpdateEulerByQuat(Quat& q)
+//{
+//	eulerRotation = RadToDeg(q.ToEulerXYZ());
+//}
 
-void ComponentTransform::UpdateEulerByQuat(Quat& q)
+bool ComponentTransform::DataToMat(float3& newPos, float3& newRot, float3& newScale)
 {
-	eulerRotation = RadToDeg(q.ToEulerXYZ());
-}
+	bool changed = false;
 
-void ComponentTransform::DataToMat()
-{
-	localTrs = float4x4::FromTRS(position, quatRotation, scale);
-	needsMatUpdate = true;
-}
+	float3 pos = localTrs.TranslatePart();
+	float3 rot = localTrs.ToEulerXYZ();
+	float3 scale = localTrs.GetScale();
 
-void ComponentTransform::MatToData()
-{
-	localTrs.Decompose(position, quatRotation, scale);
-	UpdateEulerByQuat(quatRotation);
-}
+	if (pos.x != newPos.x
+		|| pos.y != newPos.y
+		|| pos.z != newPos.z)
+		changed = true;
+	else if (rot.x != newRot.x
+		|| rot.y != newRot.y
+		|| rot.z != newRot.z)
+		changed = true;
+	else if (scale.x != newScale.x
+		|| scale.y != newScale.y
+		|| scale.z != newScale.z)
+		changed = true;
 
-bool ComponentTransform::UpdateValues(float3& pos, float3& rot, float3& scale)
-{
-	bool ret = false;
-
-	if (pos.x != this->position.x
-		|| pos.y != this->position.y
-		|| pos.z != this->position.z)
-	{
-		position = pos;
-		ret = true;
+	if (changed) {
+		localTrs = float4x4::FromTRS(newPos, Quat::FromEulerXYZ(newRot.x, newRot.y, newRot.z), newScale);
+		needsMatUpdate = true;
 	}
 
-	if (rot.x != this->eulerRotation.x
-		|| rot.y != this->eulerRotation.y
-		|| rot.z != this->eulerRotation.z)
-	{
-		UpdateQuatByEuler(rot);
-		eulerRotation = rot;
-		ret = true;
-	}
+	return changed;
+}
 
-	if (scale.x != this->scale.x
-		|| scale.y != this->scale.y
-		|| scale.z != this->scale.z)
-	{
-		this->scale = scale;
-		ret = true;
-	}
+void ComponentTransform::MatToData(float3& givenPos, float3x3& givenRot, float3& givenScale)
+{
+	localTrs.Decompose(givenPos, givenRot, givenScale);
+}
 
-	if (ret) {
-		DataToMat();
-	}
-
-	return ret;
+void ComponentTransform::MatToData(float3& givenPos, Quat& givenQuat, float3& givenScale)
+{
+	localTrs.Decompose(givenPos, givenQuat, givenScale);
 }

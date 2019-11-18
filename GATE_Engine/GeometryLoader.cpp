@@ -154,7 +154,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 			// Transform
 			ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-			trs_component->MatToData();
+			//trs_component->MatToData();
 			trs_component->needsMatUpdate = true;
 			new_mesh->LoadMeshBounds();							// Set mesh AABB
 			ret_go->obb.SetFrom(new_mesh->GetBounds());			// Pass AABB to obj OBB

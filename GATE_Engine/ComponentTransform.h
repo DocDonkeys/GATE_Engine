@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "libs/MathGeoLib/include/Math/float3.h"
 #include "libs/MathGeoLib/include/Math/Quat.h"
+#include "libs/MathGeoLib/include/Math/float3x3.h"
 #include "libs/MathGeoLib/include/Math/float4x4.h"
 
 class ComponentTransform : public Component
@@ -19,20 +20,13 @@ public:
 
 	void UpdateGlobalMat();
 
-	bool UpdateValues(float3& pos, float3& rot, float3& scale);
-	void UpdateQuatByEuler(float3& newEuler);
-	void UpdateEulerByQuat(Quat& q);
-	void DataToMat();
-	void MatToData();
+	//void UpdateQuatByEuler(float3& newEuler);
+	//void UpdateEulerByQuat(Quat& q);
+	bool DataToMat(float3& pos, float3& rot, float3& scale);
+	void MatToData(float3& pos, float3x3& rot, float3& scale);
+	void MatToData(float3& pos, Quat& rot, float3& scale);
 
 public:
-	// Data
-	float3 position = float3::zero;
-	Quat quatRotation = Quat::identity;
-	float3 eulerRotation = float3::zero;
-	float3 scale = float3::one;
-
-	// Matrices
 	float4x4 localTrs = float4x4::identity;
 	float4x4 globalTrs = float4x4::identity;
 
