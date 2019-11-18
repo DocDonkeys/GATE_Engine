@@ -9,16 +9,16 @@
 
 GameObject::GameObject()
 {
-	UID = (uint32)App->rng.RandInt(); //CRITICAL TODO: CHANEG TO RANDOM NUMBER OF 32 bytes
+	UID = App->rng.RandInt<uint32_t>();
 	name = "GameObject_" + std::to_string(App->scene_intro->numObjects++);
 	
 	//All Game Objects must have a transform component, so we assign it from creation
-	ComponentTransform* trans = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+	CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }
 
 GameObject::GameObject(const char* name) : name(name)
 {
-	UID = (uint32)App->rng.RandInt(); //CRITICAL TODO: CHANEG TO RANDOM NUMBER OF 32 bytes
+	UID = App->rng.RandInt<uint32_t>();
 	//All Game Objects must have a transform component, so we assign it from creation
 	CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }

@@ -11,27 +11,64 @@ public:
 	~RNGenerator();
 
 public:
-	int RandInt();
-	int RangedRandInt(int min, int max);
-	std::vector<int> RandIntList(int num);
-	std::vector<int> RangedRandIntList(int min, int max, int num);
+	// Int, Uint, Long
+	template <class T>
+	T RandInt()
+	{
+		std::uniform_int_distribution<T> dist;
+		return dist(randEngine);
+	}
 
 	template <class T>
-	T Rand()
+	T RangedRandInt(T min, T max)
+	{
+		std::uniform_int_distribution<T> dist(min, max);
+		return dist(randEngine);
+	}
+
+	template <class T>
+	std::vector<T> RandVecInt(int size)
+	{
+		std::vector<T> vec;
+		std::uniform_int_distribution<T> dist;
+
+		for (int i = 0; i < size; i++) {
+			vec.push_back(dist(randEngine));
+		}
+
+		return vec;
+	}
+
+	template <class T>
+	std::vector<T> RandRangedVecInt(T min, T max, int size)
+	{
+		std::vector<T> vec;
+		std::uniform_int_distribution<T> dist(min, max);
+
+		for (int i = 0; i < size; i++) {
+			vec.push_back(dist(randEngine));
+		}
+
+		return vec;
+	}
+
+	// Float, Dobule, Long Double
+	template <class T>
+	T RandDouble()
 	{
 		std::uniform_real_distribution<T> dist;
 		return dist(randEngine);
 	}
 
 	template <class T>
-	T RangedRand(T min, T max)
+	T RangedRandDouble(T min, T max)
 	{
 		std::uniform_real_distribution<T> dist(min, max);
 		return dist(randEngine);
 	}
 
 	template <class T>
-	std::vector<T> RandVec(int size)
+	std::vector<T> RandVecDouble(int size)
 	{
 		std::vector<T> vec;
 		std::uniform_real_distribution<T> dist;
@@ -44,7 +81,7 @@ public:
 	}
 
 	template <class T>
-	std::vector<T> RandRangedVec(T min, T max, int size)
+	std::vector<T> RandRangedVecDouble(T min, T max, int size)
 	{
 		std::vector<T> vec;
 		std::uniform_real_distribution<T> dist(min, max);
@@ -58,7 +95,6 @@ public:
 
 private:
 	std::default_random_engine randEngine;
-	std::uniform_int_distribution<int> intDist;
 };
 
 #endif //RNGENERATOR_H

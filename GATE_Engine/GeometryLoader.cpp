@@ -117,9 +117,14 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			meshTrs[i][j] = node->mTransformation[i][j];
 		}
 	}
-	
+
 	//We create the gameobject for the node
 	GameObject* ret_go = App->scene_intro->CreateEmptyGameObject(node->mName.C_Str());
+
+	// Transform
+	ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	trs_component->SetLocalMat(meshTrs);
+	trs_component->needsUpdateGlobal = true;
 
 	if (node != nullptr && node->mNumMeshes > 0)
 	{
@@ -130,10 +135,10 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
 			
 			//LOAD!
-			new_mesh->LoadVertices(loaded_mesh); //Vertices
-			new_mesh->LoadIndices(loaded_mesh); //Indices
-			new_mesh->LoadNormals(loaded_mesh); //Normals
-			new_mesh->LoadTexCoords(loaded_mesh); // UV's			
+			new_mesh->LoadVertices(loaded_mesh);	//Vertices
+			new_mesh->LoadIndices(loaded_mesh);		//Indices
+			new_mesh->LoadNormals(loaded_mesh);		//Normals
+			new_mesh->LoadTexCoords(loaded_mesh);	// UV's			
 
 			//Generate the buffers (Vertex and Index) for the VRAM & Drawing
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_vertex, new_mesh->num_vertex, new_mesh->vertex);
@@ -151,11 +156,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			//We create a game object for the current mesh
 			/*GameObject* go = App->scene_intro->CreateEmptyGameObject(std::string(objName + std::to_string(counter++)).c_str());
 			go->ReParent(ret_go);*/
-
-			// Transform
-			ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-			trs_component->SetLocalMat(meshTrs);
-			trs_component->needsUpdateGlobal = true;
 			
 			// Mesh
 			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
@@ -176,7 +176,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
 			if (tex == nullptr || tex->id == 0) {
 				LOG("[Warning]: The FBX has no embeded texture, could was not found, or could not be loaded!");
-				//material_component->AssignTexture(App->texture_loader->GetDefaultTex());	//IMPROVE: What flag should we abilitate so that checkers are loaded instead of having no texture?
 			}
 			else {
 				material_component->AssignTexture(tex);

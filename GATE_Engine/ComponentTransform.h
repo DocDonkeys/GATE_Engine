@@ -39,7 +39,8 @@ public:
 
 public:
 	// These are needed because directly using matrices results in a big mess
-	float3 position, rotation = float3::zero;
+	float3 position = float3::zero;
+	float3 rotation = float3::zero;
 	float3 scale = float3::one;
 
 	//bool needsUpdateLocal = false;

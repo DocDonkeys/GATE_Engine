@@ -395,7 +395,7 @@ bool ModuleFileSystem::SaveUnique(string& name, const void * buffer, uint size, 
 
 	if (prefix == "")
 	{
-		sprintf_s(result, 250, "%s%s_%llu", path, prefix, App->rng.RandInt()/*App->resources->GenerateNewUID()*/, extension);
+		sprintf_s(result, 250, "%s%s_%llu", path, prefix, App->rng.RandInt<uint32_t>()/*App->resources->GenerateNewUID()*/, extension);
 		sprintf_s(result, 250, "%s.%s", result, extension);
 	}
 	else
