@@ -18,6 +18,7 @@ enum class COMPONENT_TYPE
 	MATERIAL,
 	CAMERA
 };
+
 class GameObject
 {
 public:

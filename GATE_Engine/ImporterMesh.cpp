@@ -127,5 +127,17 @@ bool ImporterMesh::Load(const char * full_path, Mesh* mesh)
 	mesh->tex_coords = new float[mesh->num_tex_coords * 2];						//																					//
 	memcpy(mesh->tex_coords, cursor, bytes);													//																					//
 
+	//Alloc buffers for rendering
+	GenMeshBuffers(mesh);
+	return false;
+}
+
+bool ImporterMesh::GenMeshBuffers(Mesh* mesh)
+{
+	App->renderer3D->GenerateVertexBuffer(mesh->id_vertex, mesh->num_vertex, mesh->vertex);
+	if (mesh->index != nullptr)
+		App->renderer3D->GenerateIndexBuffer(mesh->id_index, mesh->num_index, mesh->index);
+
+	App->renderer3D->GenerateVertexBuffer(mesh->id_tex_coords, mesh->num_tex_coords * 2, mesh->tex_coords);
 	return false;
 }

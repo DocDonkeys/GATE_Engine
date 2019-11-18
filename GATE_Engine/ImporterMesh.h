@@ -19,6 +19,7 @@ public:
 public:
 	bool Export(const char* path, std::string& output_file, const ImportExportData* ie_data, const char* filename = "");
 	bool Load(const char* full_path, Mesh* mesh);
+	bool GenMeshBuffers(Mesh* mesh);
 };
 
 

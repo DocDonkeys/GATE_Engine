@@ -83,8 +83,6 @@ void ComponentCamera::SetFOV(float fov)
 
 void ComponentCamera::SetAspectRatio(float aspect_ratio)
 {
-	// More about FOV: http://twgljs.org/examples/fov-checker.html
-	// fieldOfViewX = 2 * atan(tan(fieldOfViewY * 0.5) * aspect)
 	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
 	needsProjectionUpdate = true;
 }

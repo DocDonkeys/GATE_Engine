@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
-#include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
@@ -129,44 +128,44 @@ void GameObject::DrawAABB()
 	glColor3f(1.0, 1.0, 0.0);
 
 	// Bottom 1
-	glVertex3f(aabb.minPoint.x, aabb.minPoint.y, aabb.minPoint.z);
-	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y, aabb.minPoint.z);
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MinX() + size.x, aabb.MinY(), aabb.MinZ());
 
-	glVertex3f(aabb.minPoint.x, aabb.minPoint.y, aabb.minPoint.z);
-	glVertex3f(aabb.minPoint.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MinY() + size.y, aabb.MinZ());
 
-	glVertex3f(aabb.minPoint.x, aabb.minPoint.y, aabb.minPoint.z);
-	glVertex3f(aabb.minPoint.x, aabb.minPoint.y, aabb.minPoint.z + size.z);
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ() + size.z);
 
 	// Bottom 2
-	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
-	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
+	glVertex3f(aabb.MaxX(), aabb.MaxY() - size.y, aabb.MaxZ());
+	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY() - size.y, aabb.MaxZ());
 
-	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
-	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y, aabb.maxPoint.z);
+	glVertex3f(aabb.MaxX(), aabb.MaxY() - size.y, aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 
-	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
-	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z - size.z);
+	glVertex3f(aabb.MaxX(), aabb.MaxY() - size.y, aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY() - size.y, aabb.MaxZ() - size.z);
 
 	// Top 1
-	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
-	glVertex3f(aabb.minPoint.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
+	glVertex3f(aabb.MinX() + size.x, aabb.MinY() + size.y, aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MinY() + size.y, aabb.MinZ());
 
-	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
-	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y, aabb.minPoint.z);
+	glVertex3f(aabb.MinX() + size.x, aabb.MinY() + size.y, aabb.MinZ());
+	glVertex3f(aabb.MinX() + size.x, aabb.MinY(), aabb.MinZ());
 
-	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y + size.y, aabb.minPoint.z);
-	glVertex3f(aabb.minPoint.x + size.x, aabb.minPoint.y + size.y, aabb.minPoint.z + size.z);
+	glVertex3f(aabb.MinX() + size.x, aabb.MinY() + size.y, aabb.MinZ());
+	glVertex3f(aabb.MinX() + size.x, aabb.MinY() + size.y, aabb.MinZ() + size.z);
 
 	// Top 2
-	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y, aabb.maxPoint.z);
-	glVertex3f(aabb.maxPoint.x, aabb.maxPoint.y, aabb.maxPoint.z);
+	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 
-	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y, aabb.maxPoint.z);
-	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y - size.y, aabb.maxPoint.z);
+	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY() - size.y, aabb.MaxZ());
 
-	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y, aabb.maxPoint.z);
-	glVertex3f(aabb.maxPoint.x - size.x, aabb.maxPoint.y, aabb.maxPoint.z - size.z);
+	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY(), aabb.MaxZ() - size.z);
 
 	glEnd();
 	glColor3f(1.0, 1.0, 1.0);
@@ -183,7 +182,7 @@ void GameObject::UpdateBoundingBox(float4x4& globalMat)
 
 		obb.Transform(globalMat);	// Transform OBB with transform global matrix
 		aabb.SetFrom(obb);			// Set object AABB
-		size = { abs(aabb.maxPoint.x - aabb.minPoint.x), abs(aabb.maxPoint.y - aabb.minPoint.y), abs(aabb.maxPoint.z - aabb.minPoint.z) };
+		size = { abs(aabb.MaxX() - aabb.MinX()), abs(aabb.MaxY() - aabb.MinY()), abs(aabb.MaxZ() - aabb.MinZ()) };
 	}
 }
 
@@ -222,6 +221,7 @@ Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 	//Pass our our Game Object pointer to the component
 	c->my_go = this;
 	c->Enable();
+	c->UID = App->rng.RandInt<uint32_t>();
 
 	components.push_back(c);
 	return c;
