@@ -100,7 +100,6 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="EditorWindow.h" />
     <ClInclude Include="GeometryLoader.h" />
-    <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="EditorHierarchy.h" />
     <ClInclude Include="EditorInspector.h" />
@@ -148,7 +147,6 @@
     <ClCompile Include="EditorToolbar.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeometryLoader.cpp" />
-    <ClCompile Include="glmath.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
     <ClCompile Include="EditorConsole.cpp" />
     <ClCompile Include="EditorHierarchy.cpp" />
