@@ -1,5 +1,6 @@
 #include "ImporterScene.h"
 #include "Application.h"
+#include "ModuleSceneIntro.h"
 #include "Component.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
@@ -18,6 +19,33 @@ bool ImporterScene::Export(const char * path, std::string & output_file, const I
 	return false;
 }
 
+bool ImporterScene::Load(const char * full_path)
+{
+	bool ret = false;
+
+	std::vector<GameObject*> gos;
+	json loaded_file = App->jLoad.Load(full_path); //Load the json file 
+
+	for (json::iterator it = loaded_file.begin(); it != loaded_file.end(); ++it)
+	{
+		GameObject* go = App->scene_intro->CreateEmptyGameObject();
+
+		const char* go_name = it.key().data();
+		go->name = go_name;
+
+		gos.push_back(go);
+	}
+
+	//Load parenting
+	for (int i = 0; i < gos.size(); ++i)
+	{
+		GOFunctions::ReParentGameObject(gos[i], App->scene_intro->root);
+	}
+
+
+	return ret;
+}
+
 std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & scene_name, FileType file_type)
 {
 	json file; //File to save
@@ -25,7 +53,6 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 	std::vector<const GameObject*> gos;
 	GOFunctions::FillArrayWithChildren(gos, root_go, true);
 
-	//TEST: create a file with basic contents
 	//Iterate all game objects
 	for (int i = 0; i < gos.size(); ++i)
 	{
