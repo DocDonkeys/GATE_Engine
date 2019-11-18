@@ -30,10 +30,15 @@ void ComponentTransform::PreUpdate()
 		SDL_assert(my_go == App->scene_intro->root);
 	}
 
-	if (needsMatUpdate) {
+	if (needsUpdateGlobal) {
 		UpdateGlobalMat();
-		needsMatUpdate = false;
+		needsUpdateGlobal = false;
 	}
+
+	/*if (needsUpdateLocal) {
+		UpdateLocalMat();
+		needsUpdateLocal = false;
+	}*/
 }
 
 void ComponentTransform::UpdateGlobalMat()
@@ -48,61 +53,182 @@ void ComponentTransform::UpdateGlobalMat()
 	}
 }
 
-void ComponentTransform::UpdateQuatByEuler(float3& newEuler)
-{
-	float3 rotAng = DegToRad(newEuler - eulerRotation);
-	quatRotation = quatRotation * Quat::FromEulerXYZ(rotAng.x, rotAng.y, rotAng.z);
-}
+//void ComponentTransform::UpdateLocalMat()
+//{
+//	ComponentTransform* parentTrs = (ComponentTransform*)my_go->parent->GetComponent(COMPONENT_TYPE::TRANSFORM);
+//	//globalTrs = parentTrs->globalTrs * localTrs;
+//	my_go->UpdateBoundingBox(globalTrs);
+//
+//	for (int i = 0; i < my_go->children.size(); i++) {
+//		ComponentTransform* childTrs = (ComponentTransform*)my_go->children[i]->GetComponent(COMPONENT_TYPE::TRANSFORM);
+//		childTrs->UpdateLocalMat();
+//	}
+//}
 
-void ComponentTransform::UpdateEulerByQuat(Quat& q)
+bool ComponentTransform::SetLocalMat(float3& newPos, float3& newRot, float3& newScale)
 {
-	eulerRotation = RadToDeg(q.ToEulerXYZ());
-}
+	bool changed = false;
 
-void ComponentTransform::DataToMat()
-{
-	localTrs = float4x4::FromTRS(position, quatRotation, scale);
-	needsMatUpdate = true;
-}
-
-void ComponentTransform::MatToData()
-{
-	localTrs.Decompose(position, quatRotation, scale);
-	UpdateEulerByQuat(quatRotation);
-}
-
-bool ComponentTransform::UpdateValues(float3& pos, float3& rot, float3& scale)
-{
-	bool ret = false;
-
-	if (pos.x != this->position.x
-		|| pos.y != this->position.y
-		|| pos.z != this->position.z)
-	{
-		position = pos;
-		ret = true;
+	if (position.x != newPos.x
+		|| position.y != newPos.y
+		|| position.z != newPos.z) {
+		changed = true;
+	}
+	else if (rotation.x != newRot.x
+		|| rotation.y != newRot.y
+		|| rotation.z != newRot.z) {
+		changed = true;
+	}
+	else if (scale.x != newScale.x
+		|| scale.y != newScale.y
+		|| scale.z != newScale.z) {
+		changed = true;
 	}
 
-	if (rot.x != this->eulerRotation.x
-		|| rot.y != this->eulerRotation.y
-		|| rot.z != this->eulerRotation.z)
-	{
-		UpdateQuatByEuler(rot);
-		eulerRotation = rot;
-		ret = true;
+	if (changed) {
+		localTrs = float4x4::FromTRS(newPos, float3x3::FromEulerXYZ(newRot.x, newRot.y, newRot.z), newScale);
+		position = newPos;
+		rotation = newRot;
+		scale = newScale;
+
+		needsUpdateGlobal = true;
 	}
 
-	if (scale.x != this->scale.x
-		|| scale.y != this->scale.y
-		|| scale.z != this->scale.z)
-	{
-		this->scale = scale;
-		ret = true;
+	return changed;
+}
+
+bool ComponentTransform::SetLocalMat(float4x4& newMat)
+{
+	bool changed = false;
+
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			if (localTrs[i][j] != newMat[i][j]) {
+				changed = true;
+				break;
+			}
+
+	if (changed) {
+		localTrs = newMat;
+		position = newMat.TranslatePart();
+		rotation = newMat.ToEulerXYZ();
+		scale = newMat.GetScale();
+
+		needsUpdateGlobal = true;
 	}
 
-	if (ret) {
-		DataToMat();
-	}
+	return changed;
+}
 
-	return ret;
+//bool ComponentTransform::SetGlobalMat(float3& newPos, float3& newRot, float3& newScale)
+//{
+//	bool changed = false;
+//
+//	if (position.x != newPos.x
+//		|| position.y != newPos.y
+//		|| position.z != newPos.z) {
+//		changed = true;
+//	}
+//	else if (rotation.x != newRot.x
+//		|| rotation.y != newRot.y
+//		|| rotation.z != newRot.z) {
+//		changed = true;
+//	}
+//	else if (scale.x != newScale.x
+//		|| scale.y != newScale.y
+//		|| scale.z != newScale.z) {
+//		changed = true;
+//	}
+//
+//	if (changed) {
+//		globalTrs = float4x4::FromTRS(newPos, float3x3::FromEulerXYZ(newRot.x, newRot.y, newRot.z), newScale);
+//		needsUpdateLocal = true;
+//	}
+//
+//	return changed;
+//}
+//
+//bool ComponentTransform::SetGlobalMat(float4x4& newMat)
+//{
+//	bool changed = false;
+//
+//	for (int i = 0; i < 4; i++)
+//		for (int j = 0; j < 4; j++)
+//			if (localTrs[i][j] != newMat[i][j]) {
+//				changed = true;
+//				break;
+//			}
+//
+//	if (changed) {
+//		globalTrs = newMat;
+//		needsUpdateLocal = true;
+//	}
+//
+//	return changed;
+//}
+
+void ComponentTransform::GetLocalMat(float3& pos, float3& rot, float3& scale)
+{
+	pos = position;
+	rot = rotation;
+	scale = this->scale;
+}
+
+void ComponentTransform::GetLocalMat(float3& pos, float3x3& rot, float3& scale)
+{
+	localTrs.Decompose(pos, rot, scale);
+}
+
+float4x4 ComponentTransform::GetLocalMat()
+{
+	return localTrs;
+}
+
+float4x4 ComponentTransform::GetGlobalMat()
+{
+	return globalTrs;
+}
+
+void ComponentTransform::Import(float* local, float* global)
+{
+	int k = 0;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+		{
+			localTrs[i][j] = local[k];
+			k++;
+		}
+
+	position = localTrs.TranslatePart();
+	rotation = localTrs.RotatePart().ToEulerXYZ();
+	scale = localTrs.GetScale();
+
+	k = 0;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+		{
+			localTrs[i][j] = global[k];
+			k++;
+		}
+
+	needsUpdateGlobal = true;
+}
+
+void ComponentTransform::Export(float* local, float* global)
+{
+	int k = 0;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+		{
+			local[k] = localTrs[i][j];
+			k++;
+		}
+
+	k = 0;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+		{
+			global[k] = localTrs[i][j];
+			k++;
+		}
 }

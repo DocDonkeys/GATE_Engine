@@ -152,17 +152,17 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 	{
 		float width = ImGui::GetWindowWidth() / 7.0f;
 
-		float3 newPosition = transform->position;
-		float3 newEulerRotation = transform->eulerRotation;
-		float3 newScale = transform->scale;
+		float3 pos, rot, scale;
+		transform->GetLocalMat(pos, rot, scale);
+		rot = RadToDeg(rot);
 
 		ImGui::Columns(4, "TransformGrid"); // 4-ways, with border
 
 		ImGui::Separator();
 		if (ImGui::Button("Reset")) {
-			newPosition = float3::zero;
-			newEulerRotation = float3::zero;
-			newScale = float3::one;
+			pos = float3::zero;
+			rot = float3::zero;
+			scale = float3::one;
 		}
 		ImGui::NextColumn();
 		ImGui::Text("X"); ImGui::NextColumn();
@@ -174,44 +174,44 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Position"); ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PX", &newPosition.x, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##PX", &pos.x, 0.05f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PY", &newPosition.y, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##PY", &pos.y, 0.05f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PZ", &newPosition.z, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##PZ", &pos.z, 0.05f); ImGui::NextColumn();
 
 		// Rotation
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Rotation"); ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RX", &newEulerRotation.x, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##RX", &rot.x, 0.05f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RY", &newEulerRotation.y, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##RY", &rot.y, 0.05f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RZ", &newEulerRotation.z, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##RZ", &rot.z, 0.05f); ImGui::NextColumn();
 
 		// Scale
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Scale   "); ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SX", &newScale.x, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##SX", &scale.x, 0.05f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SY", &newScale.y, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##SY", &scale.y, 0.05f); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SZ", &newScale.z, 0.05f);
+		ImGui::DragFloat("##SZ", &scale.z, 0.05f);
 
 		ImGui::Columns(1);
 		ImGui::TreePop();
 
 		// Data and Matrix Updating
 		if (!App->input->GetMouseWrapping())
-			if (transform->UpdateValues(newPosition, newEulerRotation, newScale)) {
+			if (transform->SetLocalMat(pos, DegToRad(rot), scale)) {
 				/*transform->my_go->staticObj = false;
 
 				if (transform->my_go->children.size() != 0) {

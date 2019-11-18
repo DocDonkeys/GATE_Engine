@@ -23,7 +23,6 @@ class GameObject
 public:
 	GameObject();
 	GameObject(const char* name);
-	GameObject(const char* name, float4x4 local_mat);
 	~GameObject();
 
 public: //Methods
@@ -33,7 +32,7 @@ public: //Methods
 
 	void Draw();	// This method is called by the renderer
 	void DrawAABB();
-	void UpdateBoundingBox(float4x4 mat);
+	void UpdateBoundingBox(float4x4& mat);
 
 	void UpdateStaticStatus(bool newVal);
 

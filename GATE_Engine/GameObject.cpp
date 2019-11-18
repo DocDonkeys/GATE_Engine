@@ -23,14 +23,6 @@ GameObject::GameObject(const char* name) : name(name)
 	CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }
 
-GameObject::GameObject(const char * name, float4x4 local_mat) : name(name)
-{
-	UID = (uint32)App->rng.RandInt(); //CRITICAL TODO: CHANEG TO RANDOM NUMBER OF 32 bytes
-	//All Game Objects must have a transform component, so we assign it from creation
-	ComponentTransform* trans = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	trans->localTrs = local_mat; //Assign the local transformation (usually used for imported objects)
-}
-
 GameObject::~GameObject()
 {
 	if (children.size() > 0)
@@ -181,7 +173,7 @@ void GameObject::DrawAABB()
 	glLineWidth(1.0f);
 }
 
-void GameObject::UpdateBoundingBox(float4x4 globalMat)
+void GameObject::UpdateBoundingBox(float4x4& globalMat)
 {
 	//CHANGE/FIX: Using the mesh is wrong(?), but I don't have the time to make it better right now, it should transform with the global matrix
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(COMPONENT_TYPE::MESH);
@@ -282,7 +274,7 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 			child->parent_UID = 0;
 	}
 	else {
-		LOG("[Error]: A parent can't be inside the heriarchy of one of his own childs.");
+		LOG("[Error]: A parent can't be inside the hierarchy of one of his own childs.");
 	}
 }
 
