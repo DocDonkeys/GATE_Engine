@@ -138,7 +138,12 @@
     <ClCompile Include="Importer.cpp">
       <Filter>Sources\Tools\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="ImporterMesh.cpp" />
+    <ClCompile Include="ImporterMesh.cpp">
+      <Filter>Sources\Tools\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ImporterScene.cpp">
+      <Filter>Sources\Tools\Importers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -294,6 +299,9 @@
       <Filter>Sources\Tools\Importers</Filter>
     </ClInclude>
     <ClInclude Include="ImporterMesh.h">
+      <Filter>Sources\Tools\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImporterScene.h">
       <Filter>Sources\Tools\Importers</Filter>
     </ClInclude>
   </ItemGroup>

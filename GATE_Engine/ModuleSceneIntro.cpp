@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
+#include "ImporterScene.h"
 
 #include <math.h>
 
@@ -46,6 +47,11 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	//TEST: Save a scene
+	ImporterScene scene_imp;
+	std::string scene_name = "scene_test";
+	scene_imp.SaveScene(root,scene_name,FileType::SCENE);
 
 	delete root;
 

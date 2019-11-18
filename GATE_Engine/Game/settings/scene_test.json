@@ -1,0 +1,41 @@
+{
+  "Baker_house": {
+    "Active": "1",
+    "Components": {
+      "Material": "no_path_just_test",
+      "Mesh": "no_path_just_test",
+      "Transform": "no_path_just_test"
+    },
+    "Parent": "1822024715",
+    "Static": "0",
+    "UID": "351997109"
+  },
+  "Chimney": {
+    "Active": "1",
+    "Components": {
+      "Material": "no_path_just_test",
+      "Mesh": "no_path_just_test",
+      "Transform": "no_path_just_test"
+    },
+    "Parent": "1822024715",
+    "Static": "0",
+    "UID": "969682694"
+  },
+  "GameObject_0": {
+    "Active": "1",
+    "Components": {
+      "Transform": "no_path_just_test"
+    },
+    "Static": "0",
+    "UID": "996580943"
+  },
+  "RootNode": {
+    "Active": "1",
+    "Components": {
+      "Transform": "no_path_just_test"
+    },
+    "Parent": "996580943",
+    "Static": "0",
+    "UID": "1822024715"
+  }
+}
