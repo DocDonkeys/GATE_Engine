@@ -26,6 +26,7 @@ bool ImporterScene::Load(const char * full_path)
 	std::vector<GameObject*> gos;
 	json loaded_file = App->jLoad.Load(full_path); //Load the json file 
 
+	//Load the .scene into a buffer
 	for (json::iterator it = loaded_file.begin(); it != loaded_file.end(); ++it)
 	{
 		GameObject* go = App->scene_intro->CreateEmptyGameObject();
@@ -136,6 +137,11 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 	}
 	std::string path = LIBRARY_FOLDER;
 	path += scene_name;
+
+	std::string data = App->jLoad.JsonToString(file);
+	char* buffer = (char*)data.data();
+	std::string output;
+	App->file_system->SaveUnique(output,buffer,data.length(),LIBRARY_FOLDER,scene_name.data(),"scene");
 	App->jLoad.Save(file, "settings/scene_test.json");
 
 	return std::string();

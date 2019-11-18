@@ -130,7 +130,7 @@ private:
 
 public:
 	//JSON
-	const JsonLoader jLoad;
+	JsonLoader jLoad;
 	std::string defaultConfig;
 	std::string editableConfig;
 
