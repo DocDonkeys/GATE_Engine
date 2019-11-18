@@ -344,7 +344,7 @@ void ModuleCamera3D::GoLook(const float3 &pos, const float3 &spot)	// Look at re
 void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)	//IMPROVE: This should not change the camera's angle
 {
 	if (obj != nullptr) {
-		float dist = length({ 10.0f, 10.0f, 10.0f });
+		float dist = Length({ 10.0f, 10.0f, 10.0f });
 
 		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(COMPONENT_TYPE::TRANSFORM);
 		if (transform != nullptr)
@@ -352,7 +352,7 @@ void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)	//IMPROVE
 
 		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(COMPONENT_TYPE::MESH);
 		if (mesh != nullptr)
-			dist = length({ mesh->mesh->size.x, mesh->mesh->size.y, mesh->mesh->size.z });
+			dist = Length({ mesh->mesh->size.x, mesh->mesh->size.y, mesh->mesh->size.z });
 
 		LookAt(reference, dist);
 	}

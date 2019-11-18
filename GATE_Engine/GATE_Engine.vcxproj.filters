@@ -6,9 +6,6 @@
     <ClCompile Include="Color.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="glmath.cpp">
-      <Filter>Sources\Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleCamera3D.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
@@ -149,9 +146,6 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Color.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="glmath.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Module.h">

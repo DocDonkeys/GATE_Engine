@@ -1,7 +1,7 @@
+#ifndef LIGHT_H
+#define LIGHT_H
 
-#pragma once
 #include "Color.h"
-#include "glmath.h"
 
 struct Light	// CHANGE/FIX: Review what are we going to do with these and inside which filter should it be
 {
@@ -14,8 +14,10 @@ struct Light	// CHANGE/FIX: Review what are we going to do with these and inside
 
 	Color ambient;
 	Color diffuse;
-	vec3 position;
-
+	float pos_x, pos_y, pos_z;	//IMPROVE: Including float3 here destroys the "include" framework, so we use this instead
+	
 	int ref;
 	bool on;
 };
+
+#endif //LIGHT_H

@@ -3,15 +3,14 @@
 
 #include "Module.h"
 #include "Globals.h"
-#include "glmath.h"
 #include "Light.h"
-#include "Primitive.h"
-#include "GeometryLoader.h"
 
+#include "libs/MathGeoLib/include/Math/float3x3.h"
+#include "libs/MathGeoLib/include/Math/float4x4.h"
 
 #define MAX_LIGHTS 8
 
-class Primitive;
+class Mesh;
 
 class ModuleRenderer3D : public Module
 {
@@ -60,8 +59,8 @@ private:
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	mat3x3 NormalMatrix;
-	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+	float3x3 NormalMatrix;
+	float4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
 	bool vSync = true;
 	bool drawVertexNormals = false;	//CHANGE/FIX: Save&Load

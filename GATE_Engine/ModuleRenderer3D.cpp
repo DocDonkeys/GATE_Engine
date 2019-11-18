@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "Mesh.h"
+#include "ComponentCamera.h"
 
 #include "libs/glew/include/GL/glew.h"
 #include "libs/SDL/include/SDL_opengl.h"
@@ -242,13 +243,11 @@ void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	ComponentCamera* camPtr = App->camera->GetActiveCamera();
+	if (camPtr != nullptr)
+		camPtr->needsProjectionUpdate = true;
+	else
+		SDL_assert(false);
 }
 
 // GL Settings
