@@ -31,7 +31,18 @@ bool ImporterScene::Load(const char * full_path)
 		GameObject* go = App->scene_intro->CreateEmptyGameObject();
 
 		const char* go_name = it.key().data();
+
 		go->name = go_name;
+		
+		std::string UID = loaded_file[go_name]["UID"];
+		go->UID = std::stoi(UID);
+		std::string parent_UID = loaded_file[go_name]["Parent UID"];
+		go->parent_UID = std::stoi(parent_UID);
+
+		std::string active = loaded_file[go_name]["Active"];
+		go->active = (bool)std::stoi(active);
+		std::string static_obj = loaded_file[go_name]["Static"];
+		go->staticObj = (bool)std::stoi(static_obj);
 
 		gos.push_back(go);
 	}
@@ -39,7 +50,19 @@ bool ImporterScene::Load(const char * full_path)
 	//Load parenting
 	for (int i = 0; i < gos.size(); ++i)
 	{
+		if(gos[i]->parent_UID == 0)
 		GOFunctions::ReParentGameObject(gos[i], App->scene_intro->root);
+		else
+		{
+				for (int j = 0; j < gos.size(); ++j)
+				{
+					if (gos[j]->UID == gos[i]->parent_UID)
+					{
+						GOFunctions::ReParentGameObject(gos[i], gos[j]);
+						break;
+					}
+				}
+		}
 	}
 
 
@@ -59,6 +82,8 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 		const char* go_name = gos[i]->name.data();
 		file[go_name];
 		file[go_name]["UID"] = std::to_string(gos[i]->UID);
+		file[go_name]["Parent UID"] = std::to_string(gos[i]->parent_UID);
+
 		file[go_name]["Active"] = std::to_string(gos[i]->active);
 		file[go_name]["Static"] = std::to_string(gos[i]->staticObj);
 

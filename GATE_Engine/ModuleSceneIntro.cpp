@@ -56,7 +56,7 @@ bool ModuleSceneIntro::CleanUp()
 	//TEST: Save a scene
 	ImporterScene scene_imp;
 	std::string scene_name = "scene_test";
-	scene_imp.SaveScene(root,scene_name,FileType::SCENE);
+	//scene_imp.SaveScene(root,scene_name,FileType::SCENE);
 
 	delete root;
 
