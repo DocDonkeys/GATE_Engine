@@ -275,8 +275,11 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 
 		//Assign our new parent and add ourselves into its children list
 		child->parent = new_parent;
+		child->parent_UID = child->parent->UID;
 		if (child->parent != nullptr)
 			child->parent->children.push_back(child);
+		else
+			child->parent_UID = 0;
 	}
 	else {
 		LOG("[Error]: A parent can't be inside the hierarchy of one of his own childs.");
