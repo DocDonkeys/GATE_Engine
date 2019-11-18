@@ -6,9 +6,9 @@
       "Mesh": "no_path_just_test",
       "Transform": "no_path_just_test"
     },
-    "Parent": "1822024715",
+    "Parent": "1275647277",
     "Static": "0",
-    "UID": "351997109"
+    "UID": "228300690"
   },
   "Chimney": {
     "Active": "1",
@@ -17,25 +17,26 @@
       "Mesh": "no_path_just_test",
       "Transform": "no_path_just_test"
     },
-    "Parent": "1822024715",
+    "Parent": "1275647277",
     "Static": "0",
-    "UID": "969682694"
+    "UID": "1279449620"
   },
   "GameObject_0": {
     "Active": "1",
     "Components": {
       "Transform": "no_path_just_test"
     },
+    "Parent": "191186895",
     "Static": "0",
-    "UID": "996580943"
+    "UID": "894310335"
   },
   "RootNode": {
     "Active": "1",
     "Components": {
       "Transform": "no_path_just_test"
     },
-    "Parent": "996580943",
+    "Parent": "191186895",
     "Static": "0",
-    "UID": "1822024715"
+    "UID": "1275647277"
   }
 }

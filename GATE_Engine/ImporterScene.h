@@ -21,7 +21,7 @@ public:
 
 public:
 	bool Export(const char* path, std::string& output_file, const ImportExportData* ie_data, const char* filename = "");
-
+	bool Load(const char* full_path);
 	//Since .model will be same as a scene but uneditable, we can use the same function but determining in which format we want to save
 	std::string SaveScene(const GameObject* root_go, std::string& scene_name, FileType file_type);
 };

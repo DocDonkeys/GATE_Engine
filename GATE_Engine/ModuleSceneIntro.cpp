@@ -37,6 +37,11 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(float3(15.0f, 15.0f, 15.0f));
 	App->camera->LookAt(float3(0.f, 0.f, 0.f));
 
+	//TEST: Import scene
+	ImporterScene importer;
+	const char* full_path = "settings/scene_test.json";
+	importer.Load(full_path);
+
 	//Load the Baker House
 	App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
