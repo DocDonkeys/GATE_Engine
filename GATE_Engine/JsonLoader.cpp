@@ -49,3 +49,10 @@ json JsonLoader::Load(const char* file) const
 
 	return obj;
 }
+
+std::string JsonLoader::JsonToString(json file)
+{
+	std::string ret;
+	ret = file.dump(4);
+	return ret;
+}

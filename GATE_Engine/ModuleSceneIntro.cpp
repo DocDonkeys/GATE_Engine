@@ -39,7 +39,7 @@ bool ModuleSceneIntro::Start()
 
 	//TEST: Import scene
 	ImporterScene importer;
-	const char* full_path = "settings/scene_test.json";
+	const char* full_path = "Library/scene_test.scene";
 	importer.Load(full_path);
 
 	//Load the Baker House
@@ -56,7 +56,7 @@ bool ModuleSceneIntro::CleanUp()
 	//TEST: Save a scene
 	ImporterScene scene_imp;
 	std::string scene_name = "scene_test";
-	//scene_imp.SaveScene(root,scene_name,FileType::SCENE);
+	scene_imp.SaveScene(root,scene_name,FileType::SCENE);
 
 	delete root;
 
@@ -98,7 +98,7 @@ void ModuleSceneIntro::DestroyGameObject(GameObject * go)
 		}	
 	}*/
 
-	delete go;
+	//delete go;
 	numObjects--;
 }
 
