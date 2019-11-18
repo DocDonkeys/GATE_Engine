@@ -2,6 +2,7 @@
 #define RNGENERATOR_H
 
 #include <random>
+//#include "libs/MathGeoLib/include/Algorithm/Random/LCG.h"	// MathGeoLib alternative
 
 class RNGenerator
 {
@@ -95,6 +96,7 @@ public:
 
 private:
 	std::default_random_engine randEngine;
+	//math::LCG randEngine;
 };
 
 #endif //RNGENERATOR_H
