@@ -37,10 +37,16 @@ public:	// Nested classes
 
 	public:		// Constructors
 		TreeNode() {}
-		TreeNode(AABB aabb, TREE_TYPE tree, NODE_TYPE node) : aabb(aabb), treeType(tree), nodeType(node) {}
+		TreeNode(AABB aabb, Tree* tree, NODE_TYPE node) : aabb(aabb), tree(tree), nodeType(node) {}
+
+	public:
+		void Draw();
 
 		void Split();
-		void Draw();
+		void Clear();
+
+		bool Insert(GameObject* obj);
+		bool Remove(GameObject* obj);
 
 	private:	// Methods
 		void QuadSplit();
@@ -48,18 +54,17 @@ public:	// Nested classes
 
 	public:		// Members
 		AABB aabb;
-
 		NODE_TYPE nodeType;
-		TREE_TYPE treeType;
 
-		TreeNode* nodes;
-		uint numNodes = 0;
+		Tree* tree;
+		TreeNode* branches;
+		uint numBranches = 0;
 		std::vector<GameObject*> objects;
 	};
 	// Tree Node END
 
 public:	// Constructors
-	Tree(TREE_TYPE type, AABB aabb);
+	Tree(TREE_TYPE type, AABB aabb, uint nodeSizeLimit);
 
 public: // Methods
 	void Draw();
@@ -67,14 +72,15 @@ public: // Methods
 	void Create(AABB limits);
 	void Clear();
 
-	void Insert(GameObject*);
-	void Remove(GameObject*);
+	bool Insert(GameObject* obj);
+	bool Remove(GameObject* obj);
 
-	//void Intersect(std::vector<GameObject*>&, PRIMITIVE);
+	void Intersect(std::vector<GameObject*>&, AABB area);
 
 public:	// Members
 	TREE_TYPE type = TREE_TYPE::NONE;
 	TreeNode* rootNode;
+	uint nodeSizeLimit;
 };
 
 #endif	//TREE_H	

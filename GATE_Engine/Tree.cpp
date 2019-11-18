@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Tree.h"
+#include "GameObject.h"
 #include "libs/SDL/include/SDL_opengl.h"
 
 #ifdef _DEBUG
@@ -9,9 +10,9 @@
 #endif
 
 // Tree
-Tree::Tree(TREE_TYPE type, AABB aabb) : type(type)
+Tree::Tree(TREE_TYPE type, AABB aabb, uint nodeSizeLimit) : type(type), nodeSizeLimit(nodeSizeLimit)
 {
-	rootNode = new TreeNode(aabb, type, TreeNode::NODE_TYPE::ROOT);
+	rootNode = new TreeNode(aabb, this, TreeNode::NODE_TYPE::ROOT);
 
 	rootNode->Split();								// The purpose of a tree is to split, so the first one is done here so that
 	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;	// we can now reassign the original node as ROOT, avoiding unnecesary first-time checks on the split method
@@ -22,24 +23,34 @@ void Tree::Draw()
 	rootNode->Draw();
 }
 
+void Tree::Create(AABB limits)
+{
+	Clear();
+
+	rootNode->aabb = limits;
+
+	rootNode->Split();
+	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;
+}
+
+void Tree::Clear()
+{
+	rootNode->Clear();
+}
+
+bool Tree::Insert(GameObject* obj)
+{
+	return rootNode->Insert(obj);
+}
+
+bool Tree::Remove(GameObject* obj)
+{
+	return rootNode->Remove(obj);
+}
+
 // -----------------------------------------------------------------
 
 // TreeNode
-void Tree::TreeNode::Split()
-{
-	nodeType = NODE_TYPE::BRANCH;
-
-	switch (treeType)
-	{
-	case TREE_TYPE::QUAD_TREE:
-		QuadSplit();
-		break;
-	case TREE_TYPE::OC_TREE:
-		OctSplit();
-		break;
-	}
-}
-
 void Tree::TreeNode::Draw()
 {
 	glLineWidth(2.0f);
@@ -86,8 +97,99 @@ void Tree::TreeNode::Draw()
 
 	// Draw Branches/Leafs
 	if (nodeType != NODE_TYPE::LEAF)
-		for (int i = 0; i < numNodes; ++i)
-			nodes[i].Draw();
+		for (int i = 0; i < numBranches; ++i)
+			branches[i].Draw();
+}
+
+void Tree::TreeNode::Split()
+{
+	nodeType = NODE_TYPE::BRANCH;
+
+	switch (tree->type)
+	{
+	case TREE_TYPE::QUAD_TREE:
+		QuadSplit();
+		break;
+	case TREE_TYPE::OC_TREE:
+		OctSplit();
+		break;
+	}
+}
+
+void Tree::TreeNode::Clear()
+{
+	if (numBranches > 0) {
+		for (int i = 0; i < numBranches; i++)
+			branches[i].Clear();
+
+		delete[] branches;
+		branches = nullptr;
+		numBranches = 0;
+	}
+
+	if (objects.size() > 0)
+		objects.clear();
+}
+
+bool Tree::TreeNode::Insert(GameObject* obj)
+{
+	bool ret = false;
+
+	if (aabb.Contains(obj->aabb.CenterPoint())) {
+		if (numBranches > 0) {
+			for (int i = 0; i < numBranches; i++) {
+				if (branches[i].Insert(obj)) {
+					ret = true;
+					break;
+				}
+			}
+		}
+		else {
+			objects.push_back(obj);
+
+			if (objects.size() > tree->nodeSizeLimit) {
+				Split();
+
+				for (int i = 0; i < objects.size(); i++) {
+					for (int j = 0; j < numBranches; j++) {
+						if (branches[j].Insert(objects[i]))
+							break;
+					}
+				}
+
+				objects.clear();	// Saving objects only in leafs is better for RAM space, but having nodes know which objects are saved on their branches could be useful
+			}
+		}
+	}
+
+	return ret;
+}
+
+bool Tree::TreeNode::Remove(GameObject* obj)
+{
+	bool ret = false;
+
+	if (aabb.Contains(obj->aabb.CenterPoint())) {
+		if (numBranches > 0) {
+			for (int i = 0; i < numBranches; i++) {
+				if (branches[i].Remove(obj)) {
+					ret = true;
+					break;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < objects.size(); i++) {
+				if (objects[i] == obj) {
+					objects.erase(objects.begin() + i);
+					ret = true;
+					break;
+				}
+			}
+		}
+	}
+	
+	return ret;
 }
 
 void Tree::TreeNode::QuadSplit()
@@ -129,11 +231,11 @@ void Tree::TreeNode::QuadSplit()
 	newAABBs[3].minPoint = minPoint;
 	newAABBs[3].maxPoint = maxPoint;
 
-	nodes = new TreeNode[numNodes];
-	numNodes = 4;
+	branches = new TreeNode[4];
+	numBranches = 4;
 
 	for (int i = 0; i < 4; i++)
-		nodes[i] = TreeNode(newAABBs[i], treeType, NODE_TYPE::LEAF);
+		branches[i] = TreeNode(newAABBs[i], tree, NODE_TYPE::LEAF);
 }
 
 void Tree::TreeNode::OctSplit()
@@ -199,10 +301,10 @@ void Tree::TreeNode::OctSplit()
 	newAABBs[7].minPoint = minPoint;
 	newAABBs[7].maxPoint = maxPoint;
 
-	nodes = new TreeNode[8];
-	numNodes = 8;
+	branches = new TreeNode[8];
+	numBranches = 8;
 
 	for (int i = 0; i < 8; ++i)
-		nodes[i] = TreeNode(newAABBs[i], treeType, NODE_TYPE::LEAF);
+		branches[i] = TreeNode(newAABBs[i], tree, NODE_TYPE::LEAF);
 
 }
