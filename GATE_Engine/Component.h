@@ -1,6 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include "Globals.h"
 #include "GameObject.h"
 
 class GameObject;
@@ -25,7 +26,7 @@ public: //Members
 
 	bool active = false;
 	GameObject* my_go = nullptr;
-
+	uint32 UID = 0;
 };
 #endif // !__COMPONENT_H__
 

@@ -47,6 +47,7 @@ bool ImporterScene::Load(const char * full_path)
 
 		//Vars we can't declare inside a switch but needed for data loading
 		ComponentTransform* trans = nullptr;
+		ComponentMesh* mesh = nullptr;
 
 		float local_mat[16] = {0};
 		float global_mat[16] = {0};
@@ -89,7 +90,11 @@ bool ImporterScene::Load(const char * full_path)
 				break;
 
 			case COMPONENT_TYPE::MESH:
+				mesh = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
+				if (mesh != nullptr)
+				mesh->Load(loaded_file[go_name]["Components"][std::to_string((int)comp_type)]);
 				break;
+
 			case COMPONENT_TYPE::MATERIAL:
 				break;
 			case COMPONENT_TYPE::CAMERA:
@@ -158,6 +163,7 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 		std::string mat_type;
 		std::string mat_num;
 		std::string mat_val;
+		json::iterator json_it;
 
 		//Save Components. Although for now we only have up to 4 components, we need to prepare it for an unlimited number of components and types
 		for (int j = 0; j < gos[i]->components.size(); ++j)
@@ -185,25 +191,11 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 					mat_val = mat_type + mat_num;
 					file[go_name]["Components"][std::to_string((int)component->type)][mat_val.data()] = global_mat[k];
 				}
-
-				mat_type = "Lnum";
-				for (int k = 0; k < 16; ++k)
-				{
-					mat_num = std::to_string(k);
-					mat_val = mat_type + mat_num;
-					file[go_name]["Components"][std::to_string((int)component->type)][mat_val.data()];
-				}
-
-
-				/*file[go_name]["Components"][std::to_string((int)component->type)]["LocalMatrix"] = local_mat;
-				file[go_name]["Components"][std::to_string((int)component->type)]["GlobalMatrix"] = local_mat;*/
 				break;
 
 			case COMPONENT_TYPE::MESH:
-				
 				mesh_comp = (ComponentMesh*)component;
-
-				file[go_name]["Components"][std::to_string((int)component->type)] = "no_path_just_test";
+				mesh_comp->Save(file[go_name]["Components"][std::to_string((int)component->type)]); // Calling SAVE from Component Mesh 
 				break;
 
 			case COMPONENT_TYPE::MATERIAL:

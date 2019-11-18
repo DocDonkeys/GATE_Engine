@@ -221,6 +221,7 @@ Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 	//Pass our our Game Object pointer to the component
 	c->my_go = this;
 	c->Enable();
+	c->UID = App->rng.RandInt<uint32_t>();
 
 	components.push_back(c);
 	return c;

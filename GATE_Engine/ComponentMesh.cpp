@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
+#include "ImporterMesh.h"
 
 ComponentMesh::ComponentMesh() : Component()
 {
@@ -58,4 +59,26 @@ void ComponentMesh::Draw()
 		// Pop transform matrix
 		glPopMatrix();
 	}
+}
+
+void ComponentMesh::Save(json &file)
+{
+	IEMeshData to_save;
+	to_save.mesh = this->mesh;
+
+	std::string name = "_m";
+	name += std::to_string(this->UID).data();
+	std::string path_to_save;
+	imp_exp.Export(LIBRARY_MESH_FOLDER,path_to_save,&to_save,name.data());
+
+	file["Path"] = path_to_save.data();
+}
+
+void ComponentMesh::Load(json & file)
+{
+	mesh = new Mesh;
+
+	std::string full_path = file["Path"];
+	imp_exp.Load(full_path.data(), mesh);
+	ie_data.mesh = mesh;
 }
