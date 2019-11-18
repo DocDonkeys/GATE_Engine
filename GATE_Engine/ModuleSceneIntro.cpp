@@ -56,7 +56,7 @@ bool ModuleSceneIntro::CleanUp()
 	//TEST: Save a scene
 	ImporterScene scene_imp;
 	std::string scene_name = "scene_test";
-	scene_imp.SaveScene(root,scene_name,FileType::SCENE);
+	//scene_imp.SaveScene(root,scene_name,FileType::SCENE);
 
 	delete root;
 
@@ -176,6 +176,6 @@ int ModuleSceneIntro::CheckToolMode() const
 		ret = (int)tool_mode::RECT;
 	else if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_IDLE)	// To avoid calling on Redo (CTRL+Y)
 		ret = (int)tool_mode::MULTI;
-
+	
 	return ret;
 }
