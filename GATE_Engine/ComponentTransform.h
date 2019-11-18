@@ -18,19 +18,36 @@ public:
 	void Disable() override;
 	void PreUpdate() override;
 
+	//void UpdateLocalMat();
 	void UpdateGlobalMat();
 
 	//void UpdateQuatByEuler(float3& newEuler);
 	//void UpdateEulerByQuat(Quat& q);
-	bool DataToMat(float3& pos, float3& rot, float3& scale);
-	void MatToData(float3& pos, float3x3& rot, float3& scale);
-	void MatToData(float3& pos, Quat& rot, float3& scale);
+	bool SetLocalMat(float3& pos, float3& rot, float3& scale);
+	bool SetLocalMat(float4x4& mat);
+
+	//bool SetGlobalMat(float3& pos, float3& rot, float3& scale);	//IMPROVE: We might need to arbitrarily set the global position, but what should we do with the children? Move them or update their data?
+	//bool SetGlobalMat(float4x4& mat);
+
+	void GetLocalMat(float3& pos, float3& rot, float3& scale);
+	void GetLocalMat(float3& pos, float3x3& rot, float3& scale);
+	float4x4 GetLocalMat();
+	float4x4 GetGlobalMat();
+
+	void Import(float* local, float* global);
+	void Export(float* local, float* global);
 
 public:
+	// These are needed because directly using matrices results in a big mess
+	float3 position, rotation = float3::zero;
+	float3 scale = float3::one;
+
+	//bool needsUpdateLocal = false;
+	bool needsUpdateGlobal = false;
+
+public:	//CHANGE/FIX: Should be private, only public currently because of Didac's import/export system
 	float4x4 localTrs = float4x4::identity;
 	float4x4 globalTrs = float4x4::identity;
-
-	bool needsMatUpdate = false;
 };
 
 #endif // !__COMPONENTTRANSFORM_H__

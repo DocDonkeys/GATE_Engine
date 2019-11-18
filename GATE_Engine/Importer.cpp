@@ -157,7 +157,7 @@ bool Importer::Import(const char * file, const char * path, std::string & output
 	uint bytes = sizeof(pos_rot_scale);
 	memcpy(pos_rot_scale, cursor, bytes);
 
-	transform->DataToMat(pos_rot_scale[0], pos_rot_scale[1], pos_rot_scale[2]);
+	transform->SetLocalMat(pos_rot_scale[0], pos_rot_scale[1], pos_rot_scale[2]);
 
 	float mat4x4[16];
 	cursor += bytes;
@@ -342,7 +342,7 @@ bool Importer::Export(const char * path, std::string & output_file, const Compon
 	char* data = new char[size];
 	char* cursor = data;
 
-	float3 pos_rot_scale[3] = {transform->localTrs.TranslatePart(), transform->localTrs.RotatePart().ToEulerXYZ(), transform->localTrs.GetScale()};
+	float3 pos_rot_scale[3] = { transform->position, transform->rotation, transform->scale };
 
 	//---------------- Store data ----------------------//
 	uint bytes = sizeof(float3) * 3;

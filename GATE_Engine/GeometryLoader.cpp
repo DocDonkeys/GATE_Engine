@@ -108,18 +108,18 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 {
 	float biggestMeshSize = -1.0f;
 
-	float4x4 local_trs;
+	float4x4 meshTrs;
 	//Before creating Game Object, obtain local transformation respect parent
 	for (int i = 0; i < 4; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
 		{
-			local_trs[i][j] = node->mTransformation[i][j];
+			meshTrs[i][j] = node->mTransformation[i][j];
 		}
 	}
 	
 	//We create the gameobject for the node
-	GameObject* ret_go = App->scene_intro->CreateEmptyGameObject(node->mName.C_Str(), local_trs);
+	GameObject* ret_go = App->scene_intro->CreateEmptyGameObject(node->mName.C_Str());
 
 	if (node != nullptr && node->mNumMeshes > 0)
 	{
@@ -154,18 +154,15 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 			// Transform
 			ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-			//trs_component->MatToData();
-			trs_component->needsMatUpdate = true;
-			new_mesh->LoadMeshBounds();							// Set mesh AABB
-			ret_go->obb.SetFrom(new_mesh->GetBounds());			// Pass AABB to obj OBB
-			ret_go->obb.Transform(trs_component->globalTrs);	// Transform OBB with transform global matrix
-			ret_go->aabb.SetFrom(ret_go->obb);					// Set object AABB
+			trs_component->SetLocalMat(meshTrs);
+			trs_component->needsUpdateGlobal = true;
 			
 			// Mesh
 			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
 			mesh_component->mesh = new_mesh;
 			mesh_component->mesh->path = full_path;
 			mesh_component->mesh->filename = filename;
+			mesh_component->mesh->LoadMeshBounds();
 			ret_go->size = mesh_component->mesh->GetSize();
 
 			float currMeshSize = Length(new_mesh->GetSize());
@@ -241,8 +238,7 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const 
 	App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2,new_mesh->tex_coords);
 
 	//We create a game object for the current mesh
-	float4x4 mat;
-	GameObject* go = App->scene_intro->CreateEmptyGameObject(name,mat.identity);
+	GameObject* go = App->scene_intro->CreateEmptyGameObject(name);
 
 	ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 	mesh_component->mesh = new_mesh;

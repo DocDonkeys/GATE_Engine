@@ -152,9 +152,9 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 	{
 		float width = ImGui::GetWindowWidth() / 7.0f;
 
-		float3 pos = transform->localTrs.TranslatePart();
-		float3 rot = RadToDeg(transform->localTrs.ToEulerXYZ());
-		float3 scale = transform->localTrs.GetScale();
+		float3 pos, rot, scale;
+		transform->GetLocalMat(pos, rot, scale);
+		rot = RadToDeg(rot);
 
 		ImGui::Columns(4, "TransformGrid"); // 4-ways, with border
 
@@ -211,7 +211,7 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 
 		// Data and Matrix Updating
 		if (!App->input->GetMouseWrapping())
-			if (transform->DataToMat(pos, DegToRad(rot), scale)) {
+			if (transform->SetLocalMat(pos, DegToRad(rot), scale)) {
 				/*transform->my_go->staticObj = false;
 
 				if (transform->my_go->children.size() != 0) {
