@@ -174,6 +174,6 @@ void Mesh::LoadMeshBounds()
 		bounds.SetFrom(vertex, num_vertex);
 
 		// We save to distance between max and min points now so later we just have to access it instead of calculating it
-		size = { abs(bounds.maxPoint.x - bounds.minPoint.x), abs(bounds.maxPoint.y - bounds.minPoint.y), abs(bounds.maxPoint.z - bounds.minPoint.z) };
+		size = { abs(bounds.MaxX() - bounds.MinX()), abs(bounds.MaxY() - bounds.MinY()), abs(bounds.MaxZ() - bounds.MinZ()) };
 	}
 }

@@ -102,9 +102,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources\Component Structure</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Sources\Component Structure</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentMaterial.cpp">
       <Filter>Sources\Component Structure\Components</Filter>
     </ClCompile>
@@ -140,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="ImporterScene.cpp">
       <Filter>Sources\Tools\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>Sources\Component Structure\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -297,6 +297,9 @@
     </ClInclude>
     <ClInclude Include="ImporterScene.h">
       <Filter>Sources\Tools\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>Sources\Component Structure\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

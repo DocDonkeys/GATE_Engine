@@ -1,13 +1,15 @@
-#ifndef __COMPONENT_H__
-#define __COMPONENT_H__
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
 #include "GameObject.h"
+
+class GameObject;
 
 class Component
 {
 public:
-	Component();
-	virtual ~Component() = 0;
+	Component() {};
+	virtual ~Component() {};
 
 public: //Methods
 	virtual void Enable() = 0;
@@ -20,6 +22,7 @@ public: //Methods
 
 public: //Members
 	COMPONENT_TYPE type;
+
 	bool active = false;
 	GameObject* my_go = nullptr;
 
