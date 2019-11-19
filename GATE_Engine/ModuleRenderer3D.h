@@ -67,6 +67,7 @@ public:
 	bool drawFaceNormals = false;	//CHANGE/FIX: Save&Load
 	bool drawObjAABB = false;		//CHANGE/FIX: Save&Load
 	bool drawObjOBB = false;		//CHANGE/FIX: Save&Load
+	bool drawStaticTree = false;	//CHANGE/FIX: Save&Load
 
 	//OpenGL Flags https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glEnable.xml	//IMPROVE: Make a list jesus
 	GL_Setting GL_DepthTest;		//Do depth comparisons and update the depth buffer.

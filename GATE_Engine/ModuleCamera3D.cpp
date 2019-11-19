@@ -211,7 +211,7 @@ void ModuleCamera3D::Orbit(float dx, float dy)
 
 void ModuleCamera3D::Rotate(float dx, float dy)
 {
-	// x motion make the camera rotate in Y absolute axis (0,1,0) (not local)
+	// X motion make the camera rotate in Y global axis
 	if (dx != 0.f)
 	{
 		Quat q = Quat::RotateY(dx);
@@ -219,7 +219,7 @@ void ModuleCamera3D::Rotate(float dx, float dy)
 		editorCamera->frustum.up = q.Mul(editorCamera->frustum.up).Normalized();
 	}
 
-	// y motion makes the camera rotate in X local axis, with tops
+	// Y motion makes the camera rotate in X local axis
 	if (dy != 0.f)
 	{
 		Quat q = Quat::RotateAxisAngle(editorCamera->frustum.WorldRight(), dy);
@@ -231,6 +231,9 @@ void ModuleCamera3D::Rotate(float dx, float dy)
 			editorCamera->frustum.front = q.Mul(editorCamera->frustum.front).Normalized();
 		}
 	}
+
+	float3 dist = reference - editorCamera->frustum.pos;
+	reference = editorCamera->frustum.pos + editorCamera->frustum.front * dist.Length();
 }
 
 // -----------------------------------------------------------------

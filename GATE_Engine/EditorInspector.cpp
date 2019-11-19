@@ -69,7 +69,8 @@ void EditorInspector::Update()
 			else {
 				go->UpdateStaticStatus(go->staticObj);
 			}
-		}
+		} ImGui::SameLine();
+		HoverTip("Editing the transform component of an object will remove the static status from himself and all of his children!");
 
 		if (ImGui::BeginPopupModal("Changing Static State", &show_static_modal, ImGuiWindowFlags_AlwaysAutoResize))
 		{

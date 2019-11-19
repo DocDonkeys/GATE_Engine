@@ -36,7 +36,6 @@ public:
 
 public:
 	//methods
-	void InitializeSceneTree();
 	int CheckToolMode() const;
 
 public:
@@ -44,6 +43,7 @@ public:
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 
 	Tree* staticTree = nullptr;
+
 	uint numObjects = 0;
 	GameObject* root = nullptr;
 	GameObject* selected_go = nullptr;

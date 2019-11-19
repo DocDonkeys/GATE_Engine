@@ -218,7 +218,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	//Render
 	App->scene_intro->root->Draw();
-	if (App->scene_intro->staticTree != nullptr)
+
+	if (drawStaticTree && App->scene_intro->staticTree != nullptr)
 		App->scene_intro->staticTree->Draw();
 
 	//Render GUI

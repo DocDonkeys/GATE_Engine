@@ -237,6 +237,10 @@ void EditorMenuBar::Update() {
 					App->editor->DrawModeChange();
 				}
 
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("View")) {
 				ImGui::Separator();
 
 				ImGui::Checkbox("Vertex Normals", &App->renderer3D->drawVertexNormals);
@@ -245,7 +249,7 @@ void EditorMenuBar::Update() {
 				ImGui::Separator();
 
 				ImGui::Checkbox("Bounding Boxes", &App->renderer3D->drawObjAABB);
-				//ImGui::Checkbox("OBB Boxes", &App->renderer3D->drawObjOBB);
+				ImGui::Checkbox("Static Tree", &App->renderer3D->drawStaticTree);
 
 				ImGui::EndMenu();
 			}
