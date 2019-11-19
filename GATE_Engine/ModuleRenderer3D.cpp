@@ -5,6 +5,7 @@
 #include "ModuleInput.h"
 #include "Mesh.h"
 #include "ComponentCamera.h"
+#include "Tree.h"
 
 #include "libs/glew/include/GL/glew.h"
 #include "libs/SDL/include/SDL_opengl.h"
@@ -217,8 +218,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	//Render
 	App->scene_intro->root->Draw();
-
-	//Debug Draw (Render)
+	if (App->scene_intro->staticTree != nullptr)
+		App->scene_intro->staticTree->Draw();
 
 	//Render GUI
 	App->editor->RenderEditorUI();

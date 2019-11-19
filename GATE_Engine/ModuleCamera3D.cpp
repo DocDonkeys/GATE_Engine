@@ -74,7 +74,10 @@ update_status ModuleCamera3D::Update(float dt)
 			|| mouseInput.z != 0.f)
 		{
 			if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
-				|| App->scene_intro->toolMode == (int)tool_mode::DRAG && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) {	// Drag Camera
+				||
+				App->scene_intro->toolMode == (int)tool_mode::DRAG
+				&& App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT
+				&& App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE) {	// Drag Camera
 				DragCamera(mouseInput.x / 5.f, mouseInput.y / 5.f);
 			}
 			else if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
@@ -148,7 +151,8 @@ void ModuleCamera3D::DragCamera(float delta_x, float delta_y)
 	mov += editorCamera->frustum.WorldRight() * delta_x;
 	mov -= editorCamera->frustum.up * delta_y;
 
-	editorCamera->frustum.Translate(mov * 100.0f);
+	editorCamera->frustum.Translate(mov * 100.f);
+	reference += mov * 100.f;
 }
 
 void ModuleCamera3D::Zoom(float delta_z)
@@ -349,11 +353,11 @@ void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)	//IMPROVE
 
 		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(COMPONENT_TYPE::TRANSFORM);
 		if (transform != nullptr)
-			reference = transform->globalTrs.TranslatePart();
+			reference = transform->position;
 
 		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(COMPONENT_TYPE::MESH);
 		if (mesh != nullptr)
-			dist = Length({ mesh->mesh->size.x, mesh->mesh->size.y, mesh->mesh->size.z });
+			dist = Length(float3(mesh->mesh->size.x, mesh->mesh->size.y, mesh->mesh->size.z)) * Length(float3(transform->scale.x, transform->scale.y, transform->scale.z));
 
 		LookAt(reference, dist);
 	}

@@ -11,6 +11,7 @@ class ComponentCamera : public Component
 {
 public:
 	ComponentCamera();
+	ComponentCamera(float fov, float aspectRatio = 1.3f, float nearPlane = 1.f, float farPlane = 1000.f);
 	~ComponentCamera();
 
 	void Enable() override;

@@ -61,9 +61,14 @@ void EditorInspector::Update()
 		//	ImGui::EndTooltip();
 		//}
 		ImGui::SameLine();
-		if (ImGui::Checkbox("Static", &go->staticObj) && go->children.size() != 0) {
-			show_static_modal = true;
-			ImGui::OpenPopup("Changing Static State");
+		if (ImGui::Checkbox("Static", &go->staticObj)) {
+			if (go->children.size() != 0) {
+				show_static_modal = true;
+				ImGui::OpenPopup("Changing Static State");
+			}
+			else {
+				go->UpdateStaticStatus(go->staticObj);
+			}
 		}
 
 		if (ImGui::BeginPopupModal("Changing Static State", &show_static_modal, ImGuiWindowFlags_AlwaysAutoResize))
@@ -212,12 +217,7 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		// Data and Matrix Updating
 		if (!App->input->GetMouseWrapping())
 			if (transform->SetLocalMat(pos, DegToRad(rot), scale)) {
-				/*transform->my_go->staticObj = false;
-
-				if (transform->my_go->children.size() != 0) {
-					show_static_modal = true;
-					ImGui::OpenPopup("Changing Static State");
-				}*/
+				transform->my_go->UpdateStaticStatus(false);
 			}
 	}
 

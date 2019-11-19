@@ -18,6 +18,15 @@ Tree::Tree(TREE_TYPE type, AABB aabb, uint nodeSizeLimit) : type(type), nodeSize
 	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;	// we can now reassign the original node as ROOT, avoiding unnecesary first-time checks on the split method
 }
 
+Tree::~Tree()
+{
+	Clear();
+
+	if (rootNode != nullptr) {
+		delete rootNode;
+	}
+}
+
 void Tree::Draw()
 {
 	rootNode->Draw();
@@ -36,16 +45,44 @@ void Tree::Create(AABB limits)
 void Tree::Clear()
 {
 	rootNode->Clear();
+
+	treeObjects.clear();
 }
 
-bool Tree::Insert(GameObject* obj)
+bool Tree::Insert(const GameObject* obj)
 {
-	return rootNode->Insert(obj);
+	bool ret = false;
+
+	for (int i = 0; i < treeObjects.size(); i++)
+		if (treeObjects[i] == obj) {
+			ret = true;	// Object is already inserted
+			break;
+		}
+
+	if (!ret) {
+		treeObjects.push_back(obj);
+		ret = rootNode->Insert(obj);
+	}
+
+	return ret;
 }
 
-bool Tree::Remove(GameObject* obj)
+bool Tree::Remove(const GameObject* obj)
 {
-	return rootNode->Remove(obj);
+	bool ret = false;
+
+	for (int i = 0; i < treeObjects.size(); i++)
+		if (treeObjects[i] == obj) {
+			ret = true;	// Object exists in the tree
+			treeObjects.erase(treeObjects.begin() + i);
+			break;
+		}
+
+	if (ret) {
+		ret = rootNode->Remove(obj);
+	}
+
+	return ret;
 }
 
 // -----------------------------------------------------------------
@@ -93,10 +130,11 @@ void Tree::TreeNode::Draw()
 	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
 	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
 
+	glColor3f(1, 1, 1);
 	glEnd();
 
 	// Draw Branches/Leafs
-	if (nodeType != NODE_TYPE::LEAF)
+	if (numBranches > 0)
 		for (int i = 0; i < numBranches; ++i)
 			branches[i].Draw();
 }
@@ -127,11 +165,11 @@ void Tree::TreeNode::Clear()
 		numBranches = 0;
 	}
 
-	if (objects.size() > 0)
-		objects.clear();
+	if (nodeObjects.size() > 0)
+		nodeObjects.clear();
 }
 
-bool Tree::TreeNode::Insert(GameObject* obj)
+bool Tree::TreeNode::Insert(const GameObject* obj)
 {
 	bool ret = false;
 
@@ -145,19 +183,19 @@ bool Tree::TreeNode::Insert(GameObject* obj)
 			}
 		}
 		else {
-			objects.push_back(obj);
+			nodeObjects.push_back(obj);
 
-			if (objects.size() > tree->nodeSizeLimit) {
+			if (nodeObjects.size() > tree->nodeSizeLimit) {
 				Split();
 
-				for (int i = 0; i < objects.size(); i++) {
+				for (int i = 0; i < nodeObjects.size(); i++) {
 					for (int j = 0; j < numBranches; j++) {
-						if (branches[j].Insert(objects[i]))
+						if (branches[j].Insert(nodeObjects[i]))
 							break;
 					}
 				}
 
-				objects.clear();	// Saving objects only in leafs is better for RAM space, but having nodes know which objects are saved on their branches could be useful
+				nodeObjects.clear();
 			}
 		}
 	}
@@ -165,7 +203,7 @@ bool Tree::TreeNode::Insert(GameObject* obj)
 	return ret;
 }
 
-bool Tree::TreeNode::Remove(GameObject* obj)
+bool Tree::TreeNode::Remove(const GameObject* obj)
 {
 	bool ret = false;
 
@@ -179,9 +217,9 @@ bool Tree::TreeNode::Remove(GameObject* obj)
 			}
 		}
 		else {
-			for (int i = 0; i < objects.size(); i++) {
-				if (objects[i] == obj) {
-					objects.erase(objects.begin() + i);
+			for (int i = 0; i < nodeObjects.size(); i++) {
+				if (nodeObjects[i] == obj) {
+					nodeObjects.erase(nodeObjects.begin() + i);
 					ret = true;
 					break;
 				}
@@ -192,7 +230,7 @@ bool Tree::TreeNode::Remove(GameObject* obj)
 	return ret;
 }
 
-void Tree::TreeNode::QuadSplit()
+void Tree::TreeNode::QuadSplit()	//REWORK
 {
 	//Subdivide the AABB     x)
 	AABB newAABBs[4];
@@ -238,7 +276,7 @@ void Tree::TreeNode::QuadSplit()
 		branches[i] = TreeNode(newAABBs[i], tree, NODE_TYPE::LEAF);
 }
 
-void Tree::TreeNode::OctSplit()
+void Tree::TreeNode::OctSplit()	//REWORK
 {
 	//Subdivide the AABB     x)
 	AABB newAABBs[8];
@@ -306,5 +344,4 @@ void Tree::TreeNode::OctSplit()
 
 	for (int i = 0; i < 8; ++i)
 		branches[i] = TreeNode(newAABBs[i], tree, NODE_TYPE::LEAF);
-
 }

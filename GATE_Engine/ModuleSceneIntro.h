@@ -12,6 +12,8 @@ enum class tool_mode {
 	MULTI	//Y
 };
 
+class Tree;
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -24,6 +26,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	//Game Objects
 	GameObject* CreateEmptyGameObject();
 	GameObject* CreateEmptyGameObject(const char* name);
 	void CreateEmptyGameObject(int num_of_go);
@@ -33,12 +36,14 @@ public:
 
 public:
 	//methods
+	void InitializeSceneTree();
 	int CheckToolMode() const;
 
 public:
 	//members
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 
+	Tree* staticTree = nullptr;
 	uint numObjects = 0;
 	GameObject* root = nullptr;
 	GameObject* selected_go = nullptr;

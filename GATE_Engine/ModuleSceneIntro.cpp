@@ -6,6 +6,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ImporterScene.h"
+#include "Tree.h"
 
 #include <math.h>
 
@@ -20,7 +21,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, const char* name, bool star
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
-{}
+{
+}
 
 // Load assets
 bool ModuleSceneIntro::Start()
@@ -45,6 +47,16 @@ bool ModuleSceneIntro::Start()
 	//Load the Baker House
 	App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
+	// Scene Tree
+	staticTree = new Tree(Tree::TREE_TYPE::OC_TREE, AABB({ -10.f, -10.f, -10.f }, { 10.f, 10.f, 10.f }), 2);
+
+	std::vector<const GameObject*> sceneObjects;
+	GOFunctions::FillArrayWithChildren(sceneObjects, root);
+
+	for (int i = 0; i < sceneObjects.size(); i++)
+		if (sceneObjects[i]->staticObj)
+			staticTree->Insert(sceneObjects[i]);
+
 	return ret;
 }
 
@@ -60,18 +72,23 @@ bool ModuleSceneIntro::CleanUp()
 
 	delete root;
 
+	if (staticTree != nullptr)
+		delete staticTree;
+
 	return true;
 }
 
 GameObject* ModuleSceneIntro::CreateEmptyGameObject()
 {
 	GameObject* go = new GameObject();
+	GOFunctions::ReParentGameObject(go,root);
 	return go;
 }
 
 GameObject* ModuleSceneIntro::CreateEmptyGameObject(const char* name)
 {
 	GameObject* go = new GameObject(name);
+	GOFunctions::ReParentGameObject(go, root);
 	return go;
 }
 
@@ -143,7 +160,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		toolMode = CheckToolMode();
 
 	root->Update();
-
+	
 	//Ground Render	(Used the Primitives Container)
 	/*Plane p(0, 1, 0, 0);
 	p.axis = true;

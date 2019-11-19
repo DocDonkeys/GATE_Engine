@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "Tree.h"
 
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
@@ -189,6 +190,11 @@ void GameObject::UpdateBoundingBox(float4x4& globalMat)
 void GameObject::UpdateStaticStatus(bool newVal)
 {
 	staticObj = newVal;
+
+	if (newVal)
+		App->scene_intro->staticTree->Insert(this);
+	else
+		App->scene_intro->staticTree->Remove(this);
 
 	for (int i = 0; i < children.size(); i++) {
 		children[i]->UpdateStaticStatus(newVal);

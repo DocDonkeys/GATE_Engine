@@ -22,6 +22,22 @@ ComponentCamera::ComponentCamera() : Component()
 	SetAspectRatio(1.3f);
 }
 
+ComponentCamera::ComponentCamera(float fov, float aspectRatio, float nearPlane, float farPlane) : Component()
+{
+	type = COMPONENT_TYPE::CAMERA;
+
+	frustum.type = FrustumType::PerspectiveFrustum;
+
+	frustum.pos = float3::zero;
+	frustum.front = float3::unitZ;
+	frustum.up = float3::unitY;
+
+	frustum.nearPlaneDistance = nearPlane;
+	frustum.farPlaneDistance = farPlane;
+	frustum.verticalFov = DegToRad(fov);
+	SetAspectRatio(aspectRatio);
+}
+
 ComponentCamera::~ComponentCamera()
 {}
 
