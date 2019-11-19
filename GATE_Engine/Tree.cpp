@@ -100,10 +100,10 @@ bool Tree::Insert(const GameObject* obj)
 		}
 
 	if (!ret) {
-		treeObjects.push_back(obj);
-
 		if (!rootNode->Insert(obj));	// If object outside of bounds
 			Grow(obj->aabb.CenterPoint());
+
+		treeObjects.push_back(obj);
 	}
 
 	return ret;
