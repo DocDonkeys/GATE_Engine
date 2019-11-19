@@ -141,6 +141,12 @@
     <ClCompile Include="Tree.cpp">
       <Filter>Sources\Component Structure\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\Component Structure</Filter>
+    </ClCompile>
+    <ClCompile Include="ImporterMaterial.cpp">
+      <Filter>Sources\Tools\Importers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -300,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="Tree.h">
       <Filter>Sources\Component Structure\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImporterMaterial.h">
+      <Filter>Sources\Tools\Importers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

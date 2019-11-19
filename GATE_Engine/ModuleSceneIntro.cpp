@@ -42,7 +42,7 @@ bool ModuleSceneIntro::Start()
 	//TEST: Import scene
 	ImporterScene importer;
 	const char* full_path = "Library/scene_test.scene";
-	//importer.Load(full_path);
+	importer.Load(full_path);
 
 	//Load the Baker House
 	App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");

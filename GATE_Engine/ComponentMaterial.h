@@ -17,6 +17,9 @@ public:
 	void Enable() override;
 	void Disable() override;
 
+	void Save(json& file);
+	void Load(json& file);
+
 	//Assign a texture to a Component
 	void AssignTexture(Texture* texture);
 

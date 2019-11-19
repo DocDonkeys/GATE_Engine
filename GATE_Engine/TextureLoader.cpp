@@ -222,7 +222,13 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 	else {
 		LOG("[Error]: Image loading failed. Cause: %s", iluErrorString(ilGetError()));
 	}
-	DuplicateTextureAsDDS(tex->filename.data());
+	if (tex != nullptr)
+	{
+		tex->UID = App->rng.RandInt<uint32>();
+		std::string save_name = "_t";
+		save_name += std::to_string(tex->UID);
+		DuplicateTextureAsDDS(save_name.data());
+	}
 
 	ilDeleteImages(1, (const ILuint*)&imgId);	// Delete image inside DevIL
 
@@ -269,7 +275,10 @@ bool TextureLoader::DuplicateTextureAsDDS(const char* name) const
 
 	ILuint   size; 
 	ILubyte *data; 
-	
+
+	//For some reason, when we save the image is flipped, so flip before and after process (for the case it was the 1st time we load this texture)
+	iluFlipImage();
+
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
 	size = ilSaveL(IL_DDS, NULL, 0 ); // Get the size of the data buffer
 	if(size > 0) 
@@ -279,6 +288,7 @@ bool TextureLoader::DuplicateTextureAsDDS(const char* name) const
 			ret = App->file_system->SaveUnique(output, data, size, LIBRARY_TEXTURES_FOLDER, filename.data(), "dds");
 		RELEASE_ARRAY(data);
 	}
+	iluFlipImage();
 
 	return ret;
 }

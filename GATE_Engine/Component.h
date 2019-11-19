@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "GameObject.h"
+#include "JsonLoader.h"
 
 class GameObject;
 
@@ -20,6 +21,9 @@ public: //Methods
 	virtual void Update() {};
 	virtual void PostUpdate() {};
 	virtual void Draw() {};
+
+	virtual void Save(json& file);
+	virtual void Load(json& file);
 
 public: //Members
 	COMPONENT_TYPE type;

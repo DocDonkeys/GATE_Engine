@@ -10,6 +10,7 @@ public:
 	Texture(uint id, const char* path);
 
 	uint id = 0;
+	uint32 UID = 0;
 	std::string filename;
 	std::string path;
 };

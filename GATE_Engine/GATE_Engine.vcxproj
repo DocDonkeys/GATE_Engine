@@ -85,6 +85,7 @@
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="Importer.h" />
+    <ClInclude Include="ImporterMaterial.h" />
     <ClInclude Include="ImporterMesh.h" />
     <ClInclude Include="ImporterScene.h" />
     <ClInclude Include="ModuleFileSystem.h" />
@@ -136,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
@@ -152,6 +154,7 @@
     <ClCompile Include="EditorHierarchy.cpp" />
     <ClCompile Include="EditorInspector.cpp" />
     <ClCompile Include="Importer.cpp" />
+    <ClCompile Include="ImporterMaterial.cpp" />
     <ClCompile Include="ImporterMesh.cpp" />
     <ClCompile Include="ImporterScene.cpp" />
     <ClCompile Include="JsonLoader.cpp" />
