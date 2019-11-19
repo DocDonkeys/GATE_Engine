@@ -33,8 +33,9 @@ public:
 	float* GetOpenGLProjection() const;
 	bool* GetProjectionUpdateFlag() const;
 	ComponentCamera* GetActiveCamera() const;
+	const Frustum& GetActiveFrustum() const;
 
-	bool ContainsAABB(const AABB& refBox) const;
+	bool Intersects(const AABB& refBox) const;
 
 private:
 	// Input Checks

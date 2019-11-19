@@ -199,11 +199,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer post-Update", Profiler::Color::DarkOrange);
 
-	//DIRECT MODE Rendering
+	// DIRECT MODE Rendering
+	// PLANE
 	glLineWidth(2.0f);
-
 	glBegin(GL_LINES);
-	//PLANE
+	
 	for (float i = -50; i <= 50; ++i)
 	{
 		glVertex3f(i, 0.f, -50.f);
@@ -215,17 +215,32 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glEnd();
 
 	glLineWidth(1.0f);
+	
+	// Original Object Rendering
+	//App->scene_intro->root->Draw();
 
-	//Render
-	App->scene_intro->root->Draw();
+	// Dynamic Frustum Culling
+	std::vector<const GameObject*> dynamicObjs;
+	GOFunctions::FillArrayWithChildren(dynamicObjs, App->scene_intro->root);
+	for (int i = 0; i < dynamicObjs.size(); i++)
+		if (!dynamicObjs[i]->staticObj && dynamicObjs[i]->active && App->camera->Intersects(dynamicObjs[i]->aabb))
+			dynamicObjs[i]->Draw();
 
+	// Static Frustum Culling
+	std::vector<const GameObject*> staticObjs;
+	App->scene_intro->staticTree->Intersects(staticObjs, App->camera->GetActiveFrustum());
+	for (int i = 0; i < staticObjs.size(); i++)
+		if (staticObjs[i]->active)
+			staticObjs[i]->Draw();
+
+	// Render Octree
 	if (drawStaticTree && App->scene_intro->staticTree != nullptr)
 		App->scene_intro->staticTree->Draw();
 
-	//Render GUI
+	// Render GUI
 	App->editor->RenderEditorUI();
 
-	//Swap Window
+	// Swap Window
 	SDL_GL_SwapWindow(App->window->window);
 
 	return UPDATE_CONTINUE;

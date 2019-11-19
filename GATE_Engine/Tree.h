@@ -47,7 +47,11 @@ public:	// Nested classes
 		bool Remove(const GameObject* obj);
 		void Clear();
 
+		void Intersects(std::vector<const GameObject*>& collector, const AABB& area);
+		void Intersects(std::vector<const GameObject*>& collector, const Frustum& frustum);
+
 		void Split();
+		void Prune();
 
 	private:
 		void QuadSplit();
@@ -57,8 +61,8 @@ public:	// Nested classes
 		AABB aabb;
 		NODE_TYPE nodeType;
 
-		const Tree* tree;
-		TreeNode* branches;
+		const Tree* tree = nullptr;
+		TreeNode* branches = nullptr;
 		uint numBranches = 0;
 		std::vector<const GameObject*> nodeObjects;
 	};
@@ -71,15 +75,18 @@ public:	// Constructors
 public: // Methods
 	void Draw();
 
-	void Create(AABB limits);
+	void Create(const AABB& limits);
 	void Reset();
-	bool Grow(float3 reachTo);
 	void Clear();
+
+	bool Grow(const AABB& absorb);
+	bool Shrink();
 
 	bool Insert(const GameObject* obj);
 	bool Remove(const GameObject* obj);
 
-	void Intersect(std::vector<const GameObject*>&, AABB area);
+	void Intersects(std::vector<const GameObject*>& collector, const AABB& area);
+	void Intersects(std::vector<const GameObject*>& collector, const Frustum& frustum);
 
 public:	// Members
 	TREE_TYPE type = TREE_TYPE::NONE;

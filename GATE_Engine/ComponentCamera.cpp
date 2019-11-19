@@ -134,7 +134,12 @@ float4x4 ComponentCamera::GetProjectionMatrix() const
 	return float4x4::D3DPerspProjRH(frustum.nearPlaneDistance, frustum.farPlaneDistance, frustum.NearPlaneWidth(), frustum.NearPlaneHeight());
 }
 
-bool ComponentCamera::ContainsAABB(const AABB& refBox) const
+bool ComponentCamera::Intersects(const AABB& refBox) const
+{
+	return Intersects(frustum, refBox);
+}
+
+bool ComponentCamera::Intersects(const Frustum& frustum, const AABB& refBox)	// We use this instead of MathGeoLib's method because it's quicker
 {
 	float3 corners[8];
 	refBox.GetCornerPoints(corners);
@@ -154,7 +159,7 @@ bool ComponentCamera::ContainsAABB(const AABB& refBox) const
 		else
 			totalInside += 1;
 	}
-	
+
 	if (totalInside == 6)
 		return true;	// FULLY IN
 	else

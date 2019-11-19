@@ -136,41 +136,6 @@ void Mesh::ChangeNormalsLength(float new_length)
 void Mesh::LoadMeshBounds()
 {
 	if (num_vertex > 0) {
-
-		//My Method
-		/* We assign the first vertex values to secure that they are within the mesh's bounds
-		bounds.maxPoint.x = vertex[0].x;
-		bounds.minPoint.x = vertex[0].x;
-		bounds.maxPoint.y = vertex[0].y;
-		bounds.minPoint.y = vertex[0].y;
-		bounds.maxPoint.z = vertex[0].z;
-		bounds.minPoint.z = vertex[0].z;
-
-		for (int i = 1; i < num_vertex; i++)
-		{
-			if (vertex[i].x > bounds.maxPoint.x) {
-				bounds.maxPoint.x = vertex[i].x;
-			}
-			else if (vertex[i].x < bounds.minPoint.x) {
-				bounds.minPoint.x = vertex[i].x;
-			}
-
-			if (vertex[i].y > bounds.maxPoint.y) {
-				bounds.maxPoint.y = vertex[i].y;
-			}
-			else if (vertex[i].y < bounds.minPoint.y) {
-				bounds.minPoint.y = vertex[i].y;
-			}
-
-			if (vertex[i].z > bounds.maxPoint.z) {
-				bounds.maxPoint.z = vertex[i].z;
-			}
-			else if (vertex[i].z < bounds.minPoint.z) {
-				bounds.minPoint.z = vertex[i].z;
-			}
-		}*/
-
-		// MathGeo Lib Method
 		bounds.SetFrom(vertex, num_vertex);
 
 		// We save to distance between max and min points now so later we just have to access it instead of calculating it

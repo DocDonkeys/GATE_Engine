@@ -391,7 +391,12 @@ ComponentCamera* ModuleCamera3D::GetActiveCamera() const
 	return activeCamera;
 }
 
-bool ModuleCamera3D::ContainsAABB(const AABB& refBox) const
+const Frustum& ModuleCamera3D::GetActiveFrustum() const
 {
-	return activeCamera->ContainsAABB(refBox);
+	return activeCamera->frustum;
+}
+
+bool ModuleCamera3D::Intersects(const AABB& refBox) const
+{
+	return activeCamera->Intersects(refBox);
 }

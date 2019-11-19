@@ -39,7 +39,8 @@ public:
 	void SetAspectRatio(float aspect_ratio);
 
 	// Flags
-	bool ContainsAABB(const AABB& refBox) const;	// Frustum culling
+	bool Intersects(const AABB& refBox) const;	// Frustum culling
+	static bool Intersects(const Frustum& frustum, const AABB& refBox);	// Function for global use
 
 public:
 	Frustum frustum;

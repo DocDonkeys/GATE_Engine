@@ -1,6 +1,9 @@
 #include "Globals.h"
 #include "Tree.h"
 #include "GameObject.h"
+#include "ComponentCamera.h"
+
+#include "libs/SDL/include/SDL_assert.h"
 #include "libs/SDL/include/SDL_opengl.h"
 
 #ifdef _DEBUG
@@ -13,9 +16,6 @@
 Tree::Tree(TREE_TYPE type, AABB aabb, uint nodeSizeLimit) : type(type), nodeSizeLimit(nodeSizeLimit)
 {
 	rootNode = new TreeNode(aabb, this, TreeNode::NODE_TYPE::ROOT);
-
-	rootNode->Split();								// The purpose of a tree is to split, so the first one is done here so that
-	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;	// we can now reassign the original node as ROOT, avoiding unnecesary first-time checks on the split method
 }
 
 Tree::~Tree()
@@ -32,20 +32,15 @@ void Tree::Draw()
 	rootNode->Draw();
 }
 
-void Tree::Create(AABB limits)
+void Tree::Create(const AABB& limits)
 {
 	Clear();
 	rootNode->aabb = limits;
-
-	rootNode->Split();
-	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;
 }
 
 void Tree::Reset()
 {
 	rootNode->Clear();
-	rootNode->Split();
-	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;
 
 	for (int i = 0; i < treeObjects.size(); i++)
 		rootNode->Insert(treeObjects[i]);
@@ -55,34 +50,65 @@ void Tree::Clear()
 {
 	rootNode->Clear();
 	treeObjects.clear();
-
-	rootNode->Split();
-	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;
 }
 
-bool Tree::Grow(float3 reachTo)
+bool Tree::Grow(const AABB& absorb)
 {
 	bool ret = false;
 
-	if (!rootNode->aabb.Contains(reachTo)) {
+	if (!rootNode->aabb.Contains(absorb)) {
 
-		if (rootNode->aabb.MaxX() < reachTo.x)
-			rootNode->aabb.maxPoint.x = reachTo.x;
-		else if (rootNode->aabb.MinX() > reachTo.x)
-			rootNode->aabb.minPoint.x = reachTo.x;
+		if (rootNode->aabb.MaxX() < absorb.MaxX())
+			rootNode->aabb.maxPoint.x = absorb.MaxX();
+		if (rootNode->aabb.MaxY() < absorb.MaxY())
+			rootNode->aabb.maxPoint.y = absorb.MaxY();
+		if (rootNode->aabb.MaxZ() < absorb.MaxZ())
+			rootNode->aabb.maxPoint.z = absorb.MaxZ();
 
-		if (rootNode->aabb.MaxY() < reachTo.y)
-			rootNode->aabb.maxPoint.y = reachTo.y;
-		else if (rootNode->aabb.MinY() > reachTo.y)
-			rootNode->aabb.minPoint.y = reachTo.y;
-
-		if (rootNode->aabb.MaxZ() < reachTo.z)
-			rootNode->aabb.maxPoint.z = reachTo.z;
-		else if (rootNode->aabb.MinZ() > reachTo.z)
-			rootNode->aabb.minPoint.z = reachTo.z;
+		if (rootNode->aabb.MinX() > absorb.MinX())
+			rootNode->aabb.minPoint.x = absorb.MinX();
+		if (rootNode->aabb.MinY() > absorb.MinY())
+			rootNode->aabb.minPoint.y = absorb.MinY();
+		if (rootNode->aabb.MinZ() > absorb.MinZ())
+			rootNode->aabb.minPoint.z = absorb.MinZ();
 
 		Reset();
 
+		ret = true;
+	}
+
+	return ret;
+}
+
+bool Tree::Shrink()
+{
+	bool ret = false;
+
+	AABB orig = rootNode->aabb;
+	for (int i = 0; i < treeObjects.size(); i++) {
+		if (rootNode->aabb.MaxX() > treeObjects[i]->aabb.MaxX())
+			rootNode->aabb.maxPoint.x = treeObjects[i]->aabb.MaxX();
+		if (rootNode->aabb.MaxY() > treeObjects[i]->aabb.MaxY())
+			rootNode->aabb.maxPoint.y = treeObjects[i]->aabb.MaxY();
+		if (rootNode->aabb.MaxZ() > treeObjects[i]->aabb.MaxZ())
+			rootNode->aabb.maxPoint.z = treeObjects[i]->aabb.MaxZ();
+
+		if (rootNode->aabb.MinX() < treeObjects[i]->aabb.MinX())
+			rootNode->aabb.minPoint.x = treeObjects[i]->aabb.MinX();
+		if (rootNode->aabb.MinY() < treeObjects[i]->aabb.MinY())
+			rootNode->aabb.minPoint.y = treeObjects[i]->aabb.MinY();
+		if (rootNode->aabb.MinZ() < treeObjects[i]->aabb.MinZ())
+			rootNode->aabb.minPoint.z = treeObjects[i]->aabb.MinZ();
+	}
+
+	if (orig.MaxX() != rootNode->aabb.MaxX()
+		|| orig.MaxY() != rootNode->aabb.MaxY()
+		|| orig.MaxZ() != rootNode->aabb.MaxZ()
+		|| orig.MinX() != rootNode->aabb.MinX()
+		|| orig.MinY() != rootNode->aabb.MinY()
+		|| orig.MinZ() != rootNode->aabb.MinZ())
+	{
+		Reset();
 		ret = true;
 	}
 
@@ -100,8 +126,10 @@ bool Tree::Insert(const GameObject* obj)
 		}
 
 	if (!ret) {
-		if (!rootNode->Insert(obj));	// If object outside of bounds
-			Grow(obj->aabb.CenterPoint());
+		if (!rootNode->Insert(obj)) {	// If object outside of bounds
+			Grow(obj->aabb);
+			SDL_assert(rootNode->Insert(obj));
+		}
 
 		treeObjects.push_back(obj);
 	}
@@ -125,6 +153,16 @@ bool Tree::Remove(const GameObject* obj)
 	}
 
 	return ret;
+}
+
+void Tree::Intersects(std::vector<const GameObject*>& collector, const AABB& area)
+{
+	rootNode->Intersects(collector, area);
+}
+
+void Tree::Intersects(std::vector<const GameObject*>& collector, const Frustum& frustum)
+{
+	rootNode->Intersects(collector, frustum);
 }
 
 // -----------------------------------------------------------------
@@ -183,7 +221,8 @@ void Tree::TreeNode::Draw()
 
 void Tree::TreeNode::Split()
 {
-	nodeType = NODE_TYPE::BRANCH;
+	if (nodeType != NODE_TYPE::ROOT)
+		nodeType = NODE_TYPE::BRANCH;
 
 	switch (tree->type)
 	{
@@ -194,6 +233,17 @@ void Tree::TreeNode::Split()
 		OctSplit();
 		break;
 	}
+}
+
+void Tree::TreeNode::Prune()	// WARNING: This is only called in the context that a branch is left with 4 leafs which have no objects
+{
+	if (numBranches > 0) {
+		delete[] branches;
+		branches = nullptr;
+		numBranches = 0;
+	}
+
+	nodeType = NODE_TYPE::LEAF;
 }
 
 void Tree::TreeNode::Clear()
@@ -211,33 +261,69 @@ void Tree::TreeNode::Clear()
 		nodeObjects.clear();
 }
 
+void Tree::TreeNode::Intersects(std::vector<const GameObject*>& collector, const AABB& area)
+{
+	if (aabb.Intersects(area)) {
+		for (int i = 0; i < nodeObjects.size(); i++)
+			collector.push_back(nodeObjects[i]);
+
+		if (numBranches > 0)
+			for (int i = 0; i < numBranches; i++)
+				branches[i].Intersects(collector, area);
+	}
+}
+
+void Tree::TreeNode::Intersects(std::vector<const GameObject*>& collector, const Frustum& frustum)
+{
+	if (ComponentCamera::Intersects(frustum, aabb)) {
+		for (int i = 0; i < nodeObjects.size(); i++)
+			collector.push_back(nodeObjects[i]);
+
+		if (numBranches > 0)
+			for (int i = 0; i < numBranches; i++)
+				branches[i].Intersects(collector, frustum);
+	}
+}
+
 bool Tree::TreeNode::Insert(const GameObject* obj)
 {
 	bool ret = false;
 
-	if (aabb.Contains(obj->aabb.CenterPoint())) {
-		if (numBranches > 0) {
+	if (aabb.Contains(obj->aabb)) {	// If obj AABB inside node's AABB
+		if (numBranches > 0) {	// If I'm a branch
 			for (int i = 0; i < numBranches; i++) {
-				if (branches[i].Insert(obj)) {
+				if (branches[i].Insert(obj)) {	// If inserted succesfully we can leave
 					ret = true;
 					break;
 				}
 			}
-		}
-		else {
-			nodeObjects.push_back(obj);
 
-			if (nodeObjects.size() > tree->nodeSizeLimit) {
+			if (!ret) {	// If none of the leafs fully contain the obj, the parent branch will
+				nodeObjects.push_back(obj);
+				ret = true;
+			}
+		}
+		else {	// If I'm a leaf
+			nodeObjects.push_back(obj);
+			ret = true;
+
+			if (nodeObjects.size() > tree->nodeSizeLimit) {	// If node's size surpassed limit, subdivide itself and spread it's objects to the new leafs
 				Split();
+
+				bool uselessSplit = true;
 
 				for (int i = 0; i < nodeObjects.size(); i++) {
 					for (int j = 0; j < numBranches; j++) {
-						if (branches[j].Insert(nodeObjects[i]))
+						if (branches[j].Insert(nodeObjects[i])) {	// If an object is succesfully inserted in a leaf, we erase it from the parent branch's list
+							nodeObjects.erase(nodeObjects.begin() + i);
+							uselessSplit = false;
 							break;
+						}
 					}
 				}
 
-				nodeObjects.clear();
+				if (uselessSplit)	// If no objects have been moved to the children nodes, Prune the node
+					Prune();
 			}
 		}
 	}
@@ -249,16 +335,37 @@ bool Tree::TreeNode::Remove(const GameObject* obj)
 {
 	bool ret = false;
 
-	if (aabb.Contains(obj->aabb.CenterPoint())) {
-		if (numBranches > 0) {
+	if (aabb.Contains(obj->aabb)) {	// If obj is contained inside this node
+		if (numBranches > 0) {	// If I'm a branch
 			for (int i = 0; i < numBranches; i++) {
-				if (branches[i].Remove(obj)) {
+				if (branches[i].Remove(obj)) {	// If obj has been removed from one of the children nodes
 					ret = true;
+
+					int j = 0;
+					for (j; j < numBranches; j++)	// After obj removal, if the children node is a "leafs" with no objects left inside, add to counter
+						if (branches[j].numBranches > 0 && branches[j].nodeObjects.empty())
+							break;
+
+					if (j == numBranches)	// If all children nodes meet the above conditions, they can be eliminated
+						Prune();
+
 					break;
 				}
 			}
+
+			if (!ret) {	// If obj was not found in any of the children nodes, yet I contain it, it means I, the parent branch, hold it and must remove it myself
+				for (int i = 0; i < nodeObjects.size(); i++) {
+					if (nodeObjects[i] == obj) {
+						nodeObjects.erase(nodeObjects.begin() + i);
+						ret = true;
+						break;
+					}
+				}
+
+				SDL_assert(ret);
+			}
 		}
-		else {
+		else {	// If I'm a leaf
 			for (int i = 0; i < nodeObjects.size(); i++) {
 				if (nodeObjects[i] == obj) {
 					nodeObjects.erase(nodeObjects.begin() + i);
@@ -272,21 +379,12 @@ bool Tree::TreeNode::Remove(const GameObject* obj)
 	return ret;
 }
 
-void Tree::TreeNode::QuadSplit()	//REWORK
+void Tree::TreeNode::QuadSplit()
 {
 	//Subdivide the AABB     x)
 	AABB newAABBs[4];
 	float3 maxPoint, minPoint;
-	/*
-	{maxx, maxy maxz)
-		 ___________
-		|	  |		|
-		|_____|_____|
-		|	  |		|
-		|_____|_____|
-					{minx, maxy minz)
 
-	*/
 	//NORTH-WEST subnode
 	maxPoint = { aabb.MaxX(), aabb.MaxY(), aabb.MaxZ() };
 	minPoint = { (aabb.MaxX() + aabb.MinX()) / 2 , aabb.MinY(), (aabb.MaxZ() + aabb.MinZ()) / 2 };
@@ -318,21 +416,12 @@ void Tree::TreeNode::QuadSplit()	//REWORK
 		branches[i] = TreeNode(newAABBs[i], tree, NODE_TYPE::LEAF);
 }
 
-void Tree::TreeNode::OctSplit()	//REWORK
+void Tree::TreeNode::OctSplit()
 {
 	//Subdivide the AABB     x)
 	AABB newAABBs[8];
 	float3 maxPoint, minPoint;
-	/*
-	{maxx, maxy, maxz)
-		 ___________
-		|	  |		|
-		|_____|_____|
-		|	  |		|
-		|_____|_____|
-					{minx, maxy, minz)
 
-	*/
 	//NORTH-WEST-TOP subnode
 	maxPoint = { aabb.MaxX(), aabb.MaxY(), aabb.MaxZ() };
 	minPoint = { (aabb.MaxX() + aabb.MinX()) / 2 , (aabb.MinY() + aabb.MaxY()) / 2, (aabb.MaxZ() + aabb.MinZ()) / 2 };

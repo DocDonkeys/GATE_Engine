@@ -216,8 +216,6 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const 
 		new_mesh->vertex[i].z = p_mesh->points[j + 2];
 	}
 
-	new_mesh->LoadMeshBounds();
-
 	for (int i = 0; i < new_mesh->num_index; i++)
 	{
 		new_mesh->index[i] = (uint)p_mesh->triangles[i];
@@ -241,6 +239,9 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const 
 
 	ComponentMesh* mesh_component = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 	mesh_component->mesh = new_mesh;
+	mesh_component->mesh->LoadMeshBounds();
+	go->size = mesh_component->mesh->GetSize();
+	go->UpdateBoundingBox();
 
 	go->CreateComponent(COMPONENT_TYPE::MATERIAL); //Create default material (will have checkers if Teacher wants to us it to check uv's)
 }

@@ -7,7 +7,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 
-GameObject::GameObject()
+GameObject::GameObject() : size(float3::zero)
 {
 	UID = App->rng.RandInt<uint32_t>();
 	name = "GameObject_" + std::to_string(App->scene_intro->numObjects++);
@@ -16,7 +16,7 @@ GameObject::GameObject()
 	CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }
 
-GameObject::GameObject(const char* name) : name(name)
+GameObject::GameObject(const char* name) : name(name), size(float3::zero)
 {
 	UID = App->rng.RandInt<uint32_t>();
 	//All Game Objects must have a transform component, so we assign it from creation
@@ -99,34 +99,35 @@ void GameObject::PostUpdate()
 	}
 }
 
-void GameObject::Draw()
+void GameObject::Draw() const
 {
-	if (App->camera->ContainsAABB(aabb)) {	// Camera culling: Objects outside the active camera view are not rendered
-		//Draw whatever the GameObject itself needs to draw
-		if (App->renderer3D->drawObjAABB)
-			DrawAABB();
+	if (App->renderer3D->drawObjAABB)
+		DrawAABB();
 
-		//Draw the components
-		for (int i = 0; i < components.size(); ++i)
-		{
-			if (components[i]->active)
-				components[i]->Draw();
-		}
+	//Draw the components
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->active)
+			components[i]->Draw();
 	}
 
 	//Update the children game objects
-	for (int i = 0; i < children.size(); ++i)
+	/*for (int i = 0; i < children.size(); ++i)
 	{
-		if (children[i]->active)
+		if (children[i]->active && App->camera->Intersects(children[i]->aabb))
 			children[i]->Draw();
-	}
+	}*/
 }
 
-void GameObject::DrawAABB()
+void GameObject::DrawAABB() const
 {
 	glLineWidth(2.0f);
 	glBegin(GL_LINES);
-	glColor3f(1.0, 1.0, 0.0);
+
+	if (staticObj)
+		glColor3f(0.0, 0.0, 1.0);
+	else
+		glColor3f(1.0, 1.0, 0.0);
 
 	// Bottom 1
 	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
@@ -173,17 +174,21 @@ void GameObject::DrawAABB()
 	glLineWidth(1.0f);
 }
 
-void GameObject::UpdateBoundingBox(float4x4& globalMat)
+void GameObject::UpdateBoundingBox()
 {
 	//CHANGE/FIX: Using the mesh is wrong(?), but I don't have the time to make it better right now, it should transform with the global matrix
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(COMPONENT_TYPE::MESH);
+	ComponentTransform* trs = (ComponentTransform*)GetComponent(COMPONENT_TYPE::TRANSFORM);
 
 	if (mesh != nullptr) {
-		obb.SetFrom(mesh->mesh->bounds);
-
-		obb.Transform(globalMat);	// Transform OBB with transform global matrix
-		aabb.SetFrom(obb);			// Set object AABB
+		obb.SetFrom(mesh->mesh->bounds);	// Set from mesh size
+		obb.Transform(trs->globalTrs);		// Transform OBB with transform global matrix
+		aabb.SetFrom(obb);					// Set object AABB
 		size = { abs(aabb.MaxX() - aabb.MinX()), abs(aabb.MaxY() - aabb.MinY()), abs(aabb.MaxZ() - aabb.MinZ()) };
+	}
+	else {	// If no mesh update based on position alone
+		aabb = AABB(trs->position, trs->position);
+		obb.SetFrom(aabb);
 	}
 }
 
