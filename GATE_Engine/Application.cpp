@@ -34,6 +34,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this, "Camera");
 	editor = new ModuleEditor(this, "Editor");
 	physics = new ModulePhysics(this, "Physics");
+	resources = new ModuleResources(this,"Resources");
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -43,6 +44,8 @@ Application::Application()
 	AddModule(window);
 	AddModule(input);
 	AddModule(camera);
+	AddModule(file_system);
+	AddModule(resources);
 	AddModule(physics);
 	AddModule(geometry_loader);
 	AddModule(texture_loader);

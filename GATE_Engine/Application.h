@@ -19,6 +19,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "ModulePhysics.h"
+#include "ModuleResources.h"
 #include "GeometryLoader.h"
 #include "TextureLoader.h"
 #include "ModuleFileSystem.h"
@@ -136,15 +137,16 @@ public:
 
 	//Modules
 	ModuleWindow*		window;
-	ModuleInput*		input;
+	ModuleInput*			input;
 	ModuleSceneIntro*	scene_intro;
 	ModuleRenderer3D*	renderer3D;
 	ModuleCamera3D*		camera;
-	ModuleEditor*		editor;
-	ModulePhysics*		physics;
+	ModuleEditor*			editor;
+	ModulePhysics*			physics;
 	GeometryLoader*		geometry_loader;
-	TextureLoader*		texture_loader;
+	TextureLoader*			texture_loader;
 	ModuleFileSystem*	file_system;
+	ModuleResources*		resources;
 
 	//App members
 	hardware_info		hardware;

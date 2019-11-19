@@ -147,6 +147,12 @@
     <ClCompile Include="ImporterMaterial.cpp">
       <Filter>Sources\Tools\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleResources.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -310,6 +316,12 @@
     <ClInclude Include="ImporterMaterial.h">
       <Filter>Sources\Tools\Importers</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleResources.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -368,6 +380,9 @@
     </Filter>
     <Filter Include="Sources\Tools\Importers">
       <UniqueIdentifier>{2f48d414-4ef5-4793-966d-4b6d098680ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Resources">
+      <UniqueIdentifier>{01f20a1a-ca3e-4ed3-9b4b-03adb023ea1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
