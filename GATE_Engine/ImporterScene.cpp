@@ -48,6 +48,7 @@ bool ImporterScene::Load(const char * full_path)
 		//Vars we can't declare inside a switch but needed for data loading
 		ComponentTransform* trans = nullptr;
 		ComponentMesh* mesh = nullptr;
+		ComponentMaterial* mat = nullptr;
 
 		float local_mat[16] = {0};
 		float global_mat[16] = {0};
@@ -96,6 +97,9 @@ bool ImporterScene::Load(const char * full_path)
 				break;
 
 			case COMPONENT_TYPE::MATERIAL:
+				mat = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
+				if (mat != nullptr)
+					mat->Load(loaded_file[go_name]["Components"][std::to_string((int)comp_type)]);
 				break;
 			case COMPONENT_TYPE::CAMERA:
 				break;
@@ -200,8 +204,7 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 
 			case COMPONENT_TYPE::MATERIAL:
 				mat_comp = (ComponentMaterial*)component;
-
-				file[go_name]["Components"][std::to_string((int)component->type)] = "no_path_just_test";
+				mat_comp->Save(file[go_name]["Components"][std::to_string((int)component->type)]);
 				break;
 
 			case COMPONENT_TYPE::CAMERA:
