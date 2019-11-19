@@ -16,6 +16,7 @@ public:	// Nested classes
 
 		QUAD_TREE,
 		OC_TREE,
+		N_TREE,
 		KD_TREE,
 
 		MAX_TYPES
@@ -71,12 +72,12 @@ public: // Methods
 	void Draw();
 
 	void Create(AABB limits);
-	void Clear();
 	void Reset();
+	bool Grow(float3 reachTo);
+	void Clear();
 
 	bool Insert(const GameObject* obj);
 	bool Remove(const GameObject* obj);
-	bool Grow(AABB newSize);
 
 	void Intersect(std::vector<const GameObject*>&, AABB area);
 

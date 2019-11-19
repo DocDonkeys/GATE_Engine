@@ -35,18 +35,58 @@ void Tree::Draw()
 void Tree::Create(AABB limits)
 {
 	Clear();
-
 	rootNode->aabb = limits;
 
 	rootNode->Split();
 	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;
 }
 
+void Tree::Reset()
+{
+	rootNode->Clear();
+	rootNode->Split();
+	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;
+
+	for (int i = 0; i < treeObjects.size(); i++)
+		rootNode->Insert(treeObjects[i]);
+}
+
 void Tree::Clear()
 {
 	rootNode->Clear();
-
 	treeObjects.clear();
+
+	rootNode->Split();
+	rootNode->nodeType = TreeNode::NODE_TYPE::ROOT;
+}
+
+bool Tree::Grow(float3 reachTo)
+{
+	bool ret = false;
+
+	if (!rootNode->aabb.Contains(reachTo)) {
+
+		if (rootNode->aabb.MaxX() < reachTo.x)
+			rootNode->aabb.maxPoint.x = reachTo.x;
+		else if (rootNode->aabb.MinX() > reachTo.x)
+			rootNode->aabb.minPoint.x = reachTo.x;
+
+		if (rootNode->aabb.MaxY() < reachTo.y)
+			rootNode->aabb.maxPoint.y = reachTo.y;
+		else if (rootNode->aabb.MinY() > reachTo.y)
+			rootNode->aabb.minPoint.y = reachTo.y;
+
+		if (rootNode->aabb.MaxZ() < reachTo.z)
+			rootNode->aabb.maxPoint.z = reachTo.z;
+		else if (rootNode->aabb.MinZ() > reachTo.z)
+			rootNode->aabb.minPoint.z = reachTo.z;
+
+		Reset();
+
+		ret = true;
+	}
+
+	return ret;
 }
 
 bool Tree::Insert(const GameObject* obj)
@@ -61,7 +101,9 @@ bool Tree::Insert(const GameObject* obj)
 
 	if (!ret) {
 		treeObjects.push_back(obj);
-		ret = rootNode->Insert(obj);
+
+		if (!rootNode->Insert(obj));	// If object outside of bounds
+			Grow(obj->aabb.CenterPoint());
 	}
 
 	return ret;
