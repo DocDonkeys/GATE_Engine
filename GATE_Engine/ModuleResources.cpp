@@ -2,6 +2,7 @@
 #include "ModuleFileSystem.h"
 #include "Application.h"
 #include "Resource.h"
+#include "ResourceMesh.h"
 
 ModuleResources::ModuleResources(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -45,22 +46,37 @@ uint32 ModuleResources::ImportFile(const char * new_file_in_assets, bool force)
 
 uint32 ModuleResources::GenerateNewUID()
 {
-	return 0;
+	return App->rng.RandInt<uint32>();
 }
 
 const Resource * ModuleResources::Get(uint32 uid) const
 {
+	std::map<uint32, Resource*>::const_iterator it = resources.find(uid); 
+	if (it != resources.end()) 
+		return it->second; 
 	return nullptr;
 }
 
 Resource * ModuleResources::Get(uint32 uid)
 {
+	std::map<uint32, Resource*>::iterator it = resources.find(uid);
+	if (it != resources.end())
+		return it->second;
 	return nullptr;
 }
 
 Resource * ModuleResources::CreateNewResource(Resource::Type type, uint32 force_uid)
 {
-	return nullptr;
+	Resource* ret = nullptr; 
+	uint32 uid = GenerateNewUID();
+	switch (type) 
+	{ 
+		case Resource::MESH:      ret = (Resource*) new ResourceMesh(uid);      break; 
+	}
+	
+	if (ret != nullptr) 
+		resources[uid] = ret;
+return ret;
 }
 
 void ModuleResources::InitPopulateAssetsDir(AbstractDir &abs_dir)

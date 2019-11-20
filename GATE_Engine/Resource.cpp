@@ -1,6 +1,6 @@
 #include "Resource.h"
 
-Resource::Resource(uint32 uid, Resource::Type type)
+Resource::Resource(uint32 uid, Resource::Type type) : UID(uid), type(type)
 {
 }
 
@@ -10,12 +10,12 @@ Resource::~Resource()
 
 Resource::Type Resource::GetType() const
 {
-	return Resource::Type();
+	return type;
 }
 
 uint32 Resource::GetUID() const
 {
-	return uint32();
+	return UID;
 }
 
 const char * Resource::GetFile() const
@@ -30,7 +30,7 @@ const char * Resource::GetImportedFile() const
 
 bool Resource::IsLoadedToMemory() const
 {
-	return false;
+	return loaded > 0;
 }
 
 bool Resource::LoadToMemory()
