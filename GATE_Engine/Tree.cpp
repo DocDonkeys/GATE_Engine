@@ -44,12 +44,16 @@ void Tree::Reset()
 
 	for (int i = 0; i < treeObjects.size(); i++)
 		rootNode->Insert(treeObjects[i]);
+
+	LOG("[Info]: Reseted Tree.")
 }
 
 void Tree::Clear()
 {
 	rootNode->Clear();
 	treeObjects.clear();
+
+	LOG("[Info]: Cleared Tree.")
 }
 
 bool Tree::Grow(const AABB& absorb)
@@ -73,6 +77,10 @@ bool Tree::Grow(const AABB& absorb)
 			rootNode->aabb.minPoint.z = absorb.MinZ();
 
 		Reset();
+
+		LOG("[Info]: Tree grown to Min %f/%f/%f and Max %f/%f/%f.",
+			rootNode->aabb.MinX(), rootNode->aabb.MinY(), rootNode->aabb.MinZ(),
+			rootNode->aabb.MaxX(), rootNode->aabb.MaxY(), rootNode->aabb.MaxZ());
 
 		ret = true;
 	}
@@ -108,6 +116,10 @@ bool Tree::Shrink()
 		|| orig.MinY() != rootNode->aabb.MinY()
 		|| orig.MinZ() != rootNode->aabb.MinZ())
 	{
+		LOG("[Info]: Tree shrunk to Min %f/%f/%f and Max %f/%f/%f.",
+			rootNode->aabb.MinX(), rootNode->aabb.MinY(), rootNode->aabb.MinZ(),
+			rootNode->aabb.MaxX(), rootNode->aabb.MaxY(), rootNode->aabb.MaxZ());
+
 		Reset();
 		ret = true;
 	}
@@ -122,6 +134,7 @@ bool Tree::Insert(const GameObject* obj)
 	for (int i = 0; i < treeObjects.size(); i++)
 		if (treeObjects[i] == obj) {
 			ret = true;	// Object is already inserted
+			//LOG("[Error]: Inserted object already present in the tree.")
 			break;
 		}
 
@@ -132,6 +145,7 @@ bool Tree::Insert(const GameObject* obj)
 		}
 
 		treeObjects.push_back(obj);
+		LOG("[Success]: Inserted object %s to tree.", obj->name.c_str())
 	}
 
 	return ret;
@@ -150,6 +164,11 @@ bool Tree::Remove(const GameObject* obj)
 
 	if (ret) {
 		ret = rootNode->Remove(obj);
+		SDL_assert(ret);	// If object is listed it should be somewhere inside the tree, otherwise we fucked up bad
+		LOG("[Success]: Object %s removed from the tree succesfully.", obj->name.c_str());
+	}
+	else {
+		//LOG("[Error]: Object to Remove not found in the tree.")
 	}
 
 	return ret;
