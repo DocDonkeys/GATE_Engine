@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Resource.h"
 #include "ResourceMesh.h"
+#include "ResourceTexture.h"
 
 ModuleResources::ModuleResources(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -72,6 +73,7 @@ Resource * ModuleResources::CreateNewResource(Resource::Type type, uint32 force_
 	switch (type) 
 	{ 
 		case Resource::MESH:      ret = (Resource*) new ResourceMesh(uid);      break; 
+		case Resource::TEXTURE: ret = (Resource*) new ResourceTexture(uid);  break;
 	}
 	
 	if (ret != nullptr) 
