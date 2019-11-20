@@ -24,7 +24,7 @@ update_status ModuleResources::PreUpdate(float dt)
 {
 	float time_passed = timer.ReadSec(); //Time passed after update of data
 
-	if (time_passed >= 0.75f)
+	if (time_passed >= 1.5f)
 	{
 		CheckDirectoryUpdate(assets_dir);
 		CheckFilesUpdate(assets_dir);
