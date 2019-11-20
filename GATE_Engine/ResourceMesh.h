@@ -18,12 +18,12 @@ public:
 	void Save(json& config) const override; 
 	void Load(const json& config) override;
 
-	/*void LoadVertices(const aiMesh* loaded_mesh);
+	void LoadVertices(const aiMesh* loaded_mesh);
 	void LoadIndices(const aiMesh* loaded_mesh);
 	void LoadNormals(const aiMesh* loaded_mesh);
 	void LoadTexCoords(const aiMesh* loaded_mesh);
 	void ChangeNormalsLength(float new_length);
-	void LoadMeshBounds();*/
+	void LoadMeshBounds();
 
 	AABB GetBounds() { return bounds; }
 	float3 GetSize() { return size; }
