@@ -48,6 +48,7 @@ public:
 public:
 	Frustum frustum;
 	bool needsProjectionUpdate = true;
+	bool cullingTesting = false;
 };
 
 #endif // __COMPONENT_CAMERA_H__

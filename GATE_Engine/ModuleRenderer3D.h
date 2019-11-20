@@ -11,6 +11,7 @@
 #define MAX_LIGHTS 8
 
 class Mesh;
+class ComponentCamera;
 
 class ModuleRenderer3D : public Module
 {
@@ -61,6 +62,8 @@ public:
 	SDL_GLContext context;
 	float3x3 NormalMatrix;
 	float4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+
+	ComponentCamera* cullingTestTarget = nullptr;
 
 	bool vSync = true;
 	bool drawVertexNormals = false;	//CHANGE/FIX: Save&Load

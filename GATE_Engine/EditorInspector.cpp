@@ -344,7 +344,17 @@ void EditorInspector::DrawComponentCamera(ComponentCamera* camera)
 
 	if (ImGui::TreeNodeEx("Camera", base_flags))
 	{
-		ImGui::Checkbox("Active", &camera->active);
+		ImGui::Checkbox("Active", &camera->active); ImGui::SameLine();
+		if (ImGui::Checkbox("Culling Testing", &camera->cullingTesting)) {
+			if (camera->cullingTesting) {
+				if (App->renderer3D->cullingTestTarget != nullptr)
+					App->renderer3D->cullingTestTarget->cullingTesting = false;
+
+				App->renderer3D->cullingTestTarget = camera;
+			}
+			else
+				App->renderer3D->cullingTestTarget = nullptr;
+		}
 
 		ImGui::Separator();
 
