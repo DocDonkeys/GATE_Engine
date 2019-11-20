@@ -237,11 +237,11 @@ void Tree::TreeNode::Split()
 
 void Tree::TreeNode::Prune()	// WARNING: This is only called in the context that a branch is left with 4 leafs which have no objects
 {
-	if (numBranches > 0) {
-		delete[] branches;
-		branches = nullptr;
-		numBranches = 0;
-	}
+	SDL_assert(numBranches > 0);
+		
+	delete[] branches;
+	branches = nullptr;
+	numBranches = 0;
 
 	nodeType = NODE_TYPE::LEAF;
 }
@@ -310,20 +310,27 @@ bool Tree::TreeNode::Insert(const GameObject* obj)
 			if (nodeObjects.size() > tree->nodeSizeLimit) {	// If node's size surpassed limit, subdivide itself and spread it's objects to the new leafs
 				Split();
 
-				bool uselessSplit = true;
+				std::vector<const GameObject*> remainers;	// We will collect all objects that aren't assigned on children because they don't fully fit in any
+				bool assigned = false;
 
 				for (int i = 0; i < nodeObjects.size(); i++) {
 					for (int j = 0; j < numBranches; j++) {
-						if (branches[j].Insert(nodeObjects[i])) {	// If an object is succesfully inserted in a leaf, we erase it from the parent branch's list
-							nodeObjects.erase(nodeObjects.begin() + i);
-							uselessSplit = false;
+						if (branches[j].Insert(nodeObjects[i])) {	// If an object is succesfully inserted in a leaf
+							assigned = true;
 							break;
 						}
 					}
+
+					if (!assigned)	// If no leaf could take this object, collect it
+						remainers.push_back(nodeObjects[i]);
+					else
+						assigned = false;
 				}
 
-				if (uselessSplit)	// If no objects have been moved to the children nodes, Prune the node
+				if (remainers.size() == nodeObjects.size())	// If no objects have been assigned on children nodes, prune them
 					Prune();
+				else	// Else, copy remaining objects to node branch so that assigned ones are erased
+					nodeObjects = remainers;
 			}
 		}
 	}
@@ -342,8 +349,8 @@ bool Tree::TreeNode::Remove(const GameObject* obj)
 					ret = true;
 
 					int j = 0;
-					for (j; j < numBranches; j++)	// After obj removal, if the children node is a "leafs" with no objects left inside, add to counter
-						if (branches[j].numBranches > 0 && branches[j].nodeObjects.empty())
+					for (j; j < numBranches; j++)	// After obj removal, if the children node is a "leaf" and contains no objects increase counter, otherwise break
+						if (branches[j].numBranches > 0 || !branches[j].nodeObjects.empty())
 							break;
 
 					if (j == numBranches)	// If all children nodes meet the above conditions, they can be eliminated

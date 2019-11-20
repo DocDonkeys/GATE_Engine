@@ -62,12 +62,12 @@ void EditorInspector::Update()
 		//}
 		ImGui::SameLine();
 		if (ImGui::Checkbox("Static", &go->staticObj)) {
-			if (go->children.size() != 0) {
+			if (go->children.size() > 0) {
 				show_static_modal = true;
 				ImGui::OpenPopup("Changing Static State");
 			}
 			else {
-				go->UpdateStaticStatus(go->staticObj);
+				go->UpdateStaticStatus(go->staticObj, false);
 			}
 		} ImGui::SameLine();
 		HoverTip("Editing the transform component of an object will remove the static status from himself and all of his children!");
@@ -79,10 +79,11 @@ void EditorInspector::Update()
 			ImGui::PopTextWrapPos();
 			ImGui::Spacing(); ImGui::SameLine(ImGui::GetWindowWidth() / 2.f - 90.f);
 			if (ImGui::Button("Yes", { 90.f, 30.f })) {
-				go->UpdateStaticStatus(go->staticObj);
+				go->UpdateStaticStatus(go->staticObj, true);
 				show_static_modal = false;
 			} ImGui::SameLine();
 			if (ImGui::Button("No", { 90.f, 30.f })) {
+				go->UpdateStaticStatus(go->staticObj, false);
 				show_static_modal = false;
 			}
 
@@ -217,9 +218,8 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 
 		// Data and Matrix Updating
 		if (!App->input->GetMouseWrapping())
-			if (transform->SetLocalMat(pos, DegToRad(rot), scale)) {
-				transform->my_go->UpdateStaticStatus(false);
-			}
+			if (transform->SetLocalMat(pos, DegToRad(rot), scale))
+				transform->my_go->UpdateStaticStatus(false, true);
 	}
 
 	ImGui::Separator();

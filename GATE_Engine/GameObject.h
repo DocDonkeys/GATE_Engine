@@ -35,7 +35,7 @@ public: //Methods
 	void DrawAABB() const;
 	void UpdateBoundingBox();
 
-	void UpdateStaticStatus(bool newVal);
+	void UpdateStaticStatus(bool newVal, bool recursive = true);
 
 	Component* CreateComponent(COMPONENT_TYPE type);
 	Component* GetComponent(COMPONENT_TYPE type) const;

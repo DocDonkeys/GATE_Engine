@@ -102,7 +102,8 @@ void GameObject::PostUpdate()
 void GameObject::Draw() const
 {
 	if (App->renderer3D->drawObjAABB)
-		DrawAABB();
+		if (size.x != 0.f || size.y != 0.f || size.z != 0.f)
+			DrawAABB();
 
 	//Draw the components
 	for (int i = 0; i < components.size(); ++i)
@@ -192,7 +193,7 @@ void GameObject::UpdateBoundingBox()
 	}
 }
 
-void GameObject::UpdateStaticStatus(bool newVal)
+void GameObject::UpdateStaticStatus(bool newVal, bool recursive)
 {
 	staticObj = newVal;
 
@@ -201,9 +202,9 @@ void GameObject::UpdateStaticStatus(bool newVal)
 	else
 		App->scene_intro->staticTree->Remove(this);
 
-	for (int i = 0; i < children.size(); i++) {
-		children[i]->UpdateStaticStatus(newVal);
-	}
+	if (recursive)
+		for (int i = 0; i < children.size(); i++)
+			children[i]->UpdateStaticStatus(newVal);
 }
 
 
