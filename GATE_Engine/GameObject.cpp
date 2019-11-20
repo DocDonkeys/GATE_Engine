@@ -278,9 +278,11 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 
 		//Assign our new parent and add ourselves into its children list
 		child->parent = new_parent;
-		child->parent_UID = child->parent->UID;
 		if (child->parent != nullptr)
+		{
+			child->parent_UID = child->parent->UID;
 			child->parent->children.push_back(child);
+		}
 		else
 			child->parent_UID = 0;
 	}
