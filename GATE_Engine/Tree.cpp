@@ -265,6 +265,17 @@ void Tree::TreeNode::Prune()	// WARNING: This is only called in the context that
 	nodeType = NODE_TYPE::LEAF;
 }
 
+void Tree::TreeNode::Prune(std::vector<const GameObject*> leafObjs)	// WARNING: This is only called in the context that a branch is left with 4 leafs which together don't overflow the parent's node limit
+{
+	SDL_assert(numBranches > 0);
+
+	delete[] branches;
+	branches = nullptr;
+	numBranches = 0;
+
+	nodeType = NODE_TYPE::LEAF;
+}
+
 void Tree::TreeNode::Clear()
 {
 	if (numBranches > 0) {
@@ -367,13 +378,30 @@ bool Tree::TreeNode::Remove(const GameObject* obj)
 				if (branches[i].Remove(obj)) {	// If obj has been removed from one of the children nodes
 					ret = true;
 
-					int j = 0;
-					for (j; j < numBranches; j++)	// After obj removal, if the children node is a "leaf" and contains no objects increase counter, otherwise break
-						if (branches[j].numBranches > 0 || !branches[j].nodeObjects.empty())
+					std::vector<const GameObject*> leafCollector;
+					for (i = 0; i < numBranches; i++) {
+						if (branches[i].numBranches > 0) {	// If a children isn't leaf, break immediately
 							break;
+						}
+						else {								// Else, if the leaf has objects at all add them to the collector
+							int leafObjSize = branches[i].nodeObjects.size();
+							if (leafObjSize > 0) {
+								for (int j = 0; j < leafObjSize; j++)
+									leafCollector.push_back(branches[i].nodeObjects[j]);
 
-					if (j == numBranches)	// If all children nodes meet the above conditions, they can be eliminated
-						Prune();
+								if (nodeObjects.size() + leafCollector.size() > tree->nodeSizeLimit)	// If parent node's objects + leaf objects overflows limit, break immediately
+									break;
+							}
+						}
+					}
+
+					if (i == numBranches) {	// If previous procedure was completed without breaks (no branches, no overflow of object limit)
+						if (!leafCollector.empty())	// If collector isn't empty
+							for (int k = 0; k < leafCollector.size(); k++)	// Add collector objects to parent node's list
+								nodeObjects.push_back(leafCollector[k]);
+
+						Prune();	// Eliminate children (which are either fully empty or their objects have been moved to the parent node)
+					}
 
 					break;
 				}
