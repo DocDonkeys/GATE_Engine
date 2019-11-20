@@ -106,16 +106,8 @@ void ModuleSceneIntro::DestroyGameObject(GameObject * go)
 	if (selected_go == go)
 		selected_go = nullptr;
 
-	/*for (int i = 0; i < game_objects.size(); ++i)
-	{
-		if (game_objects[i] == go)
-		{
-			game_objects.erase(game_objects.begin() + i);
-			break;
-		}	
-	}*/
-
-	//delete go;
+	GOFunctions::ReParentGameObject(go,nullptr);
+	delete go;
 	numObjects--;
 }
 
