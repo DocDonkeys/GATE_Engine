@@ -82,7 +82,7 @@ bool ImporterMesh::Load(const char * full_path, ResourceMesh* mesh)
 	if (mesh == nullptr)
 	{
 		LOG("[WARNING] Tried to import a .mesh file into a nullptr mesh, a mesh will be created in memory");
-		ResourceMesh* mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH); //TODO: DIDAC create new mesh using module resources
+		ResourceMesh* mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 	}
 
 	//------------------- Assign data from buffer  -------------------//

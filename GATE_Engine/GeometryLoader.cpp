@@ -15,7 +15,7 @@
 
 #include "libs/par/par_shapes.h"
 #include "ResourceMesh.h"
-#include "Texture.h"
+#include "ResourceTexture.h"
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
@@ -131,7 +131,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		int nmeshes = node->mNumMeshes;
 		for (int i = 0; i < nmeshes; ++i)
 		{
-			ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH); //TODO: DIDAC create new resource with module resources
+			ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
 			
 			//LOAD!
@@ -173,7 +173,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 			// Material
 			ComponentMaterial* material_component = (ComponentMaterial*)ret_go->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
+			ResourceTexture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
 			if (tex == nullptr || tex->id == 0) {
 				LOG("[Warning]: The FBX has no embeded texture, could was not found, or could not be loaded!");
 			}
@@ -195,7 +195,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const char* name)
 {
-	ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH); //TODO: DIDAC create new reource with module resources
+	ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 
 	//Get sizes
 	new_mesh->num_vertex = p_mesh->npoints;
@@ -280,9 +280,9 @@ void GeometryLoader::LoadPrimitiveNormals(ResourceMesh * new_mesh, const par_sha
 	}
 }
 
-Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * loaded_mesh, const std::string & absolute_path)
+ResourceTexture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * loaded_mesh, const std::string & absolute_path)
 {
-	Texture* ret = nullptr;
+	ResourceTexture* ret = nullptr;
 	if (scene->HasMaterials())
 	{
 		aiString tex_path;

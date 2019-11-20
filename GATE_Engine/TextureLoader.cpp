@@ -1,6 +1,7 @@
 #include "TextureLoader.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ResourceTexture.h"
 
 // Include DevIL headers
 #include "libs/DevIL Windows SDK/include/IL/il.h"
@@ -162,7 +163,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	return texId;
 }
 
-Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const
+ResourceTexture* TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const
 {
 	if (path == nullptr)
 	{
@@ -170,15 +171,8 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 		SDL_assert(path != nullptr);
 		return 0;
 	}
-	else {	// If a file of the same name exists, use it's id instead
-		for (int i = 0; i < textures.size(); i++) {
-			if (textures[i]->filename == App->SubtractString(std::string(path), "\\", true, false).c_str()) {
-				return textures[i];
-			}
-		}
-	}
 
-	Texture* tex = nullptr;
+	ResourceTexture* tex = nullptr;
 	uint imgId = 0;
 
 	ilGenImages(1, (ILuint*)&imgId);	// Generate image inside DevIL
@@ -209,7 +203,8 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 				LOG("[Error]: Texture ID creation failed.");
 			}
 			else {
-				tex = new Texture(tempId, path);
+				tex = (ResourceTexture*)App->resources->CreateNewResource(Resource::TEXTURE);
+				//tex = new ResourceTexture(tempId, path); //TODO: Didac Create this texture using module resources
 				App->texture_loader->textures.push_back(tex);
 				LOG("[Success]: Loaded texture from path %s", path);
 			}
@@ -224,9 +219,9 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 	}
 	if (tex != nullptr)
 	{
-		tex->UID = App->rng.RandInt<uint32>();
+		//TODO: Didac check this to see how it would work with the module resources
 		std::string save_name = "_t";
-		save_name += std::to_string(tex->UID);
+		save_name += std::to_string(tex->GetUID());
 		DuplicateTextureAsDDS(save_name.data());
 	}
 
@@ -237,7 +232,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 
 // ---------------------------------------------
 
-Texture* TextureLoader::LoadDefaultTex() const
+ResourceTexture* TextureLoader::LoadDefaultTex() const
 {
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
@@ -249,13 +244,13 @@ Texture* TextureLoader::LoadDefaultTex() const
 			checkImage[i][j][3] = (GLubyte)255;
 		}
 	}
-
-	Texture* tex = new Texture(CreateTexture(checkImage, CHECKERS_WIDTH, CHECKERS_HEIGHT, GL_RGBA, GL_RGBA, GL_TEXTURE_2D, GL_NEAREST, GL_REPEAT, true), "Default");
+	ResourceTexture* tex = (ResourceTexture*)App->resources->CreateNewResource(Resource::TEXTURE);
+	//ResourceTexture* tex = new ResourceTexture(CreateTexture(checkImage, CHECKERS_WIDTH, CHECKERS_HEIGHT, GL_RGBA, GL_RGBA, GL_TEXTURE_2D, GL_NEAREST, GL_REPEAT, true), "Default"); //TODO: Didac create texture as texture component
 	App->texture_loader->textures.push_back(tex);
 	return tex;
 }
 
-Texture* TextureLoader::GetDefaultTex()
+ResourceTexture* TextureLoader::GetDefaultTex()
 {
 	return defaultTex;
 }

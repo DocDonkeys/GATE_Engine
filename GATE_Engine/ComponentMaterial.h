@@ -5,7 +5,7 @@
 #include "Globals.h"
 #include "libs/MathGeoLib/include/Math/float4.h"
 
-class Texture;
+class ResourceTexture;
 
 class ComponentMaterial : public Component
 {
@@ -21,12 +21,12 @@ public:
 	void Load(json& file);
 
 	//Assign a texture to a Component
-	void AssignTexture(Texture* texture);
+	void AssignTexture(ResourceTexture* texture);
 
 public:
 	float4 color = { 0.0f, 0.0f, 0.0f, 1.0f };
-	Texture* active_texture = nullptr; //Currently used texture (either texture ID or checkers ID)
-	Texture* loaded_texture = nullptr; //Loaded texture Id
+	ResourceTexture* active_texture = nullptr; //Currently used texture (either texture ID or checkers ID)
+	ResourceTexture* loaded_texture = nullptr; //Loaded texture Id
 	bool use_default_texture = false;
 	uint checkers_texture_id = 0; //Checkers texture is our debug Texture
 };

@@ -40,9 +40,23 @@ uint32 ModuleResources::Find(const char * file_in_assets) const
 	return 0;
 }
 
-uint32 ModuleResources::ImportFile(const char * new_file_in_assets, bool force)
+uint32 ModuleResources::ImportFile(const char * new_file_in_assets, Resource::Type type, bool force)
 {
-	return 0;
+	uint32 ret = 0; bool import_ok = false; std::string written_file;
+
+	//switch (type)
+	//{
+	//case Resource::TEXTURE: import_ok = App->tex->Import(new_file_in_assets, "", written_file); break;
+	//}
+	//if (import_ok == true)
+	//{ // If import was successful, create a new resource 
+	//	Resource* res = CreateNewResource(type);
+	//	res->file = new_file_in_assets;
+	//	res->exported_file = written_file;
+	//	ret = res->uid;
+	//}
+
+	return ret;
 }
 
 uint32 ModuleResources::GenerateNewUID()
@@ -69,7 +83,12 @@ Resource * ModuleResources::Get(uint32 uid)
 Resource * ModuleResources::CreateNewResource(Resource::Type type, uint32 force_uid)
 {
 	Resource* ret = nullptr; 
-	uint32 uid = GenerateNewUID();
+	uint32 uid;
+	if (force_uid == 0)
+		uid = GenerateNewUID();
+	else
+		uid = force_uid;
+
 	switch (type) 
 	{ 
 		case Resource::MESH:      ret = (Resource*) new ResourceMesh(uid);      break; 

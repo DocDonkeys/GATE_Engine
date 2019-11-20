@@ -77,7 +77,7 @@ void ComponentMesh::Save(json &file)
 
 void ComponentMesh::Load(json & file)
 {
-	mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH); // TODO: DIDAC create mesh using module resources
+	mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 
 	std::string full_path = file["Path"];
 	imp_exp.Load(full_path.data(), mesh);

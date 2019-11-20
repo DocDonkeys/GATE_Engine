@@ -28,6 +28,11 @@ const char * Resource::GetImportedFile() const
 	return nullptr;
 }
 
+const char * Resource::GetName() const
+{
+	return name.data();
+}
+
 bool Resource::IsLoadedToMemory() const
 {
 	return loaded > 0;
