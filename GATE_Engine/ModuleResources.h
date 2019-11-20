@@ -13,6 +13,7 @@ class Application;
 struct AbstractDir
 {
 	std::string dir_path;
+	std::string dir_name;
 	std::vector<AbstractDir> sub_dirs;
 	std::vector<std::string> files;
 };
@@ -35,7 +36,10 @@ public:
 	Resource* CreateNewResource(Resource::Type type, uint32 force_uid = 0);
 
 private:
+	//This function initially fills the directories and files assets tree, with all data found inside the Assets folder
 	void InitPopulateAssetsDir(AbstractDir &abs_dir);
+
+	void CheckDirectoryUpdate(AbstractDir &abs_dir);
 
 private: 
 	std::map<uint32, Resource*> resources;
