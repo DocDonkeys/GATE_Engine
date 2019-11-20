@@ -6,6 +6,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
 
 GameObject::GameObject() : size(float3::zero)
 {
@@ -102,8 +103,12 @@ void GameObject::PostUpdate()
 void GameObject::Draw() const
 {
 	if (App->renderer3D->drawObjAABB)
-		if (size.x != 0.f || size.y != 0.f || size.z != 0.f)
-			DrawAABB();
+		if (size.x != 0.f || size.y != 0.f || size.z != 0.f) {
+			if (staticObj)
+				DrawAABB(aabb, float3(0.f, 0.f, 1.f));
+			else
+				DrawAABB(aabb, float3(1.f, 1.f, 0.f));
+		}
 
 	//Draw the components
 	for (int i = 0; i < components.size(); ++i)
@@ -120,58 +125,54 @@ void GameObject::Draw() const
 	}*/
 }
 
-void GameObject::DrawAABB() const
+void GameObject::DrawAABB(const AABB& aabb, const float3& rgb)
 {
 	glLineWidth(2.0f);
+	glColor3f(rgb.x, rgb.y, rgb.z);
 	glBegin(GL_LINES);
-
-	if (staticObj)
-		glColor3f(0.0, 0.0, 1.0);
-	else
-		glColor3f(1.0, 1.0, 0.0);
 
 	// Bottom 1
 	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-	glVertex3f(aabb.MinX() + size.x, aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
 
 	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-	glVertex3f(aabb.MinX(), aabb.MinY() + size.y, aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
 
 	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ() + size.z);
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
 
 	// Bottom 2
-	glVertex3f(aabb.MaxX(), aabb.MaxY() - size.y, aabb.MaxZ());
-	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY() - size.y, aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
 
-	glVertex3f(aabb.MaxX(), aabb.MaxY() - size.y, aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
 	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 
-	glVertex3f(aabb.MaxX(), aabb.MaxY() - size.y, aabb.MaxZ());
-	glVertex3f(aabb.MaxX(), aabb.MaxY() - size.y, aabb.MaxZ() - size.z);
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
 
 	// Top 1
-	glVertex3f(aabb.MinX() + size.x, aabb.MinY() + size.y, aabb.MinZ());
-	glVertex3f(aabb.MinX(), aabb.MinY() + size.y, aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
 
-	glVertex3f(aabb.MinX() + size.x, aabb.MinY() + size.y, aabb.MinZ());
-	glVertex3f(aabb.MinX() + size.x, aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
 
-	glVertex3f(aabb.MinX() + size.x, aabb.MinY() + size.y, aabb.MinZ());
-	glVertex3f(aabb.MinX() + size.x, aabb.MinY() + size.y, aabb.MinZ() + size.z);
-
-	// Top 2
-	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
 	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 
-	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY(), aabb.MaxZ());
-	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY() - size.y, aabb.MaxZ());
+	// Top 2
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 
-	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY(), aabb.MaxZ());
-	glVertex3f(aabb.MaxX() - size.x, aabb.MaxY(), aabb.MaxZ() - size.z);
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
 
 	glEnd();
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(1.f, 1.f, 1.f);
 	glLineWidth(1.0f);
 }
 
@@ -224,7 +225,7 @@ Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 		c = new ComponentMaterial();
 		break;
 	case COMPONENT_TYPE::CAMERA:
-		c = new ComponentMaterial();
+		c = new ComponentCamera();
 		break;
 	default:
 		break;

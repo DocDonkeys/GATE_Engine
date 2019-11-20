@@ -121,7 +121,7 @@ void EditorConfiguration::Update()
 				tempf = camPtr->GetNearPlaneDist();
 				if (ImGui::SliderFloat("Near Plane", &tempf, 0.1f, App->camera->GetActiveCamera()->GetFarPlaneDist())) App->camera->GetActiveCamera()->SetNearPlaneDist(tempf);
 				tempf = camPtr->GetFarPlaneDist();
-				if (ImGui::SliderFloat("Far Plane", &tempf, App->camera->GetActiveCamera()->GetNearPlaneDist(), 1000.f)) App->camera->GetActiveCamera()->SetFarPlaneDist(tempf);
+				if (ImGui::SliderFloat("Far Plane", &tempf, App->camera->GetActiveCamera()->GetNearPlaneDist(), 5000.f)) App->camera->GetActiveCamera()->SetFarPlaneDist(tempf);
 
 				ImGui::Separator();
 

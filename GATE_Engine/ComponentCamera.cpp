@@ -1,10 +1,13 @@
 #include "Globals.h"
 #include "ComponentCamera.h"
+#include "ComponentTransform.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
 #include "libs/MathGeoLib/include/Math/float3x3.h"
 #include "libs/MathGeoLib/include/Math/float4x4.h"
 #include "libs/MathGeoLib/include/Geometry/Plane.h"
+
+#include "libs/SDL/include/SDL_opengl.h"
 
 ComponentCamera::ComponentCamera() : Component()
 {
@@ -49,6 +52,76 @@ void ComponentCamera::Enable()
 void ComponentCamera::Disable()
 {
 	active = false;
+}
+
+void ComponentCamera::Update()
+{
+	ComponentTransform* trs = (ComponentTransform*)my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	frustum.pos = trs->GetGlobalMat().TranslatePart();
+	frustum.front = trs->GetGlobalMat().WorldZ();
+	frustum.up = trs->GetGlobalMat().WorldY();
+}
+
+void ComponentCamera::Draw()
+{
+	if (my_go->size.x == 0.f && my_go->size.y == 0.f && my_go->size.z == 0.f) {	// If Game object has size 0, draw a "gizmo" square instead
+		my_go->DrawAABB(AABB(my_go->aabb.minPoint - float3::one / 2.f, my_go->aabb.maxPoint + float3::one / 2.f), float3(1.f, 0.f, 1.f));
+	}
+
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+
+	float3 corners[8];
+	frustum.GetCornerPoints(corners);
+
+	// Sides
+	glColor3f(1.f, 0.f, 1.f);
+
+	// Left Face
+	glVertex3f(corners[0].x, corners[0].y, corners[0].z);
+	glVertex3f(corners[1].x, corners[1].y, corners[1].z);
+
+	glVertex3f(corners[2].x, corners[2].y, corners[2].z);
+	glVertex3f(corners[3].x, corners[3].y, corners[3].z);
+
+	// Right Face
+	glVertex3f(corners[4].x, corners[4].y, corners[4].z);
+	glVertex3f(corners[5].x, corners[5].y, corners[5].z);
+
+	glVertex3f(corners[6].x, corners[6].y, corners[6].z);
+	glVertex3f(corners[7].x, corners[7].y, corners[7].z);
+
+	// Near-Far
+	glColor3f(1.f, 0.f, 0.f);
+
+	// Near Plane
+	glVertex3f(corners[0].x, corners[0].y, corners[0].z);
+	glVertex3f(corners[4].x, corners[4].y, corners[4].z);
+
+	glVertex3f(corners[2].x, corners[2].y, corners[2].z);
+	glVertex3f(corners[6].x, corners[6].y, corners[6].z);
+
+	glVertex3f(corners[0].x, corners[0].y, corners[0].z);
+	glVertex3f(corners[2].x, corners[2].y, corners[2].z);
+
+	glVertex3f(corners[4].x, corners[4].y, corners[4].z);
+	glVertex3f(corners[6].x, corners[6].y, corners[6].z);
+
+	// Far Plane
+	glVertex3f(corners[1].x, corners[1].y, corners[1].z);
+	glVertex3f(corners[5].x, corners[5].y, corners[5].z);
+
+	glVertex3f(corners[3].x, corners[3].y, corners[3].z);
+	glVertex3f(corners[7].x, corners[7].y, corners[7].z);
+
+	glVertex3f(corners[1].x, corners[1].y, corners[1].z);
+	glVertex3f(corners[3].x, corners[3].y, corners[3].z);
+
+	glVertex3f(corners[5].x, corners[5].y, corners[5].z);
+	glVertex3f(corners[7].x, corners[7].y, corners[7].z);
+
+	glColor3f(1, 1, 1);
+	glEnd();
 }
 
 float ComponentCamera::GetNearPlaneDist() const
@@ -144,14 +217,16 @@ bool ComponentCamera::Intersects(const Frustum& frustum, const AABB& refBox)	// 
 	float3 corners[8];
 	refBox.GetCornerPoints(corners);
 
+	Plane p[6];
+	frustum.GetPlanes(p);
+
 	uint totalInside = 0;
 
 	for (int i = 0; i < 6; ++i) {	// For each frustum plane
 		int insideCount = 8;
-		Plane& p = frustum.GetPlane(i);
 
 		for (int j = 0; j < 8; ++j)	// For each AABB corner
-			if (p.IsOnPositiveSide(corners[j]))	// Frustum plane normals point outside the Frustum volume, therefore "out = positive side"
+			if (p[i].IsOnPositiveSide(corners[j]))	// Frustum plane normals point outside the Frustum volume, therefore "out = positive side"
 				--insideCount;
 
 		if (insideCount == 0)

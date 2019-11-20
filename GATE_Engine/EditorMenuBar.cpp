@@ -178,17 +178,17 @@ void EditorMenuBar::Update() {
 		// Menu - GameObjects: Create premade objects and primitives
 		if (ImGui::BeginMenu("GameObjects")) {
 
-			if (ImGui::BeginMenu("Create...")) {
+			if (ImGui::MenuItem("Create Empty"))
+			{
+				App->scene_intro->CreateEmptyGameObject();
+			}
 
-				if (ImGui::MenuItem("Create Empty"))
-				{
-					App->scene_intro->CreateEmptyGameObject();
-				}
+			if (ImGui::MenuItem("Create Empty x10"))
+			{
+				App->scene_intro->CreateEmptyGameObject(10);
+			}
 
-				if (ImGui::MenuItem("Create Empty x10"))
-				{
-					App->scene_intro->CreateEmptyGameObject(10);
-				}
+			if (ImGui::BeginMenu("Primitives")) {
 
 				if (ImGui::MenuItem("Plane"))
 				{
@@ -228,6 +228,12 @@ void EditorMenuBar::Update() {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::MenuItem("Camera", NULL)) {
+				App->scene_intro->CreateEmptyGameObject(COMPONENT_TYPE::CAMERA);
+			}
+
+			ImGui::Separator();
+
 			if (ImGui::BeginMenu("Draw Mode")) {
 
 				if (ImGui::RadioButton("Mesh", &App->editor->drawMode, (int)draw_mode::MESH)
@@ -241,8 +247,6 @@ void EditorMenuBar::Update() {
 			}
 
 			if (ImGui::BeginMenu("View")) {
-				ImGui::Separator();
-
 				ImGui::Checkbox("Vertex Normals", &App->renderer3D->drawVertexNormals);
 				ImGui::Checkbox("Face Normals", &App->renderer3D->drawFaceNormals);
 

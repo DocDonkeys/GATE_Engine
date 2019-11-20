@@ -17,6 +17,9 @@ public:
 	void Enable() override;
 	void Disable() override;
 
+	void Update() override;
+	void Draw() override;
+
 public:
 	// Orders
 	void LookAt(const float3& position);

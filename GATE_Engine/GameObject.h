@@ -32,7 +32,7 @@ public: //Methods
 	void PostUpdate();
 
 	void Draw() const;	// This method is called by the renderer
-	void DrawAABB() const;
+	static void DrawAABB(const AABB& aabb, const float3& rgb = float3(1.f, 1.f, 1.f));
 	void UpdateBoundingBox();
 
 	void UpdateStaticStatus(bool newVal, bool recursive = true);

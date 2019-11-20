@@ -124,7 +124,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 	// Transform
 	ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	trs_component->SetLocalMat(meshTrs);
-	trs_component->needsUpdateGlobal = true;
 
 	if (node != nullptr && node->mNumMeshes > 0)
 	{
