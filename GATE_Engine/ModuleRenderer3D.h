@@ -10,7 +10,7 @@
 
 #define MAX_LIGHTS 8
 
-class Mesh;
+class ResourceMesh;
 
 class ModuleRenderer3D : public Module
 {
@@ -33,15 +33,15 @@ public:
 	void GenerateIndexBuffer(uint& id_index, const int& size, const uint* index);
 	void DeleteBuffer(uint& id);
 	//Draw a given mesh
-	void DrawMesh(const Mesh* mesh, const uint texture_id = 0);
+	void DrawMesh(const ResourceMesh* mesh, const uint texture_id = 0);
 	//Print the Mesh with vertices and indices only
-	void PrintSimpleMesh(const Mesh* mesh);
+	void PrintSimpleMesh(const ResourceMesh* mesh);
 	//DRAW a mesh that contains textures using its texture coordinates
-	void PrintTexturedMesh(const Mesh* mesh, const uint texture_id);
+	void PrintTexturedMesh(const ResourceMesh* mesh, const uint texture_id);
 
 	//Draw Mesh Debug Normals
-	void DrawMeshFaceNormals(Mesh* mesh);
-	void DrawMeshVertexNormals(Mesh* mesh);
+	void DrawMeshFaceNormals(ResourceMesh* mesh);
+	void DrawMeshVertexNormals(ResourceMesh* mesh);
 
 	// OpenGL Settings
 	struct GL_Setting {

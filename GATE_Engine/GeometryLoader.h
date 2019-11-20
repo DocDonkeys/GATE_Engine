@@ -13,7 +13,7 @@ struct par_shapes_mesh_s;
 struct aiMesh;
 struct aiScene;
 struct aiNode;
-class Mesh;
+class ResourceMesh;
 class Texture;
 class GameObject;
 
@@ -50,7 +50,7 @@ public:
 
 	// Load a generated primitive (par_shape) into a mesh (Mesh)
 	void LoadPrimitiveShape(const par_shapes_mesh_s* p_mesh, const char* name); 
-	void LoadPrimitiveNormals(Mesh* mesh, const par_shapes_mesh_s* p_mesh);
+	void LoadPrimitiveNormals(ResourceMesh* mesh, const par_shapes_mesh_s* p_mesh);
 	Texture* LoadMaterial(const aiScene * scene, const aiMesh* loaded_mesh, const std::string & absolute_path);
 
 	//Generate a primitive. For CUBE (slices,stacks,radius) will be ignored, for anything else except Torus (radius) will be ignored. Remember radius between 0 & 1.0f

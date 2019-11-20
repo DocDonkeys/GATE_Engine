@@ -14,7 +14,7 @@
 #pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
 
 #include "libs/par/par_shapes.h"
-#include "Mesh.h"
+#include "ResourceMesh.h"
 #include "Texture.h"
 #include "GameObject.h"
 #include "ComponentTransform.h"
@@ -131,7 +131,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		int nmeshes = node->mNumMeshes;
 		for (int i = 0; i < nmeshes; ++i)
 		{
-			Mesh* new_mesh = new Mesh();
+			ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH); //TODO: DIDAC create new resource with module resources
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
 			
 			//LOAD!
@@ -195,7 +195,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const char* name)
 {
-	Mesh* new_mesh = new Mesh();
+	ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH); //TODO: DIDAC create new reource with module resources
 
 	//Get sizes
 	new_mesh->num_vertex = p_mesh->npoints;
@@ -246,7 +246,7 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const 
 	go->CreateComponent(COMPONENT_TYPE::MATERIAL); //Create default material (will have checkers if Teacher wants to us it to check uv's)
 }
 
-void GeometryLoader::LoadPrimitiveNormals(Mesh * new_mesh, const par_shapes_mesh_s * p_mesh)
+void GeometryLoader::LoadPrimitiveNormals(ResourceMesh * new_mesh, const par_shapes_mesh_s * p_mesh)
 {
 	//Load the Normals of the par_shape
 	if (p_mesh->normals != NULL)

@@ -3,11 +3,11 @@
 
 #include "Importer.h"
 
-class Mesh;
+class ResourceMesh;
 
 struct IEMeshData : ImportExportData
 {
-	Mesh* mesh = nullptr;
+	ResourceMesh* mesh = nullptr;
 };
 
 class ImporterMesh : public Importer 
@@ -18,8 +18,8 @@ public:
 
 public:
 	bool Export(const char* path, std::string& output_file, const ImportExportData* ie_data, const char* filename = "");
-	bool Load(const char* full_path, Mesh* mesh);
-	bool GenMeshBuffers(Mesh* mesh);
+	bool Load(const char* full_path, ResourceMesh* mesh);
+	bool GenMeshBuffers(ResourceMesh* mesh);
 };
 
 
