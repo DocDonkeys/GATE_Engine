@@ -40,6 +40,7 @@ private:
 	void InitPopulateAssetsDir(AbstractDir &abs_dir);
 
 	void CheckDirectoryUpdate(AbstractDir &abs_dir);
+	void CheckFilesUpdate(AbstractDir &abs_dir);
 
 private: 
 	std::map<uint32, Resource*> resources;
