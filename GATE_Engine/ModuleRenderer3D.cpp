@@ -199,22 +199,23 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer post-Update", Profiler::Color::DarkOrange);
 
-	// DIRECT MODE Rendering
-	// PLANE
-	glLineWidth(2.0f);
-	glBegin(GL_LINES);
-	
-	for (float i = -50; i <= 50; ++i)
-	{
-		glVertex3f(i, 0.f, -50.f);
-		glVertex3f(i, 0, 50.f);
+	// Base Grid
+	if (drawGrid) {
+		glLineWidth(2.0f);
+		glBegin(GL_LINES);
 
-		glVertex3f(-50.f, 0.f, i);
-		glVertex3f(50.f, 0, i);
+		for (float i = -50; i <= 50; ++i)
+		{
+			glVertex3f(i, 0.f, -50.f);
+			glVertex3f(i, 0, 50.f);
+
+			glVertex3f(-50.f, 0.f, i);
+			glVertex3f(50.f, 0, i);
+		}
+
+		glEnd();
+		glLineWidth(1.0f);
 	}
-	glEnd();
-
-	glLineWidth(1.0f);
 	
 	// Original Object Rendering
 	//App->scene_intro->root->Draw();

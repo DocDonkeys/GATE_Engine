@@ -369,16 +369,18 @@ void EditorInspector::DrawComponentCamera(ComponentCamera* camera)
 
 		ImGui::AlignTextToFramePadding(); ImGui::Text("Aspect Ratio");
 		ImGui::SameLine(130.f); ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##AspectRatio", &aspectRatio, 0.05f, 1.f, 10.f);
+		ImGui::DragFloat("##AspectRatio", &aspectRatio, 0.05f, 0.1f, 10.f);
 
-		if (nearPlane != camera->GetNearPlaneDist())
-			camera->SetNearPlaneDist(nearPlane);
-		if (farPlane != camera->GetFarPlaneDist())
-			camera->SetFarPlaneDist(farPlane);
-		if (fov != camera->GetFOV())
-			camera->SetFOV(fov);
-		if (aspectRatio != camera->GetAspectRatio())
-			camera->SetAspectRatio(aspectRatio);
+		if (!App->input->GetMouseWrapping()) {
+			if (nearPlane != camera->GetNearPlaneDist())
+				camera->SetNearPlaneDist(nearPlane);
+			if (farPlane != camera->GetFarPlaneDist())
+				camera->SetFarPlaneDist(farPlane);
+			if (fov != camera->GetFOV())
+				camera->SetFOV(fov);
+			if (aspectRatio != camera->GetAspectRatio())
+				camera->SetAspectRatio(aspectRatio);
+		}
 
 		ImGui::TreePop();
 	}

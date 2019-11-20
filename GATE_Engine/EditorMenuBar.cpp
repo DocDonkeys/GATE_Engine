@@ -175,6 +175,14 @@ void EditorMenuBar::Update() {
 			ImGui::EndMenu();
 		}
 
+		// View - Screen Display options
+		if (ImGui::BeginMenu("View")) {
+
+			ImGui::MenuItem("Grid", NULL, &App->renderer3D->drawGrid);
+
+			ImGui::EndMenu();
+		}
+
 		// Menu - GameObjects: Create premade objects and primitives
 		if (ImGui::BeginMenu("GameObjects")) {
 
@@ -246,7 +254,7 @@ void EditorMenuBar::Update() {
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("View")) {
+			if (ImGui::BeginMenu("Show")) {
 				ImGui::Checkbox("Vertex Normals", &App->renderer3D->drawVertexNormals);
 				ImGui::Checkbox("Face Normals", &App->renderer3D->drawFaceNormals);
 
