@@ -113,25 +113,8 @@ void EditorConfiguration::Update()
 				ImGui::PlotHistogram("##milliseconds", &App->ms_log[0], App->ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 			}
 
-			ImGui::EndTabItem();
-		}
-
-		// Camera Tab
-		if (ImGui::BeginTabItem("Camera"))
-		{
-			if (ImGui::CollapsingHeader("Controls")) {
-				ImGui::Text("Keyboard Inputs");
-				ImGui::SliderFloat("Movement Speed", &App->camera->camMovSpeed, App->camera->camDefaultMin, App->camera->maxMovSpeed);
-				ImGui::SliderFloat("Movement Multiplier", &App->camera->camMovMultiplier, App->camera->camDefaultMin, App->camera->maxMovMultiplier);
-
-				ImGui::Separator();
-
-				ImGui::Text("Mouse Inputs");
-				ImGui::SliderFloat("Mouse Sensibility", &App->camera->mouseSens, App->camera->camDefaultMin, App->camera->maxMouseSens);
-				ImGui::SliderFloat("Scroll Sensibility", &App->camera->scrollSens, App->camera->camDefaultMin, App->camera->maxScrollSens);
-			}
-
-			if (ImGui::CollapsingHeader("Display")) {
+			// Editor Camera
+			if (ImGui::CollapsingHeader("Camera")) {
 				ComponentCamera* camPtr = App->camera->GetActiveCamera();
 				float tempf;
 
@@ -151,10 +134,24 @@ void EditorConfiguration::Update()
 			ImGui::EndTabItem();
 		}
 
-		// Input Tab
-		if (ImGui::BeginTabItem("Input"))
+		// Controls Tab
+		if (ImGui::BeginTabItem("Controls"))
 		{
-			if (ImGui::CollapsingHeader("Data")) {
+			// Editor Camera
+			if (ImGui::CollapsingHeader("Camera")) {
+				ImGui::Text("Keyboard Inputs");
+				ImGui::SliderFloat("Movement Speed", &App->camera->camMovSpeed, App->camera->camDefaultMin, App->camera->maxMovSpeed);
+				ImGui::SliderFloat("Movement Multiplier", &App->camera->camMovMultiplier, App->camera->camDefaultMin, App->camera->maxMovMultiplier);
+
+				ImGui::Separator();
+
+				ImGui::Text("Mouse Inputs");
+				ImGui::SliderFloat("Mouse Sensibility", &App->camera->mouseSens, App->camera->camDefaultMin, App->camera->maxMouseSens);
+				ImGui::SliderFloat("Scroll Sensibility", &App->camera->scrollSens, App->camera->camDefaultMin, App->camera->maxScrollSens);
+			}
+
+			// Input Data
+			if (ImGui::CollapsingHeader("Input Data")) {
 				ImGui::Text("Mouse Position: "); ImGui::SameLine();
 				ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "%d, %d", App->input->GetMouseX(), App->input->GetMouseY());
 
