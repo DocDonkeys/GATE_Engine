@@ -9,7 +9,6 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ImporterScene.h"
-#include "Texture.h"
 #include "Tree.h"
 
 #include "libs/MathGeoLib/include/Math/MathConstants.h"
@@ -210,7 +209,7 @@ void ModuleSceneIntro::RecursiveTestRay(const LineSegment& segment, float& dist,
 
 		if (compMesh != nullptr)
 		{
-			Mesh* mesh = compMesh->mesh;
+			ResourceMesh* mesh = compMesh->mesh;
 
 			LineSegment seg(segment);
 			seg.Transform(compTrs->GetGlobalMat().Inverted());

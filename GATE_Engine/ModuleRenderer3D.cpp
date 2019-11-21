@@ -8,7 +8,6 @@
 #include "ModuleSceneIntro.h"
 #include "ComponentCamera.h"
 #include "TextureLoader.h"
-#include "Mesh.h"
 #include "ResourceMesh.h"
 #include "Tree.h"
 

@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResources.h"
 #include "ModuleCamera3D.h"
 #include "TextureLoader.h"
 #include "Importer.h"

@@ -1,4 +1,5 @@
 #include "ResourceMesh.h"
+#include "ModuleRenderer3D.h"
 #include "Application.h"
 #include "MemLeaks.h"
 #include "libs/Assimp/include/mesh.h"

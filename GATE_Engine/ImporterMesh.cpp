@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleFileSystem.h"
 #include "ModuleRenderer3D.h"
-#include "Mesh.h"
+#include "ModuleResources.h"
 #include "ResourceMesh.h"
 
 ImporterMesh::ImporterMesh()

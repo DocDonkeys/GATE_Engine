@@ -1,6 +1,7 @@
 #include "ModuleResources.h"
 #include "ModuleFileSystem.h"
 #include "Application.h"
+#include "TextureLoader.h"
 #include "Resource.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"

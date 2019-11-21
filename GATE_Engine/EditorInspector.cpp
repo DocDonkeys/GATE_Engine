@@ -12,7 +12,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
-#include "Texture.h"
+#include "ResourceTexture.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
 

@@ -5,7 +5,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ImporterMesh.h"
-#include "Texture.h"
+#include "ResourceTexture.h"
 
 #include "libs/SDL/include/SDL_opengl.h"
 

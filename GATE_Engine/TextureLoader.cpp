@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleFileSystem.h"
 #include "ModuleEditor.h"
+#include "ModuleResources.h"
 #include "ResourceTexture.h"
 
 // Include DevIL headers

@@ -5,7 +5,6 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
-#include "Mesh.h"
 
 Importer::Importer()
 {
