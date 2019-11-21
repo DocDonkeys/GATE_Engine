@@ -6,6 +6,7 @@
 
 #include "libs/MathGeoLib/include/Geometry/Frustum.h"
 #include "libs/MathGeoLib/include/Geometry/AABB.h"
+#include "libs/MathGeoLib/include/Geometry/LineSegment.h"
 
 class ComponentCamera : public Component
 {
@@ -34,6 +35,11 @@ public:
 	float4x4 GetProjectionMatrix() const;
 	float4x4 GetOpenGLView() const;
 	float4x4 GetOpenGLProjection() const;
+
+	// Frustum Raycasting
+	Ray GetEyeProjectedRay(float x, float y) const;
+	Ray GetNearProjectedRay(float x, float y) const;
+	LineSegment GetNearProjSegment(float x, float y) const;
 
 	// Set
 	void SetNearPlaneDist(float dist);

@@ -50,7 +50,7 @@ public:	// Nested classes
 
 		void Intersects(std::vector<const GameObject*>& collector, const AABB& area);
 		void Intersects(std::vector<const GameObject*>& collector, const Frustum& frustum);
-		void Intersects(std::map<float, const GameObject*>& collector, const LineSegment& line);
+		void Intersects(std::map<float, const GameObject*>& collector, const LineSegment& line, bool nearest = true);
 
 		void Split();
 		void Prune();
@@ -87,9 +87,11 @@ public: // Methods
 	bool Insert(const GameObject* obj);
 	bool Remove(const GameObject* obj);
 
+	//template<class Primitive>
+	//void Intersects(std::vector<const GameObject*>& collector, const Primitive& area);	//IMPROVE: Use this instead of a method for every intersection type
 	void Intersects(std::vector<const GameObject*>& collector, const AABB& area);
 	void Intersects(std::vector<const GameObject*>& collector, const Frustum& frustum);
-	void Intersects(std::map<float, const GameObject*>& collector, const LineSegment& line);
+	void Intersects(std::map<float, const GameObject*>& collector, const LineSegment& line, bool nearest = true);
 
 public:	// Members
 	TREE_TYPE type = TREE_TYPE::NONE;

@@ -37,8 +37,8 @@ public:
 	bool  AddTextureToGameObject(GameObject* go, const char* path);
 
 	// Methods
-	GameObject* CastRay(const LineSegment& segment, float& dist) const;
-	void ModuleSceneIntro::RecursiveTestRay(const LineSegment& segment, float& dist, GameObject** chosen) const;
+	GameObject* CastRay(const LineSegment& segment, float& dist, bool nearest = true) const;
+	void IntersectRay(const LineSegment& segment, float& dist, GameObject*& chosen, bool nearest = true) const;
 
 	int CheckToolMode() const;
 

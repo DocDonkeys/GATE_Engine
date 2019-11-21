@@ -207,6 +207,23 @@ float4x4 ComponentCamera::GetProjectionMatrix() const
 	return float4x4::D3DPerspProjRH(frustum.nearPlaneDistance, frustum.farPlaneDistance, frustum.NearPlaneWidth(), frustum.NearPlaneHeight());
 }
 
+/* Specifying(-1, -1) returns the bottom - left corner of the near plane.
+	The point(1, 1) corresponds to the top - right corner of the near plane. */
+Ray ComponentCamera::GetEyeProjectedRay(float x, float y) const
+{
+	return frustum.UnProject(x, y);
+}
+
+Ray ComponentCamera::GetNearProjectedRay(float x, float y) const
+{
+	return frustum.UnProjectFromNearPlane(x, y);
+}
+
+LineSegment ComponentCamera::GetNearProjSegment(float x, float y) const
+{
+	return frustum.UnProjectLineSegment(x, y);
+}
+
 bool ComponentCamera::Intersects(const AABB& refBox) const
 {
 	return Intersects(frustum, refBox);

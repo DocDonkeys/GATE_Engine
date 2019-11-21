@@ -133,15 +133,15 @@ update_status ModuleCamera3D::Update(float dt)
 // Mouse Picking
 GameObject* ModuleCamera3D::MousePick(float3* hit) const
 {
-	float normX = -(1.0f - (float(App->input->GetMouseY()) * 2.0f) / (float)App->window->GetWidth());
-	float normY = 1.0f - (float(App->input->GetMouseX()) * 2.0f) / (float)App->window->GetHeight();
-	LineSegment picking = activeCamera->frustum.UnProjectLineSegment(normX, normY);
+	float normX = (float)App->input->GetMouseX() / (float)App->window->GetWidth() * 2.f - 1.f;		// [0,1] * 2 - 1 ---> [0,2] - 1 ---> [-1,1]
+	float normY = -((float)App->input->GetMouseY() / (float)App->window->GetHeight() * 2.f - 1.f);	// Same, but inversed as mouse pos is max on bottom and for frustum near plane is on top
+	LineSegment cameraProj = activeCamera->GetNearProjSegment(normX, normY);	//Range[-1, 1]
 
 	float distance;
-	GameObject* firstObj = App->scene_intro->CastRay(picking, distance);
+	GameObject* firstObj = App->scene_intro->CastRay(cameraProj, distance, true);
 
 	if (firstObj != nullptr && hit != nullptr)
-		*hit = picking.GetPoint(distance);
+		*hit = cameraProj.GetPoint(distance);
 
 	return firstObj;
 }
