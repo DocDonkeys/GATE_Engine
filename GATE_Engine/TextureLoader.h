@@ -6,6 +6,7 @@
 #include "Module.h"
 #include "ResourceTexture.h"
 #include "libs/glew/include/GL/glew.h"
+#include "ImporterMaterial.h"
 
 class TextureLoader : public Module
 {
@@ -38,6 +39,9 @@ public:
 
 	//Save a given texture in DDS format inside the textures library folder
 	bool DuplicateTextureAsDDS(const char* name) const;
+
+public:
+	ImporterMaterial importer;
 private:
 	//TODO: Didac this vector should be deleted and only use resources map inside module resources
 	std::vector<ResourceTexture*> textures;	// IMPROVE: This class having accessible variables and a list makes it more of a "Manager" rather than a tool, consider changing nomenclature and Filter.

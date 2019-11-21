@@ -309,6 +309,14 @@ bool Importer::Load(const char * full_path)
 	return false;
 }
 
+bool Importer::ImportableResource(const char * full_path)
+{
+	if (App->file_system->Exists(full_path))
+		return true;
+	else
+		return false;
+}
+
 uint Importer::TotalGOsNum(const GameObject * go, uint& num_of_gos)
 {
 		num_of_gos++;

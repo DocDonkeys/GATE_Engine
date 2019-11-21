@@ -300,7 +300,9 @@ ResourceTexture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMes
 				relative_path = relative_path.substr(found + 1, relative_path.size());
 			}
 			std::string texture_path = absolute_path.data() + relative_path;
-			ret = App->texture_loader->LoadTextureFile(texture_path.data());
+			uint32 uid = App->resources->ImportFile(texture_path.data(), Resource::TEXTURE);
+			ret = (ResourceTexture*)App->resources->Get(uid);
+			//ret = App->texture_loader->LoadTextureFile(texture_path.data());
 
 			if (ret == nullptr || ret->id == 0) {
 				LOG("[Error]: Texture loading failed in path %s.", absolute_path);

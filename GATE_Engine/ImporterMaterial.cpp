@@ -23,18 +23,18 @@ bool ImporterMaterial::Load(const char * full_path, ResourceTexture* tex)
 	App->file_system->SplitFilePath(full_path,&path, &uid_string);
 	
 	//Check if texture is already on the map
-	if (tex->GetUID() != std::stoul(uid_string))
-	{
+	//if (tex->GetUID() != std::stoul(uid_string))
+	//{
 		tex = App->texture_loader->LoadTextureFile(full_path);
 		if (tex != nullptr)
 			ret = true;
-	}
-	else
-	{
-		tex = (ResourceTexture*)App->resources->Get(std::stoul(uid_string));
-		if(tex!=nullptr)
-		ret = true;
-	}
+	//}
+	//else
+	//{
+	//	tex = (ResourceTexture*)App->resources->Get(std::stoul(uid_string));
+	//	if(tex!=nullptr)
+	//	ret = true;
+	//}
 
-	return ret;
+	return false;
 }

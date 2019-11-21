@@ -44,17 +44,23 @@ uint32 ModuleResources::ImportFile(const char * new_file_in_assets, Resource::Ty
 {
 	uint32 ret = 0; bool import_ok = false; std::string written_file;
 
-	//switch (type)
-	//{
-	//case Resource::TEXTURE: import_ok = App->tex->Import(new_file_in_assets, "", written_file); break;
-	//}
-	//if (import_ok == true)
-	//{ // If import was successful, create a new resource 
-	//	Resource* res = CreateNewResource(type);
-	//	res->file = new_file_in_assets;
-	//	res->exported_file = written_file;
-	//	ret = res->uid;
-	//}
+	switch (type)
+	{
+	case Resource::TEXTURE: import_ok = App->texture_loader->importer.ImportableResource(new_file_in_assets); break;
+	}
+	import_ok = true; //TODO: DIdac remove this hardcode which serves to test texture creation
+	if (import_ok == true)
+	{ // If import was successful, create a new resource 
+		Resource* res = nullptr;
+		//Resource* res = CreateNewResource(type);
+		switch (type)
+		{
+		case Resource::TEXTURE:	res = App->texture_loader->LoadTextureFile(new_file_in_assets);
+		}
+		//res->file = new_file_in_assets;
+		//res->exported_file = written_file;
+		ret = res->GetUID();
+	}
 
 	return ret;
 }
