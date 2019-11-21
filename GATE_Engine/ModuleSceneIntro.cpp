@@ -188,17 +188,33 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-GameObject* ModuleSceneIntro::CastRay(const LineSegment& segment, float& dist) const
+GameObject* ModuleSceneIntro::CastRay(const LineSegment& segment, float& dist, bool nearest) const
 {
 	dist = inf;
-	GameObject* candidate = nullptr;
-	RecursiveTestRay(segment, dist, &candidate);
-	return candidate;
+	GameObject* chosen = nullptr;
+	IntersectRay(segment, dist, chosen, nearest);
+	return chosen;
 }
 
-void ModuleSceneIntro::RecursiveTestRay(const LineSegment& segment, float& dist, GameObject** chosen) const
+void ModuleSceneIntro::IntersectRay(const LineSegment& segment, float& dist, GameObject*& chosen, bool nearest) const
 {
 	std::map<float, const GameObject*> objCollector;
+	std::vector<const GameObject*> tmpCollector;
+	float nearHit, farHit;
+
+	// Dynamic Intersection
+	GOFunctions::FillArrayWithChildren(tmpCollector, root);
+	for (int i = 0; i < tmpCollector.size(); i++)
+		if (!tmpCollector[i]->staticObj
+			&& tmpCollector[i]->active
+			&& tmpCollector[i]->GetComponent(COMPONENT_TYPE::MESH) != nullptr
+			&& segment.Intersects(tmpCollector[i]->aabb, nearHit, farHit))
+			if (nearest)
+				objCollector[nearHit] = tmpCollector[i];
+			else
+				objCollector[farHit] = tmpCollector[i];
+
+	// Static Intersections
 	staticTree->Intersects(objCollector, segment);
 
 	for (std::map<float, const GameObject*>::const_iterator it = objCollector.begin(); it != objCollector.end(); it = next(it))
@@ -225,10 +241,10 @@ void ModuleSceneIntro::RecursiveTestRay(const LineSegment& segment, float& dist,
 				float3 hit_point;
 				if (seg.Intersects(tri, &distance, &hit_point))
 				{
-					if (distance < dist)
+					if (nearest && distance < dist || !nearest && distance > dist)
 					{
 						dist = distance;
-						*chosen = (GameObject*)go;
+						chosen = (GameObject*)go;
 					}
 				}
 			}
