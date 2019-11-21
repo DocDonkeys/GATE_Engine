@@ -16,11 +16,8 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -197,38 +194,46 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Renderer post-Update", Profiler::Color::DarkOrange);
 
-	// DIRECT MODE Rendering
-	// PLANE
-	glLineWidth(2.0f);
-	glBegin(GL_LINES);
-	
-	for (float i = -50; i <= 50; ++i)
-	{
-		glVertex3f(i, 0.f, -50.f);
-		glVertex3f(i, 0, 50.f);
+	// Base Grid
+	if (drawGrid) {
+		glLineWidth(2.0f);
+		glBegin(GL_LINES);
 
-		glVertex3f(-50.f, 0.f, i);
-		glVertex3f(50.f, 0, i);
+		for (float i = -50; i <= 50; ++i)
+		{
+			glVertex3f(i, 0.f, -50.f);
+			glVertex3f(i, 0, 50.f);
+
+			glVertex3f(-50.f, 0.f, i);
+			glVertex3f(50.f, 0, i);
+		}
+
+		glEnd();
+		glLineWidth(1.0f);
 	}
-	glEnd();
-
-	glLineWidth(1.0f);
 	
 	// Original Object Rendering
 	//App->scene_intro->root->Draw();
+
+	// Frustum Culling Testing
+	ComponentCamera* cam = cullingTestTarget;
+	if (cullingTestTarget == nullptr)
+		cam = App->camera->GetActiveCamera();
+	else
+		cam->Draw();
 
 	// Dynamic Frustum Culling
 	std::vector<const GameObject*> dynamicObjs;
 	GOFunctions::FillArrayWithChildren(dynamicObjs, App->scene_intro->root);
 	for (int i = 0; i < dynamicObjs.size(); i++)
-		if (!dynamicObjs[i]->staticObj && dynamicObjs[i]->active && App->camera->Intersects(dynamicObjs[i]->aabb))
+		if (!dynamicObjs[i]->staticObj && dynamicObjs[i]->active && cam->Intersects(dynamicObjs[i]->aabb))
 			dynamicObjs[i]->Draw();
 
 	// Static Frustum Culling
 	std::vector<const GameObject*> staticObjs;
-	App->scene_intro->staticTree->Intersects(staticObjs, App->camera->GetActiveFrustum());
+	App->scene_intro->staticTree->Intersects(staticObjs, cam->frustum);
 	for (int i = 0; i < staticObjs.size(); i++)
-		if (staticObjs[i]->active)
+		if (staticObjs[i]->active && cam->Intersects(staticObjs[i]->aabb))
 			staticObjs[i]->Draw();
 
 	// Render Octree

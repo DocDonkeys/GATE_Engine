@@ -13,11 +13,8 @@
 #pragma comment (lib, "libs/DevIL Windows SDK/lib/x86/Release/ILU.lib")
 #pragma comment (lib, "libs/DevIL Windows SDK/lib/x86/Release/ILUT.lib")
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 // Default texture data
 #define CHECKERS_HEIGHT 64
@@ -67,7 +64,7 @@ bool TextureLoader::CleanUp()
 	for (int i = 0; i < textures.size(); i++)
 		if (textures[i] != nullptr) {
 			glDeleteTextures(1, (GLuint*)&textures[i]->id);
-			delete textures[i];
+			RELEASE(textures[i]);
 		}
 
 	LOG("[Info]: Shutting down DevIL.");

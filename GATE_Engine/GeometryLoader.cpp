@@ -21,11 +21,8 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 //#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")		//CHANGE/FIX: Remove? @Didac do we need to keep this here just in case?
 /*
@@ -124,7 +121,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 	// Transform
 	ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	trs_component->SetLocalMat(meshTrs);
-	trs_component->needsUpdateGlobal = true;
 
 	if (node != nullptr && node->mNumMeshes > 0)
 	{

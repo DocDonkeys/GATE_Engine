@@ -8,11 +8,8 @@
 
 #include <Windows.h>
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 #define MAX_KEYS 300
 
@@ -26,7 +23,7 @@ ModuleInput::ModuleInput(Application* app, const char* name, bool start_enabled)
 // Destructor
 ModuleInput::~ModuleInput()
 {
-	delete[] keyboard;
+	RELEASE_ARRAY(keyboard);
 }
 
 // Called before render is available

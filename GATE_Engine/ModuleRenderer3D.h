@@ -11,6 +11,7 @@
 #define MAX_LIGHTS 8
 
 class ResourceMesh;
+class ComponentCamera;
 
 class ModuleRenderer3D : public Module
 {
@@ -62,26 +63,29 @@ public:
 	float3x3 NormalMatrix;
 	float4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
+	ComponentCamera* cullingTestTarget = nullptr;
+
 	bool vSync = true;
 	bool drawVertexNormals = false;	//CHANGE/FIX: Save&Load
 	bool drawFaceNormals = false;	//CHANGE/FIX: Save&Load
 	bool drawObjAABB = false;		//CHANGE/FIX: Save&Load
 	bool drawObjOBB = false;		//CHANGE/FIX: Save&Load
 	bool drawStaticTree = false;	//CHANGE/FIX: Save&Load
+	bool drawGrid = true;			//CHANGE/FIX: Save&Load
 
 	//OpenGL Flags https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glEnable.xml	//IMPROVE: Make a list jesus
 	GL_Setting GL_DepthTest;		//Do depth comparisons and update the depth buffer.
 	GL_Setting GL_CullFace;			//Cull polygons based on their winding in window coordinates.
 	GL_Setting GL_Lighting;			//If no vertex shader is active, use the current lighting parameters to compute the vertex color or index.
-	
+
 	std::vector<GL_Setting*> GL_TextureModes;
 	GL_Setting GL_Texture2D;		//If no fragment shader is active, two - dimensional texturing is performed
 	GL_Setting GL_TextureCubeMap;	//If no fragment shader is active, cube - mapped texturing is performed.
-	
+
 	GL_Setting GL_PointSmooth;		//If enabled, draw points with proper filtering. Otherwise, draw aliased points
 	GL_Setting GL_LineSmooth;		//If enabled draw lines with correct filtering. Otherwise, draw aliased lines.
 	GL_Setting GL_PolygonSmooth;	//If enabled, draw polygons with proper filtering. Otherwise, draw aliased polygons. (For correct antialiased polygons, an alpha buffer is needed and the polygons must be sorted front to back.)
-	
+
 	GL_Setting GL_LineStipple;		//Use the current line stipple pattern when drawing lines.
 	GL_Setting GL_PolygonStipple;	//Use the current polygon stipple pattern when rendering polygons.
 

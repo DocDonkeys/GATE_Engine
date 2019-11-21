@@ -8,7 +8,8 @@
 
 #pragma comment( lib, "libs/PhysFS/libx86/physfs.lib" )
 
-#include "libs/mmgr/mmgr.h"
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 using namespace std;
 
@@ -610,7 +611,7 @@ BOOL CALLBACK BassSeek(QWORD offset, void* file)
 
 void ModuleFileSystem::CreateBassIO()
 {
-	delete BassIO;
+	RELEASE(BassIO);
 
 	BassIO = new BASS_FILEPROCS;
 	BassIO->close = BassClose;

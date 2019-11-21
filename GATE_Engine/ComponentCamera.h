@@ -17,6 +17,9 @@ public:
 	void Enable() override;
 	void Disable() override;
 
+	void Update() override;
+	void Draw() override;
+
 public:
 	// Orders
 	void LookAt(const float3& position);
@@ -45,6 +48,7 @@ public:
 public:
 	Frustum frustum;
 	bool needsProjectionUpdate = true;
+	bool cullingTesting = false;
 };
 
 #endif // __COMPONENT_CAMERA_H__

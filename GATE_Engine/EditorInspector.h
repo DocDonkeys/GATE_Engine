@@ -7,6 +7,7 @@ class Component;
 class ComponentTransform;
 class ComponentMesh;
 class ComponentMaterial;
+class ComponentCamera;
 
 class EditorInspector : public EditorWindow
 {
@@ -22,6 +23,7 @@ public: //Methods
 	void DrawComponentTransform(ComponentTransform* c);
 	void DrawComponentMesh(ComponentMesh* c);
 	void DrawComponentMaterial(ComponentMaterial* c);
+	void DrawComponentCamera(ComponentCamera* c);
 
 private:
 	bool show_static_modal = false;

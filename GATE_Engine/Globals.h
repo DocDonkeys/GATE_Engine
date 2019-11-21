@@ -23,27 +23,6 @@ void log(const char file[], int line, const char* format, ...);
 //#endif
 //#define NULL 0
 
-// Deletes a buffer
-#define RELEASE( x ) \
-    {                        \
-    if( x != NULL )        \
-	    {                      \
-      delete x;            \
-	  x = NULL;              \
-	    }                      \
-    }
-
-// Deletes an array of buffers
-#define RELEASE_ARRAY( x ) \
-    {                              \
-    if( x != NULL )              \
-	    {                            \
-      delete[] x;                \
-	  x = NULL;                    \
-	    }                            \
-                              \
-    }
-
 // Utilities (Commented ones have been taken care of by other libraries or are deemed obsolete)
 
 //#define IN_RANGE( value, minimum, maximum ) ( ((value) >= (minimum) && (value) <= (maximum)) ? 1 : 0 )	//Returns if within range
@@ -102,10 +81,6 @@ enum update_status
 	UPDATE_STOP,
 	UPDATE_ERROR
 };
-
-//Memory Leak Detection
-#define _MMGR_MEM_LEAK
-//#define _VISUAL_MEM_LEAK
 
 //Only arbitrary value that can't be managed by JSON
 #define CONFIG_FILENAME "settings/config.json"

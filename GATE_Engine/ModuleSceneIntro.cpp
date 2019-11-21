@@ -10,11 +10,8 @@
 
 #include <math.h>
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -34,6 +31,7 @@ bool ModuleSceneIntro::Start()
 	//Create the Root node for Game Objects
 	root = new GameObject();
 	ComponentTransform* trans = (ComponentTransform*)root->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	trans->needsUpdateGlobal = false;
 
 	//Setup camera
 	App->camera->Move(float3(15.0f, 15.0f, 15.0f));
@@ -70,10 +68,8 @@ bool ModuleSceneIntro::CleanUp()
 	std::string scene_name = "scene_test";
 	//scene_imp.SaveScene(root,scene_name,FileType::SCENE);
 
-	delete root;
-
-	if (staticTree != nullptr)
-		delete staticTree;
+	RELEASE(root);
+	RELEASE(staticTree);
 
 	return true;
 }
@@ -88,6 +84,24 @@ GameObject* ModuleSceneIntro::CreateEmptyGameObject()
 GameObject* ModuleSceneIntro::CreateEmptyGameObject(const char* name)
 {
 	GameObject* go = new GameObject(name);
+	GOFunctions::ReParentGameObject(go, root);
+	return go;
+}
+
+GameObject* ModuleSceneIntro::CreateEmptyGameObject(COMPONENT_TYPE comp)
+{
+	GameObject* go = new GameObject();
+	go->CreateComponent(comp);
+
+	switch (comp) {
+	case COMPONENT_TYPE::CAMERA:
+		go->name = "Camera_" + std::to_string(App->scene_intro->numObjects++);
+		break;
+	default:
+		go->name = "GameObject_" + std::to_string(App->scene_intro->numObjects++);
+		break;
+	}
+	
 	GOFunctions::ReParentGameObject(go, root);
 	return go;
 }
@@ -107,7 +121,7 @@ void ModuleSceneIntro::DestroyGameObject(GameObject * go)
 		selected_go = nullptr;
 
 	GOFunctions::ReParentGameObject(go,nullptr);
-	delete go;
+	RELEASE(go);
 	numObjects--;
 }
 

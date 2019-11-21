@@ -5,11 +5,8 @@
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 EditorConfiguration::EditorConfiguration(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags) {};
 
@@ -121,7 +118,7 @@ void EditorConfiguration::Update()
 				tempf = camPtr->GetNearPlaneDist();
 				if (ImGui::SliderFloat("Near Plane", &tempf, 0.1f, App->camera->GetActiveCamera()->GetFarPlaneDist())) App->camera->GetActiveCamera()->SetNearPlaneDist(tempf);
 				tempf = camPtr->GetFarPlaneDist();
-				if (ImGui::SliderFloat("Far Plane", &tempf, App->camera->GetActiveCamera()->GetNearPlaneDist(), 1000.f)) App->camera->GetActiveCamera()->SetFarPlaneDist(tempf);
+				if (ImGui::SliderFloat("Far Plane", &tempf, App->camera->GetActiveCamera()->GetNearPlaneDist(), 5000.f)) App->camera->GetActiveCamera()->SetFarPlaneDist(tempf);
 
 				ImGui::Separator();
 

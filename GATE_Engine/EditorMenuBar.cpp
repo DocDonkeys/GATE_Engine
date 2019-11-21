@@ -16,11 +16,8 @@
 // Elements
 #include "EditorMenuBar.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 void EditorMenuBar::Update() {
 	if (ImGui::BeginMenuBar()) {
@@ -175,20 +172,28 @@ void EditorMenuBar::Update() {
 			ImGui::EndMenu();
 		}
 
+		// View - Screen Display options
+		if (ImGui::BeginMenu("View")) {
+
+			ImGui::MenuItem("Grid", NULL, &App->renderer3D->drawGrid);
+
+			ImGui::EndMenu();
+		}
+
 		// Menu - GameObjects: Create premade objects and primitives
 		if (ImGui::BeginMenu("GameObjects")) {
 
-			if (ImGui::BeginMenu("Create...")) {
+			if (ImGui::MenuItem("Create Empty"))
+			{
+				App->scene_intro->CreateEmptyGameObject();
+			}
 
-				if (ImGui::MenuItem("Create Empty"))
-				{
-					App->scene_intro->CreateEmptyGameObject();
-				}
+			if (ImGui::MenuItem("Create Empty x10"))
+			{
+				App->scene_intro->CreateEmptyGameObject(10);
+			}
 
-				if (ImGui::MenuItem("Create Empty x10"))
-				{
-					App->scene_intro->CreateEmptyGameObject(10);
-				}
+			if (ImGui::BeginMenu("Primitives")) {
 
 				if (ImGui::MenuItem("Plane"))
 				{
@@ -228,6 +233,12 @@ void EditorMenuBar::Update() {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::MenuItem("Camera", NULL)) {
+				App->scene_intro->CreateEmptyGameObject(COMPONENT_TYPE::CAMERA);
+			}
+
+			ImGui::Separator();
+
 			if (ImGui::BeginMenu("Draw Mode")) {
 
 				if (ImGui::RadioButton("Mesh", &App->editor->drawMode, (int)draw_mode::MESH)
@@ -240,9 +251,7 @@ void EditorMenuBar::Update() {
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("View")) {
-				ImGui::Separator();
-
+			if (ImGui::BeginMenu("Show")) {
 				ImGui::Checkbox("Vertex Normals", &App->renderer3D->drawVertexNormals);
 				ImGui::Checkbox("Face Normals", &App->renderer3D->drawFaceNormals);
 

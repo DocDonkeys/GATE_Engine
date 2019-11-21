@@ -1,5 +1,6 @@
 #include "ResourceMesh.h"
 #include "Application.h"
+#include "MemLeaks.h"
 #include "libs/Assimp/include/mesh.h"
 
 ResourceMesh::ResourceMesh(uint32 uid) : Resource(uid,Resource::MESH)

@@ -29,6 +29,7 @@ public:
 	//Game Objects
 	GameObject* CreateEmptyGameObject();
 	GameObject* CreateEmptyGameObject(const char* name);
+	GameObject* CreateEmptyGameObject(COMPONENT_TYPE comp);
 	void CreateEmptyGameObject(int num_of_go);
 	void DestroyGameObject(GameObject* go);
 

@@ -9,12 +9,10 @@
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
+#include "ComponentCamera.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 EditorInspector::EditorInspector(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags) {};
 
@@ -129,6 +127,12 @@ void EditorInspector::Update()
 			{
 				DrawComponentMaterial(material);
 			}
+		}
+
+		ComponentCamera* camera = (ComponentCamera*)go->GetComponent(COMPONENT_TYPE::CAMERA);
+		if (camera != nullptr)
+		{
+			DrawComponentCamera(camera);
 		}
 	}
 }
@@ -325,6 +329,65 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		}
 
 		ImGui::Checkbox("Use Default Texture", &material->use_default_texture);
+
+		ImGui::TreePop();
+	}
+	ImGui::Separator();
+}
+
+void EditorInspector::DrawComponentCamera(ComponentCamera* camera)
+{
+	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+	if (ImGui::TreeNodeEx("Camera", base_flags))
+	{
+		ImGui::Checkbox("Active", &camera->active); ImGui::SameLine();
+		if (ImGui::Checkbox("Culling Testing", &camera->cullingTesting)) {
+			if (camera->cullingTesting) {
+				if (App->renderer3D->cullingTestTarget != nullptr)
+					App->renderer3D->cullingTestTarget->cullingTesting = false;
+
+				App->renderer3D->cullingTestTarget = camera;
+			}
+			else
+				App->renderer3D->cullingTestTarget = nullptr;
+		}
+
+		ImGui::Separator();
+
+		float nearPlane = camera->GetNearPlaneDist();
+		float farPlane = camera->GetFarPlaneDist();
+		float fov = camera->GetFOV();
+		float aspectRatio = camera->GetAspectRatio();
+
+		float width = ImGui::GetWindowWidth() / 3.f;
+
+		ImGui::AlignTextToFramePadding(); ImGui::Text("Near Plane");
+		ImGui::SameLine(130.f); ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##NearPlane", &nearPlane, 0.05f, 0.1f, farPlane);
+
+		ImGui::AlignTextToFramePadding(); ImGui::Text("Far Plane");
+		ImGui::SameLine(130.f); ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##FarPlane", &farPlane, 0.05f, nearPlane, 5000.f);
+
+		ImGui::AlignTextToFramePadding(); ImGui::Text("Field of View");
+		ImGui::SameLine(130.f); ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##FieldofView", &fov, 0.05f, 1.f, 179.f);
+
+		ImGui::AlignTextToFramePadding(); ImGui::Text("Aspect Ratio");
+		ImGui::SameLine(130.f); ImGui::SetNextItemWidth(width);
+		ImGui::DragFloat("##AspectRatio", &aspectRatio, 0.05f, 0.1f, 10.f);
+
+		if (!App->input->GetMouseWrapping()) {
+			if (nearPlane != camera->GetNearPlaneDist())
+				camera->SetNearPlaneDist(nearPlane);
+			if (farPlane != camera->GetFarPlaneDist())
+				camera->SetFarPlaneDist(farPlane);
+			if (fov != camera->GetFOV())
+				camera->SetFOV(fov);
+			if (aspectRatio != camera->GetAspectRatio())
+				camera->SetAspectRatio(aspectRatio);
+		}
 
 		ImGui::TreePop();
 	}

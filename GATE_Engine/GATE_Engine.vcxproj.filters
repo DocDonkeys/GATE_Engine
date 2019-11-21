@@ -334,6 +334,9 @@
     <ClInclude Include="ResourceTexture.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
+    </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MemLeaks.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">

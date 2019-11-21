@@ -6,11 +6,8 @@
 #include "libs/SDL/include/SDL_assert.h"
 #include "libs/SDL/include/SDL_opengl.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 // Tree
 Tree::Tree(TREE_TYPE type, AABB aabb, uint nodeSizeLimit) : type(type), nodeSizeLimit(nodeSizeLimit)
@@ -23,7 +20,7 @@ Tree::~Tree()
 	Clear();
 
 	if (rootNode != nullptr) {
-		delete rootNode;
+		RELEASE(rootNode);
 	}
 }
 
@@ -258,19 +255,7 @@ void Tree::TreeNode::Prune()	// WARNING: This is only called in the context that
 {
 	SDL_assert(numBranches > 0);
 		
-	delete[] branches;
-	branches = nullptr;
-	numBranches = 0;
-
-	nodeType = NODE_TYPE::LEAF;
-}
-
-void Tree::TreeNode::Prune(std::vector<const GameObject*> leafObjs)	// WARNING: This is only called in the context that a branch is left with 4 leafs which together don't overflow the parent's node limit
-{
-	SDL_assert(numBranches > 0);
-
-	delete[] branches;
-	branches = nullptr;
+	RELEASE_ARRAY(branches);
 	numBranches = 0;
 
 	nodeType = NODE_TYPE::LEAF;
@@ -282,8 +267,7 @@ void Tree::TreeNode::Clear()
 		for (int i = 0; i < numBranches; i++)
 			branches[i].Clear();
 
-		delete[] branches;
-		branches = nullptr;
+		RELEASE_ARRAY(branches);
 		numBranches = 0;
 	}
 

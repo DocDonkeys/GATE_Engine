@@ -18,11 +18,8 @@
 // Elements
 #include "EditorMenuBar.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -43,17 +40,17 @@ ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabl
 ModuleEditor::~ModuleEditor()
 {
 	// Windows
-	delete editor_configuration;
-	delete editor_console;
-	delete editor_game;
-	delete editor_hierarchy;
-	delete editor_inspector;
-	delete editor_project;
-	delete editor_scene;
-	delete editor_toolbar;
+	RELEASE(editor_configuration);
+	RELEASE(editor_console);
+	RELEASE(editor_game);
+	RELEASE(editor_hierarchy);
+	RELEASE(editor_inspector);
+	RELEASE(editor_project);
+	RELEASE(editor_scene);
+	RELEASE(editor_toolbar);
 
 	// Elements
-	delete editor_menu_bar;
+	RELEASE(editor_menu_bar);
 }
 
 bool ModuleEditor::Init()

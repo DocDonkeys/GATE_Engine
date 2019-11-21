@@ -2,11 +2,8 @@
 #include "Application.h"
 #include "libs/Assimp/include/mesh.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 //Mesh::Mesh()
 //{
