@@ -10,11 +10,8 @@
 
 #include <math.h>
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -71,10 +68,8 @@ bool ModuleSceneIntro::CleanUp()
 	std::string scene_name = "scene_test";
 	//scene_imp.SaveScene(root,scene_name,FileType::SCENE);
 
-	delete root;
-
-	if (staticTree != nullptr)
-		delete staticTree;
+	RELEASE(root);
+	RELEASE(staticTree);
 
 	return true;
 }
@@ -126,7 +121,7 @@ void ModuleSceneIntro::DestroyGameObject(GameObject * go)
 		selected_go = nullptr;
 
 	GOFunctions::ReParentGameObject(go,nullptr);
-	delete go;
+	RELEASE(go);
 	numObjects--;
 }
 

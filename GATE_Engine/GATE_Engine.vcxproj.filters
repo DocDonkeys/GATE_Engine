@@ -322,6 +322,7 @@
     <ClInclude Include="Resource.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="MemLeaks.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">

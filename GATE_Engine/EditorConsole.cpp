@@ -1,11 +1,8 @@
 #include "EditorConsole.h"
 #include "Globals.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 EditorConsole::EditorConsole(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags)
 {

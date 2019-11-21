@@ -21,11 +21,8 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 //#pragma comment (lib, "libs/assimp-5.0.0/libx86/assimp.lib")		//CHANGE/FIX: Remove? @Didac do we need to keep this here just in case?
 /*

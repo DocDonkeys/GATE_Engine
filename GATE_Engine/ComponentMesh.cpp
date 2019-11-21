@@ -5,6 +5,9 @@
 #include "ComponentMaterial.h"
 #include "ImporterMesh.h"
 
+// Memory Leak Detection
+#include "MemLeaks.h"
+
 ComponentMesh::ComponentMesh() : Component()
 {
 	type = COMPONENT_TYPE::MESH;
@@ -12,7 +15,7 @@ ComponentMesh::ComponentMesh() : Component()
 
 ComponentMesh::~ComponentMesh()
 {
-	delete mesh;
+	RELEASE(mesh);
 }
 
 void ComponentMesh::Enable()

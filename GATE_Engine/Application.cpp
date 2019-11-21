@@ -16,11 +16,8 @@
 #include "EditorMenuBar.h"
 // ----------------
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 Application::Application()
 {
@@ -66,7 +63,7 @@ Application::~Application()
 
 	while (item != list_modules.rend())
 	{
-		delete *item;
+		RELEASE(*item);
 		item++;
 	}
 }

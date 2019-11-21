@@ -88,6 +88,7 @@
     <ClInclude Include="ImporterMaterial.h" />
     <ClInclude Include="ImporterMesh.h" />
     <ClInclude Include="ImporterScene.h" />
+    <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleResources.h" />
     <ClInclude Include="Resource.h" />

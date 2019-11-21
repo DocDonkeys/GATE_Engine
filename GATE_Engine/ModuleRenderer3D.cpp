@@ -16,11 +16,8 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {

@@ -8,6 +8,9 @@
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
 
+// Memory Leak Detection
+#include "MemLeaks.h"
+
 GameObject::GameObject() : size(float3::zero)
 {
 	UID = App->rng.RandInt<uint32_t>();
@@ -29,16 +32,13 @@ GameObject::~GameObject()
 	if (children.size() > 0)
 	{
 		for (int i = 0; i < children.size(); ++i)
-		{
-			delete children[i];
-			children[i] = nullptr;
-		}
+			RELEASE(children[i]);
 
 		children.clear();
 	}
 
 	for (int i = 0; i < components.size(); ++i)
-		delete components[i];
+		RELEASE(components[i]);
 	
 	components.clear();
 }

@@ -3,11 +3,8 @@
 #include <gl/GL.h>
 //#include <gl/GLU.h>
 
-#ifdef _DEBUG
-#ifdef _MMGR_MEM_LEAK
-#include "libs/mmgr/mmgr.h"
-#endif
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 Light::Light() : ref(-1), on(false)
 {

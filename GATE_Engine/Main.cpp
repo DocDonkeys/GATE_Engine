@@ -2,20 +2,8 @@
 #include "Globals.h"
 #include "Application.h"
 
-// Old school memory leak detector (mmgr)
-#ifdef _DEBUG
-
-#ifdef _MMGR_MEM_LEAK
-//#define TEST_MEMORY_MANAGER
-#include "libs/mmgr/mmgr.h"
-#else
-#ifdef _VISUAL_MEM_LEAK
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#endif
-#endif
-
-#endif
+// Memory Leak Detection
+#include "MemLeaks.h"
 
 // We need to include this here because SDL overwrites main()
 #include "libs/SDL/include/SDL.h"
@@ -104,8 +92,7 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	delete App;
-	App = NULL; // Why did the Physics code not have this?????	// Because having a nullptr allocation before returning main is kinda pointless
+	RELEASE(App);
 	LOG("Exiting Engine...");
 
 	//mmgr Mem Leak Detector

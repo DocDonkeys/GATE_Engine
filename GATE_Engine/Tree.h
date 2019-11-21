@@ -52,7 +52,6 @@ public:	// Nested classes
 
 		void Split();
 		void Prune();
-		void Prune(std::vector<const GameObject*> leafObjs);
 
 	private:
 		void QuadSplit();
