@@ -29,12 +29,17 @@ public:
 
 public:
 	uint32 Find(const char* file_in_assets) const;
-	uint32 ImportFile(const char* new_file_in_assets, Resource::Type type, bool force = false);
+
+	//ImportFile serves the purpose of loading a file that is not on the application, it will decide wether it has to create metadata
+	// & own file formats or if it will be using metadata and fileformats directly, calling functions and creating the resources to load the file
+	uint32 ImportFile(const char* full_path);
+	uint32 ImportInternalFile(const char* new_file_in_assets, Resource::Type type, bool force = false);
 	uint32 GenerateNewUID();
 	const Resource* Get(uint32 uid) const;
 	Resource* Get(uint32 uid);
 	Resource* CreateNewResource(Resource::Type type, uint32 force_uid = 0);
 
+	Resource::Type ResourceTypeByPath(const std::string extension);
 private:
 	//This function initially fills the directories and files assets tree, with all data found inside the Assets folder
 	void InitPopulateAssetsDir(AbstractDir &abs_dir);
@@ -50,6 +55,9 @@ private:
 	std::vector<std::string> known_files;
 	std::vector<std::string> known_dirs;
 	AbstractDir assets_dir;
+
+	std::vector<const char*> extension_3D_file;
+	std::vector<const char*> extension_texture;
 };
 #endif // !__MODULE_RESOURCES_H__
 
