@@ -238,7 +238,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	std::vector<const GameObject*> staticObjs;
 	App->scene_intro->staticTree->Intersects(staticObjs, cam->frustum);
 	for (int i = 0; i < staticObjs.size(); i++)
-		if (staticObjs[i]->active)
+		if (staticObjs[i]->active && cam->Intersects(staticObjs[i]->aabb))
 			staticObjs[i]->Draw();
 
 	// Render Octree
