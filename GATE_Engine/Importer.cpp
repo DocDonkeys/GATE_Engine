@@ -1,10 +1,11 @@
 #include "Importer.h"
-#include "Mesh.h"
+#include "Application.h"
+#include "ModuleFileSystem.h"
+#include "ModuleSceneIntro.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
-#include "Application.h"
-#include "ModuleFileSystem.h"
+#include "Mesh.h"
 
 Importer::Importer()
 {

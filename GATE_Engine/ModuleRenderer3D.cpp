@@ -1,10 +1,14 @@
-﻿#include "Globals.h"
+﻿#include "ModuleRenderer3D.h"
+#include "Globals.h"
 #include "Application.h"
-#include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "Mesh.h"
+#include "ModuleCamera3D.h"
+#include "ModuleEditor.h"
+#include "ModuleSceneIntro.h"
 #include "ComponentCamera.h"
+#include "TextureLoader.h"
+#include "Mesh.h"
 #include "Tree.h"
 
 #include "libs/glew/include/GL/glew.h"
@@ -15,6 +19,9 @@
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+
+// Brofiler
+#include "libs/Brofiler/Brofiler.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -142,7 +149,7 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(App->window->window_width, App->window->window_height);
+	OnResize(App->window->GetWidth(), App->window->GetHeight());
 
 	return ret;
 }

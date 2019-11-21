@@ -1,6 +1,10 @@
 #include "GeometryLoader.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleFileSystem.h"
+#include "ModuleCamera3D.h"
+#include "TextureLoader.h"
 #include "Importer.h"
 
 #include "libs/Assimp/include/cimport.h"
@@ -86,7 +90,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		//We load all nodes inside the root node, respecting parenting in gameobjects
 		aiNode* root = scene->mRootNode;
 		GameObject* go = LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
-		GOFunctions::ReParentGameObject(go,App->scene_intro->root);
+		GOFunctions::ReParentGameObject(go, App->scene_intro->root);
 		
 		//Once finished we release the original file
 		aiReleaseImport(scene);

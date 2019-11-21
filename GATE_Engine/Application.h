@@ -10,29 +10,28 @@
 #include "Timer.h"
 #include "RNGenerator.h"
 
-// Modules
-#include "Module.h"
-#include "ModuleWindow.h"
-#include "ModuleInput.h"
-#include "ModuleSceneIntro.h"
-#include "ModuleRenderer3D.h"
-#include "ModuleCamera3D.h"
-#include "ModuleEditor.h"
-#include "ModulePhysics.h"
-#include "ModuleResources.h"
-#include "GeometryLoader.h"
-#include "TextureLoader.h"
-#include "ModuleFileSystem.h"
-
 // SDL
-#include "libs/SDL/include/SDL.h"
-#include "libs/SDL/include/SDL_version.h"
+//#include "libs/SDL/include/SDL.h"
+//#include "libs/SDL/include/SDL_version.h"
 
 // JSON
 #include "JsonLoader.h"
 
 // Brofiler
-#include "libs/Brofiler/Brofiler.h"
+//#include "libs/Brofiler/Brofiler.h"
+
+class Module;
+class ModuleWindow;
+class ModuleInput;
+class ModuleSceneIntro;
+class ModuleRenderer3D;
+class ModuleCamera3D;
+class ModuleEditor;
+class ModulePhysics;
+class GeometryLoader;
+class TextureLoader;
+class ModuleFileSystem;
+class ModuleResources;
 
 struct GPU_info
 {
@@ -137,16 +136,16 @@ public:
 
 	//Modules
 	ModuleWindow*		window;
-	ModuleInput*			input;
+	ModuleInput*		input;
 	ModuleSceneIntro*	scene_intro;
 	ModuleRenderer3D*	renderer3D;
 	ModuleCamera3D*		camera;
-	ModuleEditor*			editor;
-	ModulePhysics*			physics;
+	ModuleEditor*		editor;
+	ModulePhysics*		physics;
 	GeometryLoader*		geometry_loader;
-	TextureLoader*			texture_loader;
+	TextureLoader*		texture_loader;
 	ModuleFileSystem*	file_system;
-	ModuleResources*		resources;
+	ModuleResources*	resources;
 
 	//App members
 	hardware_info		hardware;

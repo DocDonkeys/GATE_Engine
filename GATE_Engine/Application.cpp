@@ -1,6 +1,20 @@
 #include "Application.h"
 #include "EditorConsole.h"
 
+// Modules
+#include "Module.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleEditor.h"
+#include "ModulePhysics.h"
+#include "ModuleResources.h"
+#include "GeometryLoader.h"
+#include "TextureLoader.h"
+#include "ModuleFileSystem.h"
+
 // ----------------	//CHANGE/FIX: This shouldn't be here! Upgrade Save&Load so it's done on every module for their data.
 // Windows
 #include "EditorConfiguration.h"
@@ -14,7 +28,9 @@
 
 // Elements
 #include "EditorMenuBar.h"
-// ----------------
+
+// Brofiler
+#include "libs/Brofiler/Brofiler.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"

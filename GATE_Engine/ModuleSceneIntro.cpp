@@ -1,14 +1,20 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleCamera3D.h"
+#include "ModuleInput.h"
+#include "TextureLoader.h"
 #include "GeometryLoader.h"
-#include "Application.h"
 #include "ComponentTransform.h"
+#include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ImporterScene.h"
+#include "Texture.h"
 #include "Tree.h"
 
-#include <math.h>
+#include "libs/MathGeoLib/include/Math/MathConstants.h"
+#include "libs/MathGeoLib/include/Geometry/LineSegment.h"
+#include "libs/MathGeoLib/include/Geometry/Triangle.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -181,6 +187,54 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 	root->PostUpdate();
 
 	return UPDATE_CONTINUE;
+}
+
+GameObject* ModuleSceneIntro::CastRay(const LineSegment& segment, float& dist) const
+{
+	dist = inf;
+	GameObject* candidate = nullptr;
+	RecursiveTestRay(segment, dist, &candidate);
+	return candidate;
+}
+
+void ModuleSceneIntro::RecursiveTestRay(const LineSegment& segment, float& dist, GameObject** chosen) const
+{
+	std::map<float, const GameObject*> objCollector;
+	staticTree->Intersects(objCollector, segment);
+
+	for (std::map<float, const GameObject*>::const_iterator it = objCollector.begin(); it != objCollector.end(); it = next(it))
+	{
+		const GameObject* go = it->second;
+		ComponentTransform* compTrs = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+		ComponentMesh* compMesh = (ComponentMesh*)go->GetComponent(COMPONENT_TYPE::MESH);
+
+		if (compMesh != nullptr)
+		{
+			Mesh* mesh = compMesh->mesh;
+
+			LineSegment seg(segment);
+			seg.Transform(compTrs->GetGlobalMat().Inverted());
+
+			Triangle tri;
+			for (uint i = 0; i < mesh->num_index; i += 3)
+			{
+				tri.a = mesh->vertex[mesh->index[i]];
+				tri.b = mesh->vertex[mesh->index[i + 1]];
+				tri.c = mesh->vertex[mesh->index[i + 2]];
+
+				float distance;
+				float3 hit_point;
+				if (seg.Intersects(tri, &distance, &hit_point))
+				{
+					if (distance < dist)
+					{
+						dist = distance;
+						*chosen = (GameObject*)go;
+					}
+				}
+			}
+		}
+	}
 }
 
 int ModuleSceneIntro::CheckToolMode() const

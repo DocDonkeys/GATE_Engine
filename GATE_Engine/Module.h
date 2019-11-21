@@ -1,6 +1,7 @@
 #ifndef MODULE_H
 #define MODULE_H
 
+#include "Globals.h"
 #include <string>
 
 class Application;

@@ -2,6 +2,7 @@
 #include "ModuleEditor.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleWindow.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -27,7 +28,7 @@ void EditorToolbar::Update()
 	}; ImGui::SameLine();
 	if (ImGui::RadioButton("Multi", &App->scene_intro->toolMode, (int)tool_mode::MULTI)) {
 	
-	}; ImGui::SameLine(App->window->window_width / 2 - 100);
+	}; ImGui::SameLine(App->window->GetWidth() / 2 - 100);
 
 	ImGui::Button("Play"); ImGui::SameLine();	//IMPROVE: ImageButtons
 	ImGui::Button("Pause"); ImGui::SameLine();

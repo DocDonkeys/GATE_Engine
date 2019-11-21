@@ -26,7 +26,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	//Game Objects
+public:
+	// Game Objects
 	GameObject* CreateEmptyGameObject();
 	GameObject* CreateEmptyGameObject(const char* name);
 	GameObject* CreateEmptyGameObject(COMPONENT_TYPE comp);
@@ -35,12 +36,14 @@ public:
 
 	bool  AddTextureToGameObject(GameObject* go, const char* path);
 
-public:
-	//methods
+	// Methods
+	GameObject* CastRay(const LineSegment& segment, float& dist) const;
+	void ModuleSceneIntro::RecursiveTestRay(const LineSegment& segment, float& dist, GameObject** chosen) const;
+
 	int CheckToolMode() const;
 
 public:
-	//members
+	// Members
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 
 	Tree* staticTree = nullptr;

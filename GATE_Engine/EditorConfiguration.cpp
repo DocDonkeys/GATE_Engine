@@ -1,6 +1,10 @@
 #include "EditorConfiguration.h"
-#include "ModuleEditor.h"
 #include "Application.h"
+#include "ModuleEditor.h"
+#include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleInput.h"
 #include "ComponentCamera.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
@@ -61,32 +65,34 @@ void EditorConfiguration::Update()
 		{
 			//Window
 			if (ImGui::CollapsingHeader("Window")) {
-				if (ImGui::SliderInt("Width", &App->window->window_width, 256, 4096))
-					App->window->ResizeWindow(App->window->window_width, App->window->window_height);
+				int width = App->window->GetWidth();
+				int height = App->window->GetHeight();
+				if (ImGui::SliderInt("Width", &width, 256, 4096) || ImGui::SliderInt("Height", &height, 144, 2160)) {
+					App->window->ResizeWindow(width, height);
+				}
 
-				if (ImGui::SliderInt("Height", &App->window->window_height, 144, 2160))
-					App->window->ResizeWindow(App->window->window_width, App->window->window_height);
+				float brightness = App->window->GetBrightness();
+				if (ImGui::SliderFloat("Brightness", &brightness, 0.000f, 1.000f))
+					App->window->ChangeWindowBrightnessTo(brightness);
 
-				if (ImGui::SliderFloat("Brightness", &App->window->window_brightness, 0.000f, 1.000f))
-					App->window->ChangeWindowBrightnessTo(App->window->window_brightness);
-
-				if (ImGui::Checkbox("Fullscreen", &App->window->window_fullscreen))
-					App->window->WindowSetFullscreen(App->window->window_fullscreen);
-
-				ImGui::SameLine();
-
-				if (ImGui::Checkbox("Resizable", &App->window->window_resizable))
-					App->window->WindowSetResizable(App->window->window_resizable);
+				bool temp = App->window->GetFullscreen();
+				if (ImGui::Checkbox("Fullscreen", &temp))
+					App->window->WindowSetFullscreen(temp);
 
 				ImGui::SameLine();
-
-				if (ImGui::Checkbox("Borderless", &App->window->window_borderless))
-					App->window->WindowSetBorderless(App->window->window_borderless);
+				temp = App->window->GetResizable();
+				if (ImGui::Checkbox("Resizable", &temp))
+					App->window->WindowSetResizable(temp);
 
 				ImGui::SameLine();
+				temp = App->window->GetBorderless();
+				if (ImGui::Checkbox("Borderless", &temp))
+					App->window->WindowSetBorderless(temp);
 
-				if (ImGui::Checkbox("Full Desktop", &App->window->window_full_desktop))
-					App->window->WindowSetFullscreenDesktop(App->window->window_full_desktop);
+				ImGui::SameLine();
+				temp = App->window->GetFullDesktop();
+				if (ImGui::Checkbox("Full Desktop", &temp))
+					App->window->WindowSetFullscreenDesktop(temp);
 			}
 
 			//Plotting FPS and ms

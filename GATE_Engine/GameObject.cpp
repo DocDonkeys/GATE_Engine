@@ -1,12 +1,15 @@
 #include "GameObject.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleRenderer3D.h"
 #include "Tree.h"
 
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
+
+#include "libs/SDL/include/SDL_opengl.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"

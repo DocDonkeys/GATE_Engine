@@ -1,5 +1,7 @@
 #include "Mesh.h"
 #include "Application.h"
+#include "ModuleRenderer3D.h"
+
 #include "libs/Assimp/include/mesh.h"
 
 // Memory Leak Detection

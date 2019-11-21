@@ -4,12 +4,17 @@
 
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
 
 #include "Component.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
+#include "Texture.h"
+
+#include "libs/MathGeoLib/include/Math/MathFunc.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"

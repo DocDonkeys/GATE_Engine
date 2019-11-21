@@ -1,7 +1,10 @@
 #include "EditorMenuBar.h"
-#include "libs/imgui/imgui.h"
-#include "Application.h"
 #include "Globals.h"
+#include "Application.h"
+#include "ModuleEditor.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleRenderer3D.h"
+#include "GeometryLoader.h"
 
 // Windows
 #include "EditorConfiguration.h"
@@ -15,6 +18,8 @@
 
 // Elements
 #include "EditorMenuBar.h"
+
+#include "libs/imgui/imgui.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"

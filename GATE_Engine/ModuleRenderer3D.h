@@ -5,8 +5,11 @@
 #include "Globals.h"
 #include "Light.h"
 
+#include <vector>
 #include "libs/MathGeoLib/include/Math/float3x3.h"
 #include "libs/MathGeoLib/include/Math/float4x4.h"
+
+#include "libs/SDL/include/SDL_video.h"
 
 #define MAX_LIGHTS 8
 
@@ -96,6 +99,5 @@ public:
 	GL_Setting GL_MinMax;			//Compute the minimum and maximum values of incoming RGBA color values.
 	GL_Setting GL_MultiSample;		//Use multiple fragment samples in computing the final color of a pixel.
 };
-
 
 #endif

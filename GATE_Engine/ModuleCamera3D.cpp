@@ -2,11 +2,17 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
 #include "GeometryLoader.h"
 
 #include "ComponentCamera.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+
+#include "libs/MathGeoLib/include/Math/MathFunc.h"
+#include "libs/MathGeoLib/include/Geometry/LineSegment.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -64,6 +70,14 @@ update_status ModuleCamera3D::Update(float dt)
 			(float)-App->input->GetMouseYMotion() * mouseSens * dt,
 			(float)App->input->GetMouseZ() * scrollSens * dt };
 
+		// Mouse Picking
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+		{
+			GameObject* pick = MousePick();
+			if (pick != nullptr)
+				App->scene_intro->selected_go = pick;
+		}
+
 		// Mouse Button Controls
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
 			|| App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT
@@ -115,6 +129,23 @@ update_status ModuleCamera3D::Update(float dt)
 }
 
 // -----------------------------------------------------------------
+
+// Mouse Picking
+GameObject* ModuleCamera3D::MousePick(float3* hit) const
+{
+	float normX = -(1.0f - (float(App->input->GetMouseY()) * 2.0f) / (float)App->window->GetWidth());
+	float normY = 1.0f - (float(App->input->GetMouseX()) * 2.0f) / (float)App->window->GetHeight();
+	LineSegment picking = activeCamera->frustum.UnProjectLineSegment(normX, normY);
+
+	float distance;
+	GameObject* firstObj = App->scene_intro->CastRay(picking, distance);
+
+	if (firstObj != nullptr && hit != nullptr)
+		*hit = picking.GetPoint(distance);
+
+	return firstObj;
+}
+
 
 // Input Checks
 void ModuleCamera3D::MoveCamera(float& movSpeed)

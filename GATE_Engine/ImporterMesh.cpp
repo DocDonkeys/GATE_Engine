@@ -1,5 +1,7 @@
 #include "ImporterMesh.h"
 #include "Application.h"
+#include "ModuleFileSystem.h"
+#include "ModuleRenderer3D.h"
 #include "Mesh.h"
 
 ImporterMesh::ImporterMesh()

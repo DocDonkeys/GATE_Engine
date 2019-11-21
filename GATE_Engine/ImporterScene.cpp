@@ -1,10 +1,13 @@
 #include "ImporterScene.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleFileSystem.h"
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
+
 #include <vector>
 
 ImporterScene::ImporterScene()

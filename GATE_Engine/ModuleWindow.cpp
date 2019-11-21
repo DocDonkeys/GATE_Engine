@@ -113,9 +113,62 @@ void ModuleWindow::SetTitle(const char* title)
 	SDL_SetWindowTitle(window, title);
 }
 
+int ModuleWindow::GetWidth() const
+{
+	return window_width;
+}
+
+int ModuleWindow::GetHeight() const
+{
+	return window_height;
+}
+
+int ModuleWindow::GetScale() const
+{
+	return window_scale;
+}
+
+float ModuleWindow::GetBrightness() const
+{
+	return window_brightness;
+}
+
+int ModuleWindow::GetMonitorWidth() const
+{
+	return monitor_width;
+}
+
+int ModuleWindow::GetMonitorHeight() const
+{
+	return monitor_width;
+}
+
+bool ModuleWindow::GetFullscreen() const
+{
+	return window_fullscreen;
+}
+
+bool ModuleWindow::GetResizable() const
+{
+	return window_resizable;
+}
+
+bool ModuleWindow::GetBorderless() const
+{
+	return window_borderless;
+}
+
+bool ModuleWindow::GetFullDesktop() const
+{
+	return window_full_desktop;
+}
+
 void ModuleWindow::ResizeWindow(const uint& width, const uint& height)
 {
 	SDL_SetWindowSize(window,width,height);
+
+	window_width = width;
+	window_width = height;
 }
 
 void ModuleWindow::ChangeWindowBrightnessTo(float brightness)
@@ -126,6 +179,8 @@ void ModuleWindow::ChangeWindowBrightnessTo(float brightness)
 		brightness = 1.000f;
 
 	SDL_SetWindowBrightness(window,brightness);
+
+	window_brightness = brightness;
 }
 
 void ModuleWindow::WindowSetFullscreen(const bool & fullscreen)
@@ -134,16 +189,22 @@ void ModuleWindow::WindowSetFullscreen(const bool & fullscreen)
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 	else
 		SDL_SetWindowFullscreen(window, 0);
+
+	window_fullscreen = fullscreen;
 }
 
 void ModuleWindow::WindowSetResizable(const bool & resizable)
 {
 	SDL_SetWindowResizable(window, (SDL_bool)resizable);
+
+	window_resizable = resizable;
 }
 
 void ModuleWindow::WindowSetBorderless(const bool & borderless)
 {
 	SDL_SetWindowBordered(window,(SDL_bool)!borderless); // Passing true to the function enables borders, passing false sets borderless flag
+
+	window_borderless = borderless;
 }
 
 void ModuleWindow::WindowSetFullscreenDesktop(const bool & fullscreen_desktop)
@@ -152,4 +213,6 @@ void ModuleWindow::WindowSetFullscreenDesktop(const bool & fullscreen_desktop)
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	else
 		SDL_SetWindowFullscreen(window, 0);
+
+	window_full_desktop = fullscreen_desktop;
 }

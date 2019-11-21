@@ -18,6 +18,9 @@
 // Elements
 #include "EditorMenuBar.h"
 
+// SDL
+#include "libs/Brofiler/Brofiler.h"
+
 // Memory Leak Detection
 #include "MemLeaks.h"
 

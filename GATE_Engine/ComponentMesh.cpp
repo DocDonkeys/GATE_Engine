@@ -4,6 +4,9 @@
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ImporterMesh.h"
+#include "Texture.h"
+
+#include "libs/SDL/include/SDL_opengl.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"

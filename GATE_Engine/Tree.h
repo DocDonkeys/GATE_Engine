@@ -1,6 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include <map>
 #include <vector>
 #include "libs/MathGeoLib/include/Geometry/AABB.h"
 
@@ -49,6 +50,7 @@ public:	// Nested classes
 
 		void Intersects(std::vector<const GameObject*>& collector, const AABB& area);
 		void Intersects(std::vector<const GameObject*>& collector, const Frustum& frustum);
+		void Intersects(std::map<float, const GameObject*>& collector, const LineSegment& line);
 
 		void Split();
 		void Prune();
@@ -87,6 +89,7 @@ public: // Methods
 
 	void Intersects(std::vector<const GameObject*>& collector, const AABB& area);
 	void Intersects(std::vector<const GameObject*>& collector, const Frustum& frustum);
+	void Intersects(std::map<float, const GameObject*>& collector, const LineSegment& line);
 
 public:	// Members
 	TREE_TYPE type = TREE_TYPE::NONE;

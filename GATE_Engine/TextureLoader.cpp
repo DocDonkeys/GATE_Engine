@@ -1,6 +1,8 @@
 #include "TextureLoader.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleFileSystem.h"
+#include "ModuleEditor.h"
 
 // Include DevIL headers
 #include "libs/DevIL Windows SDK/include/IL/il.h"

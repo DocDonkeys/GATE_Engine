@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleSceneIntro.h"
 #include "ComponentTransform.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"

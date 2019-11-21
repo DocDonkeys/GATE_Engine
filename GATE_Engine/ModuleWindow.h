@@ -8,8 +8,11 @@ class Application;
 
 class ModuleWindow : public Module
 {
-public:
+	friend class Application;	//CHANGE/FIX: This shouldn't be here. This is for the Save&Load on Application, window and every other module should have a Save&Load to exec on it's own.
+	friend class ModuleRenderer3D;
+	friend class ModuleEditor;
 
+public:
 	ModuleWindow(Application* app, const char* name = "null", bool start_enabled = true);
 
 	// Destructor
@@ -18,9 +21,22 @@ public:
 	bool Init();
 	bool CleanUp();
 
+public:
 	void SetTitle(const char* title);
 
-public:
+	int GetWidth() const;
+	int GetHeight() const;
+	int GetScale() const;
+	float GetBrightness() const;
+
+	int GetMonitorWidth() const;
+	int GetMonitorHeight() const;
+
+	bool GetFullscreen() const;
+	bool GetResizable() const;
+	bool GetBorderless() const;
+	bool GetFullDesktop() const;
+
 	void ResizeWindow(const uint& width, const uint& height);
 	void ChangeWindowBrightnessTo(float brightness);
 	void WindowSetFullscreen(const bool& fullscreen);
@@ -28,7 +44,7 @@ public:
 	void WindowSetBorderless(const bool& borderless);
 	void WindowSetFullscreenDesktop(const bool& fullscreen_desktop);
 
-public:
+private:
 	//The window we'll be rendering to
 	SDL_Window* window;
 

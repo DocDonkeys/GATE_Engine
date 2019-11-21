@@ -29,6 +29,9 @@ void Tree::Draw()
 	rootNode->Draw();
 }
 
+// -----------------------------------------------------------------
+
+// Create/Destroy
 void Tree::Create(const AABB& limits)
 {
 	Clear();
@@ -53,6 +56,9 @@ void Tree::Clear()
 	LOG("[Info]: Cleared Tree.")
 }
 
+// -----------------------------------------------------------------
+
+// Size Changes
 bool Tree::Grow(const AABB& absorb)
 {
 	bool ret = false;
@@ -124,6 +130,9 @@ bool Tree::Shrink()
 	return ret;
 }
 
+// -----------------------------------------------------------------
+
+// Insert
 bool Tree::Insert(const GameObject* obj)
 {
 	bool ret = false;
@@ -148,6 +157,7 @@ bool Tree::Insert(const GameObject* obj)
 	return ret;
 }
 
+// Remove
 bool Tree::Remove(const GameObject* obj)
 {
 	bool ret = false;
@@ -171,6 +181,9 @@ bool Tree::Remove(const GameObject* obj)
 	return ret;
 }
 
+// -----------------------------------------------------------------
+
+// Intersects
 void Tree::Intersects(std::vector<const GameObject*>& collector, const AABB& area)
 {
 	rootNode->Intersects(collector, area);
@@ -181,7 +194,14 @@ void Tree::Intersects(std::vector<const GameObject*>& collector, const Frustum& 
 	rootNode->Intersects(collector, frustum);
 }
 
-// -----------------------------------------------------------------
+void Tree::Intersects(std::map<float, const GameObject*>& collector, const LineSegment& line)
+{
+	rootNode->Intersects(collector, line);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------------------------------------------------------------- //
 
 // TreeNode
 void Tree::TreeNode::Draw()
@@ -275,6 +295,9 @@ void Tree::TreeNode::Clear()
 		nodeObjects.clear();
 }
 
+// -----------------------------------------------------------------
+
+// Intersects
 void Tree::TreeNode::Intersects(std::vector<const GameObject*>& collector, const AABB& area)
 {
 	if (aabb.Intersects(area)) {
@@ -299,6 +322,24 @@ void Tree::TreeNode::Intersects(std::vector<const GameObject*>& collector, const
 	}
 }
 
+void Tree::TreeNode::Intersects(std::map<float, const GameObject*>& collector, const LineSegment& line)
+{
+	if (aabb.Intersects(line)) {
+		for (int i = 0; i < nodeObjects.size(); i++) {
+			float nearHit, farHit;
+			if (nodeObjects[i]->aabb.Intersects(line, nearHit, farHit))
+				collector[nearHit] = nodeObjects[i];
+		}
+
+		if (numBranches > 0)
+			for (int i = 0; i < numBranches; i++)
+				branches[i].Intersects(collector, line);
+	}
+}
+
+// -----------------------------------------------------------------
+
+// Insert
 bool Tree::TreeNode::Insert(const GameObject* obj)
 {
 	bool ret = false;
@@ -352,6 +393,7 @@ bool Tree::TreeNode::Insert(const GameObject* obj)
 	return ret;
 }
 
+// Remove
 bool Tree::TreeNode::Remove(const GameObject* obj)
 {
 	bool ret = false;
@@ -417,6 +459,9 @@ bool Tree::TreeNode::Remove(const GameObject* obj)
 	return ret;
 }
 
+// -----------------------------------------------------------------
+
+// Splits
 void Tree::TreeNode::QuadSplit()
 {
 	//Subdivide the AABB     x)

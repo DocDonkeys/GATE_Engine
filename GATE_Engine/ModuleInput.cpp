@@ -1,12 +1,17 @@
+#include "ModuleWindow.h"
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleEditor.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleRenderer3D.h"
 #include "GeometryLoader.h"
 #include "libs/imgui/imgui_impl_sdl.h"
 
 #include <Windows.h>
+
+// Brofiler
+#include "libs/Brofiler/Brofiler.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -68,12 +73,14 @@ update_status ModuleInput::PreUpdate(float dt)
 		POINT p;
 		if (GetCursorPos(&p))
 		{
-			if (p.x > App->window->monitor_width - 5) {
+			int width = App->window->GetMonitorWidth();
+
+			if (p.x > width - 5) {
 				SetCursorPos(10, p.y);
 				wrappedMouse = true;
 			}
 			else if (p.x < 5) {
-				SetCursorPos(App->window->monitor_width - 10, p.y);
+				SetCursorPos(width - 10, p.y);
 				wrappedMouse = true;
 			}
 		}
@@ -119,8 +126,8 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-	mouse_x /= App->window->window_scale;
-	mouse_y /= App->window->window_scale;
+	mouse_x /= App->window->GetScale();
+	mouse_y /= App->window->GetScale();
 	mouse_z = 0;
 
 	for(int i = 0; i < 5; ++i)
@@ -158,11 +165,11 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_MOUSEMOTION:
 				if (!wrappedMouse) {
-					mouse_x = e.motion.x / App->window->window_scale;
-					mouse_y = e.motion.y / App->window->window_scale;
+					mouse_x = e.motion.x / App->window->GetScale();
+					mouse_y = e.motion.y / App->window->GetScale();
 
-					mouse_x_motion = e.motion.xrel / App->window->window_scale;
-					mouse_y_motion = e.motion.yrel / App->window->window_scale;
+					mouse_x_motion = e.motion.xrel / App->window->GetScale();
+					mouse_y_motion = e.motion.yrel / App->window->GetScale();
 				}
 			break;
 
