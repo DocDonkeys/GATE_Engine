@@ -4,6 +4,7 @@
 #include "ModuleInput.h"
 #include "ModuleEditor.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleResources.h"
 #include "ModuleRenderer3D.h"
 #include "GeometryLoader.h"
 #include "libs/imgui/imgui_impl_sdl.h"
@@ -184,28 +185,31 @@ update_status ModuleInput::PreUpdate(float dt)
 
 				SDL_free(dropFileDir);	//CHANGE/FIX: Should this be here?
 
+				App->resources->ImportFile(dropFileDir);
+
 				//Chop path to get file extension
-				file_extension = dropFileDir;
-				file_extension = App->SubtractString(file_extension, ".", true, false);
+				/*file_extension = dropFileDir;
+				file_extension = App->SubtractString(file_extension, ".", true, false);*/
 
-				for (int i = 0; i < extension_3D_file.size(); ++i) { //Check if the extension is a Mesh or 3D object scene
-					if (extension_3D_file[i] == file_extension) {
-						App->geometry_loader->Load3DFile(dropFileDir);
-						break;
-					}
-				}
+				//TODO: Didac Module resources will manage this decision, keeping here for reference
+				//for (int i = 0; i < extension_3D_file.size(); ++i) { //Check if the extension is a Mesh or 3D object scene
+				//	if (extension_3D_file[i] == file_extension) {
+				//		App->geometry_loader->Load3DFile(dropFileDir);
+				//		break;
+				//	}
+				//}
 
-				for (int i = 0; i < extension_texture.size(); ++i)	//Check if the extension is a texture
-				{
-					if (extension_texture[i] == file_extension)
-					{
-						if (App->scene_intro->selected_go != nullptr)
-							App->scene_intro->AddTextureToGameObject(App->scene_intro->selected_go, dropFileDir);
-						else
-							LOG("Tried to drag & drop a texture, but no Game Object is selected! Please select a Game Object.");
-							break;
-					}
-				}
+				//for (int i = 0; i < extension_texture.size(); ++i)	//Check if the extension is a texture
+				//{
+				//	if (extension_texture[i] == file_extension)
+				//	{
+				//		if (App->scene_intro->selected_go != nullptr)
+				//			App->scene_intro->AddTextureToGameObject(App->scene_intro->selected_go, dropFileDir);
+				//		else
+				//			LOG("Tried to drag & drop a texture, but no Game Object is selected! Please select a Game Object.");
+				//			break;
+				//	}
+				//}
 
 				/*CHANGE/FIX:
 				1. DO OPEN FILE OPERATION OR FLAG ITS START

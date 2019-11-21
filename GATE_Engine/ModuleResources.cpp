@@ -20,6 +20,19 @@ bool ModuleResources::Init()
 	assets_dir.dir_path = ASSETS_FOLDER;
 	InitPopulateAssetsDir(assets_dir);
 	timer.Start();
+
+	//Fill extensions IMPROVE: load from config file
+	extension_3D_file.push_back("fbx");
+	extension_3D_file.push_back("FBX");
+	extension_3D_file.push_back("obj");
+	extension_3D_file.push_back("OBJ");
+
+	extension_texture.push_back("png");
+	extension_texture.push_back("PNG");
+	extension_texture.push_back("jpg");
+	extension_texture.push_back("dds");
+	extension_texture.push_back("DDS");
+	extension_texture.push_back("tga");
 	return false;
 }
 
@@ -41,7 +54,39 @@ uint32 ModuleResources::Find(const char * file_in_assets) const
 	return 0;
 }
 
-uint32 ModuleResources::ImportFile(const char * new_file_in_assets, Resource::Type type, bool force)
+uint32 ModuleResources::ImportFile(const char * full_path)
+{
+	uint uid = 0;
+	std::string file, extension, path;
+	path = full_path;
+	App->file_system->NormalizePath(path);
+	App->file_system->SplitFilePath(full_path,nullptr,&file,&extension);
+
+	Resource::Type type = ResourceTypeByPath(extension.data());
+
+	path += ".meta";
+	bool has_meta = App->file_system->Exists(path.data()); //MUST TEST MULTIPLE TIMES to see if physfs exists works for files that might be outside the assets folder
+
+	switch (type)
+	{
+	case Resource::UNKNOWN:
+		break;
+	case Resource::MESH:
+		break;
+	case Resource::TEXTURE:
+		break;
+	case Resource::SCENE:
+		break;
+	case Resource::MODEL:
+		break;
+	default:
+		break;
+	}
+
+	return uid;
+}
+
+uint32 ModuleResources::ImportInternalFile(const char * new_file_in_assets, Resource::Type type, bool force)
 {
 	uint32 ret = 0; bool import_ok = false; std::string written_file;
 
@@ -105,6 +150,28 @@ Resource * ModuleResources::CreateNewResource(Resource::Type type, uint32 force_
 	if (ret != nullptr) 
 		resources[uid] = ret;
 return ret;
+}
+
+Resource::Type ModuleResources::ResourceTypeByPath(const std::string extension)
+{
+	if (extension.data() == "mesh")
+		return Resource::MESH;
+
+	if (extension.data() == "dds")
+		return Resource::TEXTURE;
+
+	if (extension.data() == "scene")
+		return Resource::SCENE;
+
+	for (int i = 0; i < extension_3D_file.size(); ++i)
+		if (extension == extension_3D_file[i])
+			return Resource::MODEL;
+
+	for (int i = 0; i < extension_texture.size(); ++i)
+		if (extension == extension_texture[i])
+			return Resource::TEXTURE;
+
+	return Resource::UNKNOWN;
 }
 
 void ModuleResources::InitPopulateAssetsDir(AbstractDir &abs_dir)

@@ -14,7 +14,8 @@ public:
 		UNKNOWN = -1,
 		MESH = 0,
 		TEXTURE,
-		SCENE
+		SCENE,
+		MODEL
 	};
 
 	Resource(uint32 uid, Resource::Type type); 

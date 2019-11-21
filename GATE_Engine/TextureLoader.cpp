@@ -205,7 +205,6 @@ ResourceTexture* TextureLoader::LoadTextureFile(const char* path, uint target, i
 			else {
 				tex = (ResourceTexture*)App->resources->CreateNewResource(Resource::TEXTURE);
 				tex->id = tempId;
-				//tex = new ResourceTexture(tempId, path); //TODO: Didac Create this texture using module resources
 				App->texture_loader->textures.push_back(tex);
 				LOG("[Success]: Loaded texture from path %s", path);
 			}
