@@ -29,7 +29,7 @@ public:
 
 public:
 	uint32 Find(const char* file_in_assets) const;
-	uint32 ImportFile(const char* new_file_in_assets, bool force = false);
+	uint32 ImportFile(const char* new_file_in_assets, Resource::Type type, bool force = false);
 	uint32 GenerateNewUID();
 	const Resource* Get(uint32 uid) const;
 	Resource* Get(uint32 uid);

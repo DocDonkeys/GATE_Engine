@@ -3,7 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "Mesh.h"
+#include "ResourceMesh.h"
 #include "ComponentCamera.h"
 #include "Tree.h"
 
@@ -151,8 +151,6 @@ bool ModuleRenderer3D::Start()
 {
 	bool ret = true;
 
-	App->texture_loader->LoadTextureFile("Assets\\Textures\\Lenna_(test_image).png");	//CHANGE/FIX: Hardcoded, either put it on a JSON file to load as "default textures" or just erase it
-	App->texture_loader->LoadTextureFile("Assets\\Textures\\Baker_house.png");
 	App->texture_loader->LoadDefaultTex();
 	
 	return ret;
@@ -362,7 +360,7 @@ void ModuleRenderer3D::DeleteBuffer(uint & id)
 }
 
 //Pass a Mesh_Data to be drawn using glDrawElements
-void ModuleRenderer3D::DrawMesh(const Mesh* mesh, const uint texture_id)
+void ModuleRenderer3D::DrawMesh(const ResourceMesh* mesh, const uint texture_id)
 {
 	//Draw VERTICES with INDICES
 	if (mesh->index != nullptr) //We need indices to use DrawElements if we don't have any we would crash openGL
@@ -377,7 +375,7 @@ void ModuleRenderer3D::DrawMesh(const Mesh* mesh, const uint texture_id)
 }
 
 //DRAW a Mesh with only vertices and indices data
-void ModuleRenderer3D::PrintSimpleMesh(const Mesh* mesh)
+void ModuleRenderer3D::PrintSimpleMesh(const ResourceMesh* mesh)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -397,7 +395,7 @@ void ModuleRenderer3D::PrintSimpleMesh(const Mesh* mesh)
 }
 
 //DRAW a mesh that contains textures using it's texture coordinates
-void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh, const uint texture_id)
+void ModuleRenderer3D::PrintTexturedMesh(const ResourceMesh * mesh, const uint texture_id)
 {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -417,7 +415,7 @@ void ModuleRenderer3D::PrintTexturedMesh(const Mesh * mesh, const uint texture_i
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void ModuleRenderer3D::DrawMeshFaceNormals(Mesh * mesh)
+void ModuleRenderer3D::DrawMeshFaceNormals(ResourceMesh * mesh)
 {
 	//Print faces normals
 	glBegin(GL_LINES);
@@ -434,7 +432,7 @@ void ModuleRenderer3D::DrawMeshFaceNormals(Mesh * mesh)
 	glEnd();
 }
 
-void ModuleRenderer3D::DrawMeshVertexNormals(Mesh * mesh)
+void ModuleRenderer3D::DrawMeshVertexNormals(ResourceMesh * mesh)
 {
 	//Draw Vertex Normals
 	if (mesh->normals_vector != nullptr)

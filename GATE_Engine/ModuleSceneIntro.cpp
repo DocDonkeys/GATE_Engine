@@ -129,7 +129,7 @@ bool ModuleSceneIntro::AddTextureToGameObject(GameObject * go, const char* path)
 {
 	bool has_material_component = false;
 
-	Texture* texture = App->texture_loader->LoadTextureFile(path);
+	ResourceTexture* texture = App->texture_loader->LoadTextureFile(path); //TODO: Didac Make it work with module resources
 
 	for (int i = 0; i < go->components.size(); ++i)
 	{

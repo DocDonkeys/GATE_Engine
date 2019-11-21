@@ -4,8 +4,9 @@
 #include <vector>
 #include "Globals.h"
 #include "Module.h"
-#include "Texture.h"
+#include "ResourceTexture.h"
 #include "libs/glew/include/GL/glew.h"
+#include "ImporterMaterial.h"
 
 class TextureLoader : public Module
 {
@@ -19,7 +20,7 @@ public:
 	bool CleanUp();
 
 public:
-	Texture* LoadTextureFile(const char* path,
+	ResourceTexture* LoadTextureFile(const char* path,
 		uint target = GL_TEXTURE_2D,		// GL_TEXTURE_2D, GL_TEXTURE_CUBE_MAP
 		int filterType = GL_NEAREST,		// GL_NEAREST, GL_LINEAR
 		int fillingType = GL_REPEAT) const;	// GL_REPEAT, GL_CLAMP_TO_EDGE, GL_MIRRORED_REPEAT);
@@ -32,15 +33,19 @@ public:
 		int fillingType = GL_REPEAT,	// GL_REPEAT, GL_CLAMP_TO_EDGE, GL_MIRRORED_REPEAT
 		bool defaultTex = false) const;
 
-	Texture* LoadDefaultTex() const;
-	Texture* GetDefaultTex();
+	ResourceTexture* LoadDefaultTex() const;
+	ResourceTexture* GetDefaultTex();
 	uint GetDefaultId() const;
 
 	//Save a given texture in DDS format inside the textures library folder
 	bool DuplicateTextureAsDDS(const char* name) const;
+
+public:
+	ImporterMaterial importer;
 private:
-	std::vector<Texture*> textures;	// IMPROVE: This class having accessible variables and a list makes it more of a "Manager" rather than a tool, consider changing nomenclature and Filter.
-	Texture* defaultTex;
+	//TODO: Didac this vector should be deleted and only use resources map inside module resources
+	std::vector<ResourceTexture*> textures;	// IMPROVE: This class having accessible variables and a list makes it more of a "Manager" rather than a tool, consider changing nomenclature and Filter.
+	ResourceTexture* defaultTex;
 };
 
 #endif //TEXTURELOADER_H

@@ -14,8 +14,8 @@
 #pragma comment (lib, "libs/Assimp/libx86/assimp.lib")
 
 #include "libs/par/par_shapes.h"
-#include "Mesh.h"
-#include "Texture.h"
+#include "ResourceMesh.h"
+#include "ResourceTexture.h"
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
@@ -127,7 +127,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		int nmeshes = node->mNumMeshes;
 		for (int i = 0; i < nmeshes; ++i)
 		{
-			Mesh* new_mesh = new Mesh();
+			ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
 			
 			//LOAD!
@@ -169,7 +169,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 			// Material
 			ComponentMaterial* material_component = (ComponentMaterial*)ret_go->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			Texture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
+			ResourceTexture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
 			if (tex == nullptr || tex->id == 0) {
 				LOG("[Warning]: The FBX has no embeded texture, could was not found, or could not be loaded!");
 			}
@@ -191,7 +191,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const char* name)
 {
-	Mesh* new_mesh = new Mesh();
+	ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 
 	//Get sizes
 	new_mesh->num_vertex = p_mesh->npoints;
@@ -242,7 +242,7 @@ void GeometryLoader::LoadPrimitiveShape(const par_shapes_mesh_s * p_mesh, const 
 	go->CreateComponent(COMPONENT_TYPE::MATERIAL); //Create default material (will have checkers if Teacher wants to us it to check uv's)
 }
 
-void GeometryLoader::LoadPrimitiveNormals(Mesh * new_mesh, const par_shapes_mesh_s * p_mesh)
+void GeometryLoader::LoadPrimitiveNormals(ResourceMesh * new_mesh, const par_shapes_mesh_s * p_mesh)
 {
 	//Load the Normals of the par_shape
 	if (p_mesh->normals != NULL)
@@ -276,9 +276,9 @@ void GeometryLoader::LoadPrimitiveNormals(Mesh * new_mesh, const par_shapes_mesh
 	}
 }
 
-Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * loaded_mesh, const std::string & absolute_path)
+ResourceTexture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * loaded_mesh, const std::string & absolute_path)
 {
-	Texture* ret = nullptr;
+	ResourceTexture* ret = nullptr;
 	if (scene->HasMaterials())
 	{
 		aiString tex_path;
@@ -296,7 +296,9 @@ Texture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMesh * load
 				relative_path = relative_path.substr(found + 1, relative_path.size());
 			}
 			std::string texture_path = absolute_path.data() + relative_path;
-			ret = App->texture_loader->LoadTextureFile(texture_path.data());
+			uint32 uid = App->resources->ImportFile(texture_path.data(), Resource::TEXTURE);
+			ret = (ResourceTexture*)App->resources->Get(uid);
+			//ret = App->texture_loader->LoadTextureFile(texture_path.data());
 
 			if (ret == nullptr || ret->id == 0) {
 				LOG("[Error]: Texture loading failed in path %s.", absolute_path);

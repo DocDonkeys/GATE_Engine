@@ -10,7 +10,7 @@
 
 #define MAX_LIGHTS 8
 
-class Mesh;
+class ResourceMesh;
 class ComponentCamera;
 
 class ModuleRenderer3D : public Module
@@ -34,15 +34,15 @@ public:
 	void GenerateIndexBuffer(uint& id_index, const int& size, const uint* index);
 	void DeleteBuffer(uint& id);
 	//Draw a given mesh
-	void DrawMesh(const Mesh* mesh, const uint texture_id = 0);
+	void DrawMesh(const ResourceMesh* mesh, const uint texture_id = 0);
 	//Print the Mesh with vertices and indices only
-	void PrintSimpleMesh(const Mesh* mesh);
+	void PrintSimpleMesh(const ResourceMesh* mesh);
 	//DRAW a mesh that contains textures using its texture coordinates
-	void PrintTexturedMesh(const Mesh* mesh, const uint texture_id);
+	void PrintTexturedMesh(const ResourceMesh* mesh, const uint texture_id);
 
 	//Draw Mesh Debug Normals
-	void DrawMeshFaceNormals(Mesh* mesh);
-	void DrawMeshVertexNormals(Mesh* mesh);
+	void DrawMeshFaceNormals(ResourceMesh* mesh);
+	void DrawMeshVertexNormals(ResourceMesh* mesh);
 
 	// OpenGL Settings
 	struct GL_Setting {
@@ -77,15 +77,15 @@ public:
 	GL_Setting GL_DepthTest;		//Do depth comparisons and update the depth buffer.
 	GL_Setting GL_CullFace;			//Cull polygons based on their winding in window coordinates.
 	GL_Setting GL_Lighting;			//If no vertex shader is active, use the current lighting parameters to compute the vertex color or index.
-	
+
 	std::vector<GL_Setting*> GL_TextureModes;
 	GL_Setting GL_Texture2D;		//If no fragment shader is active, two - dimensional texturing is performed
 	GL_Setting GL_TextureCubeMap;	//If no fragment shader is active, cube - mapped texturing is performed.
-	
+
 	GL_Setting GL_PointSmooth;		//If enabled, draw points with proper filtering. Otherwise, draw aliased points
 	GL_Setting GL_LineSmooth;		//If enabled draw lines with correct filtering. Otherwise, draw aliased lines.
 	GL_Setting GL_PolygonSmooth;	//If enabled, draw polygons with proper filtering. Otherwise, draw aliased polygons. (For correct antialiased polygons, an alpha buffer is needed and the polygons must be sorted front to back.)
-	
+
 	GL_Setting GL_LineStipple;		//Use the current line stipple pattern when drawing lines.
 	GL_Setting GL_PolygonStipple;	//Use the current polygon stipple pattern when rendering polygons.
 

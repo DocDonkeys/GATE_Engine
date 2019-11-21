@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "TextureLoader.h"
 #include "ModuleFileSystem.h"
+
 ComponentMaterial::ComponentMaterial() : Component()
 {
 	type = COMPONENT_TYPE::MATERIAL;
@@ -35,7 +36,7 @@ void ComponentMaterial::Save(json & file)
 	std::string full_path = "Game";
 	full_path += LIBRARY_TEXTURES_FOLDER;
 	full_path += "_t";
-	full_path += std::to_string(this->loaded_texture->UID);
+	full_path += std::to_string(this->loaded_texture->GetUID());
 	full_path += ".dds";
 
 	file["Path"] = full_path.data();
@@ -60,7 +61,7 @@ void ComponentMaterial::Load(json & file)
 	active_texture = loaded_texture;
 }
 
-void ComponentMaterial::AssignTexture(Texture* texture)
+void ComponentMaterial::AssignTexture(ResourceTexture* texture)
 {
 	loaded_texture = texture;
 	active_texture = loaded_texture;

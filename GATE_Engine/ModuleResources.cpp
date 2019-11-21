@@ -2,6 +2,8 @@
 #include "ModuleFileSystem.h"
 #include "Application.h"
 #include "Resource.h"
+#include "ResourceMesh.h"
+#include "ResourceTexture.h"
 
 ModuleResources::ModuleResources(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -38,29 +40,70 @@ uint32 ModuleResources::Find(const char * file_in_assets) const
 	return 0;
 }
 
-uint32 ModuleResources::ImportFile(const char * new_file_in_assets, bool force)
+uint32 ModuleResources::ImportFile(const char * new_file_in_assets, Resource::Type type, bool force)
 {
-	return 0;
+	uint32 ret = 0; bool import_ok = false; std::string written_file;
+
+	switch (type)
+	{
+	case Resource::TEXTURE: import_ok = App->texture_loader->importer.ImportableResource(new_file_in_assets); break;
+	}
+	import_ok = true; //TODO: DIdac remove this hardcode which serves to test texture creation
+	if (import_ok == true)
+	{ // If import was successful, create a new resource 
+		Resource* res = nullptr;
+		//Resource* res = CreateNewResource(type);
+		switch (type)
+		{
+		case Resource::TEXTURE:	res = App->texture_loader->LoadTextureFile(new_file_in_assets);
+		}
+		//res->file = new_file_in_assets;
+		//res->exported_file = written_file;
+		ret = res->GetUID();
+	}
+
+	return ret;
 }
 
 uint32 ModuleResources::GenerateNewUID()
 {
-	return 0;
+	return App->rng.RandInt<uint32>();
 }
 
 const Resource * ModuleResources::Get(uint32 uid) const
 {
+	std::map<uint32, Resource*>::const_iterator it = resources.find(uid); 
+	if (it != resources.end()) 
+		return it->second; 
 	return nullptr;
 }
 
 Resource * ModuleResources::Get(uint32 uid)
 {
+	std::map<uint32, Resource*>::iterator it = resources.find(uid);
+	if (it != resources.end())
+		return it->second;
 	return nullptr;
 }
 
 Resource * ModuleResources::CreateNewResource(Resource::Type type, uint32 force_uid)
 {
-	return nullptr;
+	Resource* ret = nullptr; 
+	uint32 uid;
+	if (force_uid == 0)
+		uid = GenerateNewUID();
+	else
+		uid = force_uid;
+
+	switch (type) 
+	{ 
+		case Resource::MESH:      ret = (Resource*) new ResourceMesh(uid);      break; 
+		case Resource::TEXTURE: ret = (Resource*) new ResourceTexture(uid);  break;
+	}
+	
+	if (ret != nullptr) 
+		resources[uid] = ret;
+return ret;
 }
 
 void ModuleResources::InitPopulateAssetsDir(AbstractDir &abs_dir)
