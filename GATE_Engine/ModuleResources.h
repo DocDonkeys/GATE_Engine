@@ -24,6 +24,8 @@ public:
 	ModuleResources (Application* app, const char* name = "null", bool start_enabled = true);
 	~ModuleResources();
 
+	bool CleanUp();
+
 	bool Init();
 	update_status PreUpdate(float dt);
 

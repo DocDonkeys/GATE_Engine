@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleCamera3D.h"
+#include "ModuleResources.h"
 #include "ModuleInput.h"
 #include "TextureLoader.h"
 #include "GeometryLoader.h"
@@ -48,7 +49,7 @@ bool ModuleSceneIntro::Start()
 	//importer.Load(full_path);
 
 	//Load the Baker House
-	App->geometry_loader->Load3DFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
+	App->resources->ImportFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
 	// Scene Tree
 	staticTree = new Tree(Tree::TREE_TYPE::OC_TREE, AABB({ -50, -30.f, -50.f }, { 50.f, 30.f, 50.f }), 5);

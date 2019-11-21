@@ -1,6 +1,7 @@
 #include "ModuleResources.h"
 #include "ModuleFileSystem.h"
 #include "Application.h"
+#include "GeometryLoader.h"
 #include "TextureLoader.h"
 #include "Resource.h"
 #include "ResourceMesh.h"
@@ -13,6 +14,11 @@ ModuleResources::ModuleResources(Application* app, const char* name, bool start_
 
 ModuleResources::~ModuleResources()
 {
+}
+
+bool ModuleResources::CleanUp()
+{
+	return false;
 }
 
 bool ModuleResources::Init()
@@ -74,10 +80,12 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	case Resource::MESH:
 		break;
 	case Resource::TEXTURE:
+		App->texture_loader->LoadTextureFile(full_path);
 		break;
 	case Resource::SCENE:
 		break;
 	case Resource::MODEL:
+		App->geometry_loader->Load3DFile(full_path);
 		break;
 	default:
 		break;

@@ -80,7 +80,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 	std::size_t found = str.find_last_of("/\\"); //Find last\\  (right before the filename) //
 	absolute_path = str.substr(0, found + 1);
 
-	App->file_system->DuplicateFile(full_path,ASSETS_FOLDER);
+	//App->file_system->DuplicateFile(full_path,ASSETS_FOLDER);
 
 	//We call assimp to import the file
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -91,7 +91,7 @@ bool GeometryLoader::Load3DFile(const char* full_path)
 		//We load all nodes inside the root node, respecting parenting in gameobjects
 		aiNode* root = scene->mRootNode;
 		GameObject* go = LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
-		GOFunctions::ReParentGameObject(go, App->scene_intro->root);
+		//GOFunctions::ReParentGameObject(go, App->scene_intro->root); //Something is already reparenting this, probably happened during the rework
 		
 		//Once finished we release the original file
 		aiReleaseImport(scene);
@@ -149,14 +149,6 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 
 			//Generate the buffer for the tex_coordinates
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2, new_mesh->tex_coords);
-
-			
-			//Finally add the new mesh to the vector
-			//meshes.push_back(new_mesh);
-
-			//We create a game object for the current mesh
-			/*GameObject* go = App->scene_intro->CreateEmptyGameObject(std::string(objName + std::to_string(counter++)).c_str());
-			go->ReParent(ret_go);*/
 			
 			// Mesh
 			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
@@ -176,7 +168,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			ComponentMaterial* material_component = (ComponentMaterial*)ret_go->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			ResourceTexture* tex = LoadMaterial(scene, loaded_mesh, absolute_path);
 			if (tex == nullptr || tex->id == 0) {
-				LOG("[Warning]: The FBX has no embeded texture, could was not found, or could not be loaded!");
+				LOG("[Warning]: The FBX has no embeded texture, was not found, or could not be loaded!");
 			}
 			else {
 				material_component->AssignTexture(tex);

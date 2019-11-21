@@ -188,8 +188,8 @@ update_status ModuleInput::PreUpdate(float dt)
 				App->resources->ImportFile(dropFileDir);
 
 				//Chop path to get file extension
-				/*file_extension = dropFileDir;
-				file_extension = App->SubtractString(file_extension, ".", true, false);*/
+				file_extension = dropFileDir;
+				file_extension = App->SubtractString(file_extension, ".", true, false);
 
 				//TODO: Didac Module resources will manage this decision, keeping here for reference
 				//for (int i = 0; i < extension_3D_file.size(); ++i) { //Check if the extension is a Mesh or 3D object scene
