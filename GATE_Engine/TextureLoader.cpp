@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleFileSystem.h"
 #include "ModuleEditor.h"
+#include "ResourceTexture.h"
 
 // Include DevIL headers
 #include "libs/DevIL Windows SDK/include/IL/il.h"
@@ -115,7 +116,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 		{
 			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST/*GL_NEAREST*/);	//WARNING! Originally was GL_Nearest for the last parameter, revert in case of texture trouble
-		} 
+		}
 		else {
 			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -149,7 +150,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 			LOG("[Error]: Texture loading was done with a target type that wasn't GL_TEXTURE_2D nor GL_TEXTURE_CUBE_MAP.");
 			SDL_assert(false);
 		}
-		
+
 		glGenerateMipmap(target);
 	}
 
@@ -161,7 +162,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	return texId;
 }
 
-Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const
+ResourceTexture* TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const
 {
 	if (path == nullptr)
 	{
@@ -169,15 +170,8 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 		SDL_assert(path != nullptr);
 		return 0;
 	}
-	else {	// If a file of the same name exists, use it's id instead
-		for (int i = 0; i < textures.size(); i++) {
-			if (textures[i]->filename == App->SubtractString(std::string(path), "\\", true, false).c_str()) {
-				return textures[i];
-			}
-		}
-	}
 
-	Texture* tex = nullptr;
+	ResourceTexture* tex = nullptr;
 	uint imgId = 0;
 
 	ilGenImages(1, (ILuint*)&imgId);	// Generate image inside DevIL
@@ -189,7 +183,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 		// Get Image Data
 		ILinfo imgInfo;
 		iluGetImageInfo(&imgInfo);
-		
+
 		// If flipped, flip it back
 		if (imgInfo.Origin == IL_ORIGIN_UPPER_LEFT)
 			if (!iluFlipImage()) {
@@ -203,12 +197,14 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 			// Create texture and assign ID
 			uint tempId = 0;
 			tempId = CreateTexture(ilGetData(), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_FORMAT), target, filterType, fillingType);
-			
+
 			if (tempId == 0) {
 				LOG("[Error]: Texture ID creation failed.");
 			}
 			else {
-				tex = new Texture(tempId, path);
+				tex = (ResourceTexture*)App->resources->CreateNewResource(Resource::TEXTURE);
+				tex->id = tempId;
+				//tex = new ResourceTexture(tempId, path); //TODO: Didac Create this texture using module resources
 				App->texture_loader->textures.push_back(tex);
 				LOG("[Success]: Loaded texture from path %s", path);
 			}
@@ -223,9 +219,9 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 	}
 	if (tex != nullptr)
 	{
-		tex->UID = App->rng.RandInt<uint32>();
+		//TODO: Didac check this to see how it would work with the module resources
 		std::string save_name = "_t";
-		save_name += std::to_string(tex->UID);
+		save_name += std::to_string(tex->GetUID());
 		DuplicateTextureAsDDS(save_name.data());
 	}
 
@@ -236,7 +232,7 @@ Texture* TextureLoader::LoadTextureFile(const char* path, uint target, int filte
 
 // ---------------------------------------------
 
-Texture* TextureLoader::LoadDefaultTex() const
+ResourceTexture* TextureLoader::LoadDefaultTex() const
 {
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
@@ -248,13 +244,13 @@ Texture* TextureLoader::LoadDefaultTex() const
 			checkImage[i][j][3] = (GLubyte)255;
 		}
 	}
-
-	Texture* tex = new Texture(CreateTexture(checkImage, CHECKERS_WIDTH, CHECKERS_HEIGHT, GL_RGBA, GL_RGBA, GL_TEXTURE_2D, GL_NEAREST, GL_REPEAT, true), "Default");
+	ResourceTexture* tex = (ResourceTexture*)App->resources->CreateNewResource(Resource::TEXTURE);
+	//ResourceTexture* tex = new ResourceTexture(CreateTexture(checkImage, CHECKERS_WIDTH, CHECKERS_HEIGHT, GL_RGBA, GL_RGBA, GL_TEXTURE_2D, GL_NEAREST, GL_REPEAT, true), "Default"); //TODO: Didac create texture as texture component
 	App->texture_loader->textures.push_back(tex);
 	return tex;
 }
 
-Texture* TextureLoader::GetDefaultTex()
+ResourceTexture* TextureLoader::GetDefaultTex()
 {
 	return defaultTex;
 }
@@ -272,18 +268,18 @@ bool TextureLoader::DuplicateTextureAsDDS(const char* name) const
 	filename = name;
 	filename = App->SubtractString(filename,".",true,true);
 
-	ILuint   size; 
-	ILubyte *data; 
+	ILuint   size;
+	ILubyte *data;
 
 	//For some reason, when we save the image is flipped, so flip before and after process (for the case it was the 1st time we load this texture)
 	iluFlipImage();
 
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
 	size = ilSaveL(IL_DDS, NULL, 0 ); // Get the size of the data buffer
-	if(size > 0) 
-	{    
-		data = new ILubyte[size]; // allocate data buffer   
-		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function        
+	if(size > 0)
+	{
+		data = new ILubyte[size]; // allocate data buffer
+		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
 			ret = App->file_system->SaveUnique(output, data, size, LIBRARY_TEXTURES_FOLDER, filename.data(), "dds");
 		RELEASE_ARRAY(data);
 	}

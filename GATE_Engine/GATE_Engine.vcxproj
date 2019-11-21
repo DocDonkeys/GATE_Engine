@@ -92,6 +92,8 @@
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleResources.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="EditorConfiguration.h" />
@@ -185,6 +187,8 @@
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="RNGenerator.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureLoader.cpp" />

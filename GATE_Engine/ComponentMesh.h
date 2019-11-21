@@ -2,7 +2,7 @@
 #define __COMPONENTMESH_H__
 
 #include "Component.h"
-#include "Mesh.h"
+#include "ResourceMesh.h"
 #include "JsonLoader.h"
 #include "ImporterMesh.h"
 
@@ -22,7 +22,7 @@ public:
 	void Load(json &file);
 
 public:
-	Mesh* mesh = nullptr;
+	ResourceMesh* mesh = nullptr;
 
 	bool debug_vertex_normals = false;
 	bool debug_face_normals = false;

@@ -3,6 +3,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleRenderer3D.h"
 #include "Mesh.h"
+#include "ResourceMesh.h"
 
 ImporterMesh::ImporterMesh()
 {
@@ -16,7 +17,7 @@ bool ImporterMesh::Export(const char * path, std::string & output_file, const Im
 {
 	bool ret = false;
 	IEMeshData* ie_mdata= (IEMeshData*)ie_data;
-	Mesh* mesh = ie_mdata->mesh;
+	ResourceMesh* mesh = ie_mdata->mesh;
 
 	//Amount of / indices / vertices / normals / tex_coords
 	uint ranges[4] = { mesh->num_index, mesh->num_vertex, mesh->num_normals, mesh->num_tex_coords };
@@ -27,7 +28,7 @@ bool ImporterMesh::Export(const char * path, std::string & output_file, const Im
 	size += sizeof(float) * mesh->num_normals * 2; // Size of alloc for Texture coordinates
 
 
-	char* data = new char[size]; // Allocate buffer 
+	char* data = new char[size]; // Allocate buffer
 	char* cursor = data; // Cursor at start
 
 	//-------------------  Store data  -------------------//
@@ -74,7 +75,7 @@ bool ImporterMesh::Export(const char * path, std::string & output_file, const Im
 	return ret;
 }
 
-bool ImporterMesh::Load(const char * full_path, Mesh* mesh)
+bool ImporterMesh::Load(const char * full_path, ResourceMesh* mesh)
 {
 	bool ret = false;
 	//Load a buffer to access the data of the .mesh
@@ -84,7 +85,7 @@ bool ImporterMesh::Load(const char * full_path, Mesh* mesh)
 	if (mesh == nullptr)
 	{
 		LOG("[WARNING] Tried to import a .mesh file into a nullptr mesh, a mesh will be created in memory");
-		Mesh* mesh = new Mesh;
+		ResourceMesh* mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 	}
 
 	//------------------- Assign data from buffer  -------------------//
@@ -134,7 +135,7 @@ bool ImporterMesh::Load(const char * full_path, Mesh* mesh)
 	return false;
 }
 
-bool ImporterMesh::GenMeshBuffers(Mesh* mesh)
+bool ImporterMesh::GenMeshBuffers(ResourceMesh* mesh)
 {
 	App->renderer3D->GenerateVertexBuffer(mesh->id_vertex, mesh->num_vertex, mesh->vertex);
 	if (mesh->index != nullptr)

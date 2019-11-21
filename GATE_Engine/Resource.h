@@ -25,6 +25,7 @@ public:
 	uint32 GetUID() const; 
 	const char* GetFile() const; 
 	const char* GetImportedFile() const; 
+	const char* GetName() const;
 	bool IsLoadedToMemory() const; 
 	bool LoadToMemory(); 
 	uint CountReferences() const;
@@ -36,6 +37,7 @@ public:
 
 protected: 
 	uint32 UID = 0; 
+	std::string name;
 	std::string file; 
 	std::string imported_file;
 	Type type = UNKNOWN;

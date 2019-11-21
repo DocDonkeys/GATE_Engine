@@ -1,6 +1,7 @@
 #include "ComponentMesh.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleResources.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ImporterMesh.h"
@@ -82,7 +83,7 @@ void ComponentMesh::Save(json &file)
 
 void ComponentMesh::Load(json & file)
 {
-	mesh = new Mesh;
+	mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 
 	std::string full_path = file["Path"];
 	imp_exp.Load(full_path.data(), mesh);

@@ -305,8 +305,8 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("File:"); ImGui::SameLine();
 		if (material->active_texture != nullptr) {
-			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), material->active_texture->filename.c_str());
-			HoverTip(material->active_texture->path.c_str(), true);
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), material->active_texture->GetName());
+			HoverTip(material->active_texture->GetFile(), true);
 		}
 		else
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "None");
