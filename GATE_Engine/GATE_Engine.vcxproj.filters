@@ -138,9 +138,6 @@
     <ClCompile Include="ImporterScene.cpp">
       <Filter>Sources\Tools\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="Tree.cpp">
-      <Filter>Sources\Component Structure\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Sources\Component Structure</Filter>
     </ClCompile>
@@ -158,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="ResourceTexture.cpp">
       <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -316,9 +316,6 @@
     <ClInclude Include="ImporterScene.h">
       <Filter>Sources\Tools\Importers</Filter>
     </ClInclude>
-    <ClInclude Include="Tree.h">
-      <Filter>Sources\Component Structure\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="ImporterMaterial.h">
       <Filter>Sources\Tools\Importers</Filter>
     </ClInclude>
@@ -334,7 +331,10 @@
     <ClInclude Include="ResourceTexture.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
-    </ItemGroup>
+    <ClInclude Include="Tree.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemLeaks.h" />
   </ItemGroup>
