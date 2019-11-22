@@ -1,7 +1,7 @@
 #pragma once
 
 #include <windows.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 // Warning disabled ---
 #pragma warning( disable : 4577 ) // Warning that exceptions are disabled

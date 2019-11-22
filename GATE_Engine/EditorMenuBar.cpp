@@ -149,27 +149,13 @@ void EditorMenuBar::Update() {
 
 			if (ImGui::BeginMenu("Menus")) {
 
-				ImGui::MenuItem("Toolbar", NULL, &App->editor->editor_toolbar->show_window, false);
+				ImGui::MenuItem("Toolbar", NULL, &App->editor->editor_toolbar->show_window);
 				ImGui::MenuItem("Hierarchy", NULL, &App->editor->editor_hierarchy->show_window);
 				ImGui::MenuItem("Project", NULL, &App->editor->editor_project->show_window, false);
 				ImGui::MenuItem("Console", NULL, &App->editor->editor_console->show_window);
 				ImGui::MenuItem("Inspector", NULL, &App->editor->editor_inspector->show_window);
 				ImGui::MenuItem("Scene", NULL, &App->editor->editor_scene->show_window, false);
 				ImGui::MenuItem("Game", NULL, &App->editor->editor_game->show_window, false);
-
-				ImGui::EndMenu();
-			}
-
-
-			ImGui::Separator();
-
-			// Menu: Engine Development Tools
-			if (ImGui::BeginMenu("DevDebug")) {
-				if (ImGui::MenuItem("Show UI Demo"))
-					App->editor->show_demo_window = !App->editor->show_demo_window;
-
-				if (ImGui::MenuItem("Generate Game"))
-					App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
 				ImGui::EndMenu();
 			}
@@ -371,6 +357,20 @@ void EditorMenuBar::Update() {
 
 
 			ImGui::EndMenu();
+		}
+
+
+		// DEBUG: Engine Development Tools
+		if (App->editor->ui_debug_mode) {
+			if (ImGui::BeginMenu("DevDebug")) {
+				if (ImGui::MenuItem("Show UI Demo", NULL, false))
+					App->editor->show_demo_window = !App->editor->show_demo_window;
+
+				if (ImGui::MenuItem("Generate Game"))
+					App->RequestBrowser("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
+				ImGui::EndMenu();
+			}
 		}
 
 		ImGui::EndMenuBar();

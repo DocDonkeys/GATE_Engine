@@ -38,6 +38,10 @@ ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabl
 
 	// Elements
 	editor_menu_bar = new EditorMenuBar();
+
+#ifndef _DEBUG
+	ui_debug_mode = false;
+#endif
 }
 
 ModuleEditor::~ModuleEditor()

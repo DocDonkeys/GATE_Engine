@@ -121,6 +121,7 @@ public:
 	bool main_dockSpace = true;
 
 	// Debug window bools
+	bool ui_debug_mode = true;
 	bool show_demo_window = false;
 
 	// RadioButton Modes

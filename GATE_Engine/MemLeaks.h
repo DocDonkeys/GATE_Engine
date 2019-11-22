@@ -5,6 +5,8 @@
 //#define _VISUAL_MEM_LEAK
 
 // Setup
+#ifdef _DEBUG
+
 #ifdef _MMGR_MEM_LEAK
 //#define TEST_MEMORY_MANAGER
 #include "libs/mmgr/mmgr.h"
@@ -13,6 +15,8 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #endif
+#endif
+
 #endif
 
 // Deletes a buffer
