@@ -401,12 +401,12 @@ float3 ModuleCamera3D::GetPosition() const
 
 float* ModuleCamera3D::GetOpenGLView() const
 {
-	return *activeCamera->GetOpenGLView().v;
+	return activeCamera->GetOpenGLView().ptr();
 }
 
 float* ModuleCamera3D::GetOpenGLProjection() const
 {
-	return *activeCamera->GetOpenGLProjection().v;
+	return activeCamera->GetOpenGLProjection().ptr();
 }
 
 bool* ModuleCamera3D::GetProjectionUpdateFlag() const
