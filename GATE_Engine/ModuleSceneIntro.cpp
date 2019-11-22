@@ -195,20 +195,20 @@ GameObject* ModuleSceneIntro::IntersectRay(const LineSegment& segment, float& di
 	GameObject* chosen = nullptr;
 
 	std::map<float, const GameObject*> objCollector;
-	std::vector<const GameObject*> tmpCollector;
+	std::vector<const GameObject*> rootCollector;
 	float nearHit, farHit;
 
 	// Dynamic Intersection
-	GOFunctions::FillArrayWithChildren(tmpCollector, root);
-	for (int i = 0; i < tmpCollector.size(); i++)
-		if (!tmpCollector[i]->staticObj
-			&& tmpCollector[i]->active
-			&& tmpCollector[i]->GetComponent(COMPONENT_TYPE::MESH) != nullptr
-			&& segment.Intersects(tmpCollector[i]->aabb, nearHit, farHit))
+	GOFunctions::FillArrayWithChildren(rootCollector, root);
+	for (int i = 0; i < rootCollector.size(); i++)
+		if (!rootCollector[i]->staticObj
+			&& rootCollector[i]->active
+			&& rootCollector[i]->GetComponent(COMPONENT_TYPE::MESH) != nullptr
+			&& segment.Intersects(rootCollector[i]->aabb, nearHit, farHit))
 			if (nearest)
-				objCollector[nearHit] = tmpCollector[i];
+				objCollector[nearHit] = rootCollector[i];
 			else
-				objCollector[farHit] = tmpCollector[i];
+				objCollector[farHit] = rootCollector[i];
 
 	// Static Intersections
 	staticTree->Intersects(objCollector, segment);
