@@ -189,16 +189,11 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-GameObject* ModuleSceneIntro::CastRay(const LineSegment& segment, float& dist, bool nearest) const
+GameObject* ModuleSceneIntro::IntersectRay(const LineSegment& segment, float& dist, bool nearest) const
 {
 	dist = inf;
 	GameObject* chosen = nullptr;
-	IntersectRay(segment, dist, chosen, nearest);
-	return chosen;
-}
 
-void ModuleSceneIntro::IntersectRay(const LineSegment& segment, float& dist, GameObject*& chosen, bool nearest) const
-{
 	std::map<float, const GameObject*> objCollector;
 	std::vector<const GameObject*> tmpCollector;
 	float nearHit, farHit;
@@ -251,6 +246,8 @@ void ModuleSceneIntro::IntersectRay(const LineSegment& segment, float& dist, Gam
 			}
 		}
 	}
+
+	return chosen;
 }
 
 int ModuleSceneIntro::CheckToolMode() const

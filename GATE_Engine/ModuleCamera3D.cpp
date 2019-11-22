@@ -138,7 +138,7 @@ GameObject* ModuleCamera3D::MousePick(float3* hit) const
 	LineSegment cameraProj = activeCamera->GetNearProjSegment(normX, normY);	//Range[-1, 1]
 
 	float distance;
-	GameObject* firstObj = App->scene_intro->CastRay(cameraProj, distance, true);
+	GameObject* firstObj = App->scene_intro->IntersectRay(cameraProj, distance, true);
 
 	if (firstObj != nullptr && hit != nullptr)
 		*hit = cameraProj.GetPoint(distance);
