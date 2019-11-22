@@ -57,7 +57,9 @@ private:
 
 	//Window data
 	int window_width = 1280;	//CHANGE/FIX: Save/Load
+	int window_max_width;
 	int window_height = 1024;
+	int window_max_height;
 	int window_scale = 1;
 	float window_brightness = 1.0f;
 

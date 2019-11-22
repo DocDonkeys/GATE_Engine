@@ -13,6 +13,16 @@ enum class tool_mode {
 	MULTI	//Y
 };
 
+enum class handle_position {
+	CENTER,
+	PIVOT
+};
+
+enum class handle_rotation {
+	LOCAL,
+	GLOBAL
+};
+
 class Tree;
 
 class ModuleSceneIntro : public Module
@@ -46,6 +56,8 @@ public:
 	// Members
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 	int lastToolMode = (int)tool_mode::DRAG;
+	int handlePosition = (int)handle_position::CENTER;	// CHANGE/FIX: Save&Load
+	int handleRotation = (int)handle_rotation::LOCAL;	// CHANGE/FIX: Save&Load
 
 	Tree* staticTree = nullptr;
 
