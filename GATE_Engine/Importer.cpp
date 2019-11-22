@@ -309,6 +309,11 @@ bool Importer::Load(const char * full_path)
 	return false;
 }
 
+bool Importer::CreateMeta(const char * original_file_full_path, ImportExportData * ie_data)
+{
+	return false;
+}
+
 bool Importer::ImportableResource(const char * full_path)
 {
 	if (App->file_system->Exists(full_path))

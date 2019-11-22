@@ -1,5 +1,6 @@
 #include "ModuleResources.h"
 #include "ModuleFileSystem.h"
+#include "ModuleSceneIntro.h"
 #include "Application.h"
 #include "GeometryLoader.h"
 #include "TextureLoader.h"
@@ -71,8 +72,10 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	Resource::Type type = ResourceTypeByPath(extension.data());
 
 	path += ".meta";
-	bool has_meta = App->file_system->Exists(path.data()); //MUST TEST MULTIPLE TIMES to see if physfs exists works for files that might be outside the assets folder
 
+	bool has_meta = App->file_system->Exists(path.data()); //MUST TEST MULTIPLE TIMES to see if physfs exists works for files that might be outside the assets folder
+	std::string  meta_path;
+	GameObject* new_model = nullptr;
 	switch (type)
 	{
 	case Resource::UNKNOWN:
@@ -85,7 +88,10 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	case Resource::SCENE:
 		break;
 	case Resource::MODEL:
-		App->geometry_loader->Load3DFile(full_path);
+		new_model = App->geometry_loader->Load3DFile(full_path);
+		meta_path =App->scene_intro->scene_ie.SaveScene(new_model,new_model->name,FileType::MODEL);
+		App->scene_intro->scene_ie.CreateMeta(meta_path.data(),nullptr);
+		
 		break;
 	default:
 		break;

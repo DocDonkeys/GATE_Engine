@@ -109,8 +109,6 @@ bool ImporterScene::Load(const char * full_path)
 			default:
 				break;
 			}
-			
-
 		}
 		gos.push_back(go);
 	}
@@ -135,6 +133,26 @@ bool ImporterScene::Load(const char * full_path)
 
 
 	return ret;
+}
+
+bool ImporterScene::CreateMeta(const char * original_file_full_path, ImportExportData * ie_data)
+{
+	json file; //File to save
+	std::string path, filename, extension;
+	App->file_system->SplitFilePath(original_file_full_path,&path,&filename,&extension);
+
+	//Data saving
+	file["Path"] = "path to .model";
+
+
+	//Convert to buffer
+	std::string data = App->jLoad.JsonToString(file);
+	char* buffer = (char*)data.data();
+	std::string output;
+
+	//Save File
+	App->file_system->SaveUnique(output, buffer, data.length(), path.data(), filename.data(), "meta");
+	return false;
 }
 
 std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & scene_name, FileType file_type)
@@ -222,14 +240,16 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 			}
 		}
 	}
-	std::string path = LIBRARY_FOLDER;
-	path += scene_name;
 
 	std::string data = App->jLoad.JsonToString(file);
 	char* buffer = (char*)data.data();
 	std::string output;
-	App->file_system->SaveUnique(output,buffer,data.length(),LIBRARY_FOLDER,scene_name.data(),"scene");
+
+	if (file_type == FileType::SCENE)
+		App->file_system->SaveUnique(output,buffer,data.length(), ASSETS_FOLDER,scene_name.data(),"scene");
+	else if (file_type == FileType::MODEL)
+		App->file_system->SaveUnique(output, buffer, data.length(), LIBRARY_MODEL_FOLDER, scene_name.data(), "model");
 	App->jLoad.Save(file, "settings/scene_test.json");
 
-	return std::string();
+	return output;
 }

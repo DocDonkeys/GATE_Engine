@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "GameObject.h"
+#include "ImporterScene.h"
 
 enum class tool_mode {
 	DRAG,	//Q
@@ -51,4 +52,7 @@ public:
 	uint numObjects = 0;
 	GameObject* root = nullptr;
 	GameObject* selected_go = nullptr;
+
+	//Scene and models import export
+	ImporterScene scene_ie;
 };

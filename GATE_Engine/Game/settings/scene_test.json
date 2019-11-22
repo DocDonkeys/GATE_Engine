@@ -37,18 +37,18 @@
         "Lnum9": -100.0
       },
       "1": {
-        "Path": "/library/meshes/_m3721597437.mesh"
+        "Path": "/library/meshes/_m1600969291.mesh"
       },
       "2": {
         "Active": true,
         "Checkers active": false,
-        "Path": "Game/Library/Textures/_t1610180100.dds",
-        "UID": 3809971658
+        "Path": "Game/Library/Textures/_t3918262198.dds",
+        "UID": 3542610610
       }
     },
-    "Parent UID": "119123338",
+    "Parent UID": "1526216570",
     "Static": "0",
-    "UID": "2983945436"
+    "UID": "3969691793"
   },
   "Chimney": {
     "Active": "1",
@@ -88,60 +88,18 @@
         "Lnum9": -100.0
       },
       "1": {
-        "Path": "/library/meshes/_m1755984909.mesh"
+        "Path": "/library/meshes/_m2539574199.mesh"
       },
       "2": {
         "Active": true,
         "Checkers active": false,
-        "Path": "Game/Library/Textures/_t1610180100.dds",
-        "UID": 1096373196
+        "Path": "Game/Library/Textures/_t1819182854.dds",
+        "UID": 3387793124
       }
     },
-    "Parent UID": "119123338",
+    "Parent UID": "1526216570",
     "Static": "0",
-    "UID": "678541780"
-  },
-  "GameObject_0": {
-    "Active": "1",
-    "Components": {
-      "0": {
-        "Gnum0": 1.0,
-        "Gnum1": 0.0,
-        "Gnum10": 1.0,
-        "Gnum11": 0.0,
-        "Gnum12": 0.0,
-        "Gnum13": 0.0,
-        "Gnum14": 0.0,
-        "Gnum15": 1.0,
-        "Gnum2": 0.0,
-        "Gnum3": 0.0,
-        "Gnum4": 0.0,
-        "Gnum5": 1.0,
-        "Gnum6": 0.0,
-        "Gnum7": 0.0,
-        "Gnum8": 0.0,
-        "Gnum9": 0.0,
-        "Lnum0": 1.0,
-        "Lnum1": 0.0,
-        "Lnum10": 1.0,
-        "Lnum11": 0.0,
-        "Lnum12": 0.0,
-        "Lnum13": 0.0,
-        "Lnum14": 0.0,
-        "Lnum15": 1.0,
-        "Lnum2": 0.0,
-        "Lnum3": 0.0,
-        "Lnum4": 0.0,
-        "Lnum5": 1.0,
-        "Lnum6": 0.0,
-        "Lnum7": 0.0,
-        "Lnum8": 0.0,
-        "Lnum9": 0.0
-      }
-    },
-    "Parent UID": "0",
-    "Static": "0",
-    "UID": "2153611615"
+    "UID": "681580672"
   },
   "RootNode": {
     "Active": "1",
@@ -181,8 +139,8 @@
         "Lnum9": 0.0
       }
     },
-    "Parent UID": "2153611615",
+    "Parent UID": "2510106698",
     "Static": "0",
-    "UID": "119123338"
+    "UID": "1526216570"
   }
 }

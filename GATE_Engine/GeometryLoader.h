@@ -42,7 +42,7 @@ public:
 
 public:
 	// Load a 3D file such as an FBX, OBJ etc.
-	bool Load3DFile(const char* full_path); 
+	GameObject* Load3DFile(const char* full_path); 
 
 	//Load a node of ASSIMP, this will create a gameobject for the node and manage the parenting and hierarchy of this new gameobject
 	GameObject* LoadAssimpNode(const aiScene* scene, const aiNode* node, 

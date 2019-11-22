@@ -69,9 +69,12 @@ bool ImporterMesh::Export(const char * path, std::string & output_file, const Im
 	if (ret == true)
 	{
 		LOG("Succesfully exported %s", output_file);
+		//Create/Update the meta file
+		CreateMeta(output_file.data(), ie_mdata);
 	}
 	else
 		LOG("Failed to export %s to %s as a .mesh", output_file, path);
+	
 	return ret;
 }
 
@@ -133,6 +136,30 @@ bool ImporterMesh::Load(const char * full_path, ResourceMesh* mesh)
 	//Alloc buffers for rendering
 	GenMeshBuffers(mesh);
 	return false;
+}
+
+bool ImporterMesh::CreateMeta(const char * original_file_full_path, IEMeshData * ie_data)
+{
+	bool ret = false;
+	json file; //File to save
+	std::string path, filename, extension;
+	App->file_system->SplitFilePath(original_file_full_path, &path, &filename, &extension);
+
+	//Data saving
+	file["Path original"] = original_file_full_path;
+	file["UID"] = ie_data->mesh->GetUID();
+	file["Num:Indices"] = ie_data->mesh->num_index;
+	file["Num:Vertex"] = ie_data->mesh->num_vertex;
+	file["Num:Poly"] = ie_data->mesh->num_polys;
+
+	//Convert to buffer
+	std::string data = App->jLoad.JsonToString(file);
+	char* buffer = (char*)data.data();
+	std::string output;
+
+	//Save File
+	ret = App->file_system->SaveUnique(output, buffer, data.length(), path.data(), filename.data(), "meta");
+	return ret;
 }
 
 bool ImporterMesh::GenMeshBuffers(ResourceMesh* mesh)
