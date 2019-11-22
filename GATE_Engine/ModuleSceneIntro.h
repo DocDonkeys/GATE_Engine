@@ -55,12 +55,13 @@ public:
 	int CheckToolMode();
 
 public:
-	// Members
+	// Modes
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 	int lastToolMode = (int)tool_mode::DRAG;
-	int handlePosition = (int)handle_position::CENTER;	// CHANGE/FIX: Save&Load
-	int handleRotation = (int)handle_rotation::LOCAL;	// CHANGE/FIX: Save&Load
+	int handlePositionMode = (int)handle_position::CENTER;	// CHANGE/FIX: Save&Load
+	int handleRotationMode = (int)handle_rotation::LOCAL;	// CHANGE/FIX: Save&Load
 
+	// Members
 	Tree* staticTree = nullptr;
 
 	uint numObjects = 0;

@@ -33,46 +33,38 @@ void EditorToolbar::Update()
 	
 	}
 
+	ImVec2 buttonSize = { 50.f, 20.f };		// IMPROVE: Image Buttons
+
 	// Tool Handles
-	float itemWidth = 50.f;
 	ImGui::SameLine(400.f);
-	ImGui::SetNextItemWidth(itemWidth);
-	const char* handlePos[2] = { "Center", "Pivot" };
-	if (ImGui::BeginCombo("##HandlePos", handlePos[App->scene_intro->handlePosition], ImGuiComboFlags_NoArrowButton)) // The second parameter is the label previewed before opening the combo.
-	{
-		for (int i = 0; i < IM_ARRAYSIZE(handlePos); i++)
-		{
-			bool is_selected = (App->scene_intro->handlePosition == i);
-			if (ImGui::Selectable(handlePos[i], is_selected)) {
-				App->scene_intro->handlePosition = i;
-			}
-			if (is_selected)
-				ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)
+	int& posHandle = App->scene_intro->handlePositionMode;
+	if (ImGui::Button(handlePositionStr[posHandle], buttonSize)) {
+		switch (posHandle) {
+		case (int)handle_position::CENTER:
+			posHandle = (int)handle_position::PIVOT;
+			break;
+		case (int)handle_position::PIVOT:
+			posHandle = (int)handle_position::CENTER;
+			break;
 		}
-		ImGui::EndCombo();
 	}
 	HoverTip("Tool Handle Position", true);
 
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(itemWidth);
-	const char* handleRot[2] = { "Local", "Global" };
-	if (ImGui::BeginCombo("##HandleRot", handleRot[App->scene_intro->handleRotation], ImGuiComboFlags_NoArrowButton)) // The second parameter is the label previewed before opening the combo.
-	{
-		for (int i = 0; i < IM_ARRAYSIZE(handleRot); i++)
-		{
-			bool is_selected = (App->scene_intro->handleRotation == i);
-			if (ImGui::Selectable(handleRot[i], is_selected)) {
-				App->scene_intro->handleRotation = i;
-			}
-			if (is_selected)
-				ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)
+	int& rotHandle = App->scene_intro->handleRotationMode;
+	if (ImGui::Button(handleRotationStr[rotHandle], buttonSize)) {
+		switch (rotHandle) {
+		case (int)handle_rotation::LOCAL:
+			rotHandle = (int)handle_rotation::GLOBAL;
+			break;
+		case (int)handle_rotation::GLOBAL:
+			rotHandle = (int)handle_rotation::LOCAL;
+			break;
 		}
-		ImGui::EndCombo();
 	}
 	HoverTip("Tool Handle Rotation", true);
 
 	// Scene Play
-	ImVec2 buttonSize = { itemWidth, 20.f };		// IMPROVE: Image Buttons
 	ImGui::SameLine(windowCenter - buttonSize.x * 1.7f);
 	if (ImGui::Button("Play", buttonSize)) {
 
