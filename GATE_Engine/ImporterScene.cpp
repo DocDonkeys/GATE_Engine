@@ -23,7 +23,7 @@ bool ImporterScene::Export(const char * path, std::string & output_file, const I
 	return false;
 }
 
-bool ImporterScene::Load(const char * full_path)
+bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 {
 	bool ret = false;
 
@@ -114,10 +114,16 @@ bool ImporterScene::Load(const char * full_path)
 	}
 
 	//Load parenting
+	GameObject* root = nullptr;
 	for (int i = 0; i < gos.size(); ++i)
 	{
-		if(gos[i]->parent_UID == 0)
-		GOFunctions::ReParentGameObject(gos[i], App->scene_intro->root);
+		if (gos[i]->parent_UID == 0)
+		{
+			if(file_type != FileType::SCENE)
+			GOFunctions::ReParentGameObject(gos[i], App->scene_intro->root);
+
+			root = gos[i];
+		}
 		else
 		{
 				for (int j = 0; j < gos.size(); ++j)
@@ -129,6 +135,11 @@ bool ImporterScene::Load(const char * full_path)
 					}
 				}
 		}
+	}
+
+	if (file_type == FileType::SCENE)
+	{
+		App->scene_intro->ChangeScene(root);
 	}
 
 	return ret;

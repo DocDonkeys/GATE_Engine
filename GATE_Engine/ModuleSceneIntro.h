@@ -50,6 +50,8 @@ public:
 	// Methods
 	GameObject* IntersectRay(const LineSegment& segment, float& dist, bool nearest = true) const;
 
+	bool ChangeScene(GameObject*  new_root);
+
 	int CheckToolMode();
 
 public:

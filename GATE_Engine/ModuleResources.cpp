@@ -8,6 +8,8 @@
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 
+#include "MemLeaks.h"
+
 ModuleResources::ModuleResources(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
 {
 

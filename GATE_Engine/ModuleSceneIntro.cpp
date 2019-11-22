@@ -250,6 +250,16 @@ GameObject* ModuleSceneIntro::IntersectRay(const LineSegment& segment, float& di
 	return chosen;
 }
 
+bool ModuleSceneIntro::ChangeScene(GameObject * new_root)
+{
+	//Delete the current root and change it by the root of the loaded scene
+	delete root;
+	root = new_root;
+
+	//TODO: Carles initialize / recalculate / delete any necessary info like quadtrees and stuff
+	return false;
+}
+
 int ModuleSceneIntro::CheckToolMode()
 {
 	int ret = toolMode;
