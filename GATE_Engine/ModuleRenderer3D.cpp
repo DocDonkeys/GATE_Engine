@@ -275,6 +275,9 @@ void ModuleRenderer3D::OnResize(int width, int height)
 		camPtr->needsProjectionUpdate = true;
 	else
 		SDL_assert(false);
+
+	App->window->window_width = width;
+	App->window->window_height = height;
 }
 
 // GL Settings

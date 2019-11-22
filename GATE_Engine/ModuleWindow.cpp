@@ -41,8 +41,11 @@ bool ModuleWindow::Init()
 		monitor_height = info.rcMonitor.bottom - info.rcMonitor.top;
 
 		//Create window
-		int width = App->window->window_width * App->window->window_scale;
-		int height = App->window->window_height * App->window->window_scale;
+		int width = window_width * window_scale;
+		int height = window_height * window_scale;
+		int max_width = window_max_width * window_scale;
+		int max_height = window_max_height * window_scale;
+
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -84,11 +87,13 @@ bool ModuleWindow::Init()
 		}
 		else
 		{
+			SDL_SetWindowMinimumSize(window, max_width, max_height);
+
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
 		}
 	}
-
+	
 	return ret;
 }
 

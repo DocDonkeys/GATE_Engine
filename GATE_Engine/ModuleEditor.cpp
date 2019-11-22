@@ -29,11 +29,11 @@ ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabl
 	// Windows
 	editor_configuration = new EditorConfiguration("Configuration", false, ImGuiWindowFlags_MenuBar);
 	editor_console = new EditorConsole("Console", true);
-	editor_game = new EditorGame("Game", false);
+	editor_game = new EditorGame("Game", true);
 	editor_hierarchy = new EditorHierarchy("Hierarchy", true);
 	editor_inspector = new EditorInspector("Inspector", true);
-	editor_project = new EditorProject("Project", false);
-	editor_scene = new EditorScene("Scene", false);
+	editor_project = new EditorProject("Project", true);
+	editor_scene = new EditorScene("Scene", true);
 	editor_toolbar = new EditorToolbar("Toolbar", true, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 
 	// Elements

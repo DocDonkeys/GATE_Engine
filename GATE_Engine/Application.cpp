@@ -534,7 +534,9 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 
 	//Window
 	window->window_width = obj["Window"]["Width"].get<int>();
+	window->window_max_width = obj["Window"]["Max Width"].get<int>();
 	window->window_height = obj["Window"]["Height"].get<int>();
+	window->window_max_height = obj["Window"]["Max Height"].get<int>();
 	window->window_scale = obj["Window"]["Scale"].get<int>();
 	window->window_brightness = obj["Window"]["Brightness"].get<float>();
 	window->window_fullscreen = obj["Window"]["Fullscreen"].get<bool>();
@@ -591,6 +593,7 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 
 	//Editor
 	// -> Windows
+	editor->editor_toolbar->show_window = obj["Editor"]["Windows"]["Toolbar"].get<bool>();
 	editor->editor_configuration->show_window = obj["Editor"]["Windows"]["Configuration"].get<bool>();
 	editor->editor_console->show_window = obj["Editor"]["Windows"]["Console"].get<bool>();
 	editor->editor_game->show_window = obj["Editor"]["Windows"]["Game"].get<bool>();
@@ -623,7 +626,9 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 
 		{"Window", {
 			{"Width", window->window_width},
+			{"Max Width", window->window_max_width},
 			{"Height", window->window_height},
+			{"Max Height", window->window_max_height},
 			{"Scale", window->window_scale},
 			{"Brightness", window->window_brightness},
 			{"Fullscreen", window->window_fullscreen},
@@ -683,7 +688,8 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 				{"Hierarchy", editor->editor_hierarchy->show_window},
 				{"Inspector", editor->editor_inspector->show_window},
 				{"Project", editor->editor_project->show_window},
-				{"Scene", editor->editor_scene->show_window}
+				{"Scene", editor->editor_scene->show_window},
+				{"Toolbar", editor->editor_toolbar->show_window}
 			}},
 		}}
 	};
