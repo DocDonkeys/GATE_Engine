@@ -285,5 +285,9 @@ bool TextureLoader::DuplicateTextureAsDDS(const char* name) const
 	}
 	iluFlipImage();
 
+	//Create the .meta file
+	ImporterMaterial temp;
+	temp.CreateMeta(output.data(), nullptr);
+
 	return ret;
 }

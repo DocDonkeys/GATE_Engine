@@ -39,3 +39,23 @@ bool ImporterMaterial::Load(const char * full_path, ResourceTexture* tex)
 
 	return false;
 }
+
+bool ImporterMaterial::CreateMeta(const char * original_file_full_path, ImportExportData * ie_data)
+{
+	json file; //File to save
+	std::string path, filename, extension;
+	App->file_system->SplitFilePath(original_file_full_path, &path, &filename, &extension);
+
+	//Data saving
+	file["Path"] = original_file_full_path;
+
+	//Convert to buffer
+	std::string data = App->jLoad.JsonToString(file);
+	char* buffer = (char*)data.data();
+	std::string output;
+
+	//Save File
+	App->file_system->SaveUnique(output, buffer, data.length(), path.data(), filename.data(), "meta");
+
+	return false;
+}

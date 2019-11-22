@@ -131,7 +131,6 @@ bool ImporterScene::Load(const char * full_path)
 		}
 	}
 
-
 	return ret;
 }
 
@@ -249,7 +248,6 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 		App->file_system->SaveUnique(output,buffer,data.length(), ASSETS_FOLDER,scene_name.data(),"scene");
 	else if (file_type == FileType::MODEL)
 		App->file_system->SaveUnique(output, buffer, data.length(), LIBRARY_MODEL_FOLDER, scene_name.data(), "model");
-	App->jLoad.Save(file, "settings/scene_test.json");
 
 	return output;
 }
