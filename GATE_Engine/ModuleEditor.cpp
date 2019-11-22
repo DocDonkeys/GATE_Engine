@@ -34,7 +34,7 @@ ModuleEditor::ModuleEditor(Application * app, const char* name, bool start_enabl
 	editor_inspector = new EditorInspector("Inspector", true);
 	editor_project = new EditorProject("Project", false);
 	editor_scene = new EditorScene("Scene", false);
-	editor_toolbar = new EditorToolbar("Toolbar", false, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+	editor_toolbar = new EditorToolbar("Toolbar", true, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 
 	// Elements
 	editor_menu_bar = new EditorMenuBar();

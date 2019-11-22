@@ -40,11 +40,12 @@ public:
 	// Methods
 	GameObject* IntersectRay(const LineSegment& segment, float& dist, bool nearest = true) const;
 
-	int CheckToolMode() const;
+	int CheckToolMode();
 
 public:
 	// Members
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
+	int lastToolMode = (int)tool_mode::DRAG;
 
 	Tree* staticTree = nullptr;
 
