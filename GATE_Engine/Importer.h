@@ -8,7 +8,10 @@
 class ComponentTransform;
 class GameObject;
 
-struct ImportExportData {}; // We will need to overload some functions with diferent parameters. Inheriting this struct will allow us to do so
+struct ImportExportData 
+{
+	std::string meta_path;
+}; // We will need to overload some functions with diferent parameters. Inheriting this struct will allow us to do so
 
 class Importer { 
 public:

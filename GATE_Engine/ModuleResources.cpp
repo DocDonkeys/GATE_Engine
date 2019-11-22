@@ -76,7 +76,8 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	path += ".meta";
 
 	bool has_meta = App->file_system->Exists(path.data()); //MUST TEST MULTIPLE TIMES to see if physfs exists works for files that might be outside the assets folder
-	std::string  meta_path;
+	std::string  meta_info_path, meta_file_path;
+	ImportExportData metadata;
 	GameObject* new_model = nullptr;
 	switch (type)
 	{
@@ -91,8 +92,14 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 		break;
 	case Resource::MODEL:
 		new_model = App->geometry_loader->Load3DFile(full_path);
-		meta_path =App->scene_intro->scene_ie.SaveScene(new_model,new_model->name,FileType::MODEL);
-		App->scene_intro->scene_ie.CreateMeta(meta_path.data(),nullptr);
+		meta_info_path =App->scene_intro->scene_ie.SaveScene(new_model,new_model->name,FileType::MODEL);
+
+		//We create the string to duplicate the fbx
+		meta_file_path = ASSETS_DEFAULT_MESHES + file;
+		App->file_system->CopyFromOutsideFS(full_path, meta_file_path.data());
+		meta_file_path += ".meta"; //we add .meta to the path of the fbx inside Assets
+		metadata.meta_path = meta_info_path;
+		App->scene_intro->scene_ie.CreateMeta(meta_file_path.data(),&metadata);
 		
 		break;
 	default:

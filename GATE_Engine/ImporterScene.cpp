@@ -152,8 +152,7 @@ bool ImporterScene::CreateMeta(const char * original_file_full_path, ImportExpor
 	App->file_system->SplitFilePath(original_file_full_path,&path,&filename,&extension);
 
 	//Data saving
-	file["Path"] = "path to .model";
-
+	file["Path"] = ie_data->meta_path.data();
 
 	//Convert to buffer
 	std::string data = App->jLoad.JsonToString(file);
