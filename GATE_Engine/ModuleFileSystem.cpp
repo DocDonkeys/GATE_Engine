@@ -440,6 +440,15 @@ const char * ModuleFileSystem::GetReadPaths() const
 	return paths;
 }
 
+std::string ModuleFileSystem::GetPathToGameFolder() const
+{
+	std::string absolute = GetBasePath();
+	absolute = App->SubtractString(absolute, "\\", true, true, false);
+	absolute = App->SubtractString(absolute, "\\", true, true, true);
+	NormalizePath(absolute);
+	return absolute;
+}
+
 // -----------------------------------------------------
 // ASSIMP IO
 // -----------------------------------------------------

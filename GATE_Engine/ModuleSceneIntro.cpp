@@ -6,6 +6,7 @@
 #include "ModuleInput.h"
 #include "TextureLoader.h"
 #include "GeometryLoader.h"
+#include "ModuleFileSystem.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
