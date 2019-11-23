@@ -125,7 +125,7 @@ void GameObject::PostUpdate(float realDT)
 void GameObject::Draw() const
 {
 	if (App->renderer3D->drawObjAABB)
-		if (size.x != 0.f || size.y != 0.f || size.z != 0.f) {
+		if (!size.IsZero()) {
 			if (staticObj)
 				DrawAABB(aabb, float3(0.f, 0.f, 1.f));
 			else

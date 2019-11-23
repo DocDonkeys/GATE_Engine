@@ -46,7 +46,7 @@ public:
 
 	//Load a node of ASSIMP, this will create a gameobject for the node and manage the parenting and hierarchy of this new gameobject
 	GameObject* LoadAssimpNode(const aiScene* scene, const aiNode* node, 
-		const char* absolute_path, const char* filename, const char* full_path, const char* objName, const uint counter);
+		const char* absolute_path, const char* filename, const char* full_path, const char* objName, const uint counter, float& biggestSize);
 
 	// Load a generated primitive (par_shape) into a mesh (Mesh)
 	void LoadPrimitiveShape(const par_shapes_mesh_s* p_mesh, const char* name); 

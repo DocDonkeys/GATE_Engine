@@ -233,15 +233,24 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	std::vector<const GameObject*> dynamicObjs;
 	GOFunctions::FillArrayWithChildren(dynamicObjs, App->scene_intro->root);
 	for (int i = 0; i < dynamicObjs.size(); i++)
-		if (!dynamicObjs[i]->staticObj && dynamicObjs[i]->active && cam->Intersects(dynamicObjs[i]->aabb))
+		if (!dynamicObjs[i]->staticObj
+			&& dynamicObjs[i]->active
+			&& !dynamicObjs[i]->size.IsZero()
+			&& cam->Intersects(dynamicObjs[i]->aabb))
+		{
 			dynamicObjs[i]->Draw();
+		}
 
 	// Static Frustum Culling
 	std::vector<const GameObject*> staticObjs;
 	App->scene_intro->staticTree->Intersects(staticObjs, cam->frustum);
 	for (int i = 0; i < staticObjs.size(); i++)
-		if (staticObjs[i]->active && cam->Intersects(staticObjs[i]->aabb))
+		if (staticObjs[i]->active
+			&& !staticObjs[i]->size.IsZero()
+			&& cam->Intersects(staticObjs[i]->aabb))
+		{
 			staticObjs[i]->Draw();
+		}
 
 	// Render Octree
 	if (drawStaticTree && App->scene_intro->staticTree != nullptr)
