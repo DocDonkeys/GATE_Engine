@@ -169,7 +169,7 @@ bool Application::Start()
 		item++;
 	}
 	
-	frame_time.Start();
+	app_framerate.frame_time.Start();
 
 	return ret;
 }
@@ -194,11 +194,19 @@ void Application::PrepareUpdate()
 {
 	BROFILER_CATEGORY("App Prepare Update", Profiler::Color::DarkRed);
 
-	frame_count++;
-	last_sec_frame_count++;
+	// App framerate
+	app_framerate.FrameStart();
 
-	dt = (float)frame_time.ReadSec();
-	frame_time.Start();
+	// Game framerate
+	CheckGameState();
+
+	if (gamePlaying)
+		mustRunGame = (!gamePaused || gameTick);
+	else
+		mustRunGame = false;
+		
+	if (mustRunGame)
+		game_framerate.FrameStart(App->scene_intro->game_speed);
 
 	//Update Hardware info such as VRAM usage
 	GLint nTotalMemoryInKB = 0;
@@ -219,17 +227,14 @@ update_status Application::Update()
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
 
-	if (ret == true)
+	if (ret == UPDATE_CONTINUE)
 		ret = PreUpdateModules();
 
-	if (ret == true)
+	if (ret == UPDATE_CONTINUE)
 		ret = UpdateModules();
 
-	if (ret == true)
+	if (ret == UPDATE_CONTINUE)
 		ret = PostUpdateModules();
-
-	if (input->GetWindowEvent(WE_QUIT) == true || mustShutDown)
-		ret = UPDATE_STOP;
 
 	FinishUpdate();
 
@@ -245,7 +250,34 @@ void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Frame
 	CheckFileEditRequests();
 	
 	//Framerate Calculations
-	FramerateLogic();
+	app_framerate.FrameEnd();
+
+	if (gamePlaying)
+		if (!gamePaused || gameTick) {
+			game_framerate.FrameEnd();
+			gameTick = false;
+		}
+
+	// Update the fps Log
+	fps_log.push_back(app_framerate.prev_sec_frame_count);
+	if (fps_log.size() > 100)
+		fps_log.erase(fps_log.begin());
+
+	// Update the ms Log
+	ms_log.push_back(app_framerate.frame_ms);
+	if (ms_log.size() > 100)
+		ms_log.erase(ms_log.begin());
+
+	// Delay next update
+	BROFILER_CATEGORY("App Delay", Profiler::Color::Gray);
+
+	if (max_FPS > 0)
+		capped_ms = 1000 / max_FPS;
+	else
+		capped_ms = -1;
+
+	if (capped_ms > 0 && app_framerate.frame_ms < capped_ms)
+		SDL_Delay(capped_ms - app_framerate.frame_ms);
 
 	//CHANGE/FIX: Put corner FPS number
 	/*if (map->mapDebugDraw) {
@@ -296,7 +328,7 @@ update_status Application::PreUpdateModules()
 		if (pModule->active == false)
 			continue;
 
-		ret = (*item)->PreUpdate(dt);
+		ret = (*item)->PreUpdate(app_framerate.dt);
 	}
 
 	return ret;
@@ -317,7 +349,11 @@ update_status Application::UpdateModules()
 		if (pModule->active == false)
 			continue;
 
-		ret = (*item)->Update(dt);
+		ret = (*item)->Update(app_framerate.dt);
+
+		if (ret == UPDATE_CONTINUE && mustRunGame) {
+			ret = (*item)->GameUpdate(game_framerate.dt);
+		}
 	}
 
 	return ret;
@@ -338,10 +374,45 @@ update_status Application::PostUpdateModules()
 		if (pModule->active == false)
 			continue;
 
-		ret = (*item)->PostUpdate(dt);
+		ret = (*item)->PostUpdate(app_framerate.dt);
 	}
 
 	return ret;
+}
+
+void Application::CheckGameState()
+{
+	if (App->scene_intro->playing && !gamePlaying) {	// If game needs to start
+		game_framerate.Start();
+		LOG("[Info] Started Game.");
+	}
+	else if (!App->scene_intro->playing && gamePlaying) {	// If game needs to stop
+		game_framerate.Stop();
+		gamePaused = false;
+		LOG("[Info] Stopped Game.");
+	}
+	
+	gamePlaying = App->scene_intro->playing;
+
+	if (gamePlaying) {	// If game running
+		if (App->scene_intro->paused && !gamePaused) {	// If needs to pause
+			game_framerate.Stop();
+			LOG("[Info] Paused Game.");
+		}
+		else if (!App->scene_intro->paused && gamePaused) {	// If needs to unpause
+			game_framerate.Resume();
+			LOG("[Info] Resumed Game.");
+		}
+
+		gamePaused = App->scene_intro->paused;
+
+		if (App->scene_intro->requestTick) {	//DEBUG
+			LOG("[Info] Advanced game by 1 frame.");
+		}
+
+		gameTick = App->scene_intro->requestTick;	// Pass tick request
+		App->scene_intro->requestTick = false;
+	}
 }
 
 // Adding a module
@@ -372,47 +443,6 @@ void Application::CheckFileEditRequests()
 	}
 }
 
-void Application::FramerateLogic()
-{
-	//Framerate Calcs
-	if (last_sec_frame_time.Read() > 1000) {
-
-		last_sec_frame_time.Start();
-		prev_last_sec_frame_count = last_sec_frame_count;
-		last_sec_frame_count = 0;
-	}
-
-	//For performance information purposes
-	float avg_fps = float(frame_count) / time_since_start.ReadSec();
-	float secs_since_start = time_since_start.ReadSec();
-	Uint32 last_frame_ms = frame_time.Read();
-	Uint32 frames_on_last_update = prev_last_sec_frame_count;
-
-	BROFILER_CATEGORY("App Delay", Profiler::Color::Gray);
-
-	// Update the fps Log
-	fps_log.push_back(prev_last_sec_frame_count);
-	if (fps_log.size() > 100)
-	{
-		fps_log.erase(fps_log.begin());
-	}
-
-	// Update the ms Log
-	ms_log.push_back(last_frame_ms);
-	if (ms_log.size() > 100)
-	{
-		ms_log.erase(ms_log.begin());
-	}
-
-	if (max_FPS > 0)
-		capped_ms = 1000 / max_FPS;
-	else
-		capped_ms = -1;
-
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
-		SDL_Delay(capped_ms - last_frame_ms);
-}
-
 // Get App data
 const char* Application::GetTitle() const
 {
@@ -436,7 +466,7 @@ const char* Application::GetAuthors() const
 
 float Application::GetDT() const
 {
-	return dt;
+	return app_framerate.dt;
 }
 
 // Save / Load Requests

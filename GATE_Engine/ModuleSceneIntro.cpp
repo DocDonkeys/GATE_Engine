@@ -12,6 +12,9 @@
 #include "ImporterScene.h"
 #include "Tree.h"
 
+#include "libs/SDL/include/SDL_keycode.h"
+#include "libs/SDL/include/SDL_mouse.h"
+
 #include "libs/MathGeoLib/include/Math/MathConstants.h"
 #include "libs/MathGeoLib/include/Geometry/LineSegment.h"
 #include "libs/MathGeoLib/include/Geometry/Triangle.h"
@@ -158,33 +161,36 @@ bool ModuleSceneIntro::AddTextureToGameObject(GameObject * go, const char* path)
 }
 
 // PreUpdate
-update_status ModuleSceneIntro::PreUpdate(float dt)
+update_status ModuleSceneIntro::PreUpdate(float realDT)
 {
-	root->PreUpdate();
+	root->PreUpdate(realDT);
 
 	return UPDATE_CONTINUE;
 }
 
 // Update
-update_status ModuleSceneIntro::Update(float dt)
+update_status ModuleSceneIntro::Update(float realDT)
 {
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)	// Avoid conflicting with First Person controls
 		toolMode = CheckToolMode();
 
-	root->Update();
-	
-	//Ground Render	(Used the Primitives Container)
-	/*Plane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();*/
+	root->Update(realDT);
+
+	return UPDATE_CONTINUE;
+}
+
+// Game Update
+update_status ModuleSceneIntro::GameUpdate(float gameDT)
+{
+	root->GameUpdate(gameDT);
 
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate
-update_status ModuleSceneIntro::PostUpdate(float dt)
+update_status ModuleSceneIntro::PostUpdate(float realDT)
 {
-	root->PostUpdate();
+	root->PostUpdate(realDT);
 
 	return UPDATE_CONTINUE;
 }

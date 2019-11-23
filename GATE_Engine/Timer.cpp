@@ -4,6 +4,7 @@
 // ----------------------------------------------------
 
 #include "Timer.h"
+#include "libs/SDL/include/SDL_timer.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -33,8 +34,15 @@ void Timer::Stop()
 	stopped_at = SDL_GetTicks();
 }
 
+void Timer::Resume()
+{
+	running = true;
+	uint diff = SDL_GetTicks() - stopped_at;
+	started_at += diff;
+}
+
 // ---------------------------------------------
-Uint32 Timer::Read() const
+uint Timer::Read() const
 {
 	if (running == true)
 		return (SDL_GetTicks() - started_at);

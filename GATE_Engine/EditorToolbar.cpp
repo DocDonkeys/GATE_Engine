@@ -64,17 +64,52 @@ void EditorToolbar::Update()
 	}
 	HoverTip("Tool Handle Rotation", true);
 
-	// Scene Play
+	ImGui::SameLine(); HoverTip("<--- Transform tools not implemented yet!");	//CHANGE/FIX: Remove this when implementation is done
+
+	// Game Options
 	ImGui::SameLine(windowCenter - buttonSize.x * 1.7f);
-	if (ImGui::Button("Play", buttonSize)) {
-
+	if (App->scene_intro->playing) {
+		if (ImGui::Button("Stop", buttonSize)) {
+			App->scene_intro->playing = false;
+			App->scene_intro->paused = false;
+		}
 	}
+	else {
+		if (ImGui::Button("Play", buttonSize)) {
+			App->scene_intro->playing = true;
+		}
+	}
+	
 	ImGui::SameLine(windowCenter - buttonSize.x * 0.5f);
-	if (ImGui::Button("Pause", buttonSize)) {
-
+	if (App->scene_intro->paused) {
+		if (ImGui::Button("Resume", buttonSize)) {
+			App->scene_intro->paused = false;
+		}
 	}
-	ImGui::SameLine(windowCenter - buttonSize.x * -0.7f);
-	if (ImGui::Button("Frame", buttonSize)) {
+	else {
+		if (ImGui::Button("Pause", buttonSize)) {
+			App->scene_intro->paused = true;
+		}
+	}
 
+	ImGui::SameLine(windowCenter - buttonSize.x * -0.7f);
+	if (ImGui::Button("Tick", buttonSize) && App->scene_intro->playing == true) {
+		App->scene_intro->requestTick = true;
+		App->scene_intro->paused = true;
+	}
+
+	// Game Speed
+	ImGui::SameLine(windowCenter - buttonSize.x * -2.2f);
+	ImGui::SetNextItemWidth(100.f);
+	ImGui::SliderFloat("Speed", &App->scene_intro->game_speed, 0.1f, App->scene_intro->game_max_speed);
+
+	ImGui::OpenPopupOnItemClick("Speed", 1);
+	if (ImGui::BeginPopup("Speed")) {
+		if (ImGui::Button("Reset", buttonSize)) {
+			App->scene_intro->game_speed = 1.f;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
 	}
 }

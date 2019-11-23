@@ -46,7 +46,7 @@ GameObject::~GameObject()
 	components.clear();
 }
 
-void GameObject::PreUpdate()
+void GameObject::PreUpdate(float realDT)
 {
 	//PreUpdate whatever the GameObject itself needs to PreUpdate
 
@@ -54,18 +54,18 @@ void GameObject::PreUpdate()
 	for (int i = 0; i < components.size(); ++i)
 	{
 		if (components[i]->active)
-			components[i]->PreUpdate();
+			components[i]->PreUpdate(realDT);
 	}
 
 	//Update the children game objects
 	for (int i = 0; i < children.size(); ++i)
 	{
 		if (children[i]->active)
-			children[i]->PreUpdate();
+			children[i]->PreUpdate(realDT);
 	}
 }
 
-void GameObject::Update()
+void GameObject::Update(float realDT)
 {
 	//Update whatever the GameObject itself needs to Update
 
@@ -73,18 +73,37 @@ void GameObject::Update()
 	for (int i = 0; i < components.size(); ++i)
 	{
 		if (components[i]->active)
-			components[i]->Update();
+			components[i]->Update(realDT);
 	}
 
 	//Update the children game objects
 	for (int i = 0; i < children.size(); ++i)
 	{
 		if (children[i]->active)
-			children[i]->Update();
+			children[i]->Update(realDT);
 	}
 }
 
-void GameObject::PostUpdate()
+void GameObject::GameUpdate(float gameDT)
+{
+	//Update whatever the GameObject itself needs to Update
+
+	//Update the components
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->active)
+			components[i]->GameUpdate(gameDT);
+	}
+
+	//Update the children game objects
+	for (int i = 0; i < children.size(); ++i)
+	{
+		if (children[i]->active)
+			children[i]->GameUpdate(gameDT);
+	}
+}
+
+void GameObject::PostUpdate(float realDT)
 {
 	//PostUpdate whatever the GameObject itself needs to PostUpdate
 
@@ -92,14 +111,14 @@ void GameObject::PostUpdate()
 	for (int i = 0; i < components.size(); ++i)
 	{
 		if (components[i]->active)
-			components[i]->PostUpdate();
+			components[i]->PostUpdate(realDT);
 	}
 
 	//Update the children game objects
 	for (int i = 0; i < children.size(); ++i)
 	{
 		if (children[i]->active)
-			children[i]->PostUpdate();
+			children[i]->PostUpdate(realDT);
 	}
 }
 

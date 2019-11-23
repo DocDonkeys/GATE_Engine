@@ -6,13 +6,12 @@
 #include <vector>
 
 // Headers
-#include "Globals.h"
-#include "Timer.h"
 #include "RNGenerator.h"
+#include "FramerateManager.h"
 
 // SDL
 //#include "libs/SDL/include/SDL.h"
-//#include "libs/SDL/include/SDL_version.h"
+#include "libs/SDL/include/SDL_version.h"
 
 // JSON
 #include "JsonLoader.h"
@@ -112,11 +111,12 @@ private:
 	update_status UpdateModules();
 	update_status PostUpdateModules();
 
+	void CheckGameState();
+
 	void AddModule(Module* mod);
 
 	// Grouped Operations
 	void CheckFileEditRequests();
-	void FramerateLogic();
 
 	// Load / Save Operations
 	bool LoadDefaultConfig();
@@ -152,23 +152,22 @@ public:
 	RNGenerator			rng;
 	bool				mustShutDown = false;
 
-	std::vector<float>			ms_log;
-	std::vector<float>			fps_log;
 	std::vector<std::string>	LOG;
 	std::vector<std::string>	CPU_features;
+	std::vector<float>			ms_log;
+	std::vector<float>			fps_log;
 	int							max_FPS = -1;
 
 private:
 	//Framerate
-	uint				frame_count = 0;
-	Timer				time_since_start;
-	Timer				frame_time;
-	Timer				last_sec_frame_time;
-
-	Uint32				last_sec_frame_count = 0;
-	Uint32				prev_last_sec_frame_count = 0;
-	float				dt = 0.0f;
+	FramerateManager	app_framerate;
 	int					capped_ms = -1;
+
+	FramerateManager	game_framerate;
+	bool mustRunGame = true;
+	bool gamePlaying = false;
+	bool gamePaused = false;
+	bool gameTick = false;
 
 	//App data
 	std::string	title;

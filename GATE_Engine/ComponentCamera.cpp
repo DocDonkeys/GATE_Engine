@@ -54,7 +54,7 @@ void ComponentCamera::Disable()
 	active = false;
 }
 
-void ComponentCamera::Update()
+void ComponentCamera::Update(float realDT)
 {
 	ComponentTransform* trs = (ComponentTransform*)my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	frustum.pos = trs->GetGlobalMat().TranslatePart();

@@ -32,9 +32,10 @@ public:
 	~ModuleSceneIntro();
 
 	bool Start();
-	update_status PreUpdate(float dt);
-	update_status Update(float dt);
-	update_status PostUpdate(float dt);
+	update_status PreUpdate(float realDT);
+	update_status Update(float realDT);
+	update_status GameUpdate(float gameDT);
+	update_status PostUpdate(float realDT);
 	bool CleanUp();
 
 public:
@@ -55,6 +56,13 @@ public:
 	int CheckToolMode();
 
 public:
+	// Game
+	bool playing = false;
+	bool paused = false;
+	bool requestTick = false;
+	float game_speed = 1.f;
+	float game_max_speed = 5.f;	//CHANGE/FIX: Save&Load
+
 	// Modes
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 	int lastToolMode = (int)tool_mode::DRAG;

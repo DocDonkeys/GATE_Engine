@@ -16,6 +16,8 @@
 #pragma comment (lib, "libs/DevIL Windows SDK/lib/x86/Release/ILU.lib")
 #pragma comment (lib, "libs/DevIL Windows SDK/lib/x86/Release/ILUT.lib")
 
+#include "libs/SDL/include/SDL_assert.h"
+
 // Memory Leak Detection
 #include "MemLeaks.h"
 

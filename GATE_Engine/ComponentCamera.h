@@ -18,7 +18,7 @@ public:
 	void Enable() override;
 	void Disable() override;
 
-	void Update() override;
+	void Update(float realDT) override;
 	void Draw() override;
 
 public:

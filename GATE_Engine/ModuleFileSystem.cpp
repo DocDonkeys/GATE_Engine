@@ -4,6 +4,7 @@
 #include "libs/PhysFS/include/physfs.h"
 #include "libs/Assimp/include/cfileio.h"
 #include "libs/Assimp/include/types.h"
+#include "libs/SDL/include/SDL.h"
 #include <fstream>
 
 #pragma comment( lib, "libs/PhysFS/libx86/physfs.lib" )

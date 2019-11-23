@@ -16,7 +16,7 @@ public:
 public:
 	void Enable() override;
 	void Disable() override;
-	void PreUpdate() override;
+	void PreUpdate(float realDT) override;
 
 	//void UpdateLocalMat();
 	void UpdateGlobalMat();
