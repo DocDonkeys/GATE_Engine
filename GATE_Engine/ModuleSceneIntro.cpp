@@ -43,8 +43,8 @@ bool ModuleSceneIntro::Start()
 	trans->needsUpdateGlobal = false;
 
 	//Setup camera
-	App->camera->Move(float3(15.0f, 15.0f, 15.0f));
-	App->camera->LookAt(float3(0.f, 0.f, 0.f));
+	App->camera->Move(float3(15.f, 15.f, 15.f));
+	App->camera->LookAt(float3::zero);
 
 	//Load the StreetScene
 	App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");

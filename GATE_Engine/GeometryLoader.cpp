@@ -90,8 +90,14 @@ GameObject* GeometryLoader::Load3DFile(const char* full_path)
 		//We loaded the 3D file successfully!
 		//We load all nodes inside the root node, respecting parenting in gameobjects
 		aiNode* root = scene->mRootNode;
-		GameObject* go = LoadAssimpNode(scene,root,absolute_path.c_str(),filename.c_str(),full_path,objName.c_str(),counter);
+		root->mName = objName;
+		float biggestSize = 5.f;
+		GameObject* go = LoadAssimpNode(scene, root, absolute_path.c_str(), filename.c_str(), full_path, objName.c_str(), counter, biggestSize);
 		ret = go;
+
+		if (biggestSize > 5.f)
+			App->camera->LookAt(float3::zero, biggestSize);
+
 		//Once finished we release the original file
 		aiReleaseImport(scene);
 
@@ -105,10 +111,8 @@ GameObject* GeometryLoader::Load3DFile(const char* full_path)
 
 GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* node,
 	const char* absolute_path, const char* filename, const char* full_path, 
-	const char* objName, uint counter)
+	const char* objName, uint counter, float& biggestSize)
 {
-	float biggestMeshSize = -1.0f;
-
 	float4x4 meshTrs;
 	//Before creating Game Object, obtain local transformation respect parent
 	for (int i = 0; i < 4; ++i)
@@ -125,7 +129,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 	// Transform
 	ComponentTransform* trs_component = (ComponentTransform*)ret_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	trs_component->SetLocalMat(meshTrs);
-
+	
 	if (node != nullptr && node->mNumMeshes > 0)
 	{
 		int nmeshes = node->mNumMeshes;
@@ -157,10 +161,9 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			mesh_component->mesh->LoadMeshBounds();
 			ret_go->size = mesh_component->mesh->GetSize();
 
-			float currMeshSize = Length(new_mesh->GetSize());
-			if (biggestMeshSize < currMeshSize) {
-				App->camera->CenterToObject(ret_go);
-				biggestMeshSize = currMeshSize;
+			float meshSize = Length(new_mesh->GetSize());
+			if (biggestSize < meshSize) {
+				biggestSize = meshSize;
 			}
 
 			// Material
@@ -178,7 +181,7 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 	if (node->mNumChildren > 0)
 		for (int i = 0; i < node->mNumChildren; ++i)
 		{
-			GameObject* child = LoadAssimpNode(scene, node->mChildren[i], absolute_path, filename, full_path, objName, counter);
+			GameObject* child = LoadAssimpNode(scene, node->mChildren[i], absolute_path, filename, full_path, objName, counter, biggestSize);
 			GOFunctions::ReParentGameObject(child, ret_go);
 		}
 
