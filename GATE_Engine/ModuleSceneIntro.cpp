@@ -47,8 +47,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(float3::zero);
 
 	//Load the StreetScene
-	//App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
-	App->resources->ImportFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
+	App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
+	//App->resources->ImportFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
 	// Scene Tree
 	staticTree = new Tree(Tree::TREE_TYPE::OC_TREE, AABB({ -50, -30.f, -50.f }, { 50.f, 30.f, 50.f }), 5);
