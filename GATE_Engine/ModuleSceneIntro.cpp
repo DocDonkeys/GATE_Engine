@@ -78,7 +78,7 @@ bool ModuleSceneIntro::CleanUp()
 GameObject* ModuleSceneIntro::CreateEmptyGameObject()
 {
 	GameObject* go = new GameObject();
-	GOFunctions::ReParentGameObject(go,root);
+	GOFunctions::ReParentGameObject(go, root);
 	return go;
 }
 
@@ -248,11 +248,14 @@ GameObject* ModuleSceneIntro::IntersectRay(const LineSegment& segment, float& di
 	return chosen;
 }
 
-bool ModuleSceneIntro::ChangeScene(GameObject * new_root)
+bool ModuleSceneIntro::ChangeScene(GameObject* new_root)
 {
 	//Delete the current root and change it by the root of the loaded scene
-	delete root;
+	root->children.erase(root->children.begin() + 1);	// The new root was stored as a child of current root, so we take it out before deleting the original root
+	RELEASE(root);
 	root = new_root;
+	root->parent = nullptr;
+	App->scene_intro->selected_go = nullptr;
 
 	// Restart tree with new objects
 	staticTree->Clear();

@@ -293,7 +293,7 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 		if (child->parent != nullptr) {
 
 			for (int i = 0; i < child->parent->children.size(); ++i)
-				if (child->parent->children[i]->name == child->name)
+				if (child->parent->children[i] == child)
 				{
 					child->parent->children.erase(child->parent->children.begin() + i);
 					break;
