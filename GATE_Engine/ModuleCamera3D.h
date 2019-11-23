@@ -76,6 +76,7 @@ public:
 
 private:
 	float3 reference;
+	float minRefDist = 1.f;
 	bool target = false;	// Flag for object being targeted
 	ComponentCamera* editorCamera = nullptr;	// CHANGE/FIX: Save&Load of camera data
 	ComponentCamera* activeCamera = nullptr;

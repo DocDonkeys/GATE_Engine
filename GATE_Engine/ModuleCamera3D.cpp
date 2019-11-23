@@ -70,18 +70,10 @@ update_status ModuleCamera3D::Update(float dt)
 			(float)-App->input->GetMouseYMotion() * mouseSens * dt,
 			(float)App->input->GetMouseZ() * scrollSens * dt };
 
-		// Mouse Picking
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-		{
-			GameObject* pick = MousePick();
-			if (pick != nullptr)
-				App->scene_intro->selected_go = pick;
-		}
-
 		// Mouse Button Controls
-		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
-			|| App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT
-			|| App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT
+		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) != KEY_IDLE
+			|| App->input->GetMouseButton(SDL_BUTTON_LEFT) != KEY_IDLE
+			|| App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_IDLE
 			|| mouseInput.z != 0.f)
 		{
 			if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT
@@ -105,6 +97,12 @@ update_status ModuleCamera3D::Update(float dt)
 				else {
 					Zoom(mouseInput.z);	// Mouse Scroll: Forward/Backwrads
 				}
+			}
+			else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)	// Mouse Picking
+			{
+				GameObject* pick = MousePick();
+				if (pick != nullptr)
+					App->scene_intro->selected_go = pick;
 			}
 		}
 
@@ -185,7 +183,42 @@ void ModuleCamera3D::DragCamera(float delta_x, float delta_y)
 
 void ModuleCamera3D::Zoom(float delta_z)
 {
-	editorCamera->frustum.pos += editorCamera->frustum.front * delta_z * scrollSens;
+	float3 currPos = editorCamera->frustum.pos;
+	float3 newPos = currPos + editorCamera->frustum.front * delta_z * scrollSens;
+
+	if (Length(reference - newPos) < minRefDist) {
+		return;
+	}
+	else {	// If you go THROUGH the reference, cancel the zoom
+		if (currPos.x > reference.x) {
+			if (newPos.x < reference.x)
+				return;
+		}
+		else {
+			if (newPos.x > reference.x)
+				return;
+		}
+			
+		if (currPos.y > reference.y) {
+			if (newPos.y < reference.y)
+				return;
+		}
+		else {
+			if (newPos.y > reference.y)
+				return;
+		}
+
+		if (currPos.z > reference.z) {
+			if (newPos.z < reference.z)
+				return;
+		}
+		else {
+			if (newPos.z > reference.z)
+				return;
+		}
+	}
+
+	editorCamera->frustum.pos = newPos;
 }
 
 bool ModuleCamera3D::FirstPersonCamera(float& movSpeed)
@@ -383,12 +416,15 @@ void ModuleCamera3D::CenterToObject(GameObject* obj, float multiplier)	//IMPROVE
 		float dist = Length({ 10.0f, 10.0f, 10.0f });
 
 		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(COMPONENT_TYPE::TRANSFORM);
-		if (transform != nullptr)
-			reference = transform->position;
-
 		ComponentMesh* mesh = (ComponentMesh*)obj->GetComponent(COMPONENT_TYPE::MESH);
-		if (mesh != nullptr)
+
+		if (mesh != nullptr) {
+			reference = obj->aabb.CenterPoint();
 			dist = Length(float3(mesh->mesh->size.x, mesh->mesh->size.y, mesh->mesh->size.z)) * Length(float3(transform->scale.x, transform->scale.y, transform->scale.z));
+		}
+		else {
+			reference = transform->position;
+		}
 
 		LookAt(reference, dist);
 	}
