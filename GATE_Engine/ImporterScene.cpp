@@ -96,7 +96,7 @@ bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 			case COMPONENT_TYPE::MESH:
 				mesh = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
 				if (mesh != nullptr)
-				mesh->Load(loaded_file[go_name]["Components"][std::to_string((int)comp_type)]);
+					mesh->Load(loaded_file[go_name]["Components"][std::to_string((int)comp_type)]);
 				break;
 
 			case COMPONENT_TYPE::MATERIAL:

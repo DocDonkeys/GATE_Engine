@@ -75,9 +75,6 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	path = file;
 	if (type == Resource::TEXTURE) // Since textures will be exported as dds into assets default textures folder we need to change extesnion to .dds before making any checks
 	{
-		file = App->SubtractString(file, ".", true, true);
-		file += ".dds";
-		path = file;
 		path += ".meta";
 		path = ASSETS_DEFAULT_TEXTURES + path;
 	}
@@ -87,7 +84,9 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 		path = ASSETS_DEFAULT_MESHES + path;
 	}
 	
-	bool has_meta = App->file_system->Exists(path.data()); //MUST TEST MULTIPLE TIMES to see if physfs exists works for files that might be outside the assets folder
+	bool has_meta = App->file_system->Exists(path.data());
+	path = App->SubtractString(path,".",true,true);		//We take .meta out of the path since we are not checking anymore
+
 	std::string  meta_info_path, meta_file_path;
 	ImportExportData metadata;
 	GameObject* new_model = nullptr;
@@ -101,7 +100,10 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	case Resource::TEXTURE:
 		if (has_meta)
 		{
-			tex = App->texture_loader->LoadTextureFile(full_path);
+			meta_file_path = path;
+			path += ".meta";
+			tex = App->texture_loader->importer.LoadMeta(path.data(),true);
+			//tex = App->texture_loader->LoadTextureFile(full_path);
 			uid = tex->GetUID();
 		}
 		else
@@ -114,7 +116,7 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 
 			metadata.meta_path = meta_info_path;
 			meta_file_path = path;
-			App->scene_intro->scene_ie.CreateMeta(meta_file_path.data(), &metadata);
+			App->texture_loader->importer.CreateMeta(meta_file_path.data(), &metadata);
 			uid = tex->GetUID();
 		}
 		break;
@@ -123,6 +125,7 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	case Resource::MODEL:
 		if (has_meta)
 		{
+			path += ".meta";
 			App->scene_intro->scene_ie.LoadMeta(path.data(),true);
 		}
 		else

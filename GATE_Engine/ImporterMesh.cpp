@@ -142,13 +142,13 @@ bool ImporterMesh::Load(const char * full_path, ResourceMesh* mesh)
 	mesh->tex_coords = new float[mesh->num_tex_coords * 2];						//																					//
 	memcpy(mesh->tex_coords, cursor, bytes);													//																					//
 
-	cursor += bytes;
-	bytes = sizeof(AABB);
-	memcpy(&mesh->bounds, cursor, bytes);
+	cursor += bytes;																							//																					//
+	bytes = sizeof(AABB);																					//					Copy AABB												//
+	memcpy(&mesh->bounds, cursor, bytes);														//																					//
 
-	cursor += bytes;
-	bytes = sizeof(float3);
-	memcpy(&mesh->size,cursor,bytes);
+	cursor += bytes;																							//																					//
+	bytes = sizeof(float3);																					//							Copy Size											//
+	memcpy(&mesh->size,cursor,bytes);																//																					//
 
 	//Alloc buffers for rendering
 	GenMeshBuffers(mesh);

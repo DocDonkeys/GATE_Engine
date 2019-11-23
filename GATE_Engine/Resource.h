@@ -30,6 +30,8 @@ public:
 	bool IsLoadedToMemory() const; 
 	bool LoadToMemory(); 
 	uint CountReferences() const;
+	void AddReference() { references++; };
+	void RemoveReference() { references--; };
 
 	//Virtual methods
 	virtual void Save(json& config) const; 
@@ -43,5 +45,6 @@ protected:
 	std::string imported_file;
 	Type type = UNKNOWN;
 	uint loaded = 0;
+	uint references = 0;
 };
 #endif
