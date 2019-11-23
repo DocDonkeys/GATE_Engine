@@ -163,7 +163,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	return texId;
 }
 
-ResourceTexture* TextureLoader::LoadTextureFile(const char* path, bool duplicate, uint target, int filterType, int fillingType) const
+ResourceTexture* TextureLoader::LoadTextureFile(const char* path, bool duplicate, uint32 force_id, uint target, int filterType, int fillingType) const
 {
 	if (path == nullptr)
 	{
@@ -203,9 +203,13 @@ ResourceTexture* TextureLoader::LoadTextureFile(const char* path, bool duplicate
 				LOG("[Error]: Texture ID creation failed.");
 			}
 			else {
-				tex = (ResourceTexture*)App->resources->CreateNewResource(Resource::TEXTURE);
+				if(force_id != 0)
+					tex = (ResourceTexture*)App->resources->CreateNewResource(Resource::TEXTURE,force_id);
+				else
+					tex = (ResourceTexture*)App->resources->CreateNewResource(Resource::TEXTURE);
+
 				tex->id = tempId;
-				App->texture_loader->textures.push_back(tex);
+				//App->texture_loader->textures.push_back(tex);
 				LOG("[Success]: Loaded texture from path %s", path);
 			}
 		}
@@ -222,8 +226,9 @@ ResourceTexture* TextureLoader::LoadTextureFile(const char* path, bool duplicate
 		std::string file;
 
 		App->file_system->SplitFilePath(path,nullptr,&file,nullptr);
-		DuplicateTextureAsDDS(file.data(),ASSETS_DEFAULT_TEXTURES);
-
+		std::string destination = ASSETS_DEFAULT_TEXTURES + file;
+		App->file_system->CopyFromOutsideFS(path, destination.data());
+		
 		std::string save_name = "_t";
 		save_name += std::to_string(tex->GetUID());
 		DuplicateTextureAsDDS(save_name.data(),LIBRARY_TEXTURES_FOLDER);

@@ -3,6 +3,7 @@
 #include "ModuleFileSystem.h"
 #include "TextureLoader.h"
 #include "ResourceTexture.h"
+#include "ModuleResources.h"
 
 ImporterMaterial::ImporterMaterial()
 {
@@ -40,6 +41,25 @@ bool ImporterMaterial::Load(const char * full_path, ResourceTexture* tex)
 	return false;
 }
 
+ResourceTexture * ImporterMaterial::LoadTexture(const char * path, uint32 force_uid)
+{
+	ResourceTexture* ret = nullptr;
+
+	//Check if the texture is already on the resources map
+	ret = (ResourceTexture*)App->resources->Get(force_uid);
+	if (force_uid != 0 && ret != nullptr)
+	{
+		ret->AddReference();
+		return ret;
+	}
+	else //Load texture
+	{
+		ret = App->texture_loader->LoadTextureFile(path,true,force_uid);
+	}
+
+	return ret;
+}
+
 bool ImporterMaterial::CreateMeta(const char * original_file_full_path, ImportExportData * ie_data)
 {
 	json file; //File to save
@@ -47,7 +67,17 @@ bool ImporterMaterial::CreateMeta(const char * original_file_full_path, ImportEx
 	App->file_system->SplitFilePath(original_file_full_path, &path, &filename, &extension);
 
 	//Data saving
-	file["Path"] = original_file_full_path;
+	file["Path"] = ie_data->meta_path.data();
+
+	//Store the UID (we can extract from meta_path)
+	std::string file_UID;
+	App->file_system->SplitFilePath(ie_data->meta_path.data(),nullptr,&file_UID,nullptr);
+	file_UID = App->SubtractString(file_UID, ".", true, true);
+	file_UID = App->SubtractString(file_UID,"t",false,false);
+
+	file["UID"] = file_UID.data();
+
+
 
 	//Convert to buffer
 	std::string data = App->jLoad.JsonToString(file);
@@ -60,8 +90,9 @@ bool ImporterMaterial::CreateMeta(const char * original_file_full_path, ImportEx
 	return false;
 }
 
-bool ImporterMaterial::LoadMeta(const char * full_path, bool game_path)
+ResourceTexture* ImporterMaterial::LoadMeta(const char * full_path, bool game_path)
 {
+	ResourceTexture* ret = nullptr;
 	std::string path = full_path;
 	std::string base_path = App->file_system->GetBasePath();
 
@@ -76,11 +107,13 @@ bool ImporterMaterial::LoadMeta(const char * full_path, bool game_path)
 
 	json loaded_file = App->jLoad.Load(path.data()); //Load the .meta as a json file 
 
-	std::string model_path = loaded_file["Path"];
-	model_path = base_path + model_path;
+	std::string texture_path = loaded_file["Path"];
+	texture_path = base_path + texture_path;
 	//Further importing options could go here
+	std::string UID = loaded_file["UID"];
+	uint32 uid = std::stoul(UID);
 
-	//Load the .dds
-	
-	return false;
+	ret = App->texture_loader->importer.LoadTexture(texture_path.data(), uid);
+	//ret = App->texture_loader->LoadTextureFile(texture_path.data(), false);
+	return ret;
 }
