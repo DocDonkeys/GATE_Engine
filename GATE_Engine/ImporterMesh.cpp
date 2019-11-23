@@ -26,6 +26,7 @@ bool ImporterMesh::Export(const char * path, std::string & output_file, const Im
 	size += sizeof(ranges) + sizeof(uint) * mesh->num_index + sizeof(float) * mesh->num_vertex * 3; // Size of alloc for ranges, indices, and vertices
 	size += sizeof(float) * mesh->num_normals * 3 * 3; //Size of alloc of all 3 normals data containers
 	size += sizeof(float) * mesh->num_normals * 2; // Size of alloc for Texture coordinates
+	size += sizeof(AABB) + sizeof(float3); //Size of alloc of AABB & size
 
 
 	char* data = new char[size]; // Allocate buffer
@@ -62,6 +63,16 @@ bool ImporterMesh::Export(const char * path, std::string & output_file, const Im
 	cursor += bytes;
 	bytes = sizeof(float) * mesh->num_tex_coords * 2;
 	memcpy(cursor, mesh->tex_coords, bytes);
+
+	//Store AABB
+	cursor += bytes;
+	bytes = sizeof(AABB);
+	memcpy(cursor,&mesh->bounds,bytes);
+
+	//Store size
+	cursor += bytes;
+	bytes = sizeof(float3);
+	memcpy(cursor, &mesh->size, bytes);
 
 	//Save the new .mesh to disk
 	ret = App->file_system->SaveUnique(output_file, data, size, path, filename, "mesh");
@@ -130,6 +141,14 @@ bool ImporterMesh::Load(const char * full_path, ResourceMesh* mesh)
 	bytes = sizeof(float) * mesh->num_tex_coords * 2;										//					Copy Texture Coordinates						//
 	mesh->tex_coords = new float[mesh->num_tex_coords * 2];						//																					//
 	memcpy(mesh->tex_coords, cursor, bytes);													//																					//
+
+	cursor += bytes;
+	bytes = sizeof(AABB);
+	memcpy(&mesh->bounds, cursor, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(float3);
+	memcpy(&mesh->size,cursor,bytes);
 
 	//Alloc buffers for rendering
 	GenMeshBuffers(mesh);
