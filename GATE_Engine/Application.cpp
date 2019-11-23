@@ -382,32 +382,34 @@ update_status Application::PostUpdateModules()
 
 void Application::CheckGameState()
 {
-	if (App->scene_intro->playing && !gamePlaying) {	// If game needs to start
+	if (App->scene_intro->playing && !gamePlaying) {		// If game needs to start
 		game_framerate.Start();
-		LOG("[Info] Started Game.");
+		//sceneBackupPath = scene_intro->scene_ie.SaveScene(App->scene_intro->root, std::string("Scene_Backup"), FileType::SCENE);
+		LOG("[Info]: Started Game.");
 	}
 	else if (!App->scene_intro->playing && gamePlaying) {	// If game needs to stop
 		game_framerate.Stop();
 		gamePaused = false;
-		LOG("[Info] Stopped Game.");
+		//scene_intro->scene_ie.LoadScene(sceneBackupPath.c_str(), FileType::SCENE);
+		LOG("[Info]: Stopped Game.");
 	}
 	
 	gamePlaying = App->scene_intro->playing;
 
 	if (gamePlaying) {	// If game running
-		if (App->scene_intro->paused && !gamePaused) {	// If needs to pause
+		if (App->scene_intro->paused && !gamePaused) {		// If needs to pause
 			game_framerate.Stop();
-			LOG("[Info] Paused Game.");
+			LOG("[Info]: Paused Game.");
 		}
 		else if (!App->scene_intro->paused && gamePaused) {	// If needs to unpause
 			game_framerate.Resume();
-			LOG("[Info] Resumed Game.");
+			LOG("[Info]: Resumed Game.");
 		}
 
 		gamePaused = App->scene_intro->paused;
 
 		if (App->scene_intro->requestTick) {	//DEBUG
-			LOG("[Info] Advanced game by 1 frame.");
+			LOG("[Info]: Advanced game by 1 frame.");
 		}
 
 		gameTick = App->scene_intro->requestTick;	// Pass tick request

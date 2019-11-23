@@ -164,6 +164,7 @@ private:
 	int					capped_ms = -1;
 
 	FramerateManager	game_framerate;
+	std::string sceneBackupPath;
 	bool mustRunGame = true;
 	bool gamePlaying = false;
 	bool gamePaused = false;
