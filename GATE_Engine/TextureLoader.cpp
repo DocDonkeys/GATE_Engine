@@ -163,7 +163,7 @@ uint TextureLoader::CreateTexture(const void* imgData, uint width, uint height, 
 	return texId;
 }
 
-ResourceTexture* TextureLoader::LoadTextureFile(const char* path, uint target, int filterType, int fillingType) const
+ResourceTexture* TextureLoader::LoadTextureFile(const char* path, bool duplicate, uint target, int filterType, int fillingType) const
 {
 	if (path == nullptr)
 	{
@@ -217,12 +217,16 @@ ResourceTexture* TextureLoader::LoadTextureFile(const char* path, uint target, i
 	else {
 		LOG("[Error]: Image loading failed. Cause: %s", iluErrorString(ilGetError()));
 	}
-	if (tex != nullptr)
+	if (tex != nullptr && duplicate)
 	{
-		//TODO: Didac check this to see how it would work with the module resources
+		std::string file;
+
+		App->file_system->SplitFilePath(path,nullptr,&file,nullptr);
+		DuplicateTextureAsDDS(file.data(),ASSETS_DEFAULT_TEXTURES);
+
 		std::string save_name = "_t";
 		save_name += std::to_string(tex->GetUID());
-		DuplicateTextureAsDDS(save_name.data());
+		DuplicateTextureAsDDS(save_name.data(),LIBRARY_TEXTURES_FOLDER);
 	}
 
 	ilDeleteImages(1, (const ILuint*)&imgId);	// Delete image inside DevIL
@@ -260,7 +264,7 @@ uint TextureLoader::GetDefaultId() const
 	return defaultTex->id;
 }
 
-bool TextureLoader::DuplicateTextureAsDDS(const char* name) const
+bool TextureLoader::DuplicateTextureAsDDS(const char* name, const char* directory) const
 {
 	bool ret = false;
 	std::string output, filename;
@@ -280,14 +284,14 @@ bool TextureLoader::DuplicateTextureAsDDS(const char* name) const
 	{
 		data = new ILubyte[size]; // allocate data buffer
 		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-			ret = App->file_system->SaveUnique(output, data, size, LIBRARY_TEXTURES_FOLDER, filename.data(), "dds");
+			ret = App->file_system->SaveUnique(output, data, size, directory, filename.data(), "dds");
 		RELEASE_ARRAY(data);
 	}
 	iluFlipImage();
 
 	//Create the .meta file
-	ImporterMaterial temp;
-	temp.CreateMeta(output.data(), nullptr);
+	/*ImporterMaterial temp;
+	temp.CreateMeta(output.data(), nullptr);*/
 
 	return ret;
 }

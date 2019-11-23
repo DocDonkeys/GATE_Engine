@@ -59,3 +59,29 @@ bool ImporterMaterial::CreateMeta(const char * original_file_full_path, ImportEx
 
 	return false;
 }
+
+bool ImporterMaterial::LoadMeta(const char * full_path, bool game_path)
+{
+	std::string path = full_path;
+	std::string base_path = App->file_system->GetBasePath();
+
+	if (game_path)
+	{
+		base_path = App->SubtractString(base_path, "\\", true, true, false);
+		base_path = App->SubtractString(base_path, "\\", true, true, true);
+		base_path += "Game";
+		App->file_system->NormalizePath(base_path);
+		path = base_path + path;
+	}
+
+	json loaded_file = App->jLoad.Load(path.data()); //Load the .meta as a json file 
+
+	std::string model_path = loaded_file["Path"];
+	model_path = base_path + model_path;
+	//Further importing options could go here
+
+	//Load the .
+
+	return false;
+	return false;
+}

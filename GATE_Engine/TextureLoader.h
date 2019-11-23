@@ -21,6 +21,7 @@ public:
 
 public:
 	ResourceTexture* LoadTextureFile(const char* path,
+		bool duplicate = false,
 		uint target = GL_TEXTURE_2D,		// GL_TEXTURE_2D, GL_TEXTURE_CUBE_MAP
 		int filterType = GL_NEAREST,		// GL_NEAREST, GL_LINEAR
 		int fillingType = GL_REPEAT) const;	// GL_REPEAT, GL_CLAMP_TO_EDGE, GL_MIRRORED_REPEAT);
@@ -38,7 +39,7 @@ public:
 	uint GetDefaultId() const;
 
 	//Save a given texture in DDS format inside the textures library folder
-	bool DuplicateTextureAsDDS(const char* name) const;
+	bool DuplicateTextureAsDDS(const char* name,const char* directory) const;
 
 public:
 	ImporterMaterial importer;

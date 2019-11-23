@@ -164,6 +164,32 @@ bool ImporterScene::CreateMeta(const char * original_file_full_path, ImportExpor
 	return false;
 }
 
+bool ImporterScene::LoadMeta(const char * full_path, bool game_path)
+{
+	std::string path = full_path;
+	std::string base_path = App->file_system->GetBasePath();
+
+	if (game_path)
+	{
+		base_path = App->SubtractString(base_path, "\\", true, true, false);
+		base_path = App->SubtractString(base_path, "\\", true, true, true);
+		base_path += "Game";
+		App->file_system->NormalizePath(base_path);
+		path = base_path  + path;
+	}
+
+	json loaded_file = App->jLoad.Load(path.data()); //Load the .scene as a json file 
+
+	std::string model_path = loaded_file["Path"];
+	model_path = base_path + model_path;
+	//Further importing options could go here
+
+	//Load the .model
+	App->scene_intro->scene_ie.LoadScene(model_path.data(),FileType::MODEL);
+
+	return false;
+}
+
 std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & scene_name, FileType file_type)
 {
 	json file; //File to save

@@ -72,13 +72,26 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	App->file_system->SplitFilePath(full_path,nullptr,&file,&extension);
 
 	Resource::Type type = ResourceTypeByPath(extension.data());
-
-	path += ".meta";
-
+	path = file;
+	if (type == Resource::TEXTURE) // Since textures will be exported as dds into assets default textures folder we need to change extesnion to .dds before making any checks
+	{
+		file = App->SubtractString(file, ".", true, true);
+		file += ".dds";
+		path = file;
+		path += ".meta";
+		path = ASSETS_DEFAULT_TEXTURES + path;
+	}
+	else if (type == Resource::MODEL)
+	{
+		path += ".meta";
+		path = ASSETS_DEFAULT_MESHES + path;
+	}
+	
 	bool has_meta = App->file_system->Exists(path.data()); //MUST TEST MULTIPLE TIMES to see if physfs exists works for files that might be outside the assets folder
 	std::string  meta_info_path, meta_file_path;
 	ImportExportData metadata;
 	GameObject* new_model = nullptr;
+	ResourceTexture* tex = nullptr;
 	switch (type)
 	{
 	case Resource::UNKNOWN:
@@ -86,20 +99,43 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	case Resource::MESH:
 		break;
 	case Resource::TEXTURE:
-		App->texture_loader->LoadTextureFile(full_path);
+		if (has_meta)
+		{
+			tex = App->texture_loader->LoadTextureFile(full_path);
+			uid = tex->GetUID();
+		}
+		else
+		{
+			tex = App->texture_loader->LoadTextureFile(full_path, true);
+			meta_info_path = "_t";
+			meta_info_path += std::to_string(tex->GetUID());
+			meta_info_path += ".dds";
+			meta_info_path = LIBRARY_TEXTURES_FOLDER + meta_info_path;
+
+			metadata.meta_path = meta_info_path;
+			meta_file_path = path;
+			App->scene_intro->scene_ie.CreateMeta(meta_file_path.data(), &metadata);
+			uid = tex->GetUID();
+		}
 		break;
 	case Resource::SCENE:
 		break;
 	case Resource::MODEL:
-		new_model = App->geometry_loader->Load3DFile(full_path);
-		meta_info_path =App->scene_intro->scene_ie.SaveScene(new_model,new_model->name,FileType::MODEL);
+		if (has_meta)
+		{
+			App->scene_intro->scene_ie.LoadMeta(path.data(),true);
+		}
+		else
+		{
+			new_model = App->geometry_loader->Load3DFile(full_path);
+			meta_info_path = App->scene_intro->scene_ie.SaveScene(new_model, new_model->name, FileType::MODEL);
 
-		//We create the string to duplicate the fbx
-		meta_file_path = ASSETS_DEFAULT_MESHES + file;
-		App->file_system->CopyFromOutsideFS(full_path, meta_file_path.data());
-		meta_file_path += ".meta"; //we add .meta to the path of the fbx inside Assets
-		metadata.meta_path = meta_info_path;
-		App->scene_intro->scene_ie.CreateMeta(meta_file_path.data(),&metadata);
+			//We create the string to duplicate the fbx
+			meta_file_path = ASSETS_DEFAULT_MESHES + file;
+			App->file_system->CopyFromOutsideFS(full_path, meta_file_path.data());
+			metadata.meta_path = meta_info_path;
+			App->scene_intro->scene_ie.CreateMeta(meta_file_path.data(), &metadata);
+		}
 		
 		break;
 	default:

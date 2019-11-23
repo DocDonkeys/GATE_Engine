@@ -1,0 +1,146 @@
+{
+    "Baker_house": {
+        "Active": "1",
+        "Components": {
+            "0": {
+                "Gnum0": 100.0,
+                "Gnum1": 0.0,
+                "Gnum10": -1.6292067812173627e-05,
+                "Gnum11": 0.0,
+                "Gnum12": 0.0,
+                "Gnum13": 0.0,
+                "Gnum14": 0.0,
+                "Gnum15": 1.0,
+                "Gnum2": 0.0,
+                "Gnum3": 0.0,
+                "Gnum4": 0.0,
+                "Gnum5": -1.6292067812173627e-05,
+                "Gnum6": 100.0,
+                "Gnum7": 0.0,
+                "Gnum8": 0.0,
+                "Gnum9": -100.0,
+                "Lnum0": 100.0,
+                "Lnum1": 0.0,
+                "Lnum10": -1.6292067812173627e-05,
+                "Lnum11": 0.0,
+                "Lnum12": 0.0,
+                "Lnum13": 0.0,
+                "Lnum14": 0.0,
+                "Lnum15": 1.0,
+                "Lnum2": 0.0,
+                "Lnum3": 0.0,
+                "Lnum4": 0.0,
+                "Lnum5": -1.6292067812173627e-05,
+                "Lnum6": 100.0,
+                "Lnum7": 0.0,
+                "Lnum8": 0.0,
+                "Lnum9": -100.0
+            },
+            "1": {
+                "Path": "/library/meshes/_m4290309139.mesh"
+            },
+            "2": {
+                "Active": true,
+                "Checkers active": false,
+                "Path": "Game/Library/Textures/_t434692395.dds",
+                "UID": 3677768043
+            }
+        },
+        "Parent UID": "2372606629",
+        "Static": "0",
+        "UID": "2006248270"
+    },
+    "Chimney": {
+        "Active": "1",
+        "Components": {
+            "0": {
+                "Gnum0": 100.0,
+                "Gnum1": 0.0,
+                "Gnum10": -1.6292067812173627e-05,
+                "Gnum11": 0.0,
+                "Gnum12": 0.0,
+                "Gnum13": 0.0,
+                "Gnum14": 0.0,
+                "Gnum15": 1.0,
+                "Gnum2": 0.0,
+                "Gnum3": 0.0,
+                "Gnum4": 0.0,
+                "Gnum5": -1.6292067812173627e-05,
+                "Gnum6": 100.0,
+                "Gnum7": 0.0,
+                "Gnum8": 0.0,
+                "Gnum9": -100.0,
+                "Lnum0": 100.0,
+                "Lnum1": 0.0,
+                "Lnum10": -1.6292067812173627e-05,
+                "Lnum11": 0.0,
+                "Lnum12": 0.0,
+                "Lnum13": 0.0,
+                "Lnum14": 0.0,
+                "Lnum15": 1.0,
+                "Lnum2": 0.0,
+                "Lnum3": 0.0,
+                "Lnum4": 0.0,
+                "Lnum5": -1.6292067812173627e-05,
+                "Lnum6": 100.0,
+                "Lnum7": 0.0,
+                "Lnum8": 0.0,
+                "Lnum9": -100.0
+            },
+            "1": {
+                "Path": "/library/meshes/_m944283559.mesh"
+            },
+            "2": {
+                "Active": true,
+                "Checkers active": false,
+                "Path": "Game/Library/Textures/_t556964738.dds",
+                "UID": 1727884842
+            }
+        },
+        "Parent UID": "2372606629",
+        "Static": "0",
+        "UID": "186980600"
+    },
+    "RootNode": {
+        "Active": "1",
+        "Components": {
+            "0": {
+                "Gnum0": 1.0,
+                "Gnum1": 0.0,
+                "Gnum10": 1.0,
+                "Gnum11": 0.0,
+                "Gnum12": 0.0,
+                "Gnum13": 0.0,
+                "Gnum14": 0.0,
+                "Gnum15": 1.0,
+                "Gnum2": 0.0,
+                "Gnum3": 0.0,
+                "Gnum4": 0.0,
+                "Gnum5": 1.0,
+                "Gnum6": 0.0,
+                "Gnum7": 0.0,
+                "Gnum8": 0.0,
+                "Gnum9": 0.0,
+                "Lnum0": 1.0,
+                "Lnum1": 0.0,
+                "Lnum10": 1.0,
+                "Lnum11": 0.0,
+                "Lnum12": 0.0,
+                "Lnum13": 0.0,
+                "Lnum14": 0.0,
+                "Lnum15": 1.0,
+                "Lnum2": 0.0,
+                "Lnum3": 0.0,
+                "Lnum4": 0.0,
+                "Lnum5": 1.0,
+                "Lnum6": 0.0,
+                "Lnum7": 0.0,
+                "Lnum8": 0.0,
+                "Lnum9": 0.0
+            }
+        },
+        "Parent UID": "2602290136",
+        "Static": "0",
+        "UID": "2372606629"
+    }
+}

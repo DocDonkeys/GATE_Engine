@@ -27,6 +27,7 @@ public:
 	virtual bool Export(const char* path, std::string& output_file, const ImportExportData* ie_data, const char* filename = "");
 	virtual bool Load(const char* full_path);
 	virtual bool CreateMeta(const char* original_file_full_path, ImportExportData* ie_data);
+	virtual bool LoadMeta(const char* full_path);
 
 	bool ImportableResource(const char* full_path);
 	uint TotalGOsNum(const GameObject* go, uint& num_of_gos);
