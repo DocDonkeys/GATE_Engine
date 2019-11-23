@@ -224,6 +224,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_QUIT:
 				windowEvents[WE_QUIT] = true;
+				App->mustShutDown = true;
 				break;
 
 			case SDL_WINDOWEVENT:

@@ -84,6 +84,7 @@
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentMesh.h" />
+    <ClInclude Include="FramerateManager.h" />
     <ClInclude Include="Importer.h" />
     <ClInclude Include="ImporterMaterial.h" />
     <ClInclude Include="ImporterMesh.h" />
@@ -152,6 +153,7 @@
     <ClCompile Include="EditorProject.cpp" />
     <ClCompile Include="EditorScene.cpp" />
     <ClCompile Include="EditorToolbar.cpp" />
+    <ClCompile Include="FramerateManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeometryLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />

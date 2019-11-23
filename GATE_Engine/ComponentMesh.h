@@ -16,7 +16,7 @@ public:
 	void Enable() override;
 	void Disable() override;
 
-	void Draw();
+	void Draw() override;
 
 	void Save(json &file);
 	void Load(json &file);

@@ -27,9 +27,10 @@ public:
 	~GameObject();
 
 public: //Methods
-	void PreUpdate();
-	void Update();
-	void PostUpdate();
+	void PreUpdate(float realDT);
+	void Update(float realDT);
+	void GameUpdate(float gameDT);
+	void PostUpdate(float realDT);
 
 	void Draw() const;	// This method is called by the renderer
 	static void DrawAABB(const AABB& aabb, const float3& rgb = float3(1.f, 1.f, 1.f));

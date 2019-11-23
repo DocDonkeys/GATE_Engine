@@ -12,6 +12,9 @@
 #include "ImporterScene.h"
 #include "Tree.h"
 
+#include "libs/SDL/include/SDL_keycode.h"
+#include "libs/SDL/include/SDL_mouse.h"
+
 #include "libs/MathGeoLib/include/Math/MathConstants.h"
 #include "libs/MathGeoLib/include/Geometry/LineSegment.h"
 #include "libs/MathGeoLib/include/Geometry/Triangle.h"
@@ -40,8 +43,8 @@ bool ModuleSceneIntro::Start()
 	trans->needsUpdateGlobal = false;
 
 	//Setup camera
-	App->camera->Move(float3(15.0f, 15.0f, 15.0f));
-	App->camera->LookAt(float3(0.f, 0.f, 0.f));
+	App->camera->Move(float3(15.f, 15.f, 15.f));
+	App->camera->LookAt(float3::zero);
 
 	//Load the StreetScene
 	//App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
@@ -149,33 +152,36 @@ bool ModuleSceneIntro::AddTextureToGameObject(GameObject * go, const char* path)
 }
 
 // PreUpdate
-update_status ModuleSceneIntro::PreUpdate(float dt)
+update_status ModuleSceneIntro::PreUpdate(float realDT)
 {
-	root->PreUpdate();
+	root->PreUpdate(realDT);
 
 	return UPDATE_CONTINUE;
 }
 
 // Update
-update_status ModuleSceneIntro::Update(float dt)
+update_status ModuleSceneIntro::Update(float realDT)
 {
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)	// Avoid conflicting with First Person controls
 		toolMode = CheckToolMode();
 
-	root->Update();
-	
-	//Ground Render	(Used the Primitives Container)
-	/*Plane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();*/
+	root->Update(realDT);
+
+	return UPDATE_CONTINUE;
+}
+
+// Game Update
+update_status ModuleSceneIntro::GameUpdate(float gameDT)
+{
+	root->GameUpdate(gameDT);
 
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate
-update_status ModuleSceneIntro::PostUpdate(float dt)
+update_status ModuleSceneIntro::PostUpdate(float realDT)
 {
-	root->PostUpdate();
+	root->PostUpdate(realDT);
 
 	return UPDATE_CONTINUE;
 }
@@ -247,7 +253,15 @@ bool ModuleSceneIntro::ChangeScene(GameObject * new_root)
 	delete root;
 	root = new_root;
 
-	//TODO: Carles initialize / recalculate / delete any necessary info like quadtrees and stuff
+	// Restart tree with new objects
+	staticTree->Clear();
+
+	std::vector<const GameObject*> collector;
+	GOFunctions::FillArrayWithChildren(collector, root);
+	for (int i = 0; i < collector.size(); i++)
+		if (collector[i]->staticObj)
+			staticTree->Insert(collector[i]);
+
 	return false;
 }
 

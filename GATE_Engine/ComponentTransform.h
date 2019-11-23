@@ -16,7 +16,7 @@ public:
 public:
 	void Enable() override;
 	void Disable() override;
-	void PreUpdate() override;
+	void PreUpdate(float realDT) override;
 
 	//void UpdateLocalMat();
 	void UpdateGlobalMat();
@@ -44,7 +44,7 @@ public:
 	float3 scale = float3::one;
 
 	//bool needsUpdateLocal = false;
-	bool needsUpdateGlobal = true;
+	bool needsUpdateGlobal = false;
 
 public:	//CHANGE/FIX: Should be private, only public currently because of Didac's import/export system
 	float4x4 localTrs = float4x4::identity;

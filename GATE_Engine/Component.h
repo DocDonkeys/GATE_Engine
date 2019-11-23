@@ -17,9 +17,10 @@ public: //Methods
 	virtual void Enable() = 0;
 	virtual void Disable() = 0;
 
-	virtual void PreUpdate() {};
-	virtual void Update() {};
-	virtual void PostUpdate() {};
+	virtual void PreUpdate(float realDT) {};
+	virtual void Update(float realDT) {};
+	virtual void GameUpdate(float gameDT) {};
+	virtual void PostUpdate(float realDT) {};
 	virtual void Draw() {};
 
 	virtual void Save(json& file);

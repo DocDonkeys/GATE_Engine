@@ -54,7 +54,7 @@ void ComponentCamera::Disable()
 	active = false;
 }
 
-void ComponentCamera::Update()
+void ComponentCamera::Update(float realDT)
 {
 	ComponentTransform* trs = (ComponentTransform*)my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	frustum.pos = trs->GetGlobalMat().TranslatePart();
@@ -64,7 +64,7 @@ void ComponentCamera::Update()
 
 void ComponentCamera::Draw()
 {
-	if (my_go->size.x == 0.f && my_go->size.y == 0.f && my_go->size.z == 0.f) {	// If Game object has size 0, draw a "gizmo" square instead
+	if (my_go->size.IsZero()) {	// If Game object has size 0, draw a "gizmo" square instead
 		my_go->DrawAABB(AABB(my_go->aabb.minPoint - float3::one / 2.f, my_go->aabb.maxPoint + float3::one / 2.f), float3(1.f, 0.f, 1.f));
 	}
 
@@ -229,13 +229,13 @@ bool ComponentCamera::Intersects(const AABB& refBox) const
 	return Intersects(frustum, refBox);
 }
 
-bool ComponentCamera::Intersects(const Frustum& frustum, const AABB& refBox)	// We use this instead of MathGeoLib's method because it's quicker
+bool ComponentCamera::Intersects(const Frustum& refFrustum, const AABB& refBox)	// We use this instead of MathGeoLib's method because it's quicker
 {
 	float3 corners[8];
 	refBox.GetCornerPoints(corners);
 
 	Plane p[6];
-	frustum.GetPlanes(p);
+	refFrustum.GetPlanes(p);
 
 	uint totalInside = 0;
 

@@ -25,7 +25,7 @@ void ComponentTransform::Disable()
 	active = false;
 }
 
-void ComponentTransform::PreUpdate()
+void ComponentTransform::PreUpdate(float realDT)
 {
 	if (my_go->parent == nullptr) {
 		SDL_assert(my_go == App->scene_intro->root);

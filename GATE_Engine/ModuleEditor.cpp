@@ -107,6 +107,8 @@ update_status ModuleEditor::Update(float dt)
 {
 	BROFILER_CATEGORY("Renderer pre-Update", Profiler::Color::Green);
 
+	update_status ret = update_status::UPDATE_CONTINUE;
+
 	//Before we start with ImGui menus & stuff, we check for windows and menus that can be opened or closed with keyboard keys
 
 	// Poll and handle events (inputs, window resize, etc.)
@@ -140,6 +142,23 @@ update_status ModuleEditor::Update(float dt)
 	editor_project->RequestUpdate();
 	editor_scene->RequestUpdate();
 
+	if (App->mustShutDown) {
+		ImGui::OpenPopup("Exit GATE?");
+
+		if (ImGui::BeginPopupModal("Exit GATE?", &App->mustShutDown, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			if (ImGui::Button("Yes", { 90.f, 30.f })) {
+				App->mustShutDown = true;
+				ret = update_status::UPDATE_STOP;
+			} ImGui::SameLine();
+			if (ImGui::Button("No", { 90.f, 30.f })) {
+				App->mustShutDown = false;
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
 	// Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()!
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
@@ -147,7 +166,7 @@ update_status ModuleEditor::Update(float dt)
 	//If we are using a Imgui Menu, we update the bool that indicates so
 	 using_menu = io->WantCaptureMouse;
 
-	return UPDATE_CONTINUE;
+	return ret;
 }
 
 bool ModuleEditor::BeginRootWindow(char* id, bool docking, ImGuiWindowFlags winFlags)
