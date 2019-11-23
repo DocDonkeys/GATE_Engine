@@ -80,8 +80,7 @@ bool ImporterMaterial::LoadMeta(const char * full_path, bool game_path)
 	model_path = base_path + model_path;
 	//Further importing options could go here
 
-	//Load the .
-
-	return false;
+	//Load the .dds
+	
 	return false;
 }

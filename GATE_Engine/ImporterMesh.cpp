@@ -69,8 +69,6 @@ bool ImporterMesh::Export(const char * path, std::string & output_file, const Im
 	if (ret == true)
 	{
 		LOG("Succesfully exported %s", output_file);
-		//Create/Update the meta file
-		CreateMeta(output_file.data(), ie_mdata);
 	}
 	else
 		LOG("Failed to export %s to %s as a .mesh", output_file, path);

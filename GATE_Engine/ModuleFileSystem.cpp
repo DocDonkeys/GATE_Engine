@@ -261,21 +261,6 @@ void ModuleFileSystem::NormalizePath(std::string & full_path) const
 	}
 }
 
-void ModuleFileSystem::DuplicateFile(const char * path, const char * destination)
-{
-	std::string full_path, relative_path, filename, extension;
-	SplitFilePath(path,&relative_path,&filename,&extension);
-	full_path = path;
-	NormalizePath(full_path);
-	std::string destPath = std::string(*PHYSFS_getSearchPath()).append("/") + relative_path;
-
-	std::ifstream  src;
-	src.open(full_path.data(), std::ios::binary);
-	std::ofstream  dst(destPath.data(), std::ios::binary);
-
-	int i = 0;
-}
-
 unsigned int ModuleFileSystem::Load(const char * path, const char * file, char ** buffer) const
 {
 	string full_path(path);
