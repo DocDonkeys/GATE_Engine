@@ -382,20 +382,22 @@ update_status Application::PostUpdateModules()
 
 void Application::CheckGameState()
 {
-	if (App->scene_intro->playing && !gamePlaying) {	// If game needs to start
+	if (App->scene_intro->playing && !gamePlaying) {		// If game needs to start
 		game_framerate.Start();
+		//sceneBackupPath = scene_intro->scene_ie.SaveScene(App->scene_intro->root, std::string("Scene_Backup"), FileType::SCENE);
 		LOG("[Info] Started Game.");
 	}
 	else if (!App->scene_intro->playing && gamePlaying) {	// If game needs to stop
 		game_framerate.Stop();
 		gamePaused = false;
+		//scene_intro->scene_ie.LoadScene(sceneBackupPath.c_str(), FileType::SCENE);
 		LOG("[Info] Stopped Game.");
 	}
 	
 	gamePlaying = App->scene_intro->playing;
 
 	if (gamePlaying) {	// If game running
-		if (App->scene_intro->paused && !gamePaused) {	// If needs to pause
+		if (App->scene_intro->paused && !gamePaused) {		// If needs to pause
 			game_framerate.Stop();
 			LOG("[Info] Paused Game.");
 		}
