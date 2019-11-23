@@ -252,7 +252,15 @@ bool ModuleSceneIntro::ChangeScene(GameObject * new_root)
 	delete root;
 	root = new_root;
 
-	//TODO: Carles initialize / recalculate / delete any necessary info like quadtrees and stuff
+	// Restart tree with new objects
+	staticTree->Clear();
+
+	std::vector<const GameObject*> collector;
+	GOFunctions::FillArrayWithChildren(collector, root);
+	for (int i = 0; i < collector.size(); i++)
+		if (collector[i]->staticObj)
+			staticTree->Insert(collector[i]);
+
 	return false;
 }
 
