@@ -292,7 +292,7 @@ ResourceTexture* GeometryLoader::LoadMaterial(const aiScene * scene, const aiMes
 				relative_path = relative_path.substr(found + 1, relative_path.size());
 			}
 			std::string texture_path = absolute_path.data() + relative_path;
-			uint32 uid = App->resources->ImportInternalFile(texture_path.data(), Resource::TEXTURE); //TODO: Didac
+			uint32 uid = App->resources->ImportFile(texture_path.data()); //TODO: Didac
 			ret = (ResourceTexture*)App->resources->Get(uid);
 			//ret = App->texture_loader->LoadTextureFile(texture_path.data());
 

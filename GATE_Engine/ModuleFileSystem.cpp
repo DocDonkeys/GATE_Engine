@@ -41,7 +41,6 @@ ModuleFileSystem::ModuleFileSystem(Application* app, const char* name, const cha
 		/*LIBRARY_AUDIO_FOLDER, */LIBRARY_MESH_FOLDER,
 		LIBRARY_MATERIAL_FOLDER, /*LIBRARY_SCENE_FOLDER,*/ LIBRARY_MODEL_FOLDER, 
 		LIBRARY_TEXTURES_FOLDER,/* LIBRARY_ANIMATION_FOLDER, LIBRARY_STATE_MACHINE_FOLDER,*/
-		LIBRARY_TRANSFORMATIONS_FOLDER
 	};
 
 	for (uint i = 0; i < sizeof(dirs)/sizeof(const char*); ++i)
@@ -261,21 +260,6 @@ void ModuleFileSystem::NormalizePath(std::string & full_path) const
 		else
 			*it = tolower(*it);
 	}
-}
-
-void ModuleFileSystem::DuplicateFile(const char * path, const char * destination)
-{
-	std::string full_path, relative_path, filename, extension;
-	SplitFilePath(path,&relative_path,&filename,&extension);
-	full_path = path;
-	NormalizePath(full_path);
-	std::string destPath = std::string(*PHYSFS_getSearchPath()).append("/") + relative_path;
-
-	std::ifstream  src;
-	src.open(full_path.data(), std::ios::binary);
-	std::ofstream  dst(destPath.data(), std::ios::binary);
-
-	int i = 0;
 }
 
 unsigned int ModuleFileSystem::Load(const char * path, const char * file, char ** buffer) const

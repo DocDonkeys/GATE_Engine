@@ -83,26 +83,26 @@ void ResourceMesh::LoadNormals(const aiMesh * loaded_mesh)
 		//Calculate the positions and vectors of the face Normals
 		normals_faces = new float3[num_index];
 		normals_faces_vector = new float3[num_index];
-		for (int j = 0; j < num_index; j += 3)
-		{
-			// 3 points of the triangle/face
-			float3 vert1 = vertex[index[j]];
-			float3 vert2 = vertex[index[j + 1]];
-			float3 vert3 = vertex[index[j + 2]];
+		//for (int j = 0; j < num_index; j += 3) //TODO: DIDAC SOLVE THIS CRASH
+		//{
+		//	// 3 points of the triangle/face
+		//	float3 vert1 = vertex[index[j]];
+		//	float3 vert2 = vertex[index[j + 1]];
+		//	float3 vert3 = vertex[index[j + 2]];
 
-			//Calculate starting point of the normal
-			normals_faces[j] = (vert1 + vert2 + vert3) / 3;
+		//	//Calculate starting point of the normal
+		//	normals_faces[j] = (vert1 + vert2 + vert3) / 3;
 
-			//Calculate Cross product of 2 edges of the triangle to obtain Normal vector
-			float3 edge_a = vert2 - vert1;
-			float3 edge_b = vert3 - vert1;
+		//	//Calculate Cross product of 2 edges of the triangle to obtain Normal vector
+		//	float3 edge_a = vert2 - vert1;
+		//	float3 edge_b = vert3 - vert1;
 
-			float3 normal;
-			normal = Cross(edge_a, edge_b);
-			normal.Normalize();
+		//	float3 normal;
+		//	normal = Cross(edge_a, edge_b);
+		//	normal.Normalize();
 
-			normals_faces_vector[j] = normal;
-		}
+		//	normals_faces_vector[j] = normal;
+		//}
 
 	}
 }

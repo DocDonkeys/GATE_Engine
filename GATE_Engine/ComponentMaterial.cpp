@@ -36,29 +36,34 @@ void ComponentMaterial::Save(json & file)
 	std::string full_path = "Game";
 	full_path += LIBRARY_TEXTURES_FOLDER;
 	full_path += "_t";
-	full_path += std::to_string(this->loaded_texture->GetUID());
-	full_path += ".dds";
+	bool has_texture = (loaded_texture != nullptr);
+	file["Loaded Texture"] = std::to_string(has_texture);
+	if (loaded_texture != nullptr)
+	{
+		full_path += std::to_string(this->loaded_texture->GetUID());
+		full_path += ".dds";
 
-	file["Path"] = full_path.data();
+		file["Path"] = full_path.data();
+	}
 }
 
 void ComponentMaterial::Load(json & file)
 {
-	/*this->UID = std::stoul(file["UID"]);
-	this.active = std::stoi(file["Active"]);
-	this->use_default_texture = std::stoi(file["Checkers active"]);*/
-	/*file["Active"] = this->active;
-	file["Checkers active"] = this->use_default_texture;*/
-
 	std::string absolute = App->file_system->GetBasePath();
 	absolute = App->SubtractString(absolute,"\\",true,true,false);
 	absolute = App->SubtractString(absolute, "\\", true, true, true);
-	std::string relative = file["Path"];
-	std::string full_path = absolute + relative;
-	App->file_system->NormalizePath(full_path);
+	std::string bool_has_tex = file["Loaded Texture"];
+	bool has_texture = std::stoi(bool_has_tex);
 
-	this->loaded_texture = App->texture_loader->LoadTextureFile(full_path.data());
-	active_texture = loaded_texture;
+	if (has_texture)
+	{
+		std::string relative = file["Path"];
+		std::string full_path = absolute + relative;
+		App->file_system->NormalizePath(full_path);
+
+		this->loaded_texture = App->texture_loader->LoadTextureFile(full_path.data());
+		active_texture = loaded_texture;
+	}
 }
 
 void ComponentMaterial::AssignTexture(ResourceTexture* texture)

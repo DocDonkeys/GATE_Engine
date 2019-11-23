@@ -46,13 +46,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(float3(15.0f, 15.0f, 15.0f));
 	App->camera->LookAt(float3(0.f, 0.f, 0.f));
 
-	//TEST: Import scene
-	ImporterScene importer;
-	const char* full_path = "Library/scene_test.scene";
-	//importer.Load(full_path);
-
-	//Load the Baker House
-	App->resources->ImportFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
+	//Load the StreetScene
+	App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
 
 	// Scene Tree
 	staticTree = new Tree(Tree::TREE_TYPE::OC_TREE, AABB({ -50, -30.f, -50.f }, { 50.f, 30.f, 50.f }), 5);
@@ -71,11 +66,6 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
-	//TEST: Save a scene
-	ImporterScene scene_imp;
-	std::string scene_name = "scene_test";
-	//scene_imp.SaveScene(root,scene_name,FileType::SCENE);
 
 	RELEASE(root);
 	RELEASE(staticTree);

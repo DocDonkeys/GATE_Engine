@@ -8,7 +8,10 @@
 class ComponentTransform;
 class GameObject;
 
-struct ImportExportData {}; // We will need to overload some functions with diferent parameters. Inheriting this struct will allow us to do so
+struct ImportExportData 
+{
+	std::string meta_path;
+}; // We will need to overload some functions with diferent parameters. Inheriting this struct will allow us to do so
 
 class Importer { 
 public:
@@ -24,6 +27,7 @@ public:
 	virtual bool Export(const char* path, std::string& output_file, const ImportExportData* ie_data, const char* filename = "");
 	virtual bool Load(const char* full_path);
 	virtual bool CreateMeta(const char* original_file_full_path, ImportExportData* ie_data);
+	virtual bool LoadMeta(const char* full_path);
 
 	bool ImportableResource(const char* full_path);
 	uint TotalGOsNum(const GameObject* go, uint& num_of_gos);
