@@ -15,6 +15,7 @@
 
 #include "libs/SDL/include/SDL_keycode.h"
 #include "libs/SDL/include/SDL_mouse.h"
+#include "libs/SDL/include/SDL_assert.h"
 
 #include "libs/MathGeoLib/include/Math/MathConstants.h"
 #include "libs/MathGeoLib/include/Geometry/LineSegment.h"
@@ -289,9 +290,11 @@ bool ModuleSceneIntro::ChangeScene(GameObject* new_root)
 
 	std::vector<const GameObject*> collector;
 	GOFunctions::FillArrayWithChildren(collector, root);
-	for (int i = 0; i < collector.size(); i++)
-		if (collector[i]->staticObj)
+	for (int i = 0; i < collector.size(); i++) {
+		if (collector[i]->staticObj) {
 			staticTree->Insert(collector[i]);
+		}
+	}
 
 	return false;
 }
