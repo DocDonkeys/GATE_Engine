@@ -137,21 +137,23 @@ bool Tree::Insert(const GameObject* obj)
 {
 	bool ret = false;
 
-	for (int i = 0; i < treeObjects.size(); i++)
-		if (treeObjects[i] == obj) {
-			ret = true;	// Object is already inserted
-			//LOG("[Error]: Inserted object already present in the tree.")
-			break;
-		}
+	if (!obj->aabb.Size().IsZero()) {	// If obj has an AABB of size 0 it isn't valid for the tree
+		for (int i = 0; i < treeObjects.size(); i++)
+			if (treeObjects[i] == obj) {
+				ret = true;	// Object is already inserted
+				//LOG("[Error]: Inserted object already present in the tree.")
+				break;
+			}
 
-	if (!ret) {
-		if (!rootNode->Insert(obj)) {	// If object outside of bounds
-			Grow(obj->aabb);
-			SDL_assert(rootNode->Insert(obj));
-		}
+		if (!ret) {
+			if (!rootNode->Insert(obj)) {	// If object outside of bounds
+				Grow(obj->aabb);
+				SDL_assert(rootNode->Insert(obj));
+			}
 
-		treeObjects.push_back(obj);
-		LOG("[Success]: Inserted object %s to tree.", obj->name.c_str())
+			treeObjects.push_back(obj);
+			LOG("[Success]: Inserted object %s to tree.", obj->name.c_str())
+		}
 	}
 
 	return ret;
@@ -467,7 +469,7 @@ bool Tree::TreeNode::Remove(const GameObject* obj)
 // Splits
 void Tree::TreeNode::QuadSplit()
 {
-	//Subdivide the AABB     x)
+	//Subdivide the AABB
 	AABB newAABBs[4];
 	float3 maxPoint, minPoint;
 
@@ -504,7 +506,7 @@ void Tree::TreeNode::QuadSplit()
 
 void Tree::TreeNode::OctSplit()
 {
-	//Subdivide the AABB     x)
+	//Subdivide the AABB
 	AABB newAABBs[8];
 	float3 maxPoint, minPoint;
 

@@ -31,8 +31,8 @@ public:
 
 	void GetLocalMat(float3& pos, float3& rot, float3& scale);
 	void GetLocalMat(float3& pos, float3x3& rot, float3& scale);
-	float4x4 GetLocalMat();
-	float4x4 GetGlobalMat();
+	float4x4 GetLocalMat() const;
+	float4x4 GetGlobalMat() const;
 
 	void Import(float* local, float* global);
 	void Export(float* local, float* global);
