@@ -88,6 +88,9 @@ bool ComponentTransform::SetLocalMat(float3& newPos, float3& newRot, float3& new
 	}
 
 	if (changed) {
+		if (abs(rotation.x - newRot.x) < 0.000001 || abs(rotation.y - newRot.y) < 0.000001 || abs(rotation.z - newRot.z) < 0.000001)
+			changed = false;	//CHANGE/FIX: Mousepicking rotates the clicked obj by very small decimals (wtf), this avoids the object from becoming dynamic (if it was static)
+
 		localTrs = float4x4::FromTRS(newPos, float3x3::FromEulerXYZ(newRot.x, newRot.y, newRot.z), newScale);
 		position = newPos;
 		rotation = newRot;
@@ -181,12 +184,12 @@ void ComponentTransform::GetLocalMat(float3& pos, float3x3& rot, float3& scale)
 	localTrs.Decompose(pos, rot, scale);
 }
 
-float4x4 ComponentTransform::GetLocalMat()
+float4x4 ComponentTransform::GetLocalMat() const
 {
 	return localTrs;
 }
 
-float4x4 ComponentTransform::GetGlobalMat()
+float4x4 ComponentTransform::GetGlobalMat() const
 {
 	return globalTrs;
 }
