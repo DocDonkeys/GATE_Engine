@@ -11,3 +11,7 @@ void EditorProject::Update()
 {
 
 }
+
+void EditorProject::DrawAssetsLayout()
+{
+}

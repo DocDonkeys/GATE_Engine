@@ -48,7 +48,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(float3::zero);
 
 	//Load the StreetScene
-	App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
+	//App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
 	//App->resources->ImportFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
 	// Scene Tree

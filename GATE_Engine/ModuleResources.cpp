@@ -7,6 +7,7 @@
 #include "Resource.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "libs/SDL/include/SDL_assert.h"
 
 #include "MemLeaks.h"
 
@@ -84,7 +85,10 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 		path = ASSETS_DEFAULT_MESHES + path;
 	}
 	
+
 	bool has_meta = App->file_system->Exists(path.data());
+	//SDL_assert_release(has_meta == true);
+	//SDL_assert_release(has_meta == false);
 	path = App->SubtractString(path,".",true,true);		//We take .meta out of the path since we are not checking anymore
 
 	std::string  meta_info_path, meta_file_path;
