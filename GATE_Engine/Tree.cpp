@@ -137,7 +137,7 @@ bool Tree::Insert(const GameObject* obj)
 {
 	bool ret = false;
 
-	if (!obj->aabb.Size().IsZero()) {	// If obj has an AABB of size 0 it isn't valid for the tree
+	if (!obj->size.IsZero()) {	// If obj has an AABB of size 0 it isn't valid for the tree
 		for (int i = 0; i < treeObjects.size(); i++)
 			if (treeObjects[i] == obj) {
 				ret = true;	// Object is already inserted
@@ -146,7 +146,9 @@ bool Tree::Insert(const GameObject* obj)
 			}
 
 		if (!ret) {
-			if (!rootNode->Insert(obj)) {	// If object outside of bounds
+			ret = rootNode->Insert(obj);
+
+			if (!ret) {	// If object outside of bounds
 				Grow(obj->aabb);
 				SDL_assert(rootNode->Insert(obj));
 			}
@@ -409,16 +411,17 @@ bool Tree::TreeNode::Remove(const GameObject* obj)
 				if (branches[i].Remove(obj)) {	// If obj has been removed from one of the children nodes
 					ret = true;
 
+					int j = 0;
 					std::vector<const GameObject*> leafCollector;
-					for (i = 0; i < numBranches; i++) {
-						if (branches[i].numBranches > 0) {	// If a children isn't leaf, break immediately
+					for (; j < numBranches; j++) {
+						if (branches[j].numBranches > 0) {	// If a children isn't leaf, break immediately
 							break;
 						}
 						else {								// Else, if the leaf has objects at all add them to the collector
-							int leafObjSize = branches[i].nodeObjects.size();
+							int leafObjSize = branches[j].nodeObjects.size();
 							if (leafObjSize > 0) {
-								for (int j = 0; j < leafObjSize; j++)
-									leafCollector.push_back(branches[i].nodeObjects[j]);
+								for (int k = 0; k < leafObjSize; k++)
+									leafCollector.push_back(branches[j].nodeObjects[k]);
 
 								if (nodeObjects.size() + leafCollector.size() > tree->nodeSizeLimit)	// If parent node's objects + leaf objects overflows limit, break immediately
 									break;
@@ -426,10 +429,9 @@ bool Tree::TreeNode::Remove(const GameObject* obj)
 						}
 					}
 
-					if (i == numBranches) {	// If previous procedure was completed without breaks (no branches, no overflow of object limit)
-						if (!leafCollector.empty())	// If collector isn't empty
-							for (int k = 0; k < leafCollector.size(); k++)	// Add collector objects to parent node's list
-								nodeObjects.push_back(leafCollector[k]);
+					if (j == numBranches) {	// If previous procedure was completed without breaks (no branches, no overflow of object limit)
+						for (int k = 0; k < leafCollector.size(); k++)	// Add collector objects to parent node's list, if any
+							nodeObjects.push_back(leafCollector[k]);
 
 						Prune();	// Eliminate children (which are either fully empty or their objects have been moved to the parent node)
 					}
