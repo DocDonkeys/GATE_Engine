@@ -66,7 +66,7 @@ bool ModuleSceneIntro::Start()
 	}
 	else
 	{
-		//App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
+		App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
 	}
 
 	std::vector<const GameObject*> sceneObjects;

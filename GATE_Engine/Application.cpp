@@ -246,6 +246,17 @@ void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Frame
 {
 	BROFILER_CATEGORY("App Finish Update", Profiler::Color::IndianRed);
 
+	// CHANGE/FIX: If .FBX meta is loaded instead of created, SaveScene file creation malfunctions, so until we find a fix a file for saving will always be created if there isn't one
+	std::string scene_path;
+	scene_path = ASSETS_FOLDER;
+	scene_path += "scene_1.scene";
+	bool scene_exists = App->file_system->Exists(scene_path.data());
+	if (!scene_exists)
+	{
+		std::string scene_name = "scene_1";
+		App->scene_intro->scene_ie.SaveScene(App->scene_intro->root, scene_name, FileType::SCENE);
+	}
+
 	//Process Save&Load
 	CheckFileEditRequests();
 	
