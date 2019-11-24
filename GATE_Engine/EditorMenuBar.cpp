@@ -40,8 +40,9 @@ void EditorMenuBar::Update() {
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("Save", "Ctrl+S", false, false)) {
-
+			if (ImGui::MenuItem("Save", "Ctrl+S", false)) {
+				std::string scene_name = "scene_1";
+				App->scene_intro->scene_ie.SaveScene(App->scene_intro->root, scene_name,FileType::SCENE);
 			}
 
 			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S", false, false)) {

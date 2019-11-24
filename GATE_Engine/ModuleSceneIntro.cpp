@@ -47,12 +47,26 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(float3(15.f, 15.f, 15.f));
 	App->camera->LookAt(float3::zero);
 
-	//Load the StreetScene
-	App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
+	
 	//App->resources->ImportFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
 	// Scene Tree
 	staticTree = new Tree(Tree::TREE_TYPE::OC_TREE, AABB(float3(-200.f, -120.f, -200.f), float3(200.f, 100.f, 200.f)), 2);
+
+	//Load the StreetScene
+	std::string scene_path;
+	scene_path = ASSETS_FOLDER;
+	scene_path += "scene_1.scene";
+	bool scene_exists = App->file_system->Exists(scene_path.data());
+	if (scene_exists)
+	{
+		scene_path = App->file_system->GetPathToGameFolder(true) + scene_path;
+		scene_ie.LoadScene(scene_path.data(), FileType::SCENE);
+	}
+	else
+	{
+		App->resources->ImportFile("Assets\\3D_Objects\\street\\Assignment2_street.FBX");
+	}
 
 	std::vector<const GameObject*> sceneObjects;
 	GOFunctions::FillArrayWithChildren(sceneObjects, root);
@@ -256,7 +270,12 @@ bool ModuleSceneIntro::ChangeScene(GameObject* new_root)
 	if (new_root->children.size() == 0) {	//CHANGE/FIX: Workaround. If an fbx.meta exists, the highest parents in the new root's heriarchy are pushed as children of the old root, so we reparent them
 		uint rootChildrenSize = root->children.size();
 		for (int i = rootChildrenSize - 1; i >= rootChildrenSize / 2; i--) {
-			GOFunctions::ReParentGameObject(root->children[i], new_root);
+			if (i >= 0)
+			{
+				GOFunctions::ReParentGameObject(root->children[i], new_root);
+			}
+			else
+				break;
 		}
 	}
 
