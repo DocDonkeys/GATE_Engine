@@ -2,6 +2,7 @@
 #include "ModuleEditor.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "ComponentTransform.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -83,6 +84,8 @@ void EditorHierarchy::ManageGameObject(GameObject* go, int& treenode_id)
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DUMMY_CELL"))
 			{
 				GOFunctions::ReParentGameObject(dragged_go, go); //We assign the gameobject that should have been carried by the payload
+				ComponentTransform* trs = (ComponentTransform*)dragged_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+				trs->needsUpdateGlobal = true;
 				dragged_go = nullptr;
 			}
 			ImGui::EndDragDropTarget();

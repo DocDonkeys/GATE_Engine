@@ -20,6 +20,7 @@ public:
 
 	void Update(float realDT) override;
 	void Draw() override;
+	void DrawFrustum();
 
 	void Save(json& file);
 	void Load(json& file);

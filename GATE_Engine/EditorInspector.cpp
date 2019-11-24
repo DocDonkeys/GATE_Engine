@@ -251,7 +251,7 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::NextColumn();
 		ImGui::Separator();
 
-		ImGui::Text("Draw:");
+		/*ImGui::Text("Draw:");	//CHANGE/FIX: Decide if we keep this
 		ImGui::Checkbox("Vertex Normals", &mesh->debug_vertex_normals);
 		ImGui::Checkbox("Face Normals", &mesh->debug_face_normals);
 		ImGui::Text("Length:");  ImGui::SameLine();
@@ -259,7 +259,7 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		if (ImGui::DragFloat("##NL", &mesh->mesh->normals_length, 0.005f, 0.1f, 999.0f))
 		{
 			mesh->mesh->ChangeNormalsLength(mesh->mesh->normals_length);
-		}
+		}*/
 
 		ImGui::NextColumn();
 		ImGui::Text("Indexes:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_index);

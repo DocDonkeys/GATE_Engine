@@ -185,7 +185,7 @@ void EditorMenuBar::Update() {
 				App->scene_intro->CreateEmptyGameObject(10);
 			}
 
-			if (ImGui::BeginMenu("Primitives")) {
+			if (ImGui::BeginMenu("Primitives", false)) {
 
 				if (ImGui::MenuItem("Plane"))
 				{
@@ -245,7 +245,7 @@ void EditorMenuBar::Update() {
 
 			if (ImGui::BeginMenu("Show")) {
 				ImGui::Checkbox("Vertex Normals", &App->renderer3D->drawVertexNormals);
-				ImGui::Checkbox("Face Normals", &App->renderer3D->drawFaceNormals);
+				//ImGui::Checkbox("Face Normals", &App->renderer3D->drawFaceNormals);		//CHANGE/FIX: Enable when it doesn't break the engine
 
 				ImGui::Separator();
 
