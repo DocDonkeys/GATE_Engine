@@ -251,7 +251,15 @@ GameObject* ModuleSceneIntro::IntersectRay(const LineSegment& segment, float& di
 bool ModuleSceneIntro::ChangeScene(GameObject* new_root)
 {
 	//Delete the current root and change it by the root of the loaded scene
-	root->children.erase(root->children.begin() + 1);	// The new root was stored as a child of current root, so we take it out before deleting the original root
+	root->children.erase(root->children.end() - 1);	// The new root was stored as a child of current root, so we take it out before deleting the original root
+
+	if (new_root->children.size() == 0) {	//CHANGE/FIX: Workaround. If an fbx.meta exists, the highest parents in the new root's heriarchy are pushed as children of the old root, so we reparent them
+		uint rootChildrenSize = root->children.size();
+		for (int i = rootChildrenSize - 1; i >= rootChildrenSize / 2; i--) {
+			GOFunctions::ReParentGameObject(root->children[i], new_root);
+		}
+	}
+
 	RELEASE(root);
 	root = new_root;
 	root->parent = nullptr;
