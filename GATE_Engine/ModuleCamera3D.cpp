@@ -435,6 +435,16 @@ float3 ModuleCamera3D::GetPosition() const
 	return activeCamera->frustum.pos;
 }
 
+float* ModuleCamera3D::GetView() const
+{
+	return activeCamera->GetViewMatrix().ptr();
+}
+
+float* ModuleCamera3D::GetProjection() const
+{
+	return activeCamera->GetProjectionMatrix().ptr();
+}
+
 float* ModuleCamera3D::GetOpenGLView() const
 {
 	return activeCamera->GetOpenGLView().ptr();

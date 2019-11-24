@@ -6,6 +6,7 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
 
 #include "Component.h"
 #include "ComponentMaterial.h"
@@ -15,6 +16,7 @@
 #include "ResourceTexture.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
+#include "libs/ImGuizmo/ImGuizmo.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -224,6 +226,27 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 
 		ImGui::Columns(1);
 		ImGui::TreePop();
+		
+		// Gizmo editing
+		
+		if (transform->my_go == App->scene_intro->selected_go) {
+			ImGuizmo::Enable(true);
+			ImGuizmo::Manipulate(App->camera->GetView(), App->camera->GetProjection(),
+				ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::MODE::WORLD,
+				transform->globalTrs.ptr(), NULL, NULL, NULL, NULL);
+
+			ImGuizmo::Manipulate(App->camera->GetView(), App->camera->GetProjection(),
+				ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::MODE::WORLD,
+				transform->globalTrs.ptr(), NULL, NULL, NULL, NULL);
+
+			ImGuizmo::DrawCube(App->camera->GetView(), App->camera->GetProjection(), float4x4(float4x4::identity).ptr());
+			//ImGuizmo::DrawCube(App->camera->GetView(), App->camera->GetProjection(), transform->localTrs.ptr());
+			//ImGuizmo::DrawCube(App->camera->GetOpenGLView(), App->camera->GetOpenGLProjection(), transform->globalTrs.ptr());
+			//ImGuizmo::DrawCube(App->camera->GetOpenGLView(), App->camera->GetOpenGLProjection(), transform->localTrs.ptr());
+		}
+		else {
+			ImGuizmo::Enable(false);
+		}
 
 		// Data and Matrix Updating
 		if (!App->input->GetMouseWrapping())

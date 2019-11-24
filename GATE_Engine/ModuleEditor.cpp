@@ -4,6 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
 #include "GeometryLoader.h"
+#include "ModuleSceneIntro.h"
 
 // Windows
 #include "EditorConfiguration.h"
@@ -17,6 +18,8 @@
 
 // Elements
 #include "EditorMenuBar.h"
+
+#include "libs/ImGuizmo/ImGuizmo.h"
 
 // SDL
 #include "libs/Brofiler/Brofiler.h"
@@ -127,6 +130,10 @@ update_status ModuleEditor::Update(float dt)
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
+	// Start the ImGuizmo frame
+	ImGuizmo::BeginFrame();
+
+	// Main Menu
 	if (BeginRootWindow("Root Window 1", main_dockSpace, ImGuiWindowFlags_MenuBar)) {	//CHANGE/FIX: Create a root window class with docking that can be turned on/off?
 		editor_menu_bar->Update();
 		ImGui::End();

@@ -29,6 +29,8 @@ public:
 
 	// Gets
 	float3 GetPosition() const;
+	float* GetView() const;
+	float* GetProjection() const;
 	float* GetOpenGLView() const;
 	float* GetOpenGLProjection() const;
 	bool* GetProjectionUpdateFlag() const;
