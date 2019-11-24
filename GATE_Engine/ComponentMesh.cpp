@@ -11,7 +11,7 @@
 #include "libs/SDL/include/SDL_opengl.h"
 
 // Memory Leak Detection
-#include "MemLeaks.h"
+//#include "MemLeaks.h"
 
 ComponentMesh::ComponentMesh() : Component()
 {
