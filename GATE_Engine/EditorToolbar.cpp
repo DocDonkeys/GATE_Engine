@@ -112,4 +112,5 @@ void EditorToolbar::Update()
 
 		ImGui::EndPopup();
 	}
+	ImGui::SameLine(); HoverTip("The Engine is prepared to execute a GameUpdate on user command bound to the set speed using the given controls. The lack of scripting makes functionalities like speed and Tick unnoticeable, thought you can Play, change the scene, and reload on Stop.");
 }
