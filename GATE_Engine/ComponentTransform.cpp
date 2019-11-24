@@ -29,6 +29,7 @@ void ComponentTransform::PreUpdate(float realDT)
 {
 	if (my_go->parent == nullptr) {
 		SDL_assert(my_go == App->scene_intro->root);
+		needsUpdateGlobal = false;
 	}
 
 	if (needsUpdateGlobal) {
@@ -208,7 +209,7 @@ void ComponentTransform::Import(float* local, float* global)
 	for (int i = 0; i < 4; ++i)
 		for (int j = 0; j < 4; ++j)
 		{
-			localTrs[i][j] = global[k];
+			globalTrs[i][j] = global[k];
 			k++;
 		}
 

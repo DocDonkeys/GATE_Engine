@@ -90,7 +90,7 @@ bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 					local_mat[k] = loaded_components[comp][mat_val.data()];
 				}
 
-				trans->Import(local_mat,global_mat); //Manage new local and global in component
+				trans->Import(local_mat, global_mat); //Manage new local and global in component
 				break;
 
 			case COMPONENT_TYPE::MESH:
@@ -110,6 +110,8 @@ bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 				break;
 			}
 		}
+		go->UpdateBoundingBox();	// Set Obj AABB
+
 		gos.push_back(go);
 	}
 
@@ -120,20 +122,20 @@ bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 		if (gos[i]->parent_UID == 0)
 		{
 			if(file_type != FileType::SCENE)
-			GOFunctions::ReParentGameObject(gos[i], App->scene_intro->root);
+				GOFunctions::ReParentGameObject(gos[i], App->scene_intro->root);
 
 			root = gos[i];
 		}
 		else
 		{
-				for (int j = 0; j < gos.size(); ++j)
+			for (int j = 0; j < gos.size(); ++j)
+			{
+				if (gos[j]->UID == gos[i]->parent_UID)
 				{
-					if (gos[j]->UID == gos[i]->parent_UID)
-					{
-						GOFunctions::ReParentGameObject(gos[i], gos[j]);
-						break;
-					}
+					GOFunctions::ReParentGameObject(gos[i], gos[j]);
+					break;
 				}
+			}
 		}
 	}
 
