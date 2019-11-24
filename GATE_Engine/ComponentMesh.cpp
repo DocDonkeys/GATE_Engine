@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleResources.h"
+#include "ModuleFileSystem.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ImporterMesh.h"
@@ -19,7 +20,10 @@ ComponentMesh::ComponentMesh() : Component()
 
 ComponentMesh::~ComponentMesh()
 {
-	RELEASE(mesh);
+	if(mesh != nullptr)
+	mesh->RemoveReference();
+
+	mesh = nullptr;
 }
 
 void ComponentMesh::Enable()
@@ -74,8 +78,9 @@ void ComponentMesh::Save(json &file)
 	to_save.mesh = this->mesh;
 
 	std::string name = "_m";
-	name += std::to_string(this->UID).data();
+	name += std::to_string(this->mesh->GetUID()).data();
 	std::string path_to_save;
+
 	imp_exp.Export(LIBRARY_MESH_FOLDER,path_to_save,&to_save,name.data());
 
 	file["Path"] = path_to_save.data();
@@ -83,9 +88,27 @@ void ComponentMesh::Save(json &file)
 
 void ComponentMesh::Load(json & file)
 {
-	mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
-
+	//mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 	std::string full_path = file["Path"];
-	imp_exp.Load(full_path.data(), mesh);
+
+	//We get the resource UID from the name of the .mesh file
+	std::string file_UID;
+	App->file_system->SplitFilePath(full_path.data(), nullptr, &file_UID, nullptr);
+	file_UID = App->SubtractString(file_UID, ".", true, true);
+	file_UID = App->SubtractString(file_UID, "m", false, false);
+	uint32 uid = std::stoul(file_UID);
+
+	//If a resource with the same UID is already on resources
+	mesh = (ResourceMesh*)App->resources->Get(uid);
+	if (mesh != nullptr)
+	{
+		mesh->AddReference();
+	}
+	else
+	{
+		mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH, uid);
+		imp_exp.Load(full_path.data(), mesh);
+	}
+	
 	ie_data.mesh = mesh;
 }

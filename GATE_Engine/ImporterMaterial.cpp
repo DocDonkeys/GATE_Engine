@@ -41,7 +41,7 @@ bool ImporterMaterial::Load(const char * full_path, ResourceTexture* tex)
 	return false;
 }
 
-ResourceTexture * ImporterMaterial::LoadTexture(const char * path, uint32 force_uid)
+ResourceTexture * ImporterMaterial::LoadTexture(const char * path, bool duplicate,uint32 force_uid)
 {
 	ResourceTexture* ret = nullptr;
 
@@ -54,7 +54,8 @@ ResourceTexture * ImporterMaterial::LoadTexture(const char * path, uint32 force_
 	}
 	else //Load texture
 	{
-		ret = App->texture_loader->LoadTextureFile(path,true,force_uid);
+		ret = App->texture_loader->LoadTextureFile(path,duplicate,force_uid);
+		ret->AddReference();
 	}
 
 	return ret;
@@ -113,7 +114,7 @@ ResourceTexture* ImporterMaterial::LoadMeta(const char * full_path, bool game_pa
 	std::string UID = loaded_file["UID"];
 	uint32 uid = std::stoul(UID);
 
-	ret = App->texture_loader->importer.LoadTexture(texture_path.data(), uid);
+	ret = App->texture_loader->importer.LoadTexture(texture_path.data(), false,uid);
 	//ret = App->texture_loader->LoadTextureFile(texture_path.data(), false);
 	return ret;
 }

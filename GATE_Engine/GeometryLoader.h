@@ -28,6 +28,12 @@ enum class PRIMITIVE
 	TORUS
 };
 
+struct MeshWRef
+{
+	aiMesh* assimp_mesh = nullptr;
+	uint32 UID = 0;
+};
+
 class GeometryLoader : public Module
 {
 public:
@@ -58,6 +64,7 @@ public:
 
 public: // Vars
 	//aiLogStream log_stream;
+	std::vector<MeshWRef> loaded_meshes; //This could be a map in  the future, since it has almost the same idea in mind
 };
 
 //Function for Assimp calllback

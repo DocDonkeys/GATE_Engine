@@ -56,7 +56,7 @@ public:
 	const char* GetBasePath() const;
 	const char* GetWritePath() const;
 	const char* GetReadPaths() const;
-	std::string GetPathToGameFolder() const;
+	std::string GetPathToGameFolder(bool include_game = false) const;
 
 private:
 

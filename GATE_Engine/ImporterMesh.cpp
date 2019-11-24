@@ -97,9 +97,10 @@ bool ImporterMesh::Load(const char * full_path, ResourceMesh* mesh)
 	if (mesh == nullptr)
 	{
 		LOG("[WARNING] Tried to import a .mesh file into a nullptr mesh, a mesh will be created in memory");
-		ResourceMesh* mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
+		mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 	}
 
+	mesh->AddReference();
 	//------------------- Assign data from buffer  -------------------//
 	char* cursor = (char*)buffer;
 	// amount of indices / vertices / colors / normals / texture_coords
@@ -148,10 +149,11 @@ bool ImporterMesh::Load(const char * full_path, ResourceMesh* mesh)
 
 	cursor += bytes;																							//																					//
 	bytes = sizeof(float3);																					//							Copy Size											//
-	memcpy(&mesh->size,cursor,bytes);																//																					//
+	memcpy(&mesh->size, cursor, bytes);																//																					//
 
 	//Alloc buffers for rendering
 	GenMeshBuffers(mesh);
+
 	return false;
 }
 

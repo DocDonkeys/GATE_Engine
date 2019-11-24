@@ -135,8 +135,24 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 		int nmeshes = node->mNumMeshes;
 		for (int i = 0; i < nmeshes; ++i)
 		{
-			ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 			aiMesh* loaded_mesh = scene->mMeshes[node->mMeshes[i]];
+
+			bool has_mesh = false;
+			for (int i = 0; i < loaded_meshes.size(); ++i)
+			{
+				if (loaded_mesh == loaded_meshes[i].assimp_mesh)	//If this mesh has already been loaded get the reference instead
+				{
+					has_mesh = true;
+					ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
+					mesh_component->mesh = (ResourceMesh*)App->resources->Get(loaded_meshes[i].UID);
+					mesh_component->mesh->AddReference();
+					break;
+				}
+			}
+			
+			if (has_mesh == false)		//If the list of loaded meshes doesn't have this mesh, create a mesh
+			{
+			ResourceMesh* new_mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 			
 			//LOAD!
 			new_mesh->LoadVertices(loaded_mesh);	//Vertices
@@ -154,16 +170,24 @@ GameObject* GeometryLoader::LoadAssimpNode(const aiScene* scene, const aiNode* n
 			App->renderer3D->GenerateVertexBuffer(new_mesh->id_tex_coords, new_mesh->num_tex_coords * 2, new_mesh->tex_coords);
 			
 			// Mesh
-			ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
-			mesh_component->mesh = new_mesh;
-			mesh_component->mesh->path = full_path;
-			mesh_component->mesh->filename = filename;
-			mesh_component->mesh->LoadMeshBounds();
-			ret_go->size = mesh_component->mesh->GetSize();
+				ComponentMesh* mesh_component = (ComponentMesh*)ret_go->CreateComponent(COMPONENT_TYPE::MESH);
+				mesh_component->mesh = new_mesh;
+				mesh_component->mesh->path = full_path;
+				mesh_component->mesh->filename = filename;
+				mesh_component->mesh->LoadMeshBounds();
+				ret_go->size = mesh_component->mesh->GetSize();
 
-			float meshSize = Length(new_mesh->GetSize());
-			if (biggestSize < meshSize) {
-				biggestSize = meshSize;
+				float meshSize = Length(new_mesh->GetSize());
+				if (biggestSize < meshSize) {
+					biggestSize = meshSize;
+				}
+
+				//If this mesh was not in the vector we need to add it
+				MeshWRef Mesh;
+				Mesh.assimp_mesh = loaded_mesh;
+				Mesh.UID = mesh_component->mesh->GetUID();
+				mesh_component->mesh->AddReference();
+				loaded_meshes.push_back(Mesh);
 			}
 
 			// Material

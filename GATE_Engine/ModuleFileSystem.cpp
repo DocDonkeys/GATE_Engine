@@ -440,11 +440,14 @@ const char * ModuleFileSystem::GetReadPaths() const
 	return paths;
 }
 
-std::string ModuleFileSystem::GetPathToGameFolder() const
+std::string ModuleFileSystem::GetPathToGameFolder(bool include_game) const
 {
 	std::string absolute = GetBasePath();
 	absolute = App->SubtractString(absolute, "\\", true, true, false);
 	absolute = App->SubtractString(absolute, "\\", true, true, true);
+	if (include_game)
+		absolute += "Game";
+
 	NormalizePath(absolute);
 	return absolute;
 }

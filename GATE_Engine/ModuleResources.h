@@ -42,6 +42,8 @@ public:
 	Resource* CreateNewResource(Resource::Type type, uint32 force_uid = 0);
 
 	Resource::Type ResourceTypeByPath(const std::string extension);
+
+	uint32 GetUIDFromPath(const char* full_path, Resource::Type type);
 private:
 	//This function initially fills the directories and files assets tree, with all data found inside the Assets folder
 	void InitPopulateAssetsDir(AbstractDir &abs_dir);

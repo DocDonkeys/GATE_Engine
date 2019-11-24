@@ -268,6 +268,9 @@ void EditorInspector::DrawComponentMesh(ComponentMesh * mesh)
 		ImGui::Text("Faces:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_polys);
 		ImGui::Text("Tex Coords:"); ImGui::SameLine(); ImGui::Text("%u", mesh->mesh->num_tex_coords);
 
+		if(mesh->mesh !=nullptr)
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.0f), "Number of references: %d", mesh->mesh->CountReferences());
+
 		ImGui::Columns(1);
 		ImGui::TreePop();
 	}
@@ -334,6 +337,9 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		}
 
 		ImGui::Checkbox("Use Default Texture", &material->use_default_texture);
+
+		if (material->active_texture != nullptr)
+			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "Number of references: %d", material->active_texture->CountReferences());
 
 		ImGui::TreePop();
 	}

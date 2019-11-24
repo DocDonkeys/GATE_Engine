@@ -45,7 +45,7 @@ bool Resource::LoadToMemory()
 
 uint Resource::CountReferences() const
 {
-	return uint();
+	return references;
 }
 
 void Resource::Save(json & config) const

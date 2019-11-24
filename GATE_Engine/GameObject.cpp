@@ -204,7 +204,7 @@ void GameObject::UpdateBoundingBox()
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(COMPONENT_TYPE::MESH);
 	ComponentTransform* trs = (ComponentTransform*)GetComponent(COMPONENT_TYPE::TRANSFORM);
 
-	if (mesh != nullptr) {
+	if (mesh != nullptr && mesh->mesh != nullptr) {
 		obb.SetFrom(mesh->mesh->bounds);	// Set from mesh size
 		obb.Transform(trs->globalTrs);		// Transform OBB with transform global matrix
 		aabb.SetFrom(obb);					// Set object AABB

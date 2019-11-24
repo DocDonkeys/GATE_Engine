@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "TextureLoader.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResources.h"
 
 ComponentMaterial::ComponentMaterial() : Component()
 {
@@ -10,6 +11,10 @@ ComponentMaterial::ComponentMaterial() : Component()
 
 ComponentMaterial::~ComponentMaterial()
 {
+	if (loaded_texture != nullptr)
+		loaded_texture->RemoveReference();
+
+	loaded_texture = nullptr;
 }
 
 void ComponentMaterial::Enable()
@@ -49,9 +54,10 @@ void ComponentMaterial::Save(json & file)
 
 void ComponentMaterial::Load(json & file)
 {
-	std::string absolute = App->file_system->GetBasePath();
+	/*std::string absolute = App->file_system->GetBasePath();
 	absolute = App->SubtractString(absolute,"\\",true,true,false);
-	absolute = App->SubtractString(absolute, "\\", true, true, true);
+	absolute = App->SubtractString(absolute, "\\", true, true, true);*/
+	std::string absolute = App->file_system->GetPathToGameFolder();
 	std::string bool_has_tex = file["Loaded Texture"];
 	bool has_texture = std::stoi(bool_has_tex);
 
@@ -61,7 +67,10 @@ void ComponentMaterial::Load(json & file)
 		std::string full_path = absolute + relative;
 		App->file_system->NormalizePath(full_path);
 
-		this->loaded_texture = App->texture_loader->LoadTextureFile(full_path.data());
+		uint32 uid = App->resources->GetUIDFromPath(full_path.data(), Resource::TEXTURE);
+
+		this->loaded_texture = App->texture_loader->importer.LoadTexture(full_path.data(), false, uid);
+		//this->loaded_texture = App->texture_loader->LoadTextureFile(full_path.data());
 		active_texture = loaded_texture;
 	}
 }

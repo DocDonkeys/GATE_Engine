@@ -108,7 +108,8 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 		}
 		else
 		{
-			tex = App->texture_loader->LoadTextureFile(full_path, true);
+			tex = App->texture_loader->importer.LoadTexture(full_path,true);
+			//tex = App->texture_loader->LoadTextureFile(full_path, true);
 			meta_info_path = "_t";
 			meta_info_path += std::to_string(tex->GetUID());
 			meta_info_path += ".dds";
@@ -234,6 +235,30 @@ Resource::Type ModuleResources::ResourceTypeByPath(const std::string extension)
 			return Resource::TEXTURE;
 
 	return Resource::UNKNOWN;
+}
+
+uint32 ModuleResources::GetUIDFromPath(const char * full_path, Resource::Type type)
+{
+	uint32 ret = 0;
+	std::string filename;
+	App->file_system->SplitFilePath(full_path,nullptr,&filename,nullptr);
+	filename = App->SubtractString(filename,".",true,true);
+
+	switch (type)
+	{
+	case Resource::MESH:
+		filename = App->SubtractString(filename, "m", false, false);
+		ret = std::stoul(filename);
+		break;
+	case Resource::TEXTURE:
+		filename = App->SubtractString(filename, "t", false, false);
+		ret = std::stoul(filename);
+		break;
+	default:
+		break;
+	}
+
+	return ret;
 }
 
 void ModuleResources::InitPopulateAssetsDir(AbstractDir &abs_dir)
