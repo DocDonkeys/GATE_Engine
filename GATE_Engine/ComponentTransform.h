@@ -44,7 +44,7 @@ public:
 	float3 scale = float3::one;
 
 	//bool needsUpdateLocal = false;
-	bool needsUpdateGlobal = false;
+	bool needsUpdateGlobal = true;
 
 public:	//CHANGE/FIX: Should be private, only public currently because of Didac's import/export system
 	float4x4 localTrs = float4x4::identity;

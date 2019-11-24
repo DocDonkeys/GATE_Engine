@@ -1,4 +1,7 @@
 #include "Globals.h"
+#include "Application.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleSceneIntro.h"
 #include "ComponentCamera.h"
 #include "ComponentTransform.h"
 
@@ -64,10 +67,17 @@ void ComponentCamera::Update(float realDT)
 
 void ComponentCamera::Draw()
 {
-	if (my_go->size.IsZero()) {	// If Game object has size 0, draw a "gizmo" square instead
-		my_go->DrawAABB(AABB(my_go->aabb.minPoint - float3::one / 2.f, my_go->aabb.maxPoint + float3::one / 2.f), float3(1.f, 0.f, 1.f));
+	if (!App->renderer3D->drawObjAABB) {	// If Game object has size 0, draw a "gizmo" square instead
+		my_go->DrawAABB(my_go->aabb, float3(1.f, 0.f, 1.f));
 	}
 
+	if (cullingTesting || App->scene_intro->selected_go == my_go) {
+		DrawFrustum();
+	}
+}
+
+void ComponentCamera::DrawFrustum()
+{
 	glLineWidth(2.0f);
 	glBegin(GL_LINES);
 

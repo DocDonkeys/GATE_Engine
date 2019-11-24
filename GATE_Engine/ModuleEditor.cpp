@@ -4,6 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
 #include "GeometryLoader.h"
+#include "ModuleSceneIntro.h"
 
 // Windows
 #include "EditorConfiguration.h"
@@ -157,6 +158,12 @@ update_status ModuleEditor::Update(float dt)
 
 			ImGui::EndPopup();
 		}
+	}
+
+	//IMPROVE: Make "Hotkeys" files
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+		std::string scene_name = "scene_1";
+		App->scene_intro->scene_ie.SaveScene(App->scene_intro->root, scene_name, FileType::SCENE);
 	}
 
 	// Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()!

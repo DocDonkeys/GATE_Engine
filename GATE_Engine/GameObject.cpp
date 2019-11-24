@@ -201,13 +201,18 @@ void GameObject::DrawAABB(const AABB& aabb, const float3& rgb)
 void GameObject::UpdateBoundingBox()
 {
 	//CHANGE/FIX: Using the mesh is wrong(?), but I don't have the time to make it better right now, it should transform with the global matrix
-	ComponentMesh* mesh = (ComponentMesh*)GetComponent(COMPONENT_TYPE::MESH);
 	ComponentTransform* trs = (ComponentTransform*)GetComponent(COMPONENT_TYPE::TRANSFORM);
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(COMPONENT_TYPE::MESH);
+	ComponentCamera* cam = (ComponentCamera*)GetComponent(COMPONENT_TYPE::CAMERA);
 
 	if (mesh != nullptr && mesh->mesh != nullptr) {
 		obb.SetFrom(mesh->mesh->bounds);	// Set from mesh size
 		obb.Transform(trs->globalTrs);		// Transform OBB with transform global matrix
 		aabb.SetFrom(obb);					// Set object AABB
+		size = { abs(aabb.MaxX() - aabb.MinX()), abs(aabb.MaxY() - aabb.MinY()), abs(aabb.MaxZ() - aabb.MinZ()) };
+	}
+	else if (cam != nullptr) {
+		aabb.SetFrom(AABB(trs->position - float3::one / 2.f, trs->position + float3::one / 2.f));
 		size = { abs(aabb.MaxX() - aabb.MinX()), abs(aabb.MaxY() - aabb.MinY()), abs(aabb.MaxZ() - aabb.MinZ()) };
 	}
 	else {	// If no mesh update based on position alone
