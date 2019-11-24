@@ -21,6 +21,9 @@ public:
 	void Update(float realDT) override;
 	void Draw() override;
 
+	void Save(json& file);
+	void Load(json& file);
+
 public:
 	// Orders
 	void LookAt(const float3& position);

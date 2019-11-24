@@ -52,6 +52,7 @@ bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 		ComponentTransform* trans = nullptr;
 		ComponentMesh* mesh = nullptr;
 		ComponentMaterial* mat = nullptr;
+		ComponentCamera* cam = nullptr;
 
 		float local_mat[16] = {0};
 		float global_mat[16] = {0};
@@ -105,6 +106,8 @@ bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 					mat->Load(loaded_file[go_name]["Components"][std::to_string((int)comp_type)]);
 				break;
 			case COMPONENT_TYPE::CAMERA:
+				cam = (ComponentCamera*)go->CreateComponent(COMPONENT_TYPE::CAMERA);
+				cam->Load(loaded_file[go_name]["Components"][std::to_string((int)comp_type)]);
 				break;
 			default:
 				break;
@@ -267,8 +270,7 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 
 			case COMPONENT_TYPE::CAMERA:
 				cam_comp = (ComponentCamera*)component;
-
-				file[go_name]["Components"][std::to_string((int)component->type)] = "no_path_just_test";
+				cam_comp->Save(file[go_name]["Components"][std::to_string((int)component->type)]);
 				break;
 
 				//Future components like scripts and audio should go here
