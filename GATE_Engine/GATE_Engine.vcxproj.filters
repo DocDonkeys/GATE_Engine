@@ -162,6 +162,18 @@
     <ClCompile Include="FramerateManager.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="libs\ImGuizmo\ImGradient.cpp">
+      <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\ImGuizmo\ImGuizmo.cpp">
+      <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\ImGuizmo\ImSequencer.cpp">
+      <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\ImGuizmo\ImCurveEdit.cpp">
+      <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -340,6 +352,18 @@
     <ClInclude Include="FramerateManager.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="libs\ImGuizmo\ImCurveEdit.h">
+      <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\ImGuizmo\ImGradient.h">
+      <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\ImGuizmo\ImGuizmo.h">
+      <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\ImGuizmo\ImSequencer.h">
+      <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemLeaks.h" />
@@ -404,6 +428,9 @@
     </Filter>
     <Filter Include="Sources\Resources">
       <UniqueIdentifier>{01f20a1a-ca3e-4ed3-9b4b-03adb023ea1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\Libs\ImGuizmo">
+      <UniqueIdentifier>{b8aafaed-0b78-4fde-8089-f85fec7174ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

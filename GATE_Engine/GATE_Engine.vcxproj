@@ -89,6 +89,10 @@
     <ClInclude Include="ImporterMaterial.h" />
     <ClInclude Include="ImporterMesh.h" />
     <ClInclude Include="ImporterScene.h" />
+    <ClInclude Include="libs\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="libs\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="libs\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="libs\ImGuizmo\ImSequencer.h" />
     <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleResources.h" />
@@ -166,6 +170,10 @@
     <ClCompile Include="ImporterScene.cpp" />
     <ClCompile Include="JsonLoader.cpp" />
     <ClCompile Include="libs\glew\src\glew.c" />
+    <ClCompile Include="libs\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="libs\ImGuizmo\ImGradient.cpp" />
+    <ClCompile Include="libs\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="libs\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="libs\imgui\imgui.cpp" />
     <ClCompile Include="libs\imgui\imgui_demo.cpp" />
     <ClCompile Include="libs\imgui\imgui_draw.cpp" />
