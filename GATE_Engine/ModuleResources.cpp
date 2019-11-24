@@ -7,6 +7,7 @@
 #include "Resource.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "libs/SDL/include/SDL_assert.h"
 
 #include "MemLeaks.h"
 
@@ -84,7 +85,8 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 		path = ASSETS_DEFAULT_MESHES + path;
 	}
 	
-	bool has_meta = App->file_system->Exists(path.data());
+	bool has_meta = false;  //Debugging for the big crash in .exe when loading a fbx
+	has_meta = App->file_system->Exists(path.data());
 	path = App->SubtractString(path,".",true,true);		//We take .meta out of the path since we are not checking anymore
 
 	std::string  meta_info_path, meta_file_path;
@@ -102,7 +104,9 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 		{
 			meta_file_path = path;
 			path += ".meta";
+			SDL_assert_release(has_meta == true, path);
 			tex = App->texture_loader->importer.LoadMeta(path.data(),true);
+			
 			//tex = App->texture_loader->LoadTextureFile(full_path);
 			uid = tex->GetUID();
 		}
