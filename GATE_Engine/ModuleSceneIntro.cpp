@@ -52,7 +52,7 @@ bool ModuleSceneIntro::Start()
 	//App->resources->ImportFile("Assets\\3D_Objects\\Baker_house\\BakerHouse.fbx");
 
 	// Scene Tree
-	staticTree = new Tree(Tree::TREE_TYPE::OC_TREE, AABB({ -50, -30.f, -50.f }, { 50.f, 30.f, 50.f }), 5);
+	staticTree = new Tree(Tree::TREE_TYPE::OC_TREE, AABB(float3(-200.f, -120.f, -200.f), float3(200.f, 100.f, 200.f)), 2);
 
 	std::vector<const GameObject*> sceneObjects;
 	GOFunctions::FillArrayWithChildren(sceneObjects, root);
