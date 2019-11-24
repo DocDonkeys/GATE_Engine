@@ -7,6 +7,7 @@
 #include "ModuleCamera3D.h"
 #include "TextureLoader.h"
 #include "Importer.h"
+#include "libs/SDL/include/SDL_assert.h"
 
 #include "libs/Assimp/include/cimport.h"
 #include "libs/Assimp/include/scene.h"
