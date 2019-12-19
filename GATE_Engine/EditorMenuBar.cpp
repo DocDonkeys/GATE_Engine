@@ -152,7 +152,7 @@ void EditorMenuBar::Update() {
 
 				ImGui::MenuItem("Toolbar", NULL, &App->editor->editor_toolbar->show_window);
 				ImGui::MenuItem("Hierarchy", NULL, &App->editor->editor_hierarchy->show_window);
-				ImGui::MenuItem("Project", NULL, &App->editor->editor_project->show_window, false);
+				ImGui::MenuItem("Project", NULL, &App->editor->editor_project->show_window);
 				ImGui::MenuItem("Console", NULL, &App->editor->editor_console->show_window);
 				ImGui::MenuItem("Inspector", NULL, &App->editor->editor_inspector->show_window);
 				ImGui::MenuItem("Scene", NULL, &App->editor->editor_scene->show_window, false);
