@@ -47,6 +47,10 @@ public:
 	Resource::Type ResourceTypeByPath(const std::string extension);
 
 	uint32 GetUIDFromPath(const char* full_path, Resource::Type type);
+
+public: //Vars
+	AbstractDir* assets_dir = nullptr;
+	AbstractDir* selected_dir = nullptr;
 private:
 	//This function initially fills the directories and files assets tree, with all data found inside the Assets folder
 	void InitPopulateAssetsDir(AbstractDir* abs_dir);
@@ -61,7 +65,6 @@ private:
 	Timer timer;
 	std::vector<std::string> known_files;
 	std::vector<std::string> known_dirs;
-	AbstractDir* assets_dir = nullptr;
 
 	std::vector<const char*> extension_3D_file;
 	std::vector<const char*> extension_texture;

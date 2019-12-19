@@ -39,6 +39,7 @@ bool ModuleResources::Init()
 {
 	assets_dir = new AbstractDir;
 	assets_dir->dir_path = ASSETS_FOLDER;
+	assets_dir->dir_name = "Assets";
 	InitPopulateAssetsDir(assets_dir);
 	timer.Start();
 
@@ -67,6 +68,11 @@ update_status ModuleResources::PreUpdate(float dt)
 		CheckFilesUpdate(assets_dir);
 		timer.Start();
 	}
+
+	//Make sure anytime the selected dir is nullptr we set it to the assets (root) directory
+	if (selected_dir == nullptr && assets_dir != nullptr)
+		selected_dir = assets_dir;
+
 	return update_status::UPDATE_CONTINUE;
 }
 
