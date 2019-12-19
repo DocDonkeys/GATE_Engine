@@ -20,6 +20,16 @@ ModuleResources::~ModuleResources()
 {
 }
 
+AbstractDir::~AbstractDir()
+{
+	//Delete all sub directories which will destroy all sub directories recursively (since delet will call the destructor)
+	for (int i = 0; i < sub_dirs.size(); ++i)
+	{
+		RELEASE(sub_dirs[i]);
+		sub_dirs.erase(sub_dirs.begin() + i);
+	}
+}
+
 bool ModuleResources::CleanUp()
 {
 	return false;
@@ -27,7 +37,8 @@ bool ModuleResources::CleanUp()
 
 bool ModuleResources::Init()
 {
-	assets_dir.dir_path = ASSETS_FOLDER;
+	assets_dir = new AbstractDir;
+	assets_dir->dir_path = ASSETS_FOLDER;
 	InitPopulateAssetsDir(assets_dir);
 	timer.Start();
 
@@ -50,7 +61,7 @@ update_status ModuleResources::PreUpdate(float dt)
 {
 	float time_passed = timer.ReadSec(); //Time passed after update of data
 
-	if (time_passed >= 1.5f)
+	if (time_passed >= 1.0f)
 	{
 		CheckDirectoryUpdate(assets_dir);
 		CheckFilesUpdate(assets_dir);
@@ -265,37 +276,38 @@ uint32 ModuleResources::GetUIDFromPath(const char * full_path, Resource::Type ty
 	return ret;
 }
 
-void ModuleResources::InitPopulateAssetsDir(AbstractDir &abs_dir)
+void ModuleResources::InitPopulateAssetsDir(AbstractDir* abs_dir)
 {
 	LOG("Loading Assets folder hierarchy.");
 	std::vector<std::string> discovered_files, discovered_dirs;
 
-	App->file_system->DiscoverFiles(abs_dir.dir_path.data(), discovered_files, discovered_dirs);
+	App->file_system->DiscoverFiles(abs_dir->dir_path.data(), discovered_files, discovered_dirs);
 
 	for (int i = 0; i < discovered_files.size(); ++i)
 	{
-		abs_dir.files.push_back(discovered_files[i]);
+		abs_dir->files.push_back(discovered_files[i]);
 	}
 
 	for (int i = 0; i < discovered_dirs.size(); ++i)
 	{
-		AbstractDir new_dir;
-		new_dir.dir_name = discovered_dirs[i];
-		new_dir.dir_path = abs_dir.dir_path + discovered_dirs[i] + "/";
-		abs_dir.sub_dirs.push_back(new_dir);
+		AbstractDir* new_dir = new AbstractDir;
+		new_dir->parent_dir = abs_dir;
+		new_dir->dir_name = discovered_dirs[i];
+		new_dir->dir_path = abs_dir->dir_path + discovered_dirs[i] + "/";
+		abs_dir->sub_dirs.push_back(new_dir);
 	}
 
-	for (int i = 0; i < abs_dir.sub_dirs.size(); ++i)
-		InitPopulateAssetsDir(abs_dir.sub_dirs[i]);
+	for (int i = 0; i < abs_dir->sub_dirs.size(); ++i)
+		InitPopulateAssetsDir(abs_dir->sub_dirs[i]);
 }
 
-void ModuleResources::CheckDirectoryUpdate(AbstractDir & abs_dir)
+void ModuleResources::CheckDirectoryUpdate(AbstractDir* abs_dir)
 {
 	std::vector<std::string> discovered_files, discovered_dirs;
 
-	App->file_system->DiscoverFiles(abs_dir.dir_path.data(), discovered_files, discovered_dirs);
+	App->file_system->DiscoverFiles(abs_dir->dir_path.data(), discovered_files, discovered_dirs);
 
-	int size_diff = abs_dir.sub_dirs.size() - discovered_dirs.size();
+	int size_diff = abs_dir->sub_dirs.size() - discovered_dirs.size();
 	if (size_diff == 0)	//If no subdirectory was added or removed
 	{
 		//Check if the name changed
@@ -305,12 +317,13 @@ void ModuleResources::CheckDirectoryUpdate(AbstractDir & abs_dir)
 		if (size_diff > 0)	// A directory was removed
 		{
 			//Check on the known directories which ones were deleted
-			for (int i = 0; i < abs_dir.sub_dirs.size(); ++i)
+			for (int i = 0; i < abs_dir->sub_dirs.size(); ++i)
 			{
-				if (!App->file_system->Exists(abs_dir.sub_dirs[i].dir_path.data()))
+				if (!App->file_system->Exists(abs_dir->sub_dirs[i]->dir_path.data()))
 				{
-					LOG("[Info]: Directory %s and all its dependencies were removed", abs_dir.sub_dirs[i].dir_path.data());
-					abs_dir.sub_dirs.erase(abs_dir.sub_dirs.begin() + i);
+					LOG("[Info]: Directory %s and all its dependencies were removed", abs_dir->sub_dirs[i]->dir_path.data());
+					RELEASE(abs_dir->sub_dirs[i]); // Delete the sub directory in memory (and all sub directories of the directory in "recursive" manner)
+					abs_dir->sub_dirs.erase(abs_dir->sub_dirs.begin() + i);
 				}
 			}
 		}
@@ -318,11 +331,11 @@ void ModuleResources::CheckDirectoryUpdate(AbstractDir & abs_dir)
 		{
 			// We will remove from the discovered vector all elements that are already known, it's not the most optimal way to do this, but at least we are doing some optimization
 			// instead of just comparing all elements of a against elements of b each iteration
-			for (int i = 0; i < abs_dir.sub_dirs.size(); ++i)
+			for (int i = 0; i < abs_dir->sub_dirs.size(); ++i)
 			{
 				for (int j = 0; j < discovered_dirs.size(); ++j)
 				{
-					if (abs_dir.sub_dirs[i].dir_name == discovered_dirs[j])
+					if (abs_dir->sub_dirs[i]->dir_name == discovered_dirs[j])
 					{
 						discovered_dirs.erase(discovered_dirs.begin() + j);
 						break;
@@ -333,55 +346,56 @@ void ModuleResources::CheckDirectoryUpdate(AbstractDir & abs_dir)
 			//We have discarded all common elements in discovered directories, so the array contains only the different dirs
 			for (int i = 0; i < discovered_dirs.size(); ++i)
 			{
-				AbstractDir new_dir;
-				new_dir.dir_name = discovered_dirs[i];
-				new_dir.dir_path = abs_dir.dir_path + discovered_dirs[i] + "/";
-				abs_dir.sub_dirs.push_back(new_dir);
-				LOG("[Info]: Directory %s was created", new_dir.dir_path.data());
+				AbstractDir* new_dir = new AbstractDir;
+				new_dir->parent_dir = abs_dir;
+				new_dir->dir_name = discovered_dirs[i];
+				new_dir->dir_path = abs_dir->dir_path + discovered_dirs[i] + "/";
+				abs_dir->sub_dirs.push_back(new_dir);
+				LOG("[Info]: Directory %s was created", new_dir->dir_path.data());
 			}
 		}
 	}
 	// Call Recursive
-	for (int i = 0; i < abs_dir.sub_dirs.size(); ++i)
-		CheckDirectoryUpdate(abs_dir.sub_dirs[i]);
+	for (int i = 0; i < abs_dir->sub_dirs.size(); ++i)
+		CheckDirectoryUpdate(abs_dir->sub_dirs[i]);
 }
 
-void ModuleResources::CheckFilesUpdate(AbstractDir & abs_dir)
+void ModuleResources::CheckFilesUpdate(AbstractDir* abs_dir)
 {
 	std::vector<std::string> discovered_files, discovered_dirs;
 
-	App->file_system->DiscoverFiles(abs_dir.dir_path.data(), discovered_files, discovered_dirs);
+	App->file_system->DiscoverFiles(abs_dir->dir_path.data(), discovered_files, discovered_dirs);
 
-	int size_diff = abs_dir.files.size() - discovered_files.size();
-	if (size_diff == 0)	//If no subdirectory was added or removed
+	int size_diff = abs_dir->files.size() - discovered_files.size();
+	if (size_diff == 0)	//If no file was added or removed on the directory
 	{
 		//Check if the name changed
 	}
-	else if (size_diff != 0)	// If sub directory added or removed
+	else if (size_diff != 0)	// If file added or removed on the directory
 	{
-		if (size_diff > 0)	// A directory was removed
+		if (size_diff > 0)	// A file was removed
 		{
 			std::string file_path;
-			//Check on the known directories which ones were deleted
-			for (int i = 0; i < abs_dir.files.size(); ++i)
+			//Check on the known files which ones were deleted
+			for (int i = 0; i < abs_dir->files.size(); ++i)
 			{
-				file_path = abs_dir.dir_path + abs_dir.files[i];
+				file_path = abs_dir->dir_path + abs_dir->files[i];
 				if (!App->file_system->Exists(file_path.data()))
 				{
-					LOG("[Info]: File %s was removed from %s", abs_dir.files[i].data(), abs_dir.dir_path.data());
-					abs_dir.files.erase(abs_dir.files.begin() + i);
+					LOG("[Info]: File %s was removed from %s", abs_dir->files[i].data(), abs_dir->dir_path.data());
+					abs_dir->files.erase(abs_dir->files.begin() + i);
 				}
 			}
 		}
-		else //A directory was added
+		else //A File was added
 		{
 			// We will remove from the discovered vector all elements that are already known, it's not the most optimal way to do this, but at least we are doing some optimization
 			// instead of just comparing all elements of a against elements of b each iteration
-			for (int i = 0; i < abs_dir.files.size(); ++i)
+			for (int i = 0; i < abs_dir->files.size(); ++i)
 			{
 				for (int j = 0; j < discovered_files.size(); ++j)
 				{
-					if (abs_dir.files[i] == discovered_files[j])
+					if (abs_dir->files[i] == discovered_files[j])
 					{
 						discovered_files.erase(discovered_files.begin() + j);
 						break;
@@ -392,13 +406,13 @@ void ModuleResources::CheckFilesUpdate(AbstractDir & abs_dir)
 			//We have discarded all common elements in discovered directories, so the array contains only the different dirs
 			for (int i = 0; i < discovered_files.size(); ++i)
 			{
-				abs_dir.files.push_back(discovered_files[i]);
-				LOG("[Info]: File %s was added at %s", discovered_files[i].data(), abs_dir.dir_path.data());
+				abs_dir->files.push_back(discovered_files[i]);
+				LOG("[Info]: File %s was added at %s", discovered_files[i].data(), abs_dir->dir_path.data());
 			}
 		}
 	}
 
 	// Call Recursive
-	for (int i = 0; i < abs_dir.sub_dirs.size(); ++i)
-		CheckFilesUpdate(abs_dir.sub_dirs[i]);
+	for (int i = 0; i < abs_dir->sub_dirs.size(); ++i)
+		CheckFilesUpdate(abs_dir->sub_dirs[i]);
 }

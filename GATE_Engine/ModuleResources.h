@@ -12,10 +12,13 @@ class Application;
 
 struct AbstractDir
 {
+	AbstractDir* parent_dir = nullptr;
 	std::string dir_path;
 	std::string dir_name;
-	std::vector<AbstractDir> sub_dirs;
+	std::vector<AbstractDir*> sub_dirs;
 	std::vector<std::string> files;
+
+	~AbstractDir();
 };
 
 class ModuleResources : public Module
@@ -46,10 +49,10 @@ public:
 	uint32 GetUIDFromPath(const char* full_path, Resource::Type type);
 private:
 	//This function initially fills the directories and files assets tree, with all data found inside the Assets folder
-	void InitPopulateAssetsDir(AbstractDir &abs_dir);
+	void InitPopulateAssetsDir(AbstractDir* abs_dir);
 
-	void CheckDirectoryUpdate(AbstractDir &abs_dir);
-	void CheckFilesUpdate(AbstractDir &abs_dir);
+	void CheckDirectoryUpdate(AbstractDir* abs_dir);
+	void CheckFilesUpdate(AbstractDir* abs_dir);
 
 private: 
 	std::map<uint32, Resource*> resources;
@@ -58,7 +61,7 @@ private:
 	Timer timer;
 	std::vector<std::string> known_files;
 	std::vector<std::string> known_dirs;
-	AbstractDir assets_dir;
+	AbstractDir* assets_dir = nullptr;
 
 	std::vector<const char*> extension_3D_file;
 	std::vector<const char*> extension_texture;
