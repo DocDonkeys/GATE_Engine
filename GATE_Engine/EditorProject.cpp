@@ -13,18 +13,38 @@ void EditorProject::Update()
 	selected_dir_already = false;
 	int id = 0;
 
-	ImGui::BeginChild("Project", ImVec2(300, 0), true);
+	////ImGui::BeginChild("Project", ImVec2(300, 0), true);
+	//PrintAssetsHierarchy(App->resources->assets_dir, id);
+	////ImGui::EndChild();
+
+	//ImGui::SameLine();
+	//ImGui::Separator();
+	//ImGui::SameLine();
+
+	////ImGui::BeginChild("Assets", ImVec2(0, 0), true);
+	//	for (int i = 0; i < 20; ++i)
+	//		ImGui::Text("Test Text, let's figure this out ");
+
+	////ImGui::EndChild();
+
+	ImGui::Columns(2, "mixed");
+	if (initial_width != 0.0f)
+	{
+		ImGui::SetColumnWidth(0, initial_width);
+		initial_width = 0.0f;
+	}
+
+	ImGui::Text("Assets hierarchy");
+	ImGui::Separator();
 	PrintAssetsHierarchy(App->resources->assets_dir, id);
-	ImGui::EndChild();
-
 	
-	ImGui::SameLine();
+	ImGui::NextColumn();
 
-	ImGui::BeginChild("Assets", ImVec2(0, 0), true);
+	ImGui::Text("Assets");
+	ImGui::Separator();
+
 		for (int i = 0; i < 20; ++i)
 			ImGui::Text("Test Text, let's figure this out ");
-
-	ImGui::EndChild();
 }
 
 void EditorProject::DrawAssetsLayout()
