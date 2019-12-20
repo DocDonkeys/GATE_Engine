@@ -25,11 +25,11 @@
     "Windows": {
       "Configuration": false,
       "Console": true,
-      "Game": false,
+      "Game": true,
       "Hierarchy": true,
       "Inspector": true,
-      "Project": false,
-      "Scene": false,
+      "Project": true,
+      "Scene": true,
       "Toolbar": true
     }
   },

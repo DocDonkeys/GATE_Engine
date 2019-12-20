@@ -637,7 +637,7 @@ bool Application::LoadConfig(json& obj)	//IMPROVE: Divide the loading in section
 	//Editor
 	// -> Windows
 	editor->editor_toolbar->show_window = obj["Editor"]["Windows"]["Toolbar"].get<bool>();
-	editor->editor_configuration->show_window = obj["Editor"]["Windows"]["Configuration"].get<bool>();
+	//editor->editor_configuration->show_window = obj["Editor"]["Windows"]["Configuration"].get<bool>();
 	editor->editor_console->show_window = obj["Editor"]["Windows"]["Console"].get<bool>();
 	editor->editor_game->show_window = obj["Editor"]["Windows"]["Game"].get<bool>();
 	editor->editor_hierarchy->show_window = obj["Editor"]["Windows"]["Hierarchy"].get<bool>();
@@ -725,7 +725,7 @@ bool Application::SaveConfig() const	//IMPROVE: Divide the saving in sections, e
 				{"Byte Size", editor->byteSizeMode}
 			}},
 			{"Windows", {
-				{"Configuration", editor->editor_configuration->show_window},
+				//{"Configuration", editor->editor_configuration->show_window},
 				{"Console", editor->editor_console->show_window},
 				{"Game", editor->editor_game->show_window},
 				{"Hierarchy", editor->editor_hierarchy->show_window},

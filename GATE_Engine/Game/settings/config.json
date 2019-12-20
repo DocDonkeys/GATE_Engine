@@ -28,7 +28,7 @@
       "Game": false,
       "Hierarchy": true,
       "Inspector": true,
-      "Project": false,
+      "Project": true,
       "Scene": false,
       "Toolbar": true
     }

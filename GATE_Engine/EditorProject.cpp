@@ -7,8 +7,7 @@
 // Memory Leak Detection
 #include "MemLeaks.h"
 
-EditorProject::EditorProject(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags) {}
-;
+EditorProject::EditorProject(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags) {};
 
 bool EditorProject::Start()
 {
