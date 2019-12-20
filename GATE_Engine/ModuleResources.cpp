@@ -170,29 +170,15 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 	return uid;
 }
 
-uint32 ModuleResources::ImportInternalFile(const char * new_file_in_assets, Resource::Type type, bool force)
+uint32 ModuleResources::ImportInternalFile(const char * new_file_in_assets)
 {
-	uint32 ret = 0; bool import_ok = false; std::string written_file;
+	uint32 uid = 0; bool import_ok = false; std::string written_file;
 
-	switch (type)
-	{
-	case Resource::TEXTURE: import_ok = App->texture_loader->importer.ImportableResource(new_file_in_assets); break;
-	}
-	import_ok = true; //TODO: DIdac remove this hardcode which serves to test texture creation
-	if (import_ok == true)
-	{ // If import was successful, create a new resource 
-		Resource* res = nullptr;
-		//Resource* res = CreateNewResource(type);
-		switch (type)
-		{
-		case Resource::TEXTURE:	res = App->texture_loader->LoadTextureFile(new_file_in_assets);
-		}
-		//res->file = new_file_in_assets;
-		//res->exported_file = written_file;
-		ret = res->GetUID();
-	}
+	std::string full_path = App->file_system->GetPathToGameFolder(true) + new_file_in_assets;
+	App->file_system->NormalizePath(full_path);
 
-	return ret;
+	uid = ImportFile(full_path.data());
+	return uid;
 }
 
 uint32 ModuleResources::GenerateNewUID()

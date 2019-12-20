@@ -20,6 +20,7 @@ public:
 			ImGui::End();
 		}
 	}
+	virtual bool Start() { return true; };
 	virtual void PreUpdate() {};	// Any preparations before starting the window
 	virtual void Update() = 0;		// Whatever the window does must be defined in the child class
 

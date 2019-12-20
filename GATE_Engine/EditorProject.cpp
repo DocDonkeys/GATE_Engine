@@ -2,30 +2,32 @@
 #include "ModuleEditor.h"
 #include "Application.h"
 #include "ModuleResources.h"
+#include "ResourceTexture.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
 
-EditorProject::EditorProject(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags) {};
+EditorProject::EditorProject(const char* name, bool startEnabled, ImGuiWindowFlags flags) : EditorWindow(name, startEnabled, flags) {}
+;
+
+bool EditorProject::Start()
+{
+	//Get the textures for the UI icons
+	std::string path = ASSETS_FOLDER;
+	path += "Engine_UI/folder.png";
+	std::string model_path = ASSETS_FOLDER;
+	model_path += "Engine_UI/model.png";
+
+	folder_tex = (ResourceTexture*)App->resources->Get(App->resources->ImportInternalFile(path.data()));
+	object_tex = (ResourceTexture*)App->resources->Get(App->resources->ImportInternalFile(model_path.data()));
+
+	return true;
+}
 
 void EditorProject::Update()
 {
 	selected_dir_already = false;
 	int id = 0;
-
-	////ImGui::BeginChild("Project", ImVec2(300, 0), true);
-	//PrintAssetsHierarchy(App->resources->assets_dir, id);
-	////ImGui::EndChild();
-
-	//ImGui::SameLine();
-	//ImGui::Separator();
-	//ImGui::SameLine();
-
-	////ImGui::BeginChild("Assets", ImVec2(0, 0), true);
-	//	for (int i = 0; i < 20; ++i)
-	//		ImGui::Text("Test Text, let's figure this out ");
-
-	////ImGui::EndChild();
 
 	ImGui::Columns(2, "mixed");
 	if (initial_width != 0.0f)
@@ -43,12 +45,43 @@ void EditorProject::Update()
 	ImGui::Text("Assets");
 	ImGui::Separator();
 
-		for (int i = 0; i < 20; ++i)
-			ImGui::Text("Test Text, let's figure this out ");
+	DrawAssetsLayout(App->resources->selected_dir);
 }
 
-void EditorProject::DrawAssetsLayout()
+void EditorProject::DrawAssetsLayout(AbstractDir* selected_dir)
 {
+	for (int i = 0; i < selected_dir->sub_dirs.size(); ++i)
+	{
+		ImGui::BeginGroup();
+		if(folder_tex != nullptr)
+			ImGui::Image((GLuint*)folder_tex->id, ImVec2(60, 60));
+		else
+			ImGui::Image(0, ImVec2(60, 60));
+
+		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered() && !selected_dir->sub_dirs.empty())
+		{
+			App->resources->selected_dir = selected_dir->sub_dirs[i];
+		}
+
+		ImGui::TextWrapped(selected_dir->sub_dirs[i]->dir_name.data());
+
+		
+		ImGui::EndGroup();
+		ImGui::SameLine();
+	}
+
+	for (int i = 0; i < selected_dir->files.size(); ++i)
+	{
+		ImGui::BeginGroup();
+		if (folder_tex != nullptr)
+			ImGui::Image((GLuint*)object_tex->id, ImVec2(60, 60));
+		else
+			ImGui::Image(0, ImVec2(60, 60));
+
+		ImGui::TextWrapped(selected_dir->files[i].data());
+		ImGui::EndGroup();
+		ImGui::SameLine();
+	}
 }
 
 void EditorProject::PrintAssetsHierarchy(AbstractDir* abs_dir, int& treenode_id)

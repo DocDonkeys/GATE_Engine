@@ -101,6 +101,7 @@ bool ModuleEditor::Start()
 	TextureModeChange();
 	ByteSizeModeChange();
 
+	editor_project->Start();
 	return true;
 }
 
