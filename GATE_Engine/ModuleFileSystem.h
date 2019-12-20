@@ -37,6 +37,7 @@ public:
 	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
 	void NormalizePath(char* full_path) const;
 	void NormalizePath(std::string& full_path) const;
+	int64 GetFileModDate(const char* full_path);
 
 
 	// Open for Read/Write

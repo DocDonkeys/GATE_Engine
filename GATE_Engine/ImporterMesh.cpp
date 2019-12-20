@@ -163,6 +163,7 @@ bool ImporterMesh::CreateMeta(const char * original_file_full_path, IEMeshData *
 	json file; //File to save
 	std::string path, filename, extension;
 	App->file_system->SplitFilePath(original_file_full_path, &path, &filename, &extension);
+	int64 mod_time = App->file_system->GetFileModDate(original_file_full_path);
 
 	//Data saving
 	file["Path original"] = original_file_full_path;
@@ -170,6 +171,7 @@ bool ImporterMesh::CreateMeta(const char * original_file_full_path, IEMeshData *
 	file["Num:Indices"] = ie_data->mesh->num_index;
 	file["Num:Vertex"] = ie_data->mesh->num_vertex;
 	file["Num:Poly"] = ie_data->mesh->num_polys;
+	file["Mod Time"] = mod_time;
 
 	//Convert to buffer
 	std::string data = App->jLoad.JsonToString(file);

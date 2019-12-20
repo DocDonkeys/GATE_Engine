@@ -66,6 +66,7 @@ bool ImporterMaterial::CreateMeta(const char * original_file_full_path, ImportEx
 	json file; //File to save
 	std::string path, filename, extension;
 	App->file_system->SplitFilePath(original_file_full_path, &path, &filename, &extension);
+	int64 mod_time = App->file_system->GetFileModDate(original_file_full_path);
 
 	//Data saving
 	file["Path"] = ie_data->meta_path.data();
@@ -77,6 +78,7 @@ bool ImporterMaterial::CreateMeta(const char * original_file_full_path, ImportEx
 	file_UID = App->SubtractString(file_UID,"t",false,false);
 
 	file["UID"] = file_UID.data();
+	file["Mod Time"] = mod_time;
 
 
 

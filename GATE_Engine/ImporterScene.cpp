@@ -155,9 +155,11 @@ bool ImporterScene::CreateMeta(const char * original_file_full_path, ImportExpor
 	json file; //File to save
 	std::string path, filename, extension;
 	App->file_system->SplitFilePath(original_file_full_path,&path,&filename,&extension);
+	int64 mod_time = App->file_system->GetFileModDate(original_file_full_path);
 
 	//Data saving
 	file["Path"] = ie_data->meta_path.data();
+	file["Mod Time"] = mod_time;
 
 	//Convert to buffer
 	std::string data = App->jLoad.JsonToString(file);

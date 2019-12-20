@@ -262,6 +262,12 @@ void ModuleFileSystem::NormalizePath(std::string & full_path) const
 	}
 }
 
+int64 ModuleFileSystem::GetFileModDate(const char * full_path)
+{
+	int64 mod_time = PHYSFS_getLastModTime(full_path);
+	return mod_time;
+}
+
 unsigned int ModuleFileSystem::Load(const char * path, const char * file, char ** buffer) const
 {
 	string full_path(path);
