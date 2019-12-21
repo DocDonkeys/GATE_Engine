@@ -16,6 +16,7 @@ public:
 	ResourceTexture* LoadTexture(const char* path, bool duplicate = false, uint32 force_uid = 0);
 	bool CreateMeta(const char* original_file_full_path, ImportExportData* ie_data);
 	ResourceTexture* LoadMeta(const char* full_path, bool game_path = false);
+	bool EditMeta(const char* full_path, bool game_path = false);
 };
 
 

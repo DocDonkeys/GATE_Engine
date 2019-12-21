@@ -159,7 +159,7 @@ bool ImporterScene::CreateMeta(const char * original_file_full_path, ImportExpor
 
 	//Data saving
 	file["Path"] = ie_data->meta_path.data();
-	file["Mod Time"] = mod_time;
+	file["Mod_Time"] = mod_time;
 
 	//Convert to buffer
 	std::string data = App->jLoad.JsonToString(file);
@@ -287,9 +287,49 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 	std::string output;
 
 	if (file_type == FileType::SCENE)
-		App->file_system->SaveUnique(output,buffer,data.length(), ASSETS_FOLDER,scene_name.data(),"scene");
+	{
+		App->file_system->SaveUnique(output, buffer, data.length(), ASSETS_FOLDER, scene_name.data(), "scene");
+		ImportExportData a;
+		a.meta_path = ASSETS_FOLDER;
+		std::string path = ASSETS_FOLDER + scene_name + ".scene";
+		CreateMeta(path.data(),&a);
+	}
 	else if (file_type == FileType::MODEL)
 		App->file_system->SaveUnique(output, buffer, data.length(), LIBRARY_MODEL_FOLDER, scene_name.data(), "model");
 
 	return output;
+}
+
+bool ImporterScene::EditMeta(const char* full_path, bool game_path)
+{
+	std::string path, filename, extension;
+	App->file_system->SplitFilePath(full_path, &path, &filename, &extension);
+	int64 mod_time = App->file_system->GetFileModDate(full_path);
+
+	std::string absolute_path = full_path;
+	std::string base_path = App->file_system->GetBasePath();
+
+	if (game_path)
+	{
+		base_path = App->SubtractString(base_path, "\\", true, true, false);
+		base_path = App->SubtractString(base_path, "\\", true, true, true);
+		base_path += "Game";
+		App->file_system->NormalizePath(base_path);
+		absolute_path = base_path + absolute_path + ".meta";
+	}
+	json loaded_file = App->jLoad.Load(absolute_path.data()); //Load the .meta as a json file 
+
+
+	loaded_file["Mod_Time"] = mod_time;
+
+
+	//Convert to buffer
+	std::string data = App->jLoad.JsonToString(loaded_file);
+	char* buffer = (char*)data.data();
+	std::string output;
+
+	//Save File
+	App->file_system->SaveUnique(output, buffer, data.length(), path.data(), filename.data(), "meta");
+
+	return false;
 }

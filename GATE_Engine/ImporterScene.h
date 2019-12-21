@@ -26,6 +26,7 @@ public:
 	bool LoadMeta(const char* full_path, bool game_path = false);
 	//Since .model will be same as a scene but uneditable, we can use the same function but determining in which format we want to save
 	std::string SaveScene(const GameObject* root_go, std::string& scene_name, FileType file_type);
+	bool EditMeta(const char* full_path, bool game_path = false);
 };
 
 

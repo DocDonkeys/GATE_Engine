@@ -9,6 +9,8 @@
 #include <map>
 
 class Application;
+class ImporterScene;
+class ImporterMaterial;
 
 struct AbstractDir
 {
@@ -17,6 +19,7 @@ struct AbstractDir
 	std::string dir_name;
 	std::vector<AbstractDir*> sub_dirs;
 	std::vector<std::string> files;
+	std::vector<int64> file_modtimes;
 
 	~AbstractDir();
 };
@@ -43,6 +46,7 @@ public:
 	const Resource* Get(uint32 uid) const;
 	Resource* Get(uint32 uid);
 	Resource* CreateNewResource(Resource::Type type, uint32 force_uid = 0);
+	int64 GetTimestampFromMeta(const char * path, bool game_path);
 
 	Resource::Type ResourceTypeByPath(const std::string extension);
 
@@ -51,6 +55,9 @@ public:
 public: //Vars
 	AbstractDir* assets_dir = nullptr;
 	AbstractDir* selected_dir = nullptr;
+
+	ImporterMaterial* ie_material = nullptr;
+	ImporterScene*	 ie_scene = nullptr;
 private:
 	//This function initially fills the directories and files assets tree, with all data found inside the Assets folder
 	void InitPopulateAssetsDir(AbstractDir* abs_dir);
@@ -66,8 +73,9 @@ private:
 	std::vector<std::string> known_files;
 	std::vector<std::string> known_dirs;
 
-	std::vector<const char*> extension_3D_file;
-	std::vector<const char*> extension_texture;
+	std::vector<std::string> extension_3D_file;
+	std::vector<std::string> extension_texture;
+	std::string meta = "meta";
 };
 #endif // !__MODULE_RESOURCES_H__
 

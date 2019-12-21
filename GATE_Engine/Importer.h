@@ -10,7 +10,7 @@ class GameObject;
 
 struct ImportExportData 
 {
-	std::string meta_path;
+	std::string meta_path;  //Path that will be saved into the meta file
 }; // We will need to overload some functions with diferent parameters. Inheriting this struct will allow us to do so
 
 class Importer { 
@@ -29,6 +29,9 @@ public:
 
 	bool ImportableResource(const char* full_path);
 	uint TotalGOsNum(const GameObject* go, uint& num_of_gos);
+
+public:
+	ImportExportData ie_data;
 };
 
 #endif

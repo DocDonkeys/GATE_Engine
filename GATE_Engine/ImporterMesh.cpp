@@ -171,7 +171,7 @@ bool ImporterMesh::CreateMeta(const char * original_file_full_path, IEMeshData *
 	file["Num:Indices"] = ie_data->mesh->num_index;
 	file["Num:Vertex"] = ie_data->mesh->num_vertex;
 	file["Num:Poly"] = ie_data->mesh->num_polys;
-	file["Mod Time"] = mod_time;
+	file["Mod_Time"] = mod_time;
 
 	//Convert to buffer
 	std::string data = App->jLoad.JsonToString(file);

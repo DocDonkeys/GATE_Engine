@@ -9,6 +9,9 @@
 #include "ResourceTexture.h"
 #include "libs/SDL/include/SDL_assert.h"
 
+#include "ImporterScene.h"
+#include "ImporterMaterial.h"
+
 #include "MemLeaks.h"
 
 ModuleResources::ModuleResources(Application* app, const char* name, bool start_enabled) : Module(app, name, start_enabled)
@@ -32,6 +35,8 @@ AbstractDir::~AbstractDir()
 
 bool ModuleResources::CleanUp()
 {
+	RELEASE(ie_material);
+	RELEASE(ie_scene);
 	return false;
 }
 
@@ -55,6 +60,9 @@ bool ModuleResources::Init()
 	extension_texture.push_back("dds");
 	extension_texture.push_back("DDS");
 	extension_texture.push_back("tga");
+
+	ie_material = new ImporterMaterial;
+	ie_scene = new ImporterScene;
 	return false;
 }
 
@@ -102,7 +110,7 @@ uint32 ModuleResources::ImportFile(const char * full_path)
 		path = ASSETS_DEFAULT_MESHES + path;
 	}
 	
-	bool has_meta = false;  //Debugging for the big crash in .exe when loading a fbx
+	bool has_meta = false;
 	has_meta = App->file_system->Exists(path.data());
 	path = App->SubtractString(path,".",true,true);		//We take .meta out of the path since we are not checking anymore
 
@@ -222,6 +230,29 @@ Resource * ModuleResources::CreateNewResource(Resource::Type type, uint32 force_
 return ret;
 }
 
+int64 ModuleResources::GetTimestampFromMeta(const char * path, bool game_path)
+{
+	int64 ret = 0;
+
+	std::string final_path = path;
+	std::string base_path = App->file_system->GetBasePath();
+
+	if (game_path)
+	{
+		base_path = App->SubtractString(base_path, "\\", true, true, false);
+		base_path = App->SubtractString(base_path, "\\", true, true, true);
+		base_path += "Game";
+		App->file_system->NormalizePath(base_path);
+		final_path = base_path.data() + final_path;
+	}
+
+	json loaded_file = App->jLoad.Load(final_path.data()); //Load the .meta as a json file 
+	
+	ret = loaded_file["Mod_Time"];
+	
+	return ret;
+}
+
 Resource::Type ModuleResources::ResourceTypeByPath(const std::string extension)
 {
 	if (extension.data() == "mesh")
@@ -277,7 +308,27 @@ void ModuleResources::InitPopulateAssetsDir(AbstractDir* abs_dir)
 
 	for (int i = 0; i < discovered_files.size(); ++i)
 	{
+
+		//Chek if the file is a .meta, since we don't want to include them in the files displayed in the engine + we will update meta info with name + .meta
+		std::string extension;
+		App->file_system->SplitFilePath(discovered_files[i].data(),nullptr,nullptr,&extension);
+		if ( !extension.compare(meta))
+		{
+			continue;
+		}
+
+		//Add the file to our in-code-custom-directory
 		abs_dir->files.push_back(discovered_files[i]);
+
+		//See if it has a meta
+		std::string meta_path = abs_dir->dir_path + discovered_files[i] + ".meta";
+		//meta_path = App->file_system->GetPathToGameFolder(true) + "/" + meta_path;
+		if (App->file_system->Exists(meta_path.data()))
+		{
+			LOG("%s exists", meta_path.data());
+			int64 ret = GetTimestampFromMeta(meta_path.data(), true);
+			abs_dir->file_modtimes.push_back(ret);
+		}
 	}
 
 	for (int i = 0; i < discovered_dirs.size(); ++i)
@@ -361,7 +412,45 @@ void ModuleResources::CheckFilesUpdate(AbstractDir* abs_dir)
 	int size_diff = abs_dir->files.size() - discovered_files.size();
 	if (size_diff == 0)	//If no file was added or removed on the directory
 	{
-		//Check if the name changed
+		//Check if the name changed or if the file changed
+		if (abs_dir->file_modtimes.size() > 0)
+		{
+			for (int i = 0; i < abs_dir->files.size(); ++i)
+			{
+				if (i < abs_dir->file_modtimes.size())
+				{
+					std::string path = abs_dir->dir_path + abs_dir->files[i];
+					int64 mod_time = App->file_system->GetFileModDate(path.data());
+					if (abs_dir->file_modtimes[i] != mod_time)
+					{
+						LOG("%s was modified!", path.data());
+
+						std::string extension;
+						App->file_system->SplitFilePath(abs_dir->files[i].data(),nullptr,nullptr,&extension);
+						
+						for (int j = 0; j < extension_3D_file.size(); ++j)
+						{
+							if (!extension_3D_file[j].compare(extension))
+							{
+								std::string file_path = abs_dir->dir_path + abs_dir->files[i];
+								ie_material->EditMeta(file_path.data(), true);
+							}
+						}
+
+						for (int j = 0; j < extension_texture.size(); ++j)
+						{
+							if (!extension_texture[j].compare(extension))
+							{
+								std::string file_path = abs_dir->dir_path + abs_dir->files[i];
+								ie_material->EditMeta(file_path.data(),true);
+							}
+						}
+
+						abs_dir->file_modtimes[i] = mod_time;
+					}
+				}
+			}
+		}
 	}
 	else if (size_diff != 0)	// If file added or removed on the directory
 	{
@@ -395,10 +484,16 @@ void ModuleResources::CheckFilesUpdate(AbstractDir* abs_dir)
 				}
 			}
 
-			//We have discarded all common elements in discovered directories, so the array contains only the different dirs
+			//We have discarded all common elements in discovered files, so the array contains only the different files
 			for (int i = 0; i < discovered_files.size(); ++i)
 			{
 				abs_dir->files.push_back(discovered_files[i]);
+				std::string meta_path = abs_dir->dir_path + discovered_files[i] + ".meta";
+				App->file_system->GetPathToGameFolder(&meta_path);
+				if (App->file_system->Exists(meta_path.data()))
+				{
+					LOG("%s exists", meta_path.data());
+				}
 				LOG("[Info]: File %s was added at %s", discovered_files[i].data(), abs_dir->dir_path.data());
 			}
 		}
