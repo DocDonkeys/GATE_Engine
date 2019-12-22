@@ -29,8 +29,8 @@
 
 #pragma once
 
-#include <LuaBridge/detail/Config.h>
-#include <LuaBridge/detail/FuncTraits.h>
+#include "libs/LuaBridge-241/include/detail/Config.h"
+#include "libs/LuaBridge-241/include/detail/FuncTraits.h"
 
 #include <string>
 

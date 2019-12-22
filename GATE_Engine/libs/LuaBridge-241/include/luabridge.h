@@ -43,17 +43,17 @@
 #endif
 
 
-#include <LuaBridge/detail/LuaHelpers.h>
-#include <LuaBridge/detail/TypeTraits.h>
-#include <LuaBridge/detail/TypeList.h>
-#include <LuaBridge/detail/FuncTraits.h>
-#include <LuaBridge/detail/Constructor.h>
-#include <LuaBridge/detail/ClassInfo.h>
-#include <LuaBridge/detail/LuaException.h>
-#include <LuaBridge/detail/LuaRef.h>
-#include <LuaBridge/detail/Iterator.h>
-#include <LuaBridge/detail/Userdata.h>
-#include <LuaBridge/detail/CFunctions.h>
-#include <LuaBridge/detail/Security.h>
-#include <LuaBridge/detail/Stack.h>
-#include <LuaBridge/detail/Namespace.h>
+#include "libs/LuaBridge-241/include/detail/LuaHelpers.h"
+#include "libs/LuaBridge-241/include/detail/TypeTraits.h"
+#include "libs/LuaBridge-241/include/detail/TypeList.h"
+#include "libs/LuaBridge-241/include/detail/FuncTraits.h"
+#include "libs/LuaBridge-241/include/detail/Constructor.h"
+#include "libs/LuaBridge-241/include/detail/ClassInfo.h"
+#include "libs/LuaBridge-241/include/detail/LuaException.h"
+#include "libs/LuaBridge-241/include/detail/LuaRef.h"
+#include "libs/LuaBridge-241/include/detail/Iterator.h"
+#include "libs/LuaBridge-241/include/detail/Userdata.h"
+#include "libs/LuaBridge-241/include/detail/CFunctions.h"
+#include "libs/LuaBridge-241/include/detail/Security.h"
+#include "libs/LuaBridge-241/include/detail/Stack.h"
+#include "libs/LuaBridge-241/include/detail/Namespace.h"

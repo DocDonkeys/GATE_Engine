@@ -30,11 +30,11 @@
 
 #pragma once
 
-#include <LuaBridge/detail/Config.h>
-#include <LuaBridge/detail/ClassInfo.h>
-#include <LuaBridge/detail/LuaException.h>
-#include <LuaBridge/detail/Security.h>
-#include <LuaBridge/detail/TypeTraits.h>
+#include "libs/LuaBridge-241/include/detail/Config.h"
+#include "libs/LuaBridge-241/include/detail/ClassInfo.h"
+#include "libs/LuaBridge-241/include/detail/LuaException.h"
+#include "libs/LuaBridge-241/include/detail/Security.h"
+#include "libs/LuaBridge-241/include/detail/TypeTraits.h"
 
 #include <stdexcept>
 #include <string>

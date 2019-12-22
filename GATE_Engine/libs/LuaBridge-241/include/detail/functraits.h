@@ -29,7 +29,7 @@
 
 #pragma once
 
-#include <LuaBridge/detail/Config.h>
+#include "libs/LuaBridge-241/include/detail/Config.h"
 
 #ifdef LUABRIDGE_CXX11
 #include <functional>

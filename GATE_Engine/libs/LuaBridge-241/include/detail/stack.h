@@ -30,8 +30,8 @@
 
 #pragma once
 
-#include <LuaBridge/detail/LuaHelpers.h>
-#include <LuaBridge/detail/Userdata.h>
+#include "libs/LuaBridge-241/include/detail/LuaHelpers.h"
+#include "libs/LuaBridge-241/include/detail/Userdata.h"
 
 #include <string>
 

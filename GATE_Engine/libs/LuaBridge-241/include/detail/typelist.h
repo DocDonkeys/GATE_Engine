@@ -45,8 +45,8 @@
 
 #pragma once
 
-#include <LuaBridge/detail/Config.h>
-#include <LuaBridge/detail/Stack.h>
+#include "libs/LuaBridge-241/include/detail/Config.h"
+#include "libs/LuaBridge-241/include/detail/Stack.h"
 
 #include <string>
 #include <typeinfo>

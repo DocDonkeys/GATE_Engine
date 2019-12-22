@@ -3,6 +3,7 @@
 
 #include "Module.h"
 
+class lua_State;
 class ModuleScripting : public Module
 {
 public:
@@ -12,8 +13,15 @@ public:
 public:
 
 	bool Init();
+	bool Start();
 	bool CleanUp();
 	update_status Update(float dt);
+
+
+
+private:
+	// L is our Lua Virtual Machine, it's called L because its the common name it receives, so all programers can understand what this var is
+	lua_State *L = nullptr;
 
 };
 

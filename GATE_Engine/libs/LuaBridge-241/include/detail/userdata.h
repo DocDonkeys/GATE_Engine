@@ -29,7 +29,7 @@
 
 #pragma once
 
-#include <LuaBridge/detail/ClassInfo.h>
+#include "libs/LuaBridge-241/include/detail/ClassInfo.h"
 
 #include <cassert>
 #include <stdexcept>
