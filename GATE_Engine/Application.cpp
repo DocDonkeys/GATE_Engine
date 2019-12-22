@@ -14,6 +14,7 @@
 #include "GeometryLoader.h"
 #include "TextureLoader.h"
 #include "ModuleFileSystem.h"
+#include "ModuleScripting.h"
 
 // ----------------	//CHANGE/FIX: This shouldn't be here! Upgrade Save&Load so it's done on every module for their data.
 // Windows
@@ -48,6 +49,7 @@ Application::Application()
 	editor = new ModuleEditor(this, "Editor");
 	physics = new ModulePhysics(this, "Physics");
 	resources = new ModuleResources(this,"Resources");
+	scripting = new ModuleScripting(this,"Scripting");
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -69,6 +71,8 @@ Application::Application()
 	//Engine UI
 	AddModule(editor);
 
+	//Scripting module at the end just before rendering
+	AddModule(scripting);
 	// Renderer last!
 	AddModule(renderer3D);
 }

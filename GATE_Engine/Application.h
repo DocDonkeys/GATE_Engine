@@ -31,6 +31,7 @@ class GeometryLoader;
 class TextureLoader;
 class ModuleFileSystem;
 class ModuleResources;
+class ModuleScripting;
 
 struct GPU_info
 {
@@ -146,6 +147,7 @@ public:
 	TextureLoader*		texture_loader;
 	ModuleFileSystem*	file_system;
 	ModuleResources*	resources;
+	ModuleScripting*     scripting;
 
 	//App members
 	hardware_info		hardware;
