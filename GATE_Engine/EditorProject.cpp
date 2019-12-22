@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "ModuleResources.h"
 #include "ResourceTexture.h"
+#include "ModuleFileSystem.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -76,6 +77,12 @@ void EditorProject::DrawAssetsLayout(AbstractDir* selected_dir)
 			ImGui::Image((GLuint*)object_tex->id, ImVec2(60, 60));
 		else
 			ImGui::Image(0, ImVec2(60, 60));
+
+		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered())
+		{
+			std::string file_path = App->file_system->GetPathToGameFolder(true) + selected_dir->dir_path + selected_dir->files[i];
+			App->RequestBrowser(file_path.data());
+		}
 
 		ImGui::TextWrapped(selected_dir->files[i].data());
 		ImGui::EndGroup();

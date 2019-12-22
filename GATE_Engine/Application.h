@@ -100,6 +100,7 @@ public:
 
 	//Open the Web Page provided by the link
 	void RequestBrowser(const char* link);
+
 	//LOG info to both Visual Studio & the editor / Engine UI console
 	void ConsoleLOG(const char* format,...);
 
