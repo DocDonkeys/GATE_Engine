@@ -1,4 +1,6 @@
 #include "ModuleScripting.h"
+#include "Application.h"
+#include "ModuleFileSystem.h"
 
 extern "C"
 {
@@ -55,6 +57,40 @@ bool ModuleScripting::CleanUp()
 update_status ModuleScripting::Update(float dt)
 {
 	
+	std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_test.lua";
+	bool compiled = luaL_dofile(L, script_path.c_str());
+
+	if (compiled == LUA_OK)
+	{
+		if (start == true)
+		{
+			luabridge::LuaRef ScriptStart = luabridge::getGlobal(L, "Start");
+			if (!ScriptStart.isNil())
+				ScriptStart();
+			else
+				LOG("Could not execute Start!");
+		}
+		start = false;
+		//Get the Update function from LUA file
+		luabridge::LuaRef ScriptUpdate = luabridge::getGlobal(L,"Update");
+		//Execute Update
+		if(!ScriptUpdate.isNil())
+			for (int i = 0; i < 35; ++i)
+			{
+				ScriptUpdate();
+
+				luabridge::LuaRef number = luabridge::getGlobal(L, "Update_test");
+
+				int num = 0;
+				if (!number.isNil())
+					num = number.cast<int>();
+
+				LOG("Lua script Update was called. Update_test = %d", num);
+			}
+		
+
+		
+	}
 
 	return UPDATE_CONTINUE;
 }
