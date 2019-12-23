@@ -174,7 +174,9 @@
     <ClCompile Include="libs\ImGuizmo\ImCurveEdit.cpp">
       <Filter>Sources\Tools\Libs\ImGuizmo</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleScripting.cpp" />
+    <ClCompile Include="ModuleScripting.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />

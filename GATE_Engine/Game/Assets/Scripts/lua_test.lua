@@ -1,4 +1,6 @@
 
+local LOG = Debug.Scripting ()
+
 Start_test = 30
 Update_test = 30
 --Start Function, just like we've been doing in C++ or C# all this time
@@ -13,4 +15,5 @@ end
 --Update function, just like we've been doing in C++ or C# all this time
 function Update ()
 Update_test = Update_test + 1
+LOG:LOG ("This Log was called from LUA and Update_test =" .. Update_test)
 end

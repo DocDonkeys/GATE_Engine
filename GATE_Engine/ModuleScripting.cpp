@@ -26,7 +26,7 @@ bool ModuleScripting::Init()
 {
 	//Create the Virtual Machine
 	L = luaL_newstate();
-
+	luaL_openlibs(L);
 
 	return true;
 }
@@ -56,6 +56,17 @@ bool ModuleScripting::CleanUp()
 
 update_status ModuleScripting::Update(float dt)
 {
+	//Building a class / Namespace so Lua can have this object to Call EngineLOG by calling 
+
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Debug")
+			.beginClass <Scripting>("Scripting")
+				.addConstructor<void (*) (void)> ()
+				.addFunction("LOG", &Scripting::LogFromLua)
+			.endClass ()
+		.endNamespace();
+
+	Scripting Scripting;
 	
 	std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_test.lua";
 	bool compiled = luaL_dofile(L, script_path.c_str());
@@ -91,6 +102,31 @@ update_status ModuleScripting::Update(float dt)
 
 		
 	}
+	else
+	{
+		std::string error = lua_tostring(L, -1);
+		LOG("%s", error.data());
+	}
 
 	return UPDATE_CONTINUE;
+}
+
+
+Scripting::Scripting()
+{
+}
+
+Scripting::~Scripting()
+{
+}
+
+//Function that Lua will be able to call as LOG
+void Scripting::LogFromLua(const char * string)
+{
+	LOG(string);
+}
+
+void Scripting::TestFunc()
+{
+	LOG("This is a test function that Logs something (TestFunc)");
 }

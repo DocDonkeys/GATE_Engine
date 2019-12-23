@@ -24,6 +24,18 @@ private:
 };
 
 
+class Scripting
+{
+public:
+	Scripting();
+	~Scripting();
+
+public:
+
+	void LogFromLua(const char* string);
+	void TestFunc();
+};
+
 
 #endif // !__MODULESCRIPTING_H__
 
