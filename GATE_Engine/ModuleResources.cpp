@@ -7,6 +7,7 @@
 #include "Resource.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "ResourceScript.h"
 #include "libs/SDL/include/SDL_assert.h"
 
 #include "ImporterScene.h"
@@ -221,8 +222,9 @@ Resource * ModuleResources::CreateNewResource(Resource::Type type, uint32 force_
 
 	switch (type) 
 	{ 
-		case Resource::MESH:      ret = (Resource*) new ResourceMesh(uid);      break; 
+		case Resource::MESH:       ret = (Resource*) new ResourceMesh(uid);      break; 
 		case Resource::TEXTURE: ret = (Resource*) new ResourceTexture(uid);  break;
+		case Resource::SCRIPT:    ret = (Resource*) new ResourceScript(uid);     break;
 	}
 	
 	if (ret != nullptr) 

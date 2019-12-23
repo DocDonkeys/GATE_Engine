@@ -15,7 +15,8 @@ public:
 		MESH = 0,
 		TEXTURE,
 		SCENE,
-		MODEL
+		MODEL,
+		SCRIPT,
 	};
 
 	Resource(uint32 uid, Resource::Type type); 

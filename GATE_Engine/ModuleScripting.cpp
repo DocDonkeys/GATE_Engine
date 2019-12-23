@@ -1,6 +1,7 @@
 #include "ModuleScripting.h"
 #include "Application.h"
 #include "ModuleFileSystem.h"
+#include "ModuleSceneIntro.h"
 
 extern "C"
 {
@@ -57,55 +58,57 @@ bool ModuleScripting::CleanUp()
 update_status ModuleScripting::Update(float dt)
 {
 	//Building a class / Namespace so Lua can have this object to Call EngineLOG by calling 
-
-	luabridge::getGlobalNamespace(L)
-		.beginNamespace("Debug")
+	if (App->scene_intro->playing == true)
+	{
+		luabridge::getGlobalNamespace(L)
+			.beginNamespace("Debug")
 			.beginClass <Scripting>("Scripting")
-				.addConstructor<void (*) (void)> ()
-				.addFunction("LOG", &Scripting::LogFromLua)
-			.endClass ()
-		.endNamespace();
+			.addConstructor<void(*) (void)>()
+			.addFunction("LOG", &Scripting::LogFromLua)
+			.endClass()
+			.endNamespace();
 
-	Scripting Scripting;
-	
-	std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_test.lua";
-	bool compiled = luaL_dofile(L, script_path.c_str());
+		Scripting Scripting;
 
-	if (compiled == LUA_OK)
-	{
-		if (start == true)
+		std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_test.lua";
+		bool compiled = luaL_dofile(L, script_path.c_str());
+
+		if (compiled == LUA_OK)
 		{
-			luabridge::LuaRef ScriptStart = luabridge::getGlobal(L, "Start");
-			if (!ScriptStart.isNil())
-				ScriptStart();
-			else
-				LOG("Could not execute Start!");
-		}
-		start = false;
-		//Get the Update function from LUA file
-		luabridge::LuaRef ScriptUpdate = luabridge::getGlobal(L,"Update");
-		//Execute Update
-		if(!ScriptUpdate.isNil())
-			for (int i = 0; i < 35; ++i)
+			if (start == true)
 			{
-				ScriptUpdate();
-
-				luabridge::LuaRef number = luabridge::getGlobal(L, "Update_test");
-
-				int num = 0;
-				if (!number.isNil())
-					num = number.cast<int>();
-
-				LOG("Lua script Update was called. Update_test = %d", num);
+				luabridge::LuaRef ScriptStart = luabridge::getGlobal(L, "Start");
+				if (!ScriptStart.isNil())
+					ScriptStart();
+				else
+					LOG("Could not execute Start!");
 			}
-		
+			start = false;
+			//Get the Update function from LUA file
+			luabridge::LuaRef ScriptUpdate = luabridge::getGlobal(L, "Update");
+			//Execute Update
+			if (!ScriptUpdate.isNil())
+				for (int i = 0; i < 35; ++i)
+				{
+					ScriptUpdate();
 
-		
-	}
-	else
-	{
-		std::string error = lua_tostring(L, -1);
-		LOG("%s", error.data());
+					luabridge::LuaRef number = luabridge::getGlobal(L, "Update_test");
+
+					int num = 0;
+					if (!number.isNil())
+						num = number.cast<int>();
+
+					LOG("Lua script Update was called. Update_test = %d", num);
+				}
+
+
+
+		}
+		else
+		{
+			std::string error = lua_tostring(L, -1);
+			LOG("%s", error.data());
+		}
 	}
 
 	return UPDATE_CONTINUE;

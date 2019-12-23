@@ -99,6 +99,7 @@
     <ClInclude Include="ModuleScripting.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceScript.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ComponentTransform.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceScript.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="RNGenerator.cpp" />
     <ClCompile Include="Texture.cpp" />
