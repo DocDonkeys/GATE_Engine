@@ -1,4 +1,5 @@
 #include "EditorInspector.h"
+#include "EditorProject.h"
 #include "ModuleEditor.h"
 #include "EditorHierarchy.h"
 
@@ -13,6 +14,7 @@
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
 #include "ResourceTexture.h"
+#include "ModuleResources.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
 
@@ -138,6 +140,24 @@ void EditorInspector::Update()
 		if (camera != nullptr)
 		{
 			DrawComponentCamera(camera);
+		}
+	}
+
+	//the next frame of knowing that a file might have been dropped we chek if it was on our windo, sibce iswindowhovered doesn't work until the next frame after dragging ends
+	if (maybe_dropped_file == true && ImGui::IsWindowHovered())
+	{
+			int test = 0;
+			maybe_dropped_file = false;
+	}
+	else
+		maybe_dropped_file = false;
+
+	if (App->editor->editor_project->finished_dragndrop == true)
+	{
+		if (App->editor->editor_project->dragged_file > -1)
+		{
+			//Drop the file here
+			maybe_dropped_file = true;
 		}
 	}
 }

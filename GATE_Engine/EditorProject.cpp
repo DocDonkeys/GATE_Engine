@@ -46,6 +46,17 @@ void EditorProject::Update()
 	ImGui::Separator();
 
 	DrawAssetsLayout(App->resources->selected_dir);
+
+	if (!ImGui::IsMouseDragging())
+		dragndroping = false;
+
+	if (was_dragndroping == true && dragndroping == false)
+	{
+		finished_dragndrop = true;
+		was_dragndroping = false;
+	}
+	else
+		finished_dragndrop = false;
 }
 
 void EditorProject::DrawAssetsLayout(AbstractDir* selected_dir)
@@ -84,10 +95,26 @@ void EditorProject::DrawAssetsLayout(AbstractDir* selected_dir)
 			App->RequestBrowser(file_path.data());
 		}
 
+		//By making the bool false here, if we don't dragndrop, this will be false. if after begindragdrop source we are still false, we are not dragndroping
+		//dragged_file = -1;
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+		{
+			dragndroping = true;
+			was_dragndroping = true;
+			ImGui::SetDragDropPayload("DUMMY_CELL", &i, sizeof(int));
+			ImGui::Text(" %s ", selected_dir->files[i].data());
+			dragged_file = i; // We store the num of the file to be stored
+			ImGui::EndDragDropSource();
+		}
+		
+
+
 		ImGui::TextWrapped(selected_dir->files[i].data());
 		ImGui::EndGroup();
 		ImGui::SameLine();
 	}
+
+	
 }
 
 void EditorProject::PrintAssetsHierarchy(AbstractDir* abs_dir, int& treenode_id)

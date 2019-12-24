@@ -16,6 +16,12 @@ public:
 
 	void PrintAssetsHierarchy(AbstractDir* abs_dir, int& treenode_id);
 
+public:
+	int dragged_file = -1;
+	bool finished_dragndrop = false;
+	bool was_dragndroping = false;
+	bool dragndroping = false;
+
 private:
 	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 	bool selected_dir_already = false;

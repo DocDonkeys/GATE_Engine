@@ -29,6 +29,8 @@ private:
 	bool show_static_modal = false;
 	bool startedEditing = false;
 	char objNameBuffer[256];
+	//Bool for when a file is dragndroped from the project folder
+	bool maybe_dropped_file = false;
 };
 
 #endif // !EditorInspector
