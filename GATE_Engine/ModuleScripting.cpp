@@ -110,6 +110,10 @@ update_status ModuleScripting::Update(float dt)
 			LOG("%s", error.data());
 		}
 	}
+	else
+	{
+		start = true;
+	}
 
 	return UPDATE_CONTINUE;
 }

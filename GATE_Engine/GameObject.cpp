@@ -8,6 +8,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
+#include "ComponentScript.h"
 
 #include "libs/SDL/include/SDL_opengl.h"
 
@@ -253,6 +254,9 @@ Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 		break;
 	case COMPONENT_TYPE::CAMERA:
 		c = new ComponentCamera();
+		break;
+	case COMPONENT_TYPE::SCRIPT:
+		c = new ComponentScript();
 		break;
 	default:
 		break;

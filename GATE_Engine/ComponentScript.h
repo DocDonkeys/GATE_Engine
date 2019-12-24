@@ -2,7 +2,7 @@
 #define __COMPONENTSCRIPT_H__
 
 #include "Component.h"
-
+class ResourceScript;
 class ComponentScript : public Component
 {
 public:
@@ -15,6 +15,10 @@ public:
 
 	void Save(json &file);
 	void Load(json &file);
+
+public:
+	ResourceScript* script = nullptr;
+	std::string script_name;
 };
 
 
