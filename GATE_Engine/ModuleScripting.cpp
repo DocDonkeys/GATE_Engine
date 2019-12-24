@@ -70,7 +70,7 @@ update_status ModuleScripting::Update(float dt)
 
 		Scripting Scripting;
 
-		std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_test.lua";
+		std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_tabletest.lua";
 		bool compiled = luaL_dofile(L, script_path.c_str());
 
 		if (compiled == LUA_OK)

@@ -177,7 +177,12 @@
     <ClCompile Include="ModuleScripting.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceScript.cpp" />
+    <ClCompile Include="ResourceScript.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentScript.cpp">
+      <Filter>Sources\Component Structure\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -373,6 +378,9 @@
     </ClInclude>
     <ClInclude Include="ResourceScript.h">
       <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentScript.h">
+      <Filter>Sources\Component Structure\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

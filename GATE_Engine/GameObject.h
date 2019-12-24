@@ -16,7 +16,8 @@ enum class COMPONENT_TYPE
 	TRANSFORM = 0,
 	MESH,
 	MATERIAL,
-	CAMERA
+	CAMERA,
+	SCRIPT
 };
 
 class GameObject
