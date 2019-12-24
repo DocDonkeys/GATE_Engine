@@ -13,6 +13,8 @@ public:
 	void Enable() override;
 	void Disable() override;
 
+	void AssignScript(std::string path);
+
 	void Save(json &file);
 	void Load(json &file);
 

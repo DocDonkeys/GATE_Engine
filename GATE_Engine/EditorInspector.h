@@ -8,6 +8,7 @@ class ComponentTransform;
 class ComponentMesh;
 class ComponentMaterial;
 class ComponentCamera;
+class ComponentScript;
 
 class EditorInspector : public EditorWindow
 {
@@ -24,6 +25,10 @@ public: //Methods
 	void DrawComponentMesh(ComponentMesh* c);
 	void DrawComponentMaterial(ComponentMaterial* c);
 	void DrawComponentCamera(ComponentCamera* c);
+	void DrawComponentScript(ComponentScript* c);
+
+
+	void ManageDroppedFile(int file_id);
 
 private:
 	bool show_static_modal = false;

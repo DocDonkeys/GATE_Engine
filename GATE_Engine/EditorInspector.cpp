@@ -13,8 +13,10 @@
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
+#include "ComponentScript.h"
 #include "ResourceTexture.h"
 #include "ModuleResources.h"
+#include "ModuleFileSystem.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
 
@@ -141,13 +143,31 @@ void EditorInspector::Update()
 		{
 			DrawComponentCamera(camera);
 		}
+
+		ComponentScript* script = (ComponentScript*)go->GetComponent(COMPONENT_TYPE::SCRIPT);
+		if (script != nullptr)
+		{
+			DrawComponentScript(script);
+		}
 	}
 
+	//FIles dropped on the Inspector
 	//the next frame of knowing that a file might have been dropped we chek if it was on our windo, sibce iswindowhovered doesn't work until the next frame after dragging ends
 	if (maybe_dropped_file == true && ImGui::IsWindowHovered())
 	{
-			int test = 0;
 			maybe_dropped_file = false;
+
+			//Only manage file if its a script----------------
+			std::string extension;
+			std::string lua = "lua";
+			App->file_system->SplitFilePath(App->resources->selected_dir->files[App->editor->editor_project->dragged_file].data(),
+				nullptr,nullptr,&extension);
+
+			if(!extension.compare(lua))
+			ManageDroppedFile(App->editor->editor_project->dragged_file);
+			//---------------------------------------------------
+
+			App->editor->editor_project->dragged_file = -1;
 	}
 	else
 		maybe_dropped_file = false;
@@ -156,7 +176,6 @@ void EditorInspector::Update()
 	{
 		if (App->editor->editor_project->dragged_file > -1)
 		{
-			//Drop the file here
 			maybe_dropped_file = true;
 		}
 	}
@@ -423,4 +442,28 @@ void EditorInspector::DrawComponentCamera(ComponentCamera* camera)
 		ImGui::TreePop();
 	}
 	ImGui::Separator();
+}
+
+void EditorInspector::DrawComponentScript(ComponentScript * script)
+{
+	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+	std::string name = script->script_name + "(Script)";
+	if (ImGui::TreeNodeEx(name.data(), base_flags))
+	{
+		ImGui::Checkbox("Active", &script->active); ImGui::SameLine();
+		
+
+		ImGui::TreePop();
+	}
+	ImGui::Separator();
+}
+
+void EditorInspector::ManageDroppedFile(int file_id)
+{
+	std::string file = App->resources->selected_dir->files[file_id];
+	std::string file_path = App->file_system->GetPathToGameFolder(true) + ASSETS_SCRIPTS + file;
+
+	ComponentScript* script_component = (ComponentScript*)App->scene_intro->selected_go->CreateComponent(COMPONENT_TYPE::SCRIPT);
+	script_component->AssignScript(file_path);
 }

@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
+#include "ComponentScript.h"
 
 #include <vector>
 
@@ -53,6 +54,7 @@ bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 		ComponentMesh* mesh = nullptr;
 		ComponentMaterial* mat = nullptr;
 		ComponentCamera* cam = nullptr;
+		ComponentScript* script = nullptr;
 
 		float local_mat[16] = {0};
 		float global_mat[16] = {0};
@@ -108,6 +110,11 @@ bool ImporterScene::LoadScene(const char * full_path, FileType file_type)
 			case COMPONENT_TYPE::CAMERA:
 				cam = (ComponentCamera*)go->CreateComponent(COMPONENT_TYPE::CAMERA);
 				cam->Load(loaded_file[go_name]["Components"][std::to_string((int)comp_type)]);
+				break;
+
+			case COMPONENT_TYPE::SCRIPT:
+				script = (ComponentScript*)go->CreateComponent(COMPONENT_TYPE::SCRIPT);
+				script->Load(loaded_file[go_name]["Components"][std::to_string((int)comp_type)]);
 				break;
 			default:
 				break;
@@ -223,6 +230,7 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 		ComponentMesh* mesh_comp = nullptr;
 		ComponentMaterial* mat_comp = nullptr;
 		ComponentCamera*cam_comp = nullptr;
+		ComponentScript* script_comp = nullptr;
 
 		float local_mat[16] = {0};
 		float global_mat[16] = {0};
@@ -273,6 +281,11 @@ std::string ImporterScene::SaveScene(const GameObject * root_go, std::string & s
 			case COMPONENT_TYPE::CAMERA:
 				cam_comp = (ComponentCamera*)component;
 				cam_comp->Save(file[go_name]["Components"][std::to_string((int)component->type)]);
+				break;
+
+			case COMPONENT_TYPE::SCRIPT:
+				script_comp = (ComponentScript*)component;
+				script_comp->Save(file[go_name]["Components"][std::to_string((int)component->type)]);
 				break;
 
 				//Future components like scripts and audio should go here
