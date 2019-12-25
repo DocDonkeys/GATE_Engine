@@ -20,7 +20,6 @@ public:
 	ScriptFile* AddScriptFile(ComponentScript* script_component, std::string full_file_path);
 
 public:
-
 	bool Init();
 	bool Start();
 	bool CleanUp();
@@ -43,9 +42,44 @@ public:
 	~Scripting();
 
 public:
-
+	// ENGINE TRANSLATOR
+	// General
 	void LogFromLua(const char* string);
 	void TestFunc();
+
+	//void GetRealTime(luabridge::LuaRef* target);
+	//void GetGameTime(luabridge::LuaRef* target);
+
+	//// Input
+	//void GetKey();
+	//void GetMouseRaycastX(luabridge::LuaRef* target);
+	//void GetMouseRaycastY(luabridge::LuaRef* target);
+	//void GetMouseRaycastZ(luabridge::LuaRef* target);
+
+	//// OBJECT TRANSLATOR
+	//void CreateObj();
+	//void DestroyObj();
+
+	//// Position
+	//void GetObjPosX(luabridge::LuaRef* target);
+	//void GetObjPosY(luabridge::LuaRef* target);
+	//void GetObjPosZ(luabridge::LuaRef* target);
+	//void GetObjPos(luabridge::LuaRef* target);
+
+	//void MoveObj();
+	//void SetObjPos();
+
+	//// Rotation
+	//void GetObjRotX(luabridge::LuaRef* target);	// Roll
+	//void GetObjRotY(luabridge::LuaRef* target);	// Pitch
+	//void GetObjRotZ(luabridge::LuaRef* target);	// Yaw
+	//void GetObjRot(luabridge::LuaRef* target);
+
+	//void RotateObj();
+	//void SetObjRot();
+
+	//// Others
+	//void LookAt(luabridge::LuaRef* target);
 };
 
 

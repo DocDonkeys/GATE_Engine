@@ -481,9 +481,25 @@ const char* Application::GetAuthors() const
 	return authors.c_str();
 }
 
-float Application::GetDT() const
+// Time
+float Application::GetRealDT() const
 {
 	return app_framerate.dt;
+}
+
+float Application::GetGameDT() const
+{
+	return game_framerate.dt;
+}
+
+uint Application::GetRealTime() const
+{
+	return app_framerate.time_since_start.Read();
+}
+
+uint Application::GetGameTime() const
+{
+	return game_framerate.time_since_start.Read();
 }
 
 // Save / Load Requests

@@ -221,3 +221,13 @@ void Scripting::TestFunc()
 {
 	LOG("This is a test function that Logs something (TestFunc)");
 }
+
+//void Scripting::GetRealTime(luabridge::LuaRef* target)
+//{
+//	(*target)["real_time"] = App->GetRealTime();
+//}
+//
+//void Scripting::GetGameTime(luabridge::LuaRef* target)
+//{
+//	(*target)["game_time"] = App->GetGameTime();
+//}
