@@ -18,9 +18,9 @@ uint32 Resource::GetUID() const
 	return UID;
 }
 
-const char * Resource::GetFile() const
+const char * Resource::GetFilePath() const
 {
-	return nullptr;
+	return file_path.data();
 }
 
 const char * Resource::GetImportedFile() const

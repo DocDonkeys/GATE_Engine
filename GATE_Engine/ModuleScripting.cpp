@@ -2,6 +2,10 @@
 #include "Application.h"
 #include "ModuleFileSystem.h"
 #include "ModuleSceneIntro.h"
+#include "Resource.h"
+#include "ComponentScript.h"
+#include <iterator>
+
 
 extern "C"
 {
@@ -11,8 +15,9 @@ extern "C"
 }
 //This include MUST go after Lua includes
 #include "libs/LuaBridge-241/include/LuaBridge.h"
+#include "ScriptData.h"
 
-
+//LUA lib
 #pragma comment(lib, "libs/lua-535/liblua53.a")
 
 ModuleScripting::ModuleScripting(Application * app, const char * name, bool start_enabled) : Module(app, name, start_enabled)
@@ -21,6 +26,39 @@ ModuleScripting::ModuleScripting(Application * app, const char * name, bool star
 
 ModuleScripting::~ModuleScripting()
 {
+}
+
+void ModuleScripting::SendScriptToModule(ComponentScript * script_component, std::string full_file_path)
+{
+	//ScriptFile* s_file = AddScriptFile(script_component, full_file_path);
+
+	ScriptInstance* s_instance = new ScriptInstance;
+	s_instance->my_component = script_component;
+	s_instance->my_resource = script_component->script;
+
+	class_instances.push_back(s_instance);
+}
+
+ScriptFile* ModuleScripting::AddScriptFile(ComponentScript* script_component, std::string full_file_path)
+{
+	ScriptFile* ret = nullptr;
+	std::string filename;
+	App->file_system->SplitFilePath(full_file_path.data(),nullptr,&filename,nullptr);
+	for (std::vector<ScriptFile*>::iterator it = script_files.begin(); it != script_files.end(); ++it)
+	{
+		//If this file is already in our list of files
+		Resource* res = (Resource*)script_component->script;
+		if ((*it)->resource_uid == res->GetUID())
+		{
+			return (*it);
+		}
+	}
+
+	ScriptFile* new_file = new ScriptFile;
+	script_files.push_back(new_file);
+	ret = new_file;
+		
+	return ret;
 }
 
 bool ModuleScripting::Init()

@@ -382,6 +382,9 @@
     <ClInclude Include="ComponentScript.h">
       <Filter>Sources\Component Structure\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ScriptData.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemLeaks.h" />

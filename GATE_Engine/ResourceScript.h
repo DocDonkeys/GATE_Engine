@@ -15,6 +15,7 @@ public:
 	bool LoadInMemory() override;
 public:
 	std::string script_file;
+	std::string script_name;
 
 };
 #endif // !__RESOURCESCRIPT_H__

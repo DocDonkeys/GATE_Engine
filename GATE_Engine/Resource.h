@@ -25,7 +25,7 @@ public:
 public:
 	Resource::Type GetType() const; 
 	uint32 GetUID() const; 
-	const char* GetFile() const; 
+	const char* GetFilePath() const; 
 	const char* GetImportedFile() const; 
 	const char* GetName() const;
 	bool IsLoadedToMemory() const; 
@@ -42,7 +42,7 @@ public:
 protected: 
 	uint32 UID = 0; 
 	std::string name;
-	std::string file; 
+	std::string file_path; 
 	std::string imported_file;
 	Type type = UNKNOWN;
 	uint loaded = 0;

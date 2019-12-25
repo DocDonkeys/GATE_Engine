@@ -348,7 +348,7 @@ void EditorInspector::DrawComponentMaterial(ComponentMaterial * material)
 		ImGui::Text("File:"); ImGui::SameLine();
 		if (material->active_texture != nullptr) {
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), material->active_texture->GetName());
-			HoverTip(material->active_texture->GetFile(), true);
+			//HoverTip(material->active_texture->GetFilePath(), true);
 		}
 		else
 			ImGui::TextColored(ImVec4(255.0f, 255.0f, 0.0f, 255.00f), "None");

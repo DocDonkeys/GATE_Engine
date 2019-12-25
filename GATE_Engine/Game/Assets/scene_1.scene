@@ -38,14 +38,15 @@
             },
             "4": {
                 "Active": true,
-                "Resource_UID": 3750096586,
+                "Resource_UID": 657102128,
+                "Script_Path": "c:/users/didac/documents/github/gate/gate_engine/game/Assets/Scripts/lua_tabletest.lua",
                 "Script_name": "lua_tabletest.lua",
-                "UID": 2196455653
+                "UID": 1480146088
             }
         },
-        "Parent UID": "1167468180",
+        "Parent UID": "3524744969",
         "Static": "0",
-        "UID": "3156315265"
+        "UID": "661165850"
     },
     "Camera001": {
         "Active": "1",
@@ -85,9 +86,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "2578094224",
+        "Parent UID": "1188473854",
         "Static": "0",
-        "UID": "1860988403"
+        "UID": "3388622907"
     },
     "Camera001.Target": {
         "Active": "1",
@@ -127,9 +128,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "2967221229",
+        "Parent UID": "1025105227",
         "Static": "0",
-        "UID": "2761925829"
+        "UID": "843036862"
     },
     "Camera001.Target_$AssimpFbx$_PreRotation": {
         "Active": "1",
@@ -169,9 +170,9 @@
                 "Lnum9": -1.0
             }
         },
-        "Parent UID": "2398326525",
+        "Parent UID": "1797023057",
         "Static": "0",
-        "UID": "4230255255"
+        "UID": "62121039"
     },
     "Camera001.Target_$AssimpFbx$_Rotation": {
         "Active": "1",
@@ -211,9 +212,9 @@
                 "Lnum9": 0.9563047885894775
             }
         },
-        "Parent UID": "4230255255",
+        "Parent UID": "62121039",
         "Static": "0",
-        "UID": "2967221229"
+        "UID": "1025105227"
     },
     "Camera001.Target_$AssimpFbx$_Translation": {
         "Active": "1",
@@ -251,11 +252,18 @@
                 "Lnum7": 20.873329162597656,
                 "Lnum8": 0.0,
                 "Lnum9": 0.0
+            },
+            "4": {
+                "Active": true,
+                "Resource_UID": 2937318010,
+                "Script_Path": "c:/users/didac/documents/github/gate/gate_engine/game/Assets/Scripts/lua_tabletest.lua",
+                "Script_name": "lua_tabletest.lua",
+                "UID": 3998495612
             }
         },
-        "Parent UID": "3156315265",
+        "Parent UID": "661165850",
         "Static": "0",
-        "UID": "2398326525"
+        "UID": "1797023057"
     },
     "Camera001_$AssimpFbx$_PreRotation": {
         "Active": "1",
@@ -295,9 +303,9 @@
                 "Lnum9": -1.0
             }
         },
-        "Parent UID": "1826444961",
+        "Parent UID": "3850661732",
         "Static": "0",
-        "UID": "3515734191"
+        "UID": "3279124589"
     },
     "Camera001_$AssimpFbx$_Rotation": {
         "Active": "1",
@@ -337,9 +345,9 @@
                 "Lnum9": 0.9563047885894775
             }
         },
-        "Parent UID": "3515734191",
+        "Parent UID": "3279124589",
         "Static": "0",
-        "UID": "2578094224"
+        "UID": "1188473854"
     },
     "Camera001_$AssimpFbx$_Translation": {
         "Active": "1",
@@ -379,9 +387,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "3156315265",
+        "Parent UID": "661165850",
         "Static": "0",
-        "UID": "1826444961"
+        "UID": "3850661732"
     },
     "City_building_001": {
         "Active": "1",
@@ -421,19 +429,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m3835095269.mesh"
+                "Path": "/library/meshes/_m2529785582.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t3587496134.dds",
-                "UID": 2366453689
+                "Path": "Game/Library/Textures/_t4067285556.dds",
+                "UID": 632218886
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2127431458"
+        "UID": "1781060085"
     },
     "City_building_004": {
         "Active": "1",
@@ -473,19 +481,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m3394769063.mesh"
+                "Path": "/library/meshes/_m3125652097.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2606184400.dds",
-                "UID": 424546287
+                "Path": "Game/Library/Textures/_t319579576.dds",
+                "UID": 1687207523
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "261555876"
+        "UID": "2968775706"
     },
     "City_building_007": {
         "Active": "1",
@@ -525,19 +533,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m2398760177.mesh"
+                "Path": "/library/meshes/_m240509291.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1618224271.dds",
-                "UID": 2308603246
+                "Path": "Game/Library/Textures/_t1225844927.dds",
+                "UID": 3906036921
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "3595263853"
+        "UID": "1309969104"
     },
     "City_building_008": {
         "Active": "1",
@@ -577,19 +585,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m3961028474.mesh"
+                "Path": "/library/meshes/_m3374904605.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t3653005406.dds",
-                "UID": 4278613835
+                "Path": "Game/Library/Textures/_t3417137153.dds",
+                "UID": 3210018790
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "1176717985"
+        "UID": "1246638029"
     },
     "City_building_010": {
         "Active": "1",
@@ -629,19 +637,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m508567110.mesh"
+                "Path": "/library/meshes/_m2064780797.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t721030775.dds",
-                "UID": 2204348545
+                "Path": "Game/Library/Textures/_t4172060768.dds",
+                "UID": 1883136701
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "133183639"
+        "UID": "2121738388"
     },
     "City_building_011": {
         "Active": "1",
@@ -681,19 +689,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m2398760177.mesh"
+                "Path": "/library/meshes/_m240509291.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1618224271.dds",
-                "UID": 2393877493
+                "Path": "Game/Library/Textures/_t1225844927.dds",
+                "UID": 3505534450
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "1253612541"
+        "UID": "3973889195"
     },
     "City_building_013": {
         "Active": "1",
@@ -733,19 +741,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m394826982.mesh"
+                "Path": "/library/meshes/_m3941763252.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2019593430.dds",
-                "UID": 3103689802
+                "Path": "Game/Library/Textures/_t2636546696.dds",
+                "UID": 4031039648
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "88405400"
+        "UID": "3629975937"
     },
     "City_building_014": {
         "Active": "1",
@@ -785,19 +793,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m1833350763.mesh"
+                "Path": "/library/meshes/_m4006268190.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2606184400.dds",
-                "UID": 869835813
+                "Path": "Game/Library/Textures/_t319579576.dds",
+                "UID": 2673955119
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "427678456"
+        "UID": "3566961197"
     },
     "City_building_016": {
         "Active": "1",
@@ -837,19 +845,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m508567110.mesh"
+                "Path": "/library/meshes/_m2064780797.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t721030775.dds",
-                "UID": 51053802
+                "Path": "Game/Library/Textures/_t4172060768.dds",
+                "UID": 1871712553
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2569541276"
+        "UID": "1039299902"
     },
     "City_building_017": {
         "Active": "1",
@@ -889,19 +897,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m508567110.mesh"
+                "Path": "/library/meshes/_m2064780797.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t721030775.dds",
-                "UID": 3068798443
+                "Path": "Game/Library/Textures/_t4172060768.dds",
+                "UID": 952610561
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "4127150541"
+        "UID": "65422225"
     },
     "City_building_022": {
         "Active": "1",
@@ -941,19 +949,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m3277981946.mesh"
+                "Path": "/library/meshes/_m1493740212.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2716545511.dds",
-                "UID": 2012306594
+                "Path": "Game/Library/Textures/_t1066314023.dds",
+                "UID": 3505974070
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2318775921"
+        "UID": "1338095453"
     },
     "City_building_023": {
         "Active": "1",
@@ -993,19 +1001,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m2398760177.mesh"
+                "Path": "/library/meshes/_m240509291.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1618224271.dds",
-                "UID": 1261551491
+                "Path": "Game/Library/Textures/_t1225844927.dds",
+                "UID": 2946710553
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2822808306"
+        "UID": "4263721418"
     },
     "City_building_024": {
         "Active": "1",
@@ -1045,19 +1053,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m3961028474.mesh"
+                "Path": "/library/meshes/_m3374904605.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t3653005406.dds",
-                "UID": 2558838602
+                "Path": "Game/Library/Textures/_t3417137153.dds",
+                "UID": 12102220
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2201718023"
+        "UID": "3230871986"
     },
     "City_building_026": {
         "Active": "1",
@@ -1097,19 +1105,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m1941189632.mesh"
+                "Path": "/library/meshes/_m3592142970.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2716545511.dds",
-                "UID": 1056149783
+                "Path": "Game/Library/Textures/_t1066314023.dds",
+                "UID": 4238376736
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "76788777"
+        "UID": "1979835475"
     },
     "City_building_028": {
         "Active": "1",
@@ -1149,19 +1157,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m4183663133.mesh"
+                "Path": "/library/meshes/_m3736923660.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1483061202.dds",
-                "UID": 377717436
+                "Path": "Game/Library/Textures/_t3297425530.dds",
+                "UID": 1499170410
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "643280458"
+        "UID": "1533698679"
     },
     "City_building_030": {
         "Active": "1",
@@ -1201,19 +1209,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m4183663133.mesh"
+                "Path": "/library/meshes/_m3736923660.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1483061202.dds",
-                "UID": 1213436974
+                "Path": "Game/Library/Textures/_t3297425530.dds",
+                "UID": 1979445965
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2268975891"
+        "UID": "4257226306"
     },
     "City_building_031": {
         "Active": "1",
@@ -1253,19 +1261,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m4183663133.mesh"
+                "Path": "/library/meshes/_m3736923660.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1483061202.dds",
-                "UID": 1649497392
+                "Path": "Game/Library/Textures/_t3297425530.dds",
+                "UID": 803736222
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2356066482"
+        "UID": "3989245747"
     },
     "City_building_032": {
         "Active": "1",
@@ -1305,19 +1313,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m3394769063.mesh"
+                "Path": "/library/meshes/_m3125652097.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2606184400.dds",
-                "UID": 2219447909
+                "Path": "Game/Library/Textures/_t319579576.dds",
+                "UID": 2334576090
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "3580677194"
+        "UID": "1145480398"
     },
     "City_building_033": {
         "Active": "1",
@@ -1357,19 +1365,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m1198006889.mesh"
+                "Path": "/library/meshes/_m235626997.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2019593430.dds",
-                "UID": 3131513770
+                "Path": "Game/Library/Textures/_t2636546696.dds",
+                "UID": 2719052998
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "932502969"
+        "UID": "2895515403"
     },
     "City_building_034": {
         "Active": "1",
@@ -1409,19 +1417,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m3231956918.mesh"
+                "Path": "/library/meshes/_m464551928.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2716545511.dds",
-                "UID": 1299928501
+                "Path": "Game/Library/Textures/_t1066314023.dds",
+                "UID": 123778447
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "4237986659"
+        "UID": "3741061307"
     },
     "City_building_035": {
         "Active": "1",
@@ -1461,19 +1469,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m4183663133.mesh"
+                "Path": "/library/meshes/_m3736923660.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1483061202.dds",
-                "UID": 1960526144
+                "Path": "Game/Library/Textures/_t3297425530.dds",
+                "UID": 3058659541
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2936719183"
+        "UID": "680807264"
     },
     "City_building_036": {
         "Active": "1",
@@ -1513,19 +1521,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m394826982.mesh"
+                "Path": "/library/meshes/_m3941763252.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2019593430.dds",
-                "UID": 769170257
+                "Path": "Game/Library/Textures/_t2636546696.dds",
+                "UID": 4149318512
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2976118327"
+        "UID": "357897473"
     },
     "City_building_037": {
         "Active": "1",
@@ -1565,19 +1573,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m2668131174.mesh"
+                "Path": "/library/meshes/_m1679923792.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2716545511.dds",
-                "UID": 717231574
+                "Path": "Game/Library/Textures/_t1066314023.dds",
+                "UID": 3193375662
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "3087085776"
+        "UID": "3671039116"
     },
     "City_building_038": {
         "Active": "1",
@@ -1617,19 +1625,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m1450879405.mesh"
+                "Path": "/library/meshes/_m1692960682.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t2716545511.dds",
-                "UID": 1592393761
+                "Path": "Game/Library/Textures/_t1066314023.dds",
+                "UID": 3826173930
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "3537487163"
+        "UID": "3891036034"
     },
     "City_building_039": {
         "Active": "1",
@@ -1669,19 +1677,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m4183663133.mesh"
+                "Path": "/library/meshes/_m3736923660.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1483061202.dds",
-                "UID": 3449982327
+                "Path": "Game/Library/Textures/_t3297425530.dds",
+                "UID": 1008559749
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2644840662"
+        "UID": "2373000152"
     },
     "City_building_040": {
         "Active": "1",
@@ -1721,19 +1729,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m4183663133.mesh"
+                "Path": "/library/meshes/_m3736923660.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t1483061202.dds",
-                "UID": 3007749966
+                "Path": "Game/Library/Textures/_t3297425530.dds",
+                "UID": 2959780018
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "3357019869"
+        "UID": "1549148567"
     },
     "City_building_041": {
         "Active": "1",
@@ -1773,19 +1781,19 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m3835095269.mesh"
+                "Path": "/library/meshes/_m2529785582.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
-                "Path": "Game/Library/Textures/_t3587496134.dds",
-                "UID": 1206956497
+                "Path": "Game/Library/Textures/_t4067285556.dds",
+                "UID": 4045366017
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "2107027175"
+        "UID": "1325003203"
     },
     "Dummy001": {
         "Active": "1",
@@ -1825,9 +1833,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "1166609592",
+        "Parent UID": "3848423621",
         "Static": "0",
-        "UID": "594117316"
+        "UID": "1595383141"
     },
     "Dummy001_$AssimpFbx$_PreRotation": {
         "Active": "1",
@@ -1867,9 +1875,9 @@
                 "Lnum9": -1.0
             }
         },
-        "Parent UID": "3156315265",
+        "Parent UID": "661165850",
         "Static": "0",
-        "UID": "1053071369"
+        "UID": "33924485"
     },
     "Dummy001_$AssimpFbx$_Rotation": {
         "Active": "1",
@@ -1909,9 +1917,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "1053071369",
+        "Parent UID": "33924485",
         "Static": "0",
-        "UID": "1166609592"
+        "UID": "3848423621"
     },
     "GameObject_0": {
         "Active": "1",
@@ -1953,7 +1961,7 @@
         },
         "Parent UID": "0",
         "Static": "0",
-        "UID": "1167468180"
+        "UID": "3524744969"
     },
     "Line002": {
         "Active": "1",
@@ -1993,18 +2001,18 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m918102138.mesh"
+                "Path": "/library/meshes/_m4004786869.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "0",
-                "UID": 3997011438
+                "UID": 4001489151
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "1650254857"
+        "UID": "4043212583"
     },
     "Object010": {
         "Active": "1",
@@ -2044,18 +2052,18 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m1459209784.mesh"
+                "Path": "/library/meshes/_m552415059.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "0",
-                "UID": 3790624346
+                "UID": 2494089292
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "1599351575"
+        "UID": "1350348265"
     },
     "Plane001": {
         "Active": "1",
@@ -2095,18 +2103,18 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m2811709814.mesh"
+                "Path": "/library/meshes/_m1613203317.mesh"
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "0",
-                "UID": 2201689807
+                "UID": 3872741344
             }
         },
-        "Parent UID": "594117316",
+        "Parent UID": "1595383141",
         "Static": "0",
-        "UID": "292294700"
+        "UID": "261835869"
     },
     "Sky001": {
         "Active": "1",
@@ -2146,9 +2154,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "520977326",
+        "Parent UID": "2956341839",
         "Static": "0",
-        "UID": "2157912222"
+        "UID": "1917411297"
     },
     "Sky001_$AssimpFbx$_PostRotation": {
         "Active": "1",
@@ -2188,9 +2196,9 @@
                 "Lnum9": -1.0
             }
         },
-        "Parent UID": "79691991",
+        "Parent UID": "1033793468",
         "Static": "0",
-        "UID": "520977326"
+        "UID": "2956341839"
     },
     "Sky001_$AssimpFbx$_PreRotation": {
         "Active": "1",
@@ -2230,9 +2238,9 @@
                 "Lnum9": -1.0
             }
         },
-        "Parent UID": "3634900651",
+        "Parent UID": "3534787775",
         "Static": "0",
-        "UID": "79691991"
+        "UID": "1033793468"
     },
     "Sky001_$AssimpFbx$_Translation": {
         "Active": "1",
@@ -2272,9 +2280,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "3156315265",
+        "Parent UID": "661165850",
         "Static": "0",
-        "UID": "3634900651"
+        "UID": "3534787775"
     },
     "Spot001": {
         "Active": "1",
@@ -2314,9 +2322,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "1157498059",
+        "Parent UID": "1795780203",
         "Static": "0",
-        "UID": "788427035"
+        "UID": "339486422"
     },
     "Spot001.Target": {
         "Active": "1",
@@ -2356,9 +2364,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "51284206",
+        "Parent UID": "825002935",
         "Static": "0",
-        "UID": "2339901913"
+        "UID": "1868874951"
     },
     "Spot001.Target_$AssimpFbx$_PreRotation": {
         "Active": "1",
@@ -2398,9 +2406,9 @@
                 "Lnum9": -1.0
             }
         },
-        "Parent UID": "3101750357",
+        "Parent UID": "95318110",
         "Static": "0",
-        "UID": "1935257731"
+        "UID": "338375470"
     },
     "Spot001.Target_$AssimpFbx$_Rotation": {
         "Active": "1",
@@ -2440,9 +2448,9 @@
                 "Lnum9": 1.0
             }
         },
-        "Parent UID": "1935257731",
+        "Parent UID": "338375470",
         "Static": "0",
-        "UID": "51284206"
+        "UID": "825002935"
     },
     "Spot001.Target_$AssimpFbx$_Translation": {
         "Active": "1",
@@ -2482,9 +2490,9 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "3156315265",
+        "Parent UID": "661165850",
         "Static": "0",
-        "UID": "3101750357"
+        "UID": "95318110"
     },
     "Spot001_$AssimpFbx$_PostRotation": {
         "Active": "1",
@@ -2524,9 +2532,9 @@
                 "Lnum9": -1.0
             }
         },
-        "Parent UID": "1264376515",
+        "Parent UID": "3296820319",
         "Static": "0",
-        "UID": "1157498059"
+        "UID": "1795780203"
     },
     "Spot001_$AssimpFbx$_PreRotation": {
         "Active": "1",
@@ -2566,9 +2574,9 @@
                 "Lnum9": -1.0
             }
         },
-        "Parent UID": "1507442836",
+        "Parent UID": "3560137349",
         "Static": "0",
-        "UID": "1174272605"
+        "UID": "1872351611"
     },
     "Spot001_$AssimpFbx$_Rotation": {
         "Active": "1",
@@ -2608,9 +2616,9 @@
                 "Lnum9": 0.4262743890285492
             }
         },
-        "Parent UID": "1174272605",
+        "Parent UID": "1872351611",
         "Static": "0",
-        "UID": "1264376515"
+        "UID": "3296820319"
     },
     "Spot001_$AssimpFbx$_Translation": {
         "Active": "1",
@@ -2650,8 +2658,8 @@
                 "Lnum9": 0.0
             }
         },
-        "Parent UID": "3156315265",
+        "Parent UID": "661165850",
         "Static": "0",
-        "UID": "1507442836"
+        "UID": "3560137349"
     }
 }
