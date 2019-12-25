@@ -31,6 +31,7 @@ public: //Methods
 	void ManageDroppedFile(int file_id);
 
 private:
+	bool show_active_modal = false;
 	bool show_static_modal = false;
 	bool startedEditing = false;
 	char objNameBuffer[256];

@@ -31,7 +31,30 @@ void EditorInspector::Update()
 	if (go != nullptr)
 	{
 		ImGui::AlignTextToFramePadding();
-		ImGui::Checkbox("Active", &go->active); ImGui::SameLine();
+		ImGui::SameLine();
+		if (ImGui::Checkbox("Active", &go->active)) {
+			if (go->children.size() > 0) {
+				show_active_modal = true;
+				ImGui::OpenPopup("Changing Active State");
+			}
+		} ImGui::SameLine();
+
+		if (ImGui::BeginPopupModal("Changing Active State", &show_active_modal, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::PushTextWrapPos(300.f);
+			ImGui::Text("Do you want to apply the active state switch to the object's children?");
+			ImGui::PopTextWrapPos();
+			ImGui::Spacing(); ImGui::SameLine(ImGui::GetWindowWidth() / 2.f - 90.f);
+			if (ImGui::Button("Yes", { 90.f, 30.f })) {
+				go->UpdateChildrenActive(go->active);
+				show_active_modal = false;
+			} ImGui::SameLine();
+			if (ImGui::Button("No", { 90.f, 30.f })) {
+				show_active_modal = false;
+			}
+
+			ImGui::EndPopup();
+		}
 
 		//if (!startedEditing)
 		strcpy(objNameBuffer, go->name.c_str());

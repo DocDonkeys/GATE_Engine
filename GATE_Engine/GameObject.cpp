@@ -222,6 +222,14 @@ void GameObject::UpdateBoundingBox()
 	}
 }
 
+void GameObject::UpdateChildrenActive(bool newVal)
+{
+	active = newVal;
+
+	for (int i = 0; i < children.size(); i++)
+		children[i]->UpdateChildrenActive(newVal);
+}
+
 void GameObject::UpdateStaticStatus(bool newVal, bool recursive)
 {
 	staticObj = newVal;
