@@ -13,7 +13,6 @@ public:
 	void Save(json& config) const override;
 	void Load(const json& config) override;
 	bool LoadInMemory() override;
-
 public:
 	std::string script_file;
 

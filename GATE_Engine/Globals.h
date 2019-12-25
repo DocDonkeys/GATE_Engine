@@ -89,6 +89,7 @@ enum update_status
 //Common Directories
 #define ASSETS_FOLDER "/Assets/"
 #define ASSETS_DEFAULT_MESHES "/Assets/Meshes/" //Default folder were we can import fbx files and its metas
+#define ASSETS_SCRIPTS "/Assets/Scripts/"
 #define ASSETS_DEFAULT_TEXTURES "/Assets/Textures/" //Default folder were we can import dds files and its metas
 #define LIBRARY_FOLDER "/Library/"
 #define LIBRARY_TEXTURES_FOLDER "/Library/Textures/"
