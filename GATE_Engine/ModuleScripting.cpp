@@ -59,6 +59,7 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 				luabridge::LuaRef table(ScriptGetTable());
 				//table["Update"];
 				//Assign the Table instance returned by the function to our script instance
+				//luabridge::LuaRef table = luabridge::getGlobal(L, "c_table");
 				script->my_table_class = table;
 
 				int testing = 0;
@@ -118,18 +119,6 @@ bool ModuleScripting::Init()
 
 bool ModuleScripting::Start()
 {
-	std::string test = "r = 10 + 14";
-
-	int r = luaL_dostring(L, test.c_str());
-
-	if (r == LUA_OK)
-	{
-		lua_getglobal(L,"r");
-		int a = lua_tointeger(L,-1);
-		LOG("Lua operation %s = %d", test.data(), a);
-	}
-
-	
 
 	return true;
 }
@@ -141,10 +130,36 @@ bool ModuleScripting::CleanUp()
 
 update_status ModuleScripting::Update(float dt)
 {
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Debug")
+		.beginClass <Scripting>("Scripting")
+		.addConstructor<void(*) (void)>()
+		.addFunction("LOG", &Scripting::LogFromLua)
+		.endClass()
+		.endNamespace();
+
+	Scripting Scripting;
 	//Building a class / Namespace so Lua can have this object to Call EngineLOG by calling 
 	if (App->scene_intro->playing == true)
 	{
-		luabridge::getGlobalNamespace(L)
+		for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
+		{
+			if ((*it)->my_component->active == true) //Check if the script instance is active or not
+			{
+				if (start == true)
+				{
+					//Call Start Method of LUA class
+					(*it)->my_table_class["Start"] ();
+				}
+				else
+				{
+					//Call Update Method of LUA class
+					(*it)->my_table_class["Update"] ();
+				}
+			}
+		}
+		start = false;
+		/*luabridge::getGlobalNamespace(L)
 			.beginNamespace("Debug")
 			.beginClass <Scripting>("Scripting")
 			.addConstructor<void(*) (void)>()
@@ -152,47 +167,47 @@ update_status ModuleScripting::Update(float dt)
 			.endClass()
 			.endNamespace();
 
-		Scripting Scripting;
+		Scripting Scripting;*/
 
-		std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_tabletest.lua";
-		bool compiled = luaL_dofile(L, script_path.c_str());
+		//std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_tabletest.lua";
+		//bool compiled = luaL_dofile(L, script_path.c_str());
 
-		if (compiled == LUA_OK)
-		{
-			if (start == true)
-			{
-				luabridge::LuaRef ScriptStart = luabridge::getGlobal(L, "Start");
-				if (!ScriptStart.isNil())
-					ScriptStart();
-				else
-					LOG("Could not execute Start!");
-			}
-			start = false;
-			//Get the Update function from LUA file
-			luabridge::LuaRef ScriptUpdate = luabridge::getGlobal(L, "Update");
-			//Execute Update
-			if (!ScriptUpdate.isNil())
-				for (int i = 0; i < 35; ++i)
-				{
-					ScriptUpdate();
+		//if (compiled == LUA_OK)
+		//{
+		//	if (start == true)
+		//	{
+		//		luabridge::LuaRef ScriptStart = luabridge::getGlobal(L, "Start");
+		//		if (!ScriptStart.isNil())
+		//			ScriptStart();
+		//		else
+		//			LOG("Could not execute Start!");
+		//	}
+		//	start = false;
+		//	//Get the Update function from LUA file
+		//	luabridge::LuaRef ScriptUpdate = luabridge::getGlobal(L, "Update");
+		//	//Execute Update
+		//	if (!ScriptUpdate.isNil())
+		//		for (int i = 0; i < 35; ++i)
+		//		{
+		//			ScriptUpdate();
 
-					luabridge::LuaRef number = luabridge::getGlobal(L, "Update_test");
+		//			luabridge::LuaRef number = luabridge::getGlobal(L, "Update_test");
 
-					int num = 0;
-					if (!number.isNil())
-						num = number.cast<int>();
+		//			int num = 0;
+		//			if (!number.isNil())
+		//				num = number.cast<int>();
 
-					LOG("Lua script Update was called. Update_test = %d", num);
-				}
+		//			LOG("Lua script Update was called. Update_test = %d", num);
+		//		}
 
 
 
-		}
-		else
-		{
-			std::string error = lua_tostring(L, -1);
-			LOG("%s", error.data());
-		}
+		//}
+		//else
+		//{
+		//	std::string error = lua_tostring(L, -1);
+		//	LOG("%s", error.data());
+		//}
 	}
 	else
 	{
