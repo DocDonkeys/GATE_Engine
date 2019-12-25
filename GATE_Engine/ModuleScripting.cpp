@@ -3,6 +3,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleSceneIntro.h"
 #include "Resource.h"
+#include "ResourceScript.h"
 #include "ComponentScript.h"
 #include <iterator>
 
@@ -28,6 +29,50 @@ ModuleScripting::~ModuleScripting()
 {
 }
 
+void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
+{
+
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Debug")
+		.beginClass <Scripting>("Scripting")
+		.addConstructor<void(*) (void)>()
+		.addFunction("LOG", &Scripting::LogFromLua)
+		.endClass()
+		.endNamespace();
+
+	Scripting Scripting;
+
+	if (L != nullptr)
+	{
+		//Compile the file and run it, we're gonna optimize this to just compile the function the script contains to library later.
+		int compiled = luaL_dofile(L, script->my_resource->script_file.c_str());
+
+		if (compiled == LUA_OK)
+		{
+			//Get the function to instantiate the lua table (used as a class as known in C++)
+			std::string get_function = "GetTable" + script->my_resource->script_name;
+			get_function = App->SubtractString(get_function,".",false,true,false);
+			luabridge::LuaRef ScriptGetTable = luabridge::getGlobal(L, get_function.c_str());
+			
+			if (!ScriptGetTable.isNil())
+			{
+				luabridge::LuaRef table(ScriptGetTable());
+				//table["Update"];
+				//Assign the Table instance returned by the function to our script instance
+				script->my_table_class = table;
+
+				int testing = 0;
+			}
+				
+		}
+		else
+		{
+			std::string error = lua_tostring(L, -1);
+			LOG("%s", error.data());
+		}
+	}
+}
+
 void ModuleScripting::SendScriptToModule(ComponentScript * script_component, std::string full_file_path)
 {
 	//ScriptFile* s_file = AddScriptFile(script_component, full_file_path);
@@ -37,6 +82,7 @@ void ModuleScripting::SendScriptToModule(ComponentScript * script_component, std
 	s_instance->my_resource = script_component->script;
 
 	class_instances.push_back(s_instance);
+	CompileScriptTableClass(s_instance); //Compile so we can give the instance its table/class reference
 }
 
 ScriptFile* ModuleScripting::AddScriptFile(ComponentScript* script_component, std::string full_file_path)

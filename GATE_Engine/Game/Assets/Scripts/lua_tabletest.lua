@@ -1,5 +1,6 @@
 local LOG = Debug.Scripting ()
 
+function	GetTablelua_tabletest ()
 lua_table = {}
 lua_table["position_x"] = 0
 
@@ -17,5 +18,8 @@ end
 
 lua_table["Start"] = Start ()
 lua_table["Update"] = Update ()
+
+return lua_table
+end
 
 

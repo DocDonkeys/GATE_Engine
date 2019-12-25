@@ -15,7 +15,7 @@ public:
 	ModuleScripting(Application* app, const char* name = "null", bool start_enabled = true);
 	~ModuleScripting();
 
-
+	void CompileScriptTableClass(ScriptInstance* script);
 	void SendScriptToModule(ComponentScript* script_component, std::string full_file_path);
 	ScriptFile* AddScriptFile(ComponentScript* script_component, std::string full_file_path);
 
