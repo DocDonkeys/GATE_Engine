@@ -37,6 +37,7 @@ public: //Methods
 	static void DrawAABB(const AABB& aabb, const float3& rgb = float3(1.f, 1.f, 1.f));
 	void UpdateBoundingBox();
 
+	void UpdateChildrenActive(bool newVal);
 	void UpdateStaticStatus(bool newVal, bool recursive = true);
 
 	Component* CreateComponent(COMPONENT_TYPE type);
