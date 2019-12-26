@@ -61,7 +61,6 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 			if (!ScriptGetTable.isNil())
 			{
 				luabridge::LuaRef table(ScriptGetTable());
-				luabridge::LuaRef new_table_instance = duplicator(table);
 
 				script->my_table_class = table;
 
