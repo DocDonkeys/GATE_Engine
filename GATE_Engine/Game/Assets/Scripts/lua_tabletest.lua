@@ -18,9 +18,5 @@ function lua_table:Update ()
 
 end
 
-
 return lua_table
 end
-
-
-c_table = GetTablelua_tabletest ()

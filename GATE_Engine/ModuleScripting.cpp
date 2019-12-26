@@ -57,10 +57,13 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 			if (!ScriptGetTable.isNil())
 			{
 				luabridge::LuaRef table(ScriptGetTable());
+				luabridge::LuaRef duplicator = luabridge::getGlobal(L, "deepCopy");
+				luabridge::LuaRef new_table_instance = duplicator(table);
+
 				//table["Update"];
 				//Assign the Table instance returned by the function to our script instance
 				//luabridge::LuaRef table = luabridge::getGlobal(L, "c_table");
-				script->my_table_class = table;
+				script->my_table_class = new_table_instance;
 
 				int testing = 0;
 			}
@@ -114,6 +117,11 @@ bool ModuleScripting::Init()
 	L = luaL_newstate();
 	luaL_openlibs(L);
 
+	std::string table_duplicator_path =  App->file_system->GetPathToGameFolder(true) +  ASSETS_SCRIPTS;
+	table_duplicator_path += "table_duplicator.lua";
+
+	luaL_dofile(L,table_duplicator_path.c_str());
+
 	return true;
 }
 
@@ -155,6 +163,9 @@ update_status ModuleScripting::Update(float dt)
 				{
 					//Call Update Method of LUA class
 					(*it)->my_table_class["Update"] ();
+					int num = (*it)->my_table_class["position_x"];
+
+					int testwork = 0;
 				}
 			}
 		}
