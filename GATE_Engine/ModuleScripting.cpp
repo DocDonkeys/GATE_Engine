@@ -61,13 +61,9 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 			if (!ScriptGetTable.isNil())
 			{
 				luabridge::LuaRef table(ScriptGetTable());
-				luabridge::LuaRef duplicator = luabridge::getGlobal(L, "deepCopy");
 				luabridge::LuaRef new_table_instance = duplicator(table);
 
-				//table["Update"];
-				//Assign the Table instance returned by the function to our script instance
-				//luabridge::LuaRef table = luabridge::getGlobal(L, "c_table");
-				script->my_table_class = new_table_instance;
+				script->my_table_class = table;
 
 				int testing = 0;
 			}

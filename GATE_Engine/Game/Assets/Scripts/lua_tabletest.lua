@@ -1,7 +1,7 @@
 local LOG = Debug.Scripting ()
 
 function	GetTablelua_tabletest ()
-lua_table = {}
+local lua_table = {}
 lua_table["position_x"] = 0
 lua_table["LOG"] = Debug.Scripting ()
 
