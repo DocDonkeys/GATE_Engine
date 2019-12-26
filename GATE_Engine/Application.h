@@ -88,7 +88,13 @@ public:
 	const char* GetOrganization() const;
 	const char* GetAuthors() const;
 	const char* GetLicense() const;
-	float GetDT() const;
+
+	// Time
+	uint GetRealTime() const;
+	uint GetGameTime() const;
+
+	float GetRealDT() const;
+	float GetGameDT() const;
 
 	// Load / Save Requests
 	void RequestLoad(const char* file);

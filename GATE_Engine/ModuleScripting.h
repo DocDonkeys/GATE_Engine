@@ -20,7 +20,6 @@ public:
 	ScriptFile* AddScriptFile(ComponentScript* script_component, std::string full_file_path);
 
 public:
-
 	bool Init();
 	bool Start();
 	bool CleanUp();
@@ -43,9 +42,46 @@ public:
 	~Scripting();
 
 public:
-
+	// ENGINE TRANSLATOR
+	// General
 	void LogFromLua(const char* string);
 	void TestFunc();
+
+	uint GetRealTime();
+	uint GetGameTime();
+
+	// Input
+	int GetKeyState(int keyCode) const;
+	bool KeyDown(int keyCode) const;
+	bool KeyUp(int keyCode) const;
+	bool KeyRepeat(int keyCode) const;
+
+	void GetMouseRaycast(float& x, float& y, float& z) const;
+
+	// OBJECT TRANSLATOR
+	void CreateObj();
+	void DestroyObj();
+
+	// Position
+	float GetObjPosX(ScriptInstance* script);
+	float GetObjPosY(ScriptInstance* script);
+	float GetObjPosZ(ScriptInstance* script);
+	void GetObjPos(ScriptInstance* script, float& x, float& y, float& z);
+
+	void MoveObj(ScriptInstance* script, float x, float y, float z);
+	void SetObjPos(ScriptInstance* script, float x, float y, float z);
+
+	// Rotation
+	float GetObjRotX(ScriptInstance* script);	// Roll
+	float GetObjRotY(ScriptInstance* script);	// Pitch
+	float GetObjRotZ(ScriptInstance* script);	// Yaw
+	void GetObjRot(ScriptInstance* script, float& x, float& y, float& z);
+
+	void RotateObj(ScriptInstance* script, float x, float y, float z);
+	void SetObjRot(ScriptInstance* script, float x, float y, float z);
+
+	// Others
+	void LookAt(ScriptInstance* script, float posX, float posY, float posZ);
 };
 
 
