@@ -14,7 +14,8 @@ public:
 	void Load(const json& config) override;
 	bool LoadInMemory() override;
 public:
-	std::string script_file;
+	std::string absolute_path;
+	std::string relative_path;
 	std::string script_name;
 
 };

@@ -24,17 +24,19 @@ void ComponentScript::Disable()
 	active = false;
 }
 
-void ComponentScript::AssignScript(std::string path)
+void ComponentScript::AssignScript(std::string relative_path)
 {
 	ResourceScript* new_script = (ResourceScript*)App->resources->CreateNewResource(Resource::SCRIPT);
 	this->script = new_script;
 	std::string filename;
-	App->file_system->SplitFilePath(path.data(),nullptr,&filename,nullptr);
+	App->file_system->SplitFilePath(relative_path.data(),nullptr,&filename,nullptr);
 	this->script_name = filename;
 	this->script->script_name = filename;
-	this->script->script_file = path;
+	this->script->relative_path = relative_path;
 
-	App->scripting->SendScriptToModule(this, path);
+	std::string absolute_path = App->file_system->GetPathToGameFolder(true) + relative_path;
+	this->script->absolute_path = absolute_path;
+	App->scripting->SendScriptToModule(this, absolute_path);
 }
 
 void ComponentScript::Save(json & file)
@@ -45,7 +47,7 @@ void ComponentScript::Save(json & file)
 	if (this->script != nullptr)
 	{
 		file["Resource_UID"] = this->script->GetUID();
-		file["Script_Path"] = this->script->script_file;
+		file["Script_Path"] = this->script->relative_path;
 	}
 }
 
@@ -69,7 +71,8 @@ void ComponentScript::Load(json & file)
 		script = (ResourceScript*)App->resources->CreateNewResource(Resource::SCRIPT, uid);
 	}
 	script->script_name = name_of_script;
-	script->script_file = path_of_script;
+	script->relative_path = path_of_script;
+	script->absolute_path = App->file_system->GetPathToGameFolder(true) + path_of_script;
 
 	App->scripting->SendScriptToModule(this,path_of_script);
 }

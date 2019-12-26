@@ -485,7 +485,7 @@ void EditorInspector::DrawComponentScript(ComponentScript * script)
 void EditorInspector::ManageDroppedFile(int file_id)
 {
 	std::string file = App->resources->selected_dir->files[file_id];
-	std::string file_path = App->file_system->GetPathToGameFolder(true) + ASSETS_SCRIPTS + file;
+	std::string file_path = App->resources->selected_dir->dir_path + file;
 
 	ComponentScript* script_component = (ComponentScript*)App->scene_intro->selected_go->CreateComponent(COMPONENT_TYPE::SCRIPT);
 	script_component->AssignScript(file_path);

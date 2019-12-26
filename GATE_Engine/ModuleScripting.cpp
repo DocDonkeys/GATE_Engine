@@ -49,7 +49,7 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 	if (L != nullptr)
 	{
 		//Compile the file and run it, we're gonna optimize this to just compile the function the script contains to library later.
-		int compiled = luaL_dofile(L, script->my_resource->script_file.c_str());
+		int compiled = luaL_dofile(L, script->my_resource->absolute_path.c_str());
 
 		if (compiled == LUA_OK)
 		{
