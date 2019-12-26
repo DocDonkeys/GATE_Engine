@@ -2,11 +2,15 @@
 #include "Application.h"
 #include "ModuleFileSystem.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleInput.h"
+#include "ModuleCamera3D.h"
 #include "Resource.h"
 #include "ResourceScript.h"
 #include "ComponentScript.h"
+#include "ComponentTransform.h"
 #include <iterator>
 
+#include "libs/MathGeoLib/include/Math/float4x4.h"
 
 extern "C"
 {
@@ -226,6 +230,9 @@ Scripting::~Scripting()
 {
 }
 
+// ENGINE TRANSLATOR
+// General
+
 //Function that Lua will be able to call as LOG
 void Scripting::LogFromLua(const char * string)
 {
@@ -237,12 +244,139 @@ void Scripting::TestFunc()
 	LOG("This is a test function that Logs something (TestFunc)");
 }
 
-//void Scripting::GetRealTime(luabridge::LuaRef* target)
-//{
-//	(*target)["real_time"] = App->GetRealTime();
-//}
-//
-//void Scripting::GetGameTime(luabridge::LuaRef* target)
-//{
-//	(*target)["game_time"] = App->GetGameTime();
-//}
+uint Scripting::GetRealTime()
+{
+	return App->GetRealTime();
+}
+
+uint Scripting::GetGameTime()
+{
+	return App->GetGameTime();
+}
+
+// Input
+int Scripting::GetKeyState(int keyCode) const
+{
+	return App->input->GetKey(keyCode);
+}
+
+bool Scripting::KeyDown(int keyCode) const
+{
+	return App->input->GetKey(keyCode) == KEY_DOWN;
+}
+
+bool Scripting::KeyUp(int keyCode) const
+{
+	return App->input->GetKey(keyCode) == KEY_UP;
+}
+
+bool Scripting::KeyRepeat(int keyCode) const
+{
+	return App->input->GetKey(keyCode) == KEY_REPEAT;
+}
+
+void Scripting::GetMouseRaycast(float& x, float& y, float& z) const
+{
+	float3 hit;
+	if (App->camera->MousePick(&hit) != nullptr) {
+		x = hit.x;
+		y = hit.y;
+		z = hit.z;
+	}
+}
+
+// OBJECT TRANSLATOR
+void Scripting::CreateObj()
+{
+
+}
+
+void Scripting::DestroyObj()
+{
+
+}
+
+// Position
+float Scripting::GetObjPosX(ScriptInstance* script)
+{
+	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.x;
+}
+
+float Scripting::GetObjPosY(ScriptInstance* script)
+{
+	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.y;
+}
+
+float Scripting::GetObjPosZ(ScriptInstance* script)
+{
+	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.z;
+}
+
+void Scripting::GetObjPos(ScriptInstance* script, float& x, float& y, float& z)
+{
+	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	x = trs->position.x;
+	y = trs->position.y;
+	z = trs->position.z;
+}
+
+void Scripting::MoveObj(ScriptInstance* script, float x, float y, float z)
+{
+	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	trs->position += float3(x, y, z);
+	trs->needsUpdateGlobal = true;
+}
+
+void Scripting::SetObjPos(ScriptInstance* script, float x, float y, float z)
+{
+	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	trs->position = float3(x, y, z);
+	trs->needsUpdateGlobal = true;
+}
+
+// Rotation
+float Scripting::GetObjRotX(ScriptInstance* script)
+{
+	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.x;
+}
+
+float Scripting::GetObjRotY(ScriptInstance* script)
+{
+	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.y;
+}
+
+float Scripting::GetObjRotZ(ScriptInstance* script)
+{
+	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.z;
+}
+
+void Scripting::GetObjRot(ScriptInstance* script, float& x, float& y, float& z)
+{
+	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	
+	x = trs->rotation.x;
+	y = trs->rotation.y;
+	z = trs->rotation.z;
+}
+
+void Scripting::RotateObj(ScriptInstance* script, float x, float y, float z)
+{
+	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	trs->rotation += float3(x, y, z);
+	trs->needsUpdateGlobal = true;
+}
+
+void Scripting::SetObjRot(ScriptInstance* script, float x, float y, float z)
+{
+	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	trs->rotation += float3(x, y, z);
+	trs->needsUpdateGlobal = true;
+}
+
+// Others
+void Scripting::LookAt(ScriptInstance* script, float spotX, float spotY, float spotZ)
+{
+	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	trs->localTrs * float4x4::LookAt(trs->localTrs.Col3(2), float3(spotX, spotY, spotZ) - trs->position, trs->localTrs.Col3(1), float3::unitY);
+	trs->needsUpdateGlobal = true;
+}

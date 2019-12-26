@@ -37,10 +37,10 @@ public:
 
 	bool Intersects(const AABB& refBox) const;
 
-private:
 	// Mouse picking
 	GameObject* MousePick(float3* hit_point = nullptr) const;
 
+public:
 	// Input Checks
 	void MoveCamera(float& movSpeed);
 	void DragCamera(float delta_x, float delta_y);

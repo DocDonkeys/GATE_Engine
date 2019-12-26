@@ -47,39 +47,41 @@ public:
 	void LogFromLua(const char* string);
 	void TestFunc();
 
-	//void GetRealTime(luabridge::LuaRef* target);
-	//void GetGameTime(luabridge::LuaRef* target);
+	uint GetRealTime();
+	uint GetGameTime();
 
-	//// Input
-	//void GetKey();
-	//void GetMouseRaycastX(luabridge::LuaRef* target);
-	//void GetMouseRaycastY(luabridge::LuaRef* target);
-	//void GetMouseRaycastZ(luabridge::LuaRef* target);
+	// Input
+	int GetKeyState(int keyCode) const;
+	bool KeyDown(int keyCode) const;
+	bool KeyUp(int keyCode) const;
+	bool KeyRepeat(int keyCode) const;
 
-	//// OBJECT TRANSLATOR
-	//void CreateObj();
-	//void DestroyObj();
+	void GetMouseRaycast(float& x, float& y, float& z) const;
 
-	//// Position
-	//void GetObjPosX(luabridge::LuaRef* target);
-	//void GetObjPosY(luabridge::LuaRef* target);
-	//void GetObjPosZ(luabridge::LuaRef* target);
-	//void GetObjPos(luabridge::LuaRef* target);
+	// OBJECT TRANSLATOR
+	void CreateObj();
+	void DestroyObj();
 
-	//void MoveObj();
-	//void SetObjPos();
+	// Position
+	float GetObjPosX(ScriptInstance* script);
+	float GetObjPosY(ScriptInstance* script);
+	float GetObjPosZ(ScriptInstance* script);
+	void GetObjPos(ScriptInstance* script, float& x, float& y, float& z);
 
-	//// Rotation
-	//void GetObjRotX(luabridge::LuaRef* target);	// Roll
-	//void GetObjRotY(luabridge::LuaRef* target);	// Pitch
-	//void GetObjRotZ(luabridge::LuaRef* target);	// Yaw
-	//void GetObjRot(luabridge::LuaRef* target);
+	void MoveObj(ScriptInstance* script, float x, float y, float z);
+	void SetObjPos(ScriptInstance* script, float x, float y, float z);
 
-	//void RotateObj();
-	//void SetObjRot();
+	// Rotation
+	float GetObjRotX(ScriptInstance* script);	// Roll
+	float GetObjRotY(ScriptInstance* script);	// Pitch
+	float GetObjRotZ(ScriptInstance* script);	// Yaw
+	void GetObjRot(ScriptInstance* script, float& x, float& y, float& z);
 
-	//// Others
-	//void LookAt(luabridge::LuaRef* target);
+	void RotateObj(ScriptInstance* script, float x, float y, float z);
+	void SetObjRot(ScriptInstance* script, float x, float y, float z);
+
+	// Others
+	void LookAt(ScriptInstance* script, float posX, float posY, float posZ);
 };
 
 
