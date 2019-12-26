@@ -8,6 +8,7 @@
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "ResourceScript.h"
+#include "ModuleScripting.h"
 #include "libs/SDL/include/SDL_assert.h"
 
 #include "ImporterScene.h"
@@ -69,18 +70,21 @@ bool ModuleResources::Init()
 
 update_status ModuleResources::PreUpdate(float dt)
 {
-	float time_passed = timer.ReadSec(); //Time passed after update of data
-
-	if (time_passed >= 1.0f)
+	if (App->scene_intro->playing == false)
 	{
-		CheckDirectoryUpdate(assets_dir);
-		CheckFilesUpdate(assets_dir);
-		timer.Start();
-	}
+		float time_passed = timer.ReadSec(); //Time passed after update of data
 
-	//Make sure anytime the selected dir is nullptr we set it to the assets (root) directory
-	if (selected_dir == nullptr && assets_dir != nullptr)
-		selected_dir = assets_dir;
+		if (time_passed >= 1.0f)
+		{
+			CheckDirectoryUpdate(assets_dir);
+			CheckFilesUpdate(assets_dir);
+			timer.Start();
+		}
+
+		//Make sure anytime the selected dir is nullptr we set it to the assets (root) directory
+		if (selected_dir == nullptr && assets_dir != nullptr)
+			selected_dir = assets_dir;
+	}
 
 	return update_status::UPDATE_CONTINUE;
 }
@@ -255,6 +259,39 @@ int64 ModuleResources::GetTimestampFromMeta(const char * path, bool game_path)
 	return ret;
 }
 
+void ModuleResources::GetAllFilesWithExtension(std::string & extension, std::vector<std::string>& files, AbstractDir* directory)
+{
+
+	for (int i = 0; i < directory->files.size(); ++i)
+	{
+		std::string file_extension;
+		App->file_system->SplitFilePath(directory->files[i].data(),nullptr,nullptr,&file_extension);
+
+		if (!file_extension.compare(extension))
+		{
+			files.push_back(directory->dir_path + directory->files[i]);
+		}
+	}
+
+	//Recursivity
+	if (directory->sub_dirs.size() > 0)
+	{
+		for (int i = 0; i < directory->sub_dirs.size(); ++i)
+		{
+			GetAllFilesWithExtension(extension, files, directory->sub_dirs[i]);
+		}
+	}
+}
+
+void ModuleResources::ManageModifiedFile(std::string extension)
+{
+	std::string lua = "lua";
+	if (!extension.compare(lua))
+	{
+		App->scripting->DoHotReloading();
+	}
+}
+
 Resource::Type ModuleResources::ResourceTypeByPath(const std::string extension)
 {
 	if (extension.data() == "mesh")
@@ -330,6 +367,16 @@ void ModuleResources::InitPopulateAssetsDir(AbstractDir* abs_dir)
 			LOG("%s exists", meta_path.data());
 			int64 ret = GetTimestampFromMeta(meta_path.data(), true);
 			abs_dir->file_modtimes.push_back(ret);
+		}
+		else
+		{
+			std::string extension;
+			App->file_system->SplitFilePath(discovered_files[i].data(),nullptr,nullptr,&extension);
+			std::string lua = "lua";
+			if (!extension.compare(lua))
+			{
+				App->scripting->ManageOrphanScript(abs_dir->dir_path + discovered_files[i]);
+			}
 		}
 	}
 
@@ -435,7 +482,7 @@ void ModuleResources::CheckFilesUpdate(AbstractDir* abs_dir)
 							if (!extension_3D_file[j].compare(extension))
 							{
 								std::string file_path = abs_dir->dir_path + abs_dir->files[i];
-								ie_material->EditMeta(file_path.data(), true);
+								ie_scene->EditMeta(file_path.data(), true);
 							}
 						}
 
@@ -447,8 +494,8 @@ void ModuleResources::CheckFilesUpdate(AbstractDir* abs_dir)
 								ie_material->EditMeta(file_path.data(),true);
 							}
 						}
-
 						abs_dir->file_modtimes[i] = mod_time;
+						ManageModifiedFile(extension);
 					}
 				}
 			}

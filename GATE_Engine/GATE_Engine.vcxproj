@@ -90,6 +90,7 @@
     <ClInclude Include="ImporterMaterial.h" />
     <ClInclude Include="ImporterMesh.h" />
     <ClInclude Include="ImporterScene.h" />
+    <ClInclude Include="ImporterScript.h" />
     <ClInclude Include="libs\ImGuizmo\ImCurveEdit.h" />
     <ClInclude Include="libs\ImGuizmo\ImGradient.h" />
     <ClInclude Include="libs\ImGuizmo\ImGuizmo.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="ImporterMaterial.cpp" />
     <ClCompile Include="ImporterMesh.cpp" />
     <ClCompile Include="ImporterScene.cpp" />
+    <ClCompile Include="ImporterScript.cpp" />
     <ClCompile Include="JsonLoader.cpp" />
     <ClCompile Include="libs\glew\src\glew.c" />
     <ClCompile Include="libs\ImGuizmo\ImCurveEdit.cpp" />

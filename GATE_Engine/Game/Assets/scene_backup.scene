@@ -429,7 +429,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t1465124389.dds",
-                "UID": 3548817511
+                "UID": 774110288
             }
         },
         "Parent UID": "2525605837",
@@ -481,7 +481,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t2786672057.dds",
-                "UID": 2924028949
+                "UID": 1889041940
             }
         },
         "Parent UID": "2525605837",
@@ -533,7 +533,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t634729870.dds",
-                "UID": 685006913
+                "UID": 2714292011
             }
         },
         "Parent UID": "2525605837",
@@ -585,7 +585,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t2675855556.dds",
-                "UID": 3272836397
+                "UID": 3694662339
             }
         },
         "Parent UID": "2525605837",
@@ -637,7 +637,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t1249945688.dds",
-                "UID": 169270132
+                "UID": 2495622129
             }
         },
         "Parent UID": "2525605837",
@@ -689,7 +689,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t634729870.dds",
-                "UID": 2846224081
+                "UID": 2738824248
             }
         },
         "Parent UID": "2525605837",
@@ -741,7 +741,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t2770128866.dds",
-                "UID": 2079001680
+                "UID": 2943321167
             }
         },
         "Parent UID": "2525605837",
@@ -786,14 +786,14 @@
                 "Lnum9": 0.0
             },
             "1": {
-                "Path": "/library/meshes/_m1447225551.mesh"
+                "Path": ""
             },
             "2": {
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t2786672057.dds",
-                "UID": 2128591946
+                "UID": 1532994652
             }
         },
         "Parent UID": "2525605837",
@@ -845,7 +845,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t1249945688.dds",
-                "UID": 613173950
+                "UID": 2447577536
             }
         },
         "Parent UID": "2525605837",
@@ -897,7 +897,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t1249945688.dds",
-                "UID": 19075104
+                "UID": 2230888224
             }
         },
         "Parent UID": "2525605837",
@@ -949,7 +949,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3898310084.dds",
-                "UID": 2044821267
+                "UID": 2532937818
             }
         },
         "Parent UID": "2525605837",
@@ -1001,7 +1001,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t634729870.dds",
-                "UID": 2456547842
+                "UID": 2246426466
             }
         },
         "Parent UID": "2525605837",
@@ -1053,7 +1053,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t2675855556.dds",
-                "UID": 973544100
+                "UID": 3546300466
             }
         },
         "Parent UID": "2525605837",
@@ -1105,7 +1105,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3898310084.dds",
-                "UID": 534097787
+                "UID": 2717983169
             }
         },
         "Parent UID": "2525605837",
@@ -1157,7 +1157,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3695921665.dds",
-                "UID": 1198305026
+                "UID": 2680168224
             }
         },
         "Parent UID": "2525605837",
@@ -1209,7 +1209,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3695921665.dds",
-                "UID": 1812394930
+                "UID": 1653731858
             }
         },
         "Parent UID": "2525605837",
@@ -1261,7 +1261,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3695921665.dds",
-                "UID": 2005890304
+                "UID": 2845772228
             }
         },
         "Parent UID": "2525605837",
@@ -1313,7 +1313,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t2786672057.dds",
-                "UID": 2761756192
+                "UID": 776094934
             }
         },
         "Parent UID": "2525605837",
@@ -1365,7 +1365,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t2770128866.dds",
-                "UID": 2226584886
+                "UID": 2752996730
             }
         },
         "Parent UID": "2525605837",
@@ -1417,7 +1417,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3898310084.dds",
-                "UID": 529899064
+                "UID": 2075159120
             }
         },
         "Parent UID": "2525605837",
@@ -1469,7 +1469,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3695921665.dds",
-                "UID": 2199583171
+                "UID": 97696641
             }
         },
         "Parent UID": "2525605837",
@@ -1521,7 +1521,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t2770128866.dds",
-                "UID": 1923570221
+                "UID": 3893639955
             }
         },
         "Parent UID": "2525605837",
@@ -1573,7 +1573,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3898310084.dds",
-                "UID": 1227918021
+                "UID": 3892546033
             }
         },
         "Parent UID": "2525605837",
@@ -1625,7 +1625,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3898310084.dds",
-                "UID": 4141499224
+                "UID": 2836142044
             }
         },
         "Parent UID": "2525605837",
@@ -1677,7 +1677,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3695921665.dds",
-                "UID": 998853237
+                "UID": 1503655393
             }
         },
         "Parent UID": "2525605837",
@@ -1729,7 +1729,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t3695921665.dds",
-                "UID": 1528173912
+                "UID": 3606446800
             }
         },
         "Parent UID": "2525605837",
@@ -1781,7 +1781,7 @@
                 "Checkers active": false,
                 "Loaded Texture": "1",
                 "Path": "Game/Library/Textures/_t1465124389.dds",
-                "UID": 778415670
+                "UID": 1261670333
             }
         },
         "Parent UID": "2525605837",
@@ -2000,7 +2000,7 @@
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "0",
-                "UID": 3066121487
+                "UID": 965052382
             }
         },
         "Parent UID": "2525605837",
@@ -2051,7 +2051,7 @@
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "0",
-                "UID": 1168012549
+                "UID": 1746336619
             }
         },
         "Parent UID": "2525605837",
@@ -2102,7 +2102,7 @@
                 "Active": true,
                 "Checkers active": false,
                 "Loaded Texture": "0",
-                "UID": 2243935752
+                "UID": 468161446
             }
         },
         "Parent UID": "2525605837",

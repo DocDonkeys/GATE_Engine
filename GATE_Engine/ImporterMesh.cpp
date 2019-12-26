@@ -79,10 +79,10 @@ bool ImporterMesh::Export(const char * path, std::string & output_file, const Im
 
 	if (ret == true)
 	{
-		LOG("Succesfully exported %s", output_file);
+		LOG("Succesfully exported %s", output_file.c_str());
 	}
 	else
-		LOG("Failed to export %s to %s as a .mesh", output_file, path);
+		LOG("Failed to export %s to %s as a .mesh", output_file.c_str(), path);
 	
 	return ret;
 }
