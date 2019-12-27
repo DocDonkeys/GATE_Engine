@@ -48,6 +48,11 @@ public:
 	Resource* CreateNewResource(Resource::Type type, uint32 force_uid = 0);
 	int64 GetTimestampFromMeta(const char * path, bool game_path);
 
+	//Return all files with this extension, slow recursive function
+	void GetAllFilesWithExtension(std::string& extension, std::vector<std::string>& files,AbstractDir* directory);
+
+	void ManageModifiedFile(std::string extension);
+
 	Resource::Type ResourceTypeByPath(const std::string extension);
 
 	uint32 GetUIDFromPath(const char* full_path, Resource::Type type);

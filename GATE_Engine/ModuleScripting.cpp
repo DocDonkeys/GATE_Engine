@@ -8,6 +8,8 @@
 #include "ResourceScript.h"
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
+#include "ModuleResources.h"
+#include "MemLeaks.h"
 #include <iterator>
 
 #include "libs/MathGeoLib/include/Math/float4x4.h"
@@ -34,9 +36,39 @@ ModuleScripting::~ModuleScripting()
 {
 }
 
+void ModuleScripting::DoHotReloading()
+{
+	if (App->scene_intro->playing == false)
+	{
+		//We do the necessary Hot Reloading
+		//for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
+		//{
+		//	//Remove the references to the data inside the virtual machine
+		//	(*it)->my_table_class = 0;
+		//}
+		////Close the virtual machine & Destroy it
+		//lua_close(L);
+
+		////Create the new Virtual Machine
+		//L = luaL_newstate();
+		//luaL_openlibs(L);
+
+		//Acquire All scripts to be compiled       (we will compile even scripts which are currently not attached to any gameobject)
+		//to check if it still compiles after the change done in a given script which is unknown to us
+		std::string extension = "lua";
+		std::vector<std::string> files;
+		App->resources->GetAllFilesWithExtension(extension,files,App->resources->assets_dir);
+
+		hot_reloading_waiting = false;
+	}
+	else
+	{
+		hot_reloading_waiting = true;
+	}
+}
+
 void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 {
-
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Debug")
 		.beginClass <Scripting>("Scripting")
@@ -58,7 +90,7 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 			std::string get_function = "GetTable" + script->my_resource->script_name;
 			get_function = App->SubtractString(get_function,".",false,true,false);
 			luabridge::LuaRef ScriptGetTable = luabridge::getGlobal(L, get_function.c_str());
-			
+
 			if (!ScriptGetTable.isNil())
 			{
 				luabridge::LuaRef table(ScriptGetTable());
@@ -67,7 +99,7 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 
 				int testing = 0;
 			}
-				
+
 		}
 		else
 		{
@@ -107,8 +139,15 @@ ScriptFile* ModuleScripting::AddScriptFile(ComponentScript* script_component, st
 	ScriptFile* new_file = new ScriptFile;
 	script_files.push_back(new_file);
 	ret = new_file;
-		
+
 	return ret;
+}
+
+void ModuleScripting::ManageOrphanScript(std::string relative_path)
+{
+	//Create a new meta
+	ie_scripts.ie_data.meta_path = relative_path;
+	ie_scripts.CreateMeta(relative_path.data(), &ie_scripts.ie_data);
 }
 
 bool ModuleScripting::Init()
@@ -116,11 +155,6 @@ bool ModuleScripting::Init()
 	//Create the Virtual Machine
 	L = luaL_newstate();
 	luaL_openlibs(L);
-
-	std::string table_duplicator_path =  App->file_system->GetPathToGameFolder(true) +  ASSETS_SCRIPTS;
-	table_duplicator_path += "table_duplicator.lua";
-
-	luaL_dofile(L,table_duplicator_path.c_str());
 
 	return true;
 }
@@ -138,93 +172,9 @@ bool ModuleScripting::CleanUp()
 
 update_status ModuleScripting::Update(float realDT)
 {
-	//luabridge::getGlobalNamespace(L)
-	//	.beginNamespace("Debug")
-	//	.beginClass <Scripting>("Scripting")
-	//	.addConstructor<void(*) (void)>()
-	//	.addFunction("LOG", &Scripting::LogFromLua)
-	//	.addFunction("GetDT", &Scripting::GetDT)
-	//	.endClass()
-	//	.endNamespace();
-
-	//Scripting Scripting;
-	////Building a class / Namespace so Lua can have this object to Call EngineLOG by calling 
-	//if (App->scene_intro->playing == true)
-	//{
-	//	for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
-	//	{
-	//		if ((*it)->my_component->active == true) //Check if the script instance is active or not
-	//		{
-	//			if (start == true)
-	//			{
-	//				//Call Start Method of LUA class
-	//				(*it)->my_table_class["Start"] ();
-	//			}
-	//			else
-	//			{
-	//				//Call Update Method of LUA class
-	//				(*it)->my_table_class["Update"] ();
-	//				int num = (*it)->my_table_class["position_x"];
-
-	//				int testwork = 0;
-	//			}
-	//		}
-	//	}
-	//	start = false;
-	//	/*luabridge::getGlobalNamespace(L)
-	//		.beginNamespace("Debug")
-	//		.beginClass <Scripting>("Scripting")
-	//		.addConstructor<void(*) (void)>()
-	//		.addFunction("LOG", &Scripting::LogFromLua)
-	//		.endClass()
-	//		.endNamespace();
-
-	//	Scripting Scripting;*/
-
-	//	//std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_tabletest.lua";
-	//	//bool compiled = luaL_dofile(L, script_path.c_str());
-
-	//	//if (compiled == LUA_OK)
-	//	//{
-	//	//	if (start == true)
-	//	//	{
-	//	//		luabridge::LuaRef ScriptStart = luabridge::getGlobal(L, "Start");
-	//	//		if (!ScriptStart.isNil())
-	//	//			ScriptStart();
-	//	//		else
-	//	//			LOG("Could not execute Start!");
-	//	//	}
-	//	//	start = false;
-	//	//	//Get the Update function from LUA file
-	//	//	luabridge::LuaRef ScriptUpdate = luabridge::getGlobal(L, "Update");
-	//	//	//Execute Update
-	//	//	if (!ScriptUpdate.isNil())
-	//	//		for (int i = 0; i < 35; ++i)
-	//	//		{
-	//	//			ScriptUpdate();
-
-	//	//			luabridge::LuaRef number = luabridge::getGlobal(L, "Update_test");
-
-	//	//			int num = 0;
-	//	//			if (!number.isNil())
-	//	//				num = number.cast<int>();
-
-	//	//			LOG("Lua script Update was called. Update_test = %d", num);
-	//	//		}
-
-
-
-	//	//}
-	//	//else
-	//	//{
-	//	//	std::string error = lua_tostring(L, -1);
-	//	//	LOG("%s", error.data());
-	//	//}
-	//}
-	//else
-	//{
-	//	start = true;
-	//}
+	//If a script was changed during runtime, hot reload
+	if (hot_reloading_waiting)
+		DoHotReloading();
 
 	return UPDATE_CONTINUE;
 }
@@ -447,7 +397,7 @@ float Scripting::GetEulerZ()
 void Scripting::GetEulerRotation(float& x, float& y, float& z)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	
+
 	x = trs->rotation.x;
 	y = trs->rotation.y;
 	z = trs->rotation.z;

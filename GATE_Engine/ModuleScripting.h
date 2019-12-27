@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include <vector>
+#include "ImporterScript.h"
 
 class lua_State;
 class GameObject;
@@ -16,9 +17,13 @@ public:
 	ModuleScripting(Application* app, const char* name = "null", bool start_enabled = true);
 	~ModuleScripting();
 
+	void DoHotReloading();
 	void CompileScriptTableClass(ScriptInstance* script);
 	void SendScriptToModule(ComponentScript* script_component, std::string full_file_path);
 	ScriptFile* AddScriptFile(ComponentScript* script_component, std::string full_file_path);
+
+	//If a lua file doesn't have a meta
+	void ManageOrphanScript(std::string relative_path);
 
 public:
 	bool Init();
@@ -31,11 +36,13 @@ public:
 	void Stop();
 
 public:
+	ImporterScript ie_scripts;
 	std::vector<ScriptInstance*>::iterator current_script;
 
 private:
 	// L is our Lua Virtual Machine, it's called L because its the common name it receives, so all programers can understand what this var is
 	lua_State *L = nullptr;
+	bool hot_reloading_waiting = false;
 
 	std::vector<ScriptFile*> script_files;
 	std::vector<ScriptInstance*> class_instances;
@@ -98,4 +105,3 @@ public:
 };
 
 #endif // !__MODULESCRIPTING_H__
-
