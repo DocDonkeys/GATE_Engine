@@ -9,8 +9,6 @@ class FramerateManager
 public:
 	void Start();
 	void Stop();
-
-	void Pause();
 	void Resume();
 
 	void FrameStart(float dtMultiplier = 1.f);

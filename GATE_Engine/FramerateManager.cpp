@@ -9,6 +9,7 @@ void FramerateManager::Start()
 	time_since_start.Start();
 	frame_time.Start();
 	sec_frame_time.Start();
+	frame_count = prev_sec_frame_count = curr_sec_frame_count = 0;
 }
 
 void FramerateManager::Stop()
@@ -16,8 +17,6 @@ void FramerateManager::Stop()
 	time_since_start.Stop();
 	frame_time.Stop();
 	sec_frame_time.Stop();
-	prev_sec_frame_count = curr_sec_frame_count;
-	frame_count = curr_sec_frame_count = 0;
 }
 
 void FramerateManager::Resume()
