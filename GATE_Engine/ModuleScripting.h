@@ -73,7 +73,7 @@ public:
 	bool KeyUp(const char* key) const;
 	bool KeyRepeat(const char* key) const;
 
-	const GameObject* GetMouseRaycast(float& x, float& y, float& z) const;
+	int GetMouseRaycastHit(lua_State *L);
 
 	// GameObjects
 	//const GameObject* Find(const char* objName) const;
@@ -117,6 +117,7 @@ public:
 
 	// Others
 	void LookAt(float posX, float posY, float posZ);
+	void LookTo(float dirX, float dirY, float dirZ);
 };
 
 #endif // !__MODULESCRIPTING_H__

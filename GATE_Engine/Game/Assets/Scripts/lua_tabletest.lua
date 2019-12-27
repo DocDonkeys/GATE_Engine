@@ -27,6 +27,9 @@ function lua_table:Update ()
 	if lua_table["Functions"]:KeyRepeat ("A") then lua_table["Functions"]:Rotate (0.0, 50.0 * dt, 0.0) end
 	if lua_table["Functions"]:KeyRepeat ("S") then lua_table["Functions"]:Translate (0.0, 0.0, -50.0 * dt) end
 	if lua_table["Functions"]:KeyRepeat ("D") then lua_table["Functions"]:Rotate (0.0, -50.0 * dt, 0.0) end
+
+	hit_x, hit_y, hit_z = lua_table["Functions"]:GetMouseRaycastHit ();
+	if hit_x ~= nil then lua_table["Functions"]:LookAt (hit_x, hit_y, hit_z) else lua_table["Functions"]:LookAt (0.0, 0.0, 1.0) end
 end
 
 return lua_table

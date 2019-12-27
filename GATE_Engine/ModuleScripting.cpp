@@ -12,6 +12,7 @@
 #include "MemLeaks.h"
 #include <iterator>
 
+#include "libs/MathGeoLib/include/Math/float3x3.h"
 #include "libs/MathGeoLib/include/Math/float4x4.h"
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
 #include "libs/SDL/include/SDL_keyboard.h"
@@ -195,6 +196,9 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 		.addFunction("KeyRepeat", &Scripting::KeyRepeat)
 		.addFunction("Translate", &Scripting::Translate)
 		.addFunction("Rotate", &Scripting::Rotate)
+		.addCFunction("GetMouseRaycastHit", &Scripting::GetMouseRaycastHit)
+		.addFunction("LookAt", &Scripting::LookAt)
+		.addFunction("LookTo", &Scripting::LookTo)
 		.endClass()
 		.endNamespace();
 
@@ -311,18 +315,18 @@ bool Scripting::KeyRepeat(const char* key) const
 		return false;
 }
 
-const GameObject* Scripting::GetMouseRaycast(float& x, float& y, float& z) const
+int Scripting::GetMouseRaycastHit(lua_State *L)
 {
-	float3 hit;
+	float3 hit = float3::zero;
 	const GameObject* go = App->camera->MousePick(&hit);
 
 	if (go != nullptr) {
-		x = hit.x;
-		y = hit.y;
-		z = hit.z;
+		lua_pushnumber(L, hit.x);
+		lua_pushnumber(L, hit.y);
+		lua_pushnumber(L, hit.z);
 	}
 
-	return go;
+	return 3;
 }
 
 // GameObjects
@@ -466,6 +470,13 @@ void Scripting::SetEulerRotation(float x, float y, float z)
 void Scripting::LookAt(float spotX, float spotY, float spotZ)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->localTrs * float4x4::LookAt(trs->localTrs.Col3(2), float3(spotX, spotY, spotZ) - trs->position, trs->localTrs.Col3(1), float3::unitY);
+	trs->localTrs = trs->localTrs * float4x4::LookAt(trs->localTrs.WorldZ(), (float3(spotX, spotY, spotZ) - trs->globalTrs.TranslatePart()).Normalized(), trs->localTrs.WorldY(), float3::unitY);
+	trs->needsUpdateGlobal = true;
+}
+
+void Scripting::LookTo(float dirX, float dirY, float dirZ)
+{
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	trs->localTrs = trs->localTrs * float4x4::LookAt(trs->localTrs.WorldZ(), float3(dirX, dirY, dirZ), trs->localTrs.WorldY(), float3::unitY);
 	trs->needsUpdateGlobal = true;
 }
