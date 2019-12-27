@@ -4,6 +4,7 @@
 #include "ComponentTransform.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
+#include "libs/MathGeoLib/include/Math/TransformOps.h"
 #include "libs/SDL/include/SDL_assert.h"
 
 ComponentTransform::ComponentTransform() : Component()
@@ -67,6 +68,67 @@ void ComponentTransform::UpdateGlobalMat()
 //	}
 //}
 
+float3 ComponentTransform::Translate(float3 movement)
+{
+	float3 origPos = position;
+	localTrs = localTrs * float4x4::Translate(movement);
+	position = localTrs.TranslatePart();
+	needsUpdateGlobal = true;
+
+	return position - origPos;
+}
+
+float3 ComponentTransform::SetTranslation(float3 targetPos)
+{
+	float3 origPos = position;
+	localTrs = localTrs.FromTRS(targetPos, localTrs.RotatePart(), scale);
+	position = localTrs.TranslatePart();
+	needsUpdateGlobal = true;
+
+	return position - origPos;
+}
+
+float3 ComponentTransform::Rotate(float3 rot)
+{
+	float3 origRot = rotation;
+	localTrs = localTrs * localTrs.RotateX(rot.x) * localTrs.RotateY(rot.y) * localTrs.RotateZ(rot.z);
+	rotation = localTrs.RotatePart().ToEulerXYZ();
+	needsUpdateGlobal = true;
+
+	return rotation - origRot;
+}
+
+float3 ComponentTransform::SetRotation(float3 targetRot)
+{
+	float3 origRot = rotation;
+	localTrs = localTrs.FromTRS(position, Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z), scale);
+	rotation = localTrs.RotatePart().ToEulerXYZ();
+	needsUpdateGlobal = true;
+
+	return localTrs.RotatePart().ToEulerXYZ() - origRot;
+}
+
+float3 ComponentTransform::Scale(float3 scale)
+{
+	float3 origScale = this->scale;
+	localTrs.Scale(scale);
+	this->scale += scale;
+
+	needsUpdateGlobal = true;
+	return this->scale - origScale;
+}
+
+float3 ComponentTransform::SetScale(float3 targetScale)
+{
+	float3 origScale = this->scale;
+	localTrs.Scale(float3(-this->scale.x, -this->scale.y, -this->scale.z));	// Scale to 0
+	localTrs.Scale(targetScale);
+	this->scale = targetScale;
+
+	needsUpdateGlobal = true;
+	return this->scale - origScale;
+}
+
 bool ComponentTransform::SetLocalMat(float3& newPos, float3& newRot, float3& newScale)
 {
 	bool changed = false;
@@ -83,7 +145,7 @@ bool ComponentTransform::SetLocalMat(float3& newPos, float3& newRot, float3& new
 		changed = true;
 
 		if (abs(rotation.x - newRot.x) < 0.000001 && abs(rotation.y - newRot.y) < 0.000001 && abs(rotation.z - newRot.z) < 0.000001)
-			mousePickFix = false;	//CHANGE/FIX: Mousepicking rotates the clicked obj by very small decimals (wtf), this avoids the object from becoming dynamic (if it was static)
+			changed = false;	//CHANGE/FIX: Mousepicking rotates the clicked obj by very small decimals (wtf), this avoids a transformation to happen because of it
 	}
 	else if (scale.x != newScale.x
 		|| scale.y != newScale.y
@@ -92,13 +154,12 @@ bool ComponentTransform::SetLocalMat(float3& newPos, float3& newRot, float3& new
 	}
 
 	if (changed) {
-		localTrs = float4x4::FromTRS(newPos, float3x3::FromEulerXYZ(newRot.x, newRot.y, newRot.z), newScale);
+		localTrs = float4x4::FromTRS(newPos, Quat::FromEulerXYZ(newRot.x, newRot.y, newRot.z), newScale);
 		position = newPos;
 		rotation = newRot;
 		scale = newScale;
 
 		needsUpdateGlobal = true;
-		changed = mousePickFix;	// Removed when mouse picking bug is fixed
 	}
 
 	return changed;

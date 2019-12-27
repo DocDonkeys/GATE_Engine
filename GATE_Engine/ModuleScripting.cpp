@@ -13,6 +13,7 @@
 #include <iterator>
 
 #include "libs/MathGeoLib/include/Math/float4x4.h"
+#include "libs/MathGeoLib/include/Math/MathFunc.h"
 #include "libs/SDL/include/SDL_keyboard.h"
 
 extern "C"
@@ -191,6 +192,9 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 		.addConstructor<void(*) (void)>()
 		.addFunction("LOG", &Scripting::LogFromLua)
 		.addFunction("GetDT", &Scripting::GetDT)
+		.addFunction("KeyRepeat", &Scripting::KeyRepeat)
+		.addFunction("Translate", &Scripting::Translate)
+		.addFunction("Rotate", &Scripting::Rotate)
 		.endClass()
 		.endNamespace();
 
@@ -307,14 +311,18 @@ bool Scripting::KeyRepeat(const char* key) const
 		return false;
 }
 
-void Scripting::GetMouseRaycast(float& x, float& y, float& z) const
+const GameObject* Scripting::GetMouseRaycast(float& x, float& y, float& z) const
 {
 	float3 hit;
-	if (App->camera->MousePick(&hit) != nullptr) {
+	const GameObject* go = App->camera->MousePick(&hit);
+
+	if (go != nullptr) {
 		x = hit.x;
 		y = hit.y;
 		z = hit.z;
 	}
+
+	return go;
 }
 
 // GameObjects
@@ -405,18 +413,16 @@ void Scripting::GetPosition(float& x, float& y, float& z) const
 	z = trs->position.z;
 }
 
-void Scripting::Move(float x, float y, float z)
+void Scripting::Translate(float x, float y, float z)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->position += float3(x, y, z);
-	trs->needsUpdateGlobal = true;
+	trs->Translate(float3(x, y, z));
 }
 
 void Scripting::SetPosition(float x, float y, float z)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->position = float3(x, y, z);
-	trs->needsUpdateGlobal = true;
+	trs->SetTranslation(float3(x, y, z));
 }
 
 // Rotation
@@ -447,15 +453,13 @@ void Scripting::GetEulerRotation(float& x, float& y, float& z) const
 void Scripting::Rotate(float x, float y, float z)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->rotation += float3(x, y, z);
-	trs->needsUpdateGlobal = true;
+	trs->Rotate(DegToRad(float3(x, y, z)));
 }
 
 void Scripting::SetEulerRotation(float x, float y, float z)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->rotation += float3(x, y, z);
-	trs->needsUpdateGlobal = true;
+	trs->SetRotation(float3(x, y, z));
 }
 
 // Others

@@ -13,22 +13,34 @@ public:
 	ComponentTransform();
 	~ComponentTransform();
 
-public:
 	void Enable() override;
 	void Disable() override;
 	void PreUpdate(float realDT) override;
 
+public:
 	//void UpdateLocalMat();
 	void UpdateGlobalMat();
 
 	//void UpdateQuatByEuler(float3& newEuler);
 	//void UpdateEulerByQuat(Quat& q);
+
+	// Change
+	float3 Translate(float3 movement);
+	float3 SetTranslation(float3 targetPos);
+
+	float3 Rotate(float3 rot);
+	float3 SetRotation(float3 targetRot);
+
+	float3 Scale(float3 scale);
+	float3 SetScale(float3 targetScale);
+
+	// Set
 	bool SetLocalMat(float3& pos, float3& rot, float3& scale);
 	bool SetLocalMat(float4x4& mat);
-
 	//bool SetGlobalMat(float3& pos, float3& rot, float3& scale);	//IMPROVE: We might need to arbitrarily set the global position, but what should we do with the children? Move them or update their data?
 	//bool SetGlobalMat(float4x4& mat);
 
+	// Get
 	void GetLocalMat(float3& pos, float3& rot, float3& scale);
 	void GetLocalMat(float3& pos, float3x3& rot, float3& scale);
 	float4x4 GetLocalMat() const;

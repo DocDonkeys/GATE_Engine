@@ -241,6 +241,9 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 			pos = float3::zero;
 			rot = float3::zero;
 			scale = float3::one;
+
+			/*transform->SetLocalMat(float3::zero, float3::zero, float3::one);	// METHOD_2
+			transform->my_go->UpdateStaticStatus(false, true);*/
 		}
 		ImGui::NextColumn();
 		ImGui::Text("X"); ImGui::NextColumn();
@@ -260,6 +263,10 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::SetNextItemWidth(width);
 		ImGui::DragFloat("##PZ", &pos.z, 0.05f); ImGui::NextColumn();
 
+		//if (!App->input->GetMouseWrapping())
+		//	if (transform->position.x != pos.x || transform->position.y != pos.y || transform->position.z != pos.z)	// METHOD_2
+		//		transform->SetTranslation(pos);
+
 		// Rotation
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Rotation"); ImGui::NextColumn();
@@ -271,6 +278,11 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 
 		ImGui::SetNextItemWidth(width);
 		ImGui::DragFloat("##RZ", &rot.z, 0.05f); ImGui::NextColumn();
+
+		//if (!App->input->GetMouseWrapping())	// METHOD_2
+		//	if (transform->rotation.x != rot.x || transform->rotation.y != rot.y || transform->rotation.z != rot.z)
+		//		if (abs(rot.x - transform->rotation.x) > 0.000001 || abs(rot.y - transform->rotation.y) > 0.000001 || abs(rot.z - transform->rotation.z) > 0.000001)
+		//			transform->SetRotation(DegToRad(rot));		//CHANGE/FIX: Mousepicking rotates the clicked obj by very small decimals (wtf), this avoids a transformation to happen because of it
 
 		// Scale
 		ImGui::AlignTextToFramePadding();
@@ -284,6 +296,10 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::SetNextItemWidth(width);
 		ImGui::DragFloat("##SZ", &scale.z, 0.05f);
 
+		//if (!App->input->GetMouseWrapping())	// METHOD_2
+		//	if (transform->scale.x != scale.x || transform->scale.y != scale.y || transform->scale.z != scale.z)
+		//		transform->SetScale(scale);
+
 		ImGui::Columns(1);
 		ImGui::TreePop();
 
@@ -291,6 +307,9 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		if (!App->input->GetMouseWrapping())
 			if (transform->SetLocalMat(pos, DegToRad(rot), scale))
 				transform->my_go->UpdateStaticStatus(false, true);
+
+		//if (transform->needsUpdateGlobal)	// If any change was made, global needs updating and so we remove static status // METHOD_2
+		//	transform->my_go->UpdateStaticStatus(false, true);
 	}
 
 	ImGui::Separator();

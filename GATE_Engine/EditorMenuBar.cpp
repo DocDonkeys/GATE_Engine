@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "ModuleEditor.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
 #include "GeometryLoader.h"
 
@@ -20,6 +21,8 @@
 #include "EditorMenuBar.h"
 
 #include "libs/imgui/imgui.h"
+
+#include "libs/SDL/include/SDL_scancode.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -40,9 +43,15 @@ void EditorMenuBar::Update() {
 
 			ImGui::Separator();
 
-			if (ImGui::MenuItem("Save", "Ctrl+S", false)) {
-				std::string scene_name = "scene_1";
-				App->scene_intro->scene_ie.SaveScene(App->scene_intro->root, scene_name,FileType::SCENE);
+			if (ImGui::MenuItem("Save", "Ctrl+S", false)
+				|| App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+				if (App->IsGamePlaying()) {
+					LOG("[Warning]: You must stop the game before saving the scene!");
+				}
+				else {
+					std::string scene_name = "scene_1";
+					App->scene_intro->scene_ie.SaveScene(App->scene_intro->root, scene_name, FileType::SCENE);
+				}
 			}
 
 			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S", false, false)) {
