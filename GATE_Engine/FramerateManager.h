@@ -11,8 +11,8 @@ public:
 	void Stop();
 	void Resume();
 
-	void FrameStart(float dtMultiplier = 1.f);
-	void FrameEnd();
+	void FrameStart(float dtMultiplier = 1.f, bool tick = false);
+	void FrameEnd(bool tick = false);
 
 public:
 	uint	frame_count = 0;			// Total frame count

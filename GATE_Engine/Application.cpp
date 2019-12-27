@@ -210,7 +210,7 @@ void Application::PrepareUpdate()
 		mustRunGame = false;
 		
 	if (mustRunGame)
-		game_framerate.FrameStart(App->scene_intro->game_speed);
+		game_framerate.FrameStart(App->scene_intro->game_speed, gameTick);
 
 	//Update Hardware info such as VRAM usage
 	GLint nTotalMemoryInKB = 0;
@@ -269,11 +269,11 @@ void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Frame
 
 	if (gamePlaying) {
 		if (!gamePaused || gameTick) {
-			game_framerate.FrameEnd();
+			game_framerate.FrameEnd(gameTick);
 			gameTick = false;
 		}
 
-		firstFrame = false;
+		gameFirstFrame = false;
 	}
 
 	// Update the fps Log
@@ -403,7 +403,7 @@ void Application::CheckGameState()
 	if (App->scene_intro->playing && !gamePlaying) {		// If game needs to start
 		sceneBackupPath = file_system->GetPathToGameFolder() + "game" + scene_intro->scene_ie.SaveScene(App->scene_intro->root, std::string("Scene_Backup"), FileType::SCENE);
 		game_framerate.Start();
-		firstFrame = true;
+		gameFirstFrame = true;
 		LOG("[Info]: Started Game.");
 	}
 	else if (!App->scene_intro->playing && gamePlaying) {	// If game needs to stop
@@ -487,9 +487,9 @@ const char* Application::GetAuthors() const
 }
 
 // Game State
-bool Application::IsFirstFrame() const
+bool Application::IsGameFirstFrame() const
 {
-	return firstFrame;
+	return gameFirstFrame;
 }
 
 bool Application::IsGamePlaying() const

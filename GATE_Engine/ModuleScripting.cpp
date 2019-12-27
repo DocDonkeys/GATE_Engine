@@ -161,7 +161,6 @@ bool ModuleScripting::Init()
 
 bool ModuleScripting::Start()
 {
-
 	return true;
 }
 
@@ -173,8 +172,13 @@ bool ModuleScripting::CleanUp()
 update_status ModuleScripting::Update(float realDT)
 {
 	//If a script was changed during runtime, hot reload
-	if (hot_reloading_waiting)
+	if (!App->IsGamePlaying() && hot_reloading_waiting)
 		DoHotReloading();
+
+	// Carles to Didac
+	// 1. You can use the "IsWhatever" functions of App to check the current game state.
+	// 2. "App->IsGameFirstFrame()" marks the first frame a GameUpdate() will happen, if you want to do anything right before the game plays in preparation
+	// 3. Referring to your previous code, you expected DoHotReloading() to NOT run if the game is playing, I put the condition accordingly "!IsGamePlaying()"
 
 	return UPDATE_CONTINUE;
 }

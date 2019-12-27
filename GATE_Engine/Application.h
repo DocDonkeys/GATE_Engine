@@ -90,7 +90,7 @@ public:
 	const char* GetLicense() const;
 
 	// Game State
-	bool IsFirstFrame() const;
+	bool IsGameFirstFrame() const;
 	bool IsGamePlaying() const;
 	bool IsGamePaused() const;
 	bool IsGameTick() const;
@@ -181,7 +181,7 @@ private:
 	FramerateManager	game_framerate;
 	std::string sceneBackupPath;
 	bool mustRunGame = true;
-	bool firstFrame = false;
+	bool gameFirstFrame = false;
 	bool gamePlaying = false;
 	bool gamePaused = false;
 	bool gameTick = false;

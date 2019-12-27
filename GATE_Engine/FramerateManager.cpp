@@ -26,16 +26,21 @@ void FramerateManager::Resume()
 	sec_frame_time.Resume();
 }
 
-void FramerateManager::FrameStart(float dtMultiplier)
+void FramerateManager::FrameStart(float dtMultiplier, bool tick)
 {
 	frame_count++;
 	curr_sec_frame_count++;
 
 	dt = (float)frame_time.ReadSec() * dtMultiplier;
 	frame_time.Start();
+
+	if (tick) {
+		time_since_start.Resume();
+		sec_frame_time.Resume();
+	}
 }
 
-void FramerateManager::FrameEnd()
+void FramerateManager::FrameEnd(bool tick)
 {
 	//Framerate Calcs
 	if (sec_frame_time.Read() > 1000) {
@@ -48,4 +53,8 @@ void FramerateManager::FrameEnd()
 	avg_fps = float(frame_count) / time_since_start.ReadSec();
 	secs_since_start = time_since_start.ReadSec();
 	frame_ms = frame_time.Read();
+
+	if (tick) {
+		Stop();
+	}
 }
