@@ -79,7 +79,7 @@ public:
 	bool KeyUp(const char* key) const;
 	bool KeyRepeat(const char* key) const;
 
-	void GetMouseRaycast(float& x, float& y, float& z) const;
+	const GameObject* GetMouseRaycast(float& x, float& y, float& z) const;
 
 	// GameObjects
 	//const GameObject* Find(const char* objName) const;
@@ -109,7 +109,7 @@ public:
 	float GetPositionZ() const;
 	void GetPosition(float& x, float& y, float& z) const;
 
-	void Move(float x, float y, float z);
+	void Translate(float x, float y, float z);
 	void SetPosition(float x, float y, float z);
 
 	// Rotation
