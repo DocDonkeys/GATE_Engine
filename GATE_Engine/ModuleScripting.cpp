@@ -333,34 +333,71 @@ void Scripting::GetMouseRaycast(float& x, float& y, float& z) const
 //	return ret;
 //}
 
+void Scripting::Enable(bool state)
+{
+	(*App->scripting->current_script)->my_component->active = state;
+}
+
+bool Scripting::IsEnabled() const
+{
+	return (*App->scripting->current_script)->my_component->active;
+}
+
 // OBJECT TRANSLATOR
-//void Scripting::Instantiate()
-//{
-//
-//}
-//
-//void Scripting::DestroyObj()
-//{
-//	App->scene_intro->DestroyGameObject((*App->scripting->current_script)->my_component->my_go);
-//}
+
+// General
+const GameObject* Scripting::GetGameObject() const
+{
+	return (*App->scripting->current_script)->my_component->my_go;
+}
+
+const char* Scripting::GetObjectName() const
+{
+	return (*App->scripting->current_script)->my_component->my_go->name.c_str();
+}
+
+void Scripting::ActivateObject(bool state)
+{
+	(*App->scripting->current_script)->my_component->my_go->UpdateChildrenActive(state);
+}
+
+bool Scripting::IsObjectActivated() const
+{
+	return (*App->scripting->current_script)->my_component->my_go->active;
+}
+
+void Scripting::SetStatic(bool state)
+{
+	(*App->scripting->current_script)->my_component->my_go->UpdateStaticStatus(state);
+}
+
+bool Scripting::IsStatic() const
+{
+	return (*App->scripting->current_script)->my_component->my_go->staticObj;
+}
+
+void Scripting::DestroySelf() const
+{
+	App->scene_intro->DestroyGameObject((*App->scripting->current_script)->my_component->my_go);
+}
 
 // Position
-float Scripting::GetPositionX()
+float Scripting::GetPositionX() const
 {
 	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.x;
 }
 
-float Scripting::GetPositionY()
+float Scripting::GetPositionY() const
 {
 	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.y;
 }
 
-float Scripting::GetPositionZ()
+float Scripting::GetPositionZ() const
 {
 	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.z;
 }
 
-void Scripting::GetPosition(float& x, float& y, float& z)
+void Scripting::GetPosition(float& x, float& y, float& z) const
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	x = trs->position.x;
@@ -383,22 +420,22 @@ void Scripting::SetPosition(float x, float y, float z)
 }
 
 // Rotation
-float Scripting::GetEulerX()
+float Scripting::GetEulerX() const
 {
 	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.x;
 }
 
-float Scripting::GetEulerY()
+float Scripting::GetEulerY() const
 {
 	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.y;
 }
 
-float Scripting::GetEulerZ()
+float Scripting::GetEulerZ() const
 {
 	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.z;
 }
 
-void Scripting::GetEulerRotation(float& x, float& y, float& z)
+void Scripting::GetEulerRotation(float& x, float& y, float& z) const
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 

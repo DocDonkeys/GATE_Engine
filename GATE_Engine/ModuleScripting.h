@@ -77,25 +77,40 @@ public:
 
 	// GameObjects
 	//const GameObject* Find(const char* objName) const;
+	//const GameObject* Instantiate(Resource prefab);
+	//const GameObject* Destroy(const GameObject* target);
+	
+	// SCRIPT TRANSLATOR
+	void Enable(bool state);
+	bool IsEnabled() const;
 
 	// OBJECT TRANSLATOR
-	//void Instantiate();
-	//void Destroy();
+	// General
+	const GameObject* GetGameObject() const;
+	const char* GetObjectName() const;
+
+	void ActivateObject(bool state);
+	bool IsObjectActivated() const;
+
+	void SetStatic(bool state);
+	bool IsStatic() const;
+
+	void DestroySelf() const;
 
 	// Position
-	float GetPositionX();
-	float GetPositionY();
-	float GetPositionZ();
-	void GetPosition(float& x, float& y, float& z);
+	float GetPositionX() const;
+	float GetPositionY() const;
+	float GetPositionZ() const;
+	void GetPosition(float& x, float& y, float& z) const;
 
 	void Move(float x, float y, float z);
 	void SetPosition(float x, float y, float z);
 
 	// Rotation
-	float GetEulerX();	// Roll
-	float GetEulerY();	// Pitch
-	float GetEulerZ();	// Yaw
-	void GetEulerRotation(float& x, float& y, float& z);
+	float GetEulerX() const;	// Roll
+	float GetEulerY() const;	// Pitch
+	float GetEulerZ() const;	// Yaw
+	void GetEulerRotation(float& x, float& y, float& z) const;
 
 	void Rotate(float x, float y, float z);
 	void SetEulerRotation(float x, float y, float z);
