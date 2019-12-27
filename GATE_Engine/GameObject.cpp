@@ -334,15 +334,18 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 
 void GOFunctions::FillArrayWithChildren(std::vector<const GameObject*> &go_array, const GameObject * go, bool add_parent, uint count)
 {
-	if (count != 0)	//If we're not the parent that was called explicitly in the function
-		go_array.push_back(go);
-	else if (add_parent == true)		// In case we are the parent (Count == 0) & we want to include the parent
-		go_array.push_back(go);
-
-	count++;
-	if (go->children.size() > 0)
+	if (go != nullptr)
 	{
-		for (int i = 0; i < go->children.size(); ++i)
-		FillArrayWithChildren(go_array,go->children[i],add_parent,count);
+		if (count != 0)	//If we're not the parent that was called explicitly in the function
+			go_array.push_back(go);
+		else if (add_parent == true)		// In case we are the parent (Count == 0) & we want to include the parent
+			go_array.push_back(go);
+
+		count++;
+		if (go->children.size() > 0)
+		{
+			for (int i = 0; i < go->children.size(); ++i)
+				FillArrayWithChildren(go_array, go->children[i], add_parent, count);
+		}
 	}
 }
