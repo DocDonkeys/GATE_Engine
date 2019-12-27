@@ -17,7 +17,8 @@ public:
 	ModuleScripting(Application* app, const char* name = "null", bool start_enabled = true);
 	~ModuleScripting();
 
-	void DoHotReloading();
+	bool DoHotReloading();
+	bool JustCompile(std::string relative_path);
 	void CompileScriptTableClass(ScriptInstance* script);
 	void SendScriptToModule(ComponentScript* script_component, std::string full_file_path);
 	ScriptFile* AddScriptFile(ComponentScript* script_component, std::string full_file_path);
@@ -42,9 +43,14 @@ public:
 private:
 	// L is our Lua Virtual Machine, it's called L because its the common name it receives, so all programers can understand what this var is
 	lua_State *L = nullptr;
+	bool start = true;
+	bool cannot_start = false; //We cannot start if a compilation error would cause a crash on the engine when we start playing
 	bool hot_reloading_waiting = false;
 
+	void CleanUpInstances();
+
 	std::vector<ScriptFile*> script_files;
+	std::vector<ScriptInstance*> recompiled_instances;
 	std::vector<ScriptInstance*> class_instances;
 };
 
@@ -79,7 +85,7 @@ public:
 	//const GameObject* Find(const char* objName) const;
 	//const GameObject* Instantiate(Resource prefab);
 	//const GameObject* Destroy(const GameObject* target);
-	
+
 	// SCRIPT TRANSLATOR
 	void Enable(bool state);
 	bool IsEnabled() const;

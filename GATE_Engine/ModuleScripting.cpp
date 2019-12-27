@@ -38,22 +38,33 @@ ModuleScripting::~ModuleScripting()
 {
 }
 
-void ModuleScripting::DoHotReloading()
+bool ModuleScripting::DoHotReloading()
 {
+	bool ret = true;
+
 	if (App->scene_intro->playing == false)
 	{
 		//We do the necessary Hot Reloading
-		//for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
-		//{
-		//	//Remove the references to the data inside the virtual machine
-		//	(*it)->my_table_class = 0;
-		//}
-		////Close the virtual machine & Destroy it
-		//lua_close(L);
+		for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
+		{
+			//Remove the references to the data inside the virtual machine
+			(*it)->my_table_class = 0;
 
-		////Create the new Virtual Machine
-		//L = luaL_newstate();
-		//luaL_openlibs(L);
+			//Copy the necessary data into new instances which will hold the new compiled tables
+			ScriptInstance* recompiled_instance = new ScriptInstance;
+
+			recompiled_instance->my_component = (*it)->my_component;
+			recompiled_instance->my_resource = (*it)->my_resource;
+
+			recompiled_instances.push_back(recompiled_instance);
+		}
+		CleanUpInstances();
+		//Close the virtual machine & Destroy it
+		lua_close(L);
+
+		//Create the new Virtual Machine
+		L = luaL_newstate();
+		luaL_openlibs(L);
 
 		//Acquire All scripts to be compiled       (we will compile even scripts which are currently not attached to any gameobject)
 		//to check if it still compiles after the change done in a given script which is unknown to us
@@ -61,12 +72,75 @@ void ModuleScripting::DoHotReloading()
 		std::vector<std::string> files;
 		App->resources->GetAllFilesWithExtension(extension,files,App->resources->assets_dir);
 
+		bool can_instantiate_scripts = true;
+		//Compile all the scripts of the Engine
+		for (int i = 0; i < files.size(); ++i)
+		{
+			if (JustCompile(files[i]) == false)
+			{
+				can_instantiate_scripts = false;
+				ret = false;
+				LOG("[Warning] Fix all compiler Errors!");
+				cannot_start = true;
+			}
+		}
+
+		if (can_instantiate_scripts == true)
+		{
+			//If everything compiled just fine, give the recompiled instances the new version of the script
+			for (std::vector<ScriptInstance*>::iterator it = recompiled_instances.begin(); it != recompiled_instances.end(); ++it)
+				CompileScriptTableClass((*it));
+
+			for (int i = 0; i < recompiled_instances.size(); ++i)
+				class_instances.push_back(recompiled_instances[i]);
+
+			recompiled_instances.clear();
+		}
+
 		hot_reloading_waiting = false;
 	}
 	else
 	{
 		hot_reloading_waiting = true;
 	}
+
+	if (ret == true)
+		cannot_start = false;
+
+	return ret;
+}
+
+//This function just compiles a script and checks if it compiled or it prompts the error to console
+bool ModuleScripting::JustCompile(std::string relative_path)
+{
+	bool ret = false;
+
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Debug")
+		.beginClass <Scripting>("Scripting")
+		.addConstructor<void(*) (void)>()
+		.addFunction("LOG", &Scripting::LogFromLua)
+		.endClass()
+		.endNamespace();
+
+	Scripting Scripting;
+
+	std::string absolute_path = App->file_system->GetPathToGameFolder(true) + relative_path;
+	int compiled = luaL_dofile(L, absolute_path.c_str());
+
+	if (compiled == LUA_OK)
+	{
+		//We don't need to do nothing here, LOG something at most
+		LOG("Compiled %s successfully!", relative_path);
+		ret = true;
+	}
+	else
+	{
+		std::string error = lua_tostring(L, -1);
+		LOG("%s", error.data());
+	}
+
+	return ret;
 }
 
 void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
@@ -98,8 +172,6 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 				luabridge::LuaRef table(ScriptGetTable());
 
 				script->my_table_class = table;
-
-				int testing = 0;
 			}
 
 		}
@@ -203,38 +275,55 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 		.endNamespace();
 
 	Scripting Scripting;
-	for (current_script = class_instances.begin(); current_script != class_instances.end(); ++current_script)
-	{
-		if ((*current_script)->awoken == false)
-		{
-			(*current_script)->my_table_class["Awake"]();	// Awake is done first, regardless of the script being active or not
-			(*current_script)->awoken = true;
-		}
-		else if ((*current_script)->my_component->active == true) //Check if the script instance is active or not
-		{
-			if ((*current_script)->started == false)
-			{
-				(*current_script)->my_table_class["Start"]();	// Start is done only once for the first time the script is active
-				(*current_script)->started = true;
-			}
-			else
-			{
-				(*current_script)->my_table_class["Update"]();	// Update is done on every iteration of the script as long as it remains active
-				int num = (*current_script)->my_table_class["position_x"];
 
-				int testwork = 0;
+	//Building a class / Namespace so Lua can have this object to Call EngineLOG by calling
+	if (cannot_start == false && App->scene_intro->playing == true)
+	{
+		for (current_script = class_instances.begin(); current_script != class_instances.end(); ++current_script)
+		{
+			if ((*current_script)->awoken == false)
+			{
+				(*current_script)->my_table_class["Awake"]();	// Awake is done first, regardless of the script being active or not
+				(*current_script)->awoken = true;
 			}
+			else if ((*current_script)->my_component->active == true) //Check if the script instance is active or not
+			{
+				if ((*current_script)->started == false)
+				{
+					(*current_script)->my_table_class["Start"]();	// Start is done only once for the first time the script is active
+					(*current_script)->started = true;
+				}
+				else
+				{
+					(*current_script)->my_table_class["Update"]();	// Update is done on every iteration of the script as long as it remains active
+					int num = (*current_script)->my_table_class["position_x"];
+
+					int testwork = 0;
+				}
 		}
 	}
-
+	}
 	return UPDATE_CONTINUE;
 }
+
+
+void ModuleScripting::CleanUpInstances()
+{
+	for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
+	{
+		RELEASE((*it));
+	}
+
+	class_instances.clear();
+}
+
 
 void ModuleScripting::Stop()
 {
 	for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
 		(*it)->awoken = (*it)->started = false;
 }
+
 
 Scripting::Scripting()
 {
