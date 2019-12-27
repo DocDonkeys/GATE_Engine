@@ -16,6 +16,8 @@ struct ScriptInstance {
 	ComponentScript* my_component = nullptr;
 	ResourceScript* my_resource = nullptr;
 	luabridge::LuaRef my_table_class = 0;
+	bool awoken = false;
+	bool started = false;
 };
 
 

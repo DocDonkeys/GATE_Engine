@@ -89,6 +89,12 @@ public:
 	const char* GetAuthors() const;
 	const char* GetLicense() const;
 
+	// Game State
+	bool IsGameFirstFrame() const;
+	bool IsGamePlaying() const;
+	bool IsGamePaused() const;
+	bool IsGameTick() const;
+
 	// Time
 	uint GetRealTime() const;
 	uint GetGameTime() const;
@@ -175,6 +181,7 @@ private:
 	FramerateManager	game_framerate;
 	std::string sceneBackupPath;
 	bool mustRunGame = true;
+	bool gameFirstFrame = false;
 	bool gamePlaying = false;
 	bool gamePaused = false;
 	bool gameTick = false;

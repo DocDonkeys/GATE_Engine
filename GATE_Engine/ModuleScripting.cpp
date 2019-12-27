@@ -13,6 +13,7 @@
 #include <iterator>
 
 #include "libs/MathGeoLib/include/Math/float4x4.h"
+#include "libs/SDL/include/SDL_keyboard.h"
 
 extern "C"
 {
@@ -87,7 +88,7 @@ bool ModuleScripting::DoHotReloading()
 			//If everything compiled just fine, give the recompiled instances the new version of the script
 			for (std::vector<ScriptInstance*>::iterator it = recompiled_instances.begin(); it != recompiled_instances.end(); ++it)
 				CompileScriptTableClass((*it));
-			
+
 			for (int i = 0; i < recompiled_instances.size(); ++i)
 				class_instances.push_back(recompiled_instances[i]);
 
@@ -163,14 +164,14 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 			std::string get_function = "GetTable" + script->my_resource->script_name;
 			get_function = App->SubtractString(get_function,".",false,true,false);
 			luabridge::LuaRef ScriptGetTable = luabridge::getGlobal(L, get_function.c_str());
-			
+
 			if (!ScriptGetTable.isNil())
 			{
 				luabridge::LuaRef table(ScriptGetTable());
 
 				script->my_table_class = table;
 			}
-				
+
 		}
 		else
 		{
@@ -210,7 +211,7 @@ ScriptFile* ModuleScripting::AddScriptFile(ComponentScript* script_component, st
 	ScriptFile* new_file = new ScriptFile;
 	script_files.push_back(new_file);
 	ret = new_file;
-		
+
 	return ret;
 }
 
@@ -232,7 +233,6 @@ bool ModuleScripting::Init()
 
 bool ModuleScripting::Start()
 {
-
 	return true;
 }
 
@@ -241,101 +241,63 @@ bool ModuleScripting::CleanUp()
 	return true;
 }
 
-update_status ModuleScripting::Update(float dt)
+update_status ModuleScripting::Update(float realDT)
+{
+	//If a script was changed during runtime, hot reload
+	if (!App->IsGamePlaying() && hot_reloading_waiting)
+		DoHotReloading();
+
+	// Carles to Didac
+	// 1. You can use the "IsWhatever" functions of App to check the current game state.
+	// 2. "App->IsGameFirstFrame()" marks the first frame a GameUpdate() will happen, if you want to do anything right before the game plays in preparation
+	// 3. Referring to your previous code, you expected DoHotReloading() to NOT run if the game is playing, I put the condition accordingly "!IsGamePlaying()"
+
+	return UPDATE_CONTINUE;
+}
+
+update_status ModuleScripting::GameUpdate(float gameDT)
 {
 	luabridge::getGlobalNamespace(L)
 		.beginNamespace("Debug")
 		.beginClass <Scripting>("Scripting")
 		.addConstructor<void(*) (void)>()
 		.addFunction("LOG", &Scripting::LogFromLua)
+		.addFunction("GetDT", &Scripting::GetDT)
 		.endClass()
 		.endNamespace();
 
 	Scripting Scripting;
-	//Building a class / Namespace so Lua can have this object to Call EngineLOG by calling 
+
+	//Building a class / Namespace so Lua can have this object to Call EngineLOG by calling
 	if (cannot_start == false && App->scene_intro->playing == true)
 	{
-		for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
+		for (current_script = class_instances.begin(); current_script != class_instances.end(); ++current_script)
 		{
-			if ((*it)->my_component->active == true) //Check if the script instance is active or not
+			if ((*current_script)->awoken == false)
 			{
-				if (start == true)
+				(*current_script)->my_table_class["Awake"]();	// Awake is done first, regardless of the script being active or not
+				(*current_script)->awoken = true;
+			}
+			else if ((*current_script)->my_component->active == true) //Check if the script instance is active or not
+			{
+				if ((*current_script)->started == false)
 				{
-					//Call Start Method of LUA class
-					(*it)->my_table_class["Start"] ();
+					(*current_script)->my_table_class["Start"]();	// Start is done only once for the first time the script is active
+					(*current_script)->started = true;
 				}
 				else
 				{
-					//Call Update Method of LUA class
-					(*it)->my_table_class["Update"] ();
-					int num = (*it)->my_table_class["position_x"];
+					(*current_script)->my_table_class["Update"]();	// Update is done on every iteration of the script as long as it remains active
+					int num = (*current_script)->my_table_class["position_x"];
 
 					int testwork = 0;
 				}
-			}
 		}
-		start = false;
-		/*luabridge::getGlobalNamespace(L)
-			.beginNamespace("Debug")
-			.beginClass <Scripting>("Scripting")
-			.addConstructor<void(*) (void)>()
-			.addFunction("LOG", &Scripting::LogFromLua)
-			.endClass()
-			.endNamespace();
-
-		Scripting Scripting;*/
-
-		//std::string script_path = App->file_system->GetPathToGameFolder(true) + "/Assets/Scripts/" + "lua_tabletest.lua";
-		//bool compiled = luaL_dofile(L, script_path.c_str());
-
-		//if (compiled == LUA_OK)
-		//{
-		//	if (start == true)
-		//	{
-		//		luabridge::LuaRef ScriptStart = luabridge::getGlobal(L, "Start");
-		//		if (!ScriptStart.isNil())
-		//			ScriptStart();
-		//		else
-		//			LOG("Could not execute Start!");
-		//	}
-		//	start = false;
-		//	//Get the Update function from LUA file
-		//	luabridge::LuaRef ScriptUpdate = luabridge::getGlobal(L, "Update");
-		//	//Execute Update
-		//	if (!ScriptUpdate.isNil())
-		//		for (int i = 0; i < 35; ++i)
-		//		{
-		//			ScriptUpdate();
-
-		//			luabridge::LuaRef number = luabridge::getGlobal(L, "Update_test");
-
-		//			int num = 0;
-		//			if (!number.isNil())
-		//				num = number.cast<int>();
-
-		//			LOG("Lua script Update was called. Update_test = %d", num);
-		//		}
-
-
-
-		//}
-		//else
-		//{
-		//	std::string error = lua_tostring(L, -1);
-		//	LOG("%s", error.data());
-		//}
 	}
-	else
-	{
-		start = true;
-
-		//If a script was changed during runtime, hot reload
-		if (hot_reloading_waiting)
-			DoHotReloading();
 	}
-
 	return UPDATE_CONTINUE;
 }
+
 
 void ModuleScripting::CleanUpInstances()
 {
@@ -345,6 +307,13 @@ void ModuleScripting::CleanUpInstances()
 	}
 
 	class_instances.clear();
+}
+
+
+void ModuleScripting::Stop()
+{
+	for (std::vector<ScriptInstance*>::iterator it = class_instances.begin(); it != class_instances.end(); ++it)
+		(*it)->awoken = (*it)->started = false;
 }
 
 
@@ -370,35 +339,61 @@ void Scripting::TestFunc()
 	LOG("This is a test function that Logs something (TestFunc)");
 }
 
-uint Scripting::GetRealTime()
+uint Scripting::GetRealTime() const
 {
 	return App->GetRealTime();
 }
 
-uint Scripting::GetGameTime()
+uint Scripting::GetTime() const
 {
 	return App->GetGameTime();
 }
 
+float Scripting::GetRealDT() const
+{
+	return App->GetRealDT();
+}
+
+float Scripting::GetDT() const
+{
+	return App->GetGameDT();
+}
+
 // Input
-int Scripting::GetKeyState(int keyCode) const
+int Scripting::GetKeyState(const char* key) const
 {
-	return App->input->GetKey(keyCode);
+	SDL_Scancode code = SDL_GetScancodeFromName(key);
+	if (code != SDL_SCANCODE_UNKNOWN)
+		return App->input->GetKey(code);
+	else
+		return -1;
 }
 
-bool Scripting::KeyDown(int keyCode) const
+bool Scripting::KeyDown(const char* key) const
 {
-	return App->input->GetKey(keyCode) == KEY_DOWN;
+	SDL_Scancode code = SDL_GetScancodeFromName(key);
+	if (code != SDL_SCANCODE_UNKNOWN)
+		return App->input->GetKey(code) == KEY_DOWN;
+	else
+		return false;
 }
 
-bool Scripting::KeyUp(int keyCode) const
+bool Scripting::KeyUp(const char* key) const
 {
-	return App->input->GetKey(keyCode) == KEY_UP;
+	SDL_Scancode code = SDL_GetScancodeFromName(key);
+	if (code != SDL_SCANCODE_UNKNOWN)
+		return App->input->GetKey(code) == KEY_UP;
+	else
+		return false;
 }
 
-bool Scripting::KeyRepeat(int keyCode) const
+bool Scripting::KeyRepeat(const char* key) const
 {
-	return App->input->GetKey(keyCode) == KEY_REPEAT;
+	SDL_Scancode code = SDL_GetScancodeFromName(key);
+	if (code != SDL_SCANCODE_UNKNOWN)
+		return App->input->GetKey(code) == KEY_REPEAT;
+	else
+		return false;
 }
 
 void Scripting::GetMouseRaycast(float& x, float& y, float& z) const
@@ -411,98 +406,151 @@ void Scripting::GetMouseRaycast(float& x, float& y, float& z) const
 	}
 }
 
-// OBJECT TRANSLATOR
-void Scripting::CreateObj()
-{
+// GameObjects
+//const GameObject* Scripting::Find(const char* objName) const
+//{
+//	const GameObject* ret = nullptr;
+//
+//	std::vector<const GameObject*> vec;
+//	GOFunctions::FillArrayWithChildren(vec, App->scene_intro->root);
+//	for (std::vector<const GameObject*>::iterator it = vec.begin(); it != vec.end(); ++it)
+//		if ((*it)->name == objName) {
+//			ret = (*it);
+//			break;
+//		}
+//
+//	return ret;
+//}
 
+void Scripting::Enable(bool state)
+{
+	(*App->scripting->current_script)->my_component->active = state;
 }
 
-void Scripting::DestroyObj()
+bool Scripting::IsEnabled() const
 {
+	return (*App->scripting->current_script)->my_component->active;
+}
 
+// OBJECT TRANSLATOR
+
+// General
+const GameObject* Scripting::GetGameObject() const
+{
+	return (*App->scripting->current_script)->my_component->my_go;
+}
+
+const char* Scripting::GetObjectName() const
+{
+	return (*App->scripting->current_script)->my_component->my_go->name.c_str();
+}
+
+void Scripting::ActivateObject(bool state)
+{
+	(*App->scripting->current_script)->my_component->my_go->UpdateChildrenActive(state);
+}
+
+bool Scripting::IsObjectActivated() const
+{
+	return (*App->scripting->current_script)->my_component->my_go->active;
+}
+
+void Scripting::SetStatic(bool state)
+{
+	(*App->scripting->current_script)->my_component->my_go->UpdateStaticStatus(state);
+}
+
+bool Scripting::IsStatic() const
+{
+	return (*App->scripting->current_script)->my_component->my_go->staticObj;
+}
+
+void Scripting::DestroySelf() const
+{
+	App->scene_intro->DestroyGameObject((*App->scripting->current_script)->my_component->my_go);
 }
 
 // Position
-float Scripting::GetObjPosX(ScriptInstance* script)
+float Scripting::GetPositionX() const
 {
-	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.x;
+	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.x;
 }
 
-float Scripting::GetObjPosY(ScriptInstance* script)
+float Scripting::GetPositionY() const
 {
-	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.y;
+	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.y;
 }
 
-float Scripting::GetObjPosZ(ScriptInstance* script)
+float Scripting::GetPositionZ() const
 {
-	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.z;
+	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.z;
 }
 
-void Scripting::GetObjPos(ScriptInstance* script, float& x, float& y, float& z)
+void Scripting::GetPosition(float& x, float& y, float& z) const
 {
-	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	x = trs->position.x;
 	y = trs->position.y;
 	z = trs->position.z;
 }
 
-void Scripting::MoveObj(ScriptInstance* script, float x, float y, float z)
+void Scripting::Move(float x, float y, float z)
 {
-	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	trs->position += float3(x, y, z);
 	trs->needsUpdateGlobal = true;
 }
 
-void Scripting::SetObjPos(ScriptInstance* script, float x, float y, float z)
+void Scripting::SetPosition(float x, float y, float z)
 {
-	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	trs->position = float3(x, y, z);
 	trs->needsUpdateGlobal = true;
 }
 
 // Rotation
-float Scripting::GetObjRotX(ScriptInstance* script)
+float Scripting::GetEulerX() const
 {
-	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.x;
+	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.x;
 }
 
-float Scripting::GetObjRotY(ScriptInstance* script)
+float Scripting::GetEulerY() const
 {
-	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.y;
+	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.y;
 }
 
-float Scripting::GetObjRotZ(ScriptInstance* script)
+float Scripting::GetEulerZ() const
 {
-	return ((ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.z;
+	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.z;
 }
 
-void Scripting::GetObjRot(ScriptInstance* script, float& x, float& y, float& z)
+void Scripting::GetEulerRotation(float& x, float& y, float& z) const
 {
-	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+
 	x = trs->rotation.x;
 	y = trs->rotation.y;
 	z = trs->rotation.z;
 }
 
-void Scripting::RotateObj(ScriptInstance* script, float x, float y, float z)
+void Scripting::Rotate(float x, float y, float z)
 {
-	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	trs->rotation += float3(x, y, z);
 	trs->needsUpdateGlobal = true;
 }
 
-void Scripting::SetObjRot(ScriptInstance* script, float x, float y, float z)
+void Scripting::SetEulerRotation(float x, float y, float z)
 {
-	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	trs->rotation += float3(x, y, z);
 	trs->needsUpdateGlobal = true;
 }
 
 // Others
-void Scripting::LookAt(ScriptInstance* script, float spotX, float spotY, float spotZ)
+void Scripting::LookAt(float spotX, float spotY, float spotZ)
 {
-	ComponentTransform* trs = (ComponentTransform*)script->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	trs->localTrs * float4x4::LookAt(trs->localTrs.Col3(2), float3(spotX, spotY, spotZ) - trs->position, trs->localTrs.Col3(1), float3::unitY);
 	trs->needsUpdateGlobal = true;
 }

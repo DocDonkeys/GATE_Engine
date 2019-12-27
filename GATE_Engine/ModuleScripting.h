@@ -6,6 +6,7 @@
 #include "ImporterScript.h"
 
 class lua_State;
+class GameObject;
 class ComponentScript;
 struct ScriptFile;
 struct ScriptInstance;
@@ -29,8 +30,15 @@ public:
 	bool Init();
 	bool Start();
 	bool CleanUp();
-	update_status Update(float dt);
+
+	update_status Update(float realDT);
+	update_status GameUpdate(float gameDT);
+
+	void Stop();
+
+public:
 	ImporterScript ie_scripts;
+	std::vector<ScriptInstance*>::iterator current_script;
 
 private:
 	// L is our Lua Virtual Machine, it's called L because its the common name it receives, so all programers can understand what this var is
@@ -59,43 +67,62 @@ public:
 	void LogFromLua(const char* string);
 	void TestFunc();
 
-	uint GetRealTime();
-	uint GetGameTime();
+	uint GetRealTime() const;
+	uint GetTime() const;
+
+	float GetRealDT() const;
+	float GetDT() const;
 
 	// Input
-	int GetKeyState(int keyCode) const;
-	bool KeyDown(int keyCode) const;
-	bool KeyUp(int keyCode) const;
-	bool KeyRepeat(int keyCode) const;
+	int GetKeyState(const char* key) const;
+	bool KeyDown(const char* key) const;
+	bool KeyUp(const char* key) const;
+	bool KeyRepeat(const char* key) const;
 
 	void GetMouseRaycast(float& x, float& y, float& z) const;
 
+	// GameObjects
+	//const GameObject* Find(const char* objName) const;
+	//const GameObject* Instantiate(Resource prefab);
+	//const GameObject* Destroy(const GameObject* target);
+
+	// SCRIPT TRANSLATOR
+	void Enable(bool state);
+	bool IsEnabled() const;
+
 	// OBJECT TRANSLATOR
-	void CreateObj();
-	void DestroyObj();
+	// General
+	const GameObject* GetGameObject() const;
+	const char* GetObjectName() const;
+
+	void ActivateObject(bool state);
+	bool IsObjectActivated() const;
+
+	void SetStatic(bool state);
+	bool IsStatic() const;
+
+	void DestroySelf() const;
 
 	// Position
-	float GetObjPosX(ScriptInstance* script);
-	float GetObjPosY(ScriptInstance* script);
-	float GetObjPosZ(ScriptInstance* script);
-	void GetObjPos(ScriptInstance* script, float& x, float& y, float& z);
+	float GetPositionX() const;
+	float GetPositionY() const;
+	float GetPositionZ() const;
+	void GetPosition(float& x, float& y, float& z) const;
 
-	void MoveObj(ScriptInstance* script, float x, float y, float z);
-	void SetObjPos(ScriptInstance* script, float x, float y, float z);
+	void Move(float x, float y, float z);
+	void SetPosition(float x, float y, float z);
 
 	// Rotation
-	float GetObjRotX(ScriptInstance* script);	// Roll
-	float GetObjRotY(ScriptInstance* script);	// Pitch
-	float GetObjRotZ(ScriptInstance* script);	// Yaw
-	void GetObjRot(ScriptInstance* script, float& x, float& y, float& z);
+	float GetEulerX() const;	// Roll
+	float GetEulerY() const;	// Pitch
+	float GetEulerZ() const;	// Yaw
+	void GetEulerRotation(float& x, float& y, float& z) const;
 
-	void RotateObj(ScriptInstance* script, float x, float y, float z);
-	void SetObjRot(ScriptInstance* script, float x, float y, float z);
+	void Rotate(float x, float y, float z);
+	void SetEulerRotation(float x, float y, float z);
 
 	// Others
-	void LookAt(ScriptInstance* script, float posX, float posY, float posZ);
+	void LookAt(float posX, float posY, float posZ);
 };
 
-
 #endif // !__MODULESCRIPTING_H__
-
