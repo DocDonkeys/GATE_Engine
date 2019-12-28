@@ -40,6 +40,8 @@ public: //Methods
 	void UpdateChildrenActive(bool newVal);
 	void UpdateStaticStatus(bool newVal, bool recursive = true);
 
+	uint32 ChangeRandomUID();
+
 	Component* CreateComponent(COMPONENT_TYPE type);
 	Component* GetComponent(COMPONENT_TYPE type) const;
 
@@ -67,6 +69,9 @@ namespace GOFunctions {
 	//Returns all gameobjects that are directly or indirectly children of the gameobject, for instance: 
 	// if a children gameobject also has children, it will include its children too, including all nodes of the tree that depend on the gameobject passed
 	void FillArrayWithChildren(std::vector<const GameObject*> &go_array, const GameObject* go, bool add_parent = false, uint count = 0);
+	//Same as functin above but for non const purposes
+	void FillArrayWithModifiableChildren(std::vector<GameObject*> &go_array,GameObject* go, bool add_parent = false, uint count = 0);
+	GameObject* InstantiateGameObject(GameObject* go_to_instantiate);
 }
 #endif // !__GAMEOBJECT_H__
 
