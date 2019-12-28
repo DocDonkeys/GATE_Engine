@@ -230,9 +230,20 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 	{
 		float width = ImGui::GetWindowWidth() / 7.0f;
 
-		float3 pos, rot, scale;
+		float3 pos, rot, scale, snap;
 		transform->GetLocalMat(pos, rot, scale);
 		rot = RadToDeg(rot);
+		snap = App->scene_intro->snapTools;
+
+		float defaultDrag = 0.05f;
+		float3 dragValues(defaultDrag);
+		
+		/*if (App->scene_intro->snapActivated[0] && snap.x > 0.0f)	//IMPROVE: Find an user-friendly acceptable use or get rid of it (disabled currently)
+			dragValues.x = snap.x;
+		if (App->scene_intro->snapActivated[1] && snap.y > 0.0f)
+			dragValues.y = snap.y;
+		if (App->scene_intro->snapActivated[2] && snap.z > 0.0f)
+			dragValues.z = snap.z;*/
 
 		ImGui::Columns(4, "TransformGrid"); // 4-ways, with border
 
@@ -255,13 +266,13 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Position"); ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PX", &pos.x, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##PX", &pos.x, dragValues.x, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PY", &pos.y, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##PY", &pos.y, dragValues.y, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##PZ", &pos.z, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##PZ", &pos.z, dragValues.z, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		//if (!App->input->GetMouseWrapping())
 		//	if (transform->position.x != pos.x || transform->position.y != pos.y || transform->position.z != pos.z)	// METHOD_2
@@ -271,13 +282,13 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Rotation"); ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RX", &rot.x, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##RX", &rot.x, dragValues.x, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RY", &rot.y, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##RY", &rot.y, dragValues.y, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##RZ", &rot.z, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##RZ", &rot.z, dragValues.z, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		//if (!App->input->GetMouseWrapping())	// METHOD_2
 		//	if (transform->rotation.x != rot.x || transform->rotation.y != rot.y || transform->rotation.z != rot.z)
@@ -286,27 +297,81 @@ void EditorInspector::DrawComponentTransform(ComponentTransform * transform)
 
 		// Scale
 		ImGui::AlignTextToFramePadding();
-		ImGui::Text("Scale   "); ImGui::NextColumn();
+		ImGui::Text("Scale"); ImGui::SameLine(); HoverTip("Beware of using snap with Scale! There are some issues that need fixing, but for now we recommend that you use it with 1.0f or below values.");
+		ImGui::NextColumn();
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SX", &scale.x, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##SX", &scale.x, dragValues.x, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SY", &scale.y, 0.05f); ImGui::NextColumn();
+		ImGui::DragFloat("##SY", &scale.y, dragValues.y, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		ImGui::SetNextItemWidth(width);
-		ImGui::DragFloat("##SZ", &scale.z, 0.05f);
+		ImGui::DragFloat("##SZ", &scale.z, dragValues.z, 0.f, 0.f, "%.2f"); ImGui::NextColumn();
 
 		//if (!App->input->GetMouseWrapping())	// METHOD_2
 		//	if (transform->scale.x != scale.x || transform->scale.y != scale.y || transform->scale.z != scale.z)
 		//		transform->SetScale(scale);
 
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("Snap"); ImGui::SameLine(); HoverTip("Use for Gizmo only! Does not affect the Inspector drag UI because of the drag sensibility being too hight for the snap values and user confort.");
+		ImGui::NextColumn();
+
+		if (ImGui::Checkbox("##SnapCheckX", &App->scene_intro->snapActivated[0])) {
+			if (App->scene_intro->snapActivated[0]) {
+				snap.x = App->scene_intro->snapBackup.x;
+			}
+			else {
+				App->scene_intro->snapBackup.x = snap.x;
+				snap.x = 0.0f;
+			}
+		}
+		if (App->scene_intro->snapActivated[0]) {
+			ImGui::SameLine(); ImGui::SetNextItemWidth(width / 1.5f);
+			ImGui::DragFloat("##SnapX", &snap.x, 0.1f, 0.1f, 999.9f, "%.1f");
+		}
+		ImGui::NextColumn();
+
+		if (ImGui::Checkbox("##SnapCheckY", &App->scene_intro->snapActivated[1])) {
+			if (App->scene_intro->snapActivated[1]) {
+				snap.y = App->scene_intro->snapBackup.y;
+			}
+			else {
+				App->scene_intro->snapBackup.y = snap.y;
+				snap.y = 0.0f;
+			}
+		}
+		if (App->scene_intro->snapActivated[1]) {
+			ImGui::SameLine(); ImGui::SetNextItemWidth(width / 1.5f);
+			ImGui::DragFloat("##SnapY", &snap.y, 0.1f, 0.1f, 999.9f, "%.1f");
+		}
+		ImGui::NextColumn();
+
+		if (ImGui::Checkbox("##SnapCheckZ", &App->scene_intro->snapActivated[2])) {
+			if (App->scene_intro->snapActivated[2]) {
+				snap.z = App->scene_intro->snapBackup.z;
+			}
+			else {
+				App->scene_intro->snapBackup.z = snap.z;
+				snap.z = 0.0f;
+			}
+		}
+		if (App->scene_intro->snapActivated[2]) {
+			ImGui::SameLine(); ImGui::SetNextItemWidth(width / 1.5f);
+			ImGui::DragFloat("##SnapZ", &snap.z, 0.1f, 0.1f, 999.9f, "%.1f");
+		}
+		ImGui::NextColumn();
+
 		ImGui::Columns(1);
 		ImGui::TreePop();
 
-		// Data and Matrix Updating
-		if (!App->input->GetMouseWrapping())
+		// Update all values of Mouse isn't wrapping
+		if (!App->input->GetMouseWrapping()) {
 			if (transform->SetLocalMat(pos, DegToRad(rot), scale))
 				transform->my_go->UpdateStaticStatus(false, true);
+
+			App->scene_intro->snapTools = snap;
+		}
+			
 
 		//if (transform->needsUpdateGlobal)	// If any change was made, global needs updating and so we remove static status // METHOD_2
 		//	transform->my_go->UpdateStaticStatus(false, true);
@@ -492,9 +557,8 @@ void EditorInspector::DrawComponentScript(ComponentScript * script)
 
 	std::string name = script->script_name + "(Script)";
 	if (ImGui::TreeNodeEx(name.data(), base_flags)) {
-		ImGui::Checkbox("Active", &script->active); ImGui::SameLine();
+		ImGui::Checkbox("Active", &script->active);
 		
-
 		ImGui::TreePop();
 	}
 	ImGui::Separator();

@@ -176,7 +176,7 @@ update_status ModuleEditor::Update(float dt)
 	 using_menu = io->WantCaptureMouse;
 
 	 // ImGuizmo
-	 if (/*!App->IsGamePlaying() && */App->scene_intro->selected_go != nullptr)	//NOTE: ImGuizmo doesn't work well with ortographic camera, careful if it's implemented!
+	 if (/*!App->IsGamePlaying() && */App->scene_intro->gizmos && App->scene_intro->selected_go != nullptr)	//NOTE: ImGuizmo doesn't work well with ortographic camera, careful if it's implemented!
 		 DrawImGuizmo();
 
 	return ret;
@@ -277,7 +277,7 @@ void ModuleEditor::ByteSizeModeChange()
 	}
 }
 
-void ModuleEditor::DrawImGuizmo()
+void ModuleEditor::DrawImGuizmo()	//IMPROVE: Add ImViewGizmo and Bounds
 {
 	ImGuizmo::BeginFrame();
 	float4x4 projection;
@@ -295,10 +295,17 @@ void ModuleEditor::DrawImGuizmo()
 	//if (App->scene_intro->handlePositionMode == (int)handle_position::CENTER)	//IMPROVE: Make rotation axis be in the AABB center (which should include all children?)
 	//	mat.SetTranslatePart(transform->my_go->aabb.CenterPoint());
 
-	mat.Transpose();
-	ImGuizmo::Manipulate((float*)view.v, (float*)projection.v, (ImGuizmo::OPERATION)App->scene_intro->toolMode, (ImGuizmo::MODE)App->scene_intro->handleRotationMode, (float*)mat.v);
-	transform->globalTrs = mat.Transposed();
+	bool snap = false;
+	for (int i = 0; i < 3; ++i)
+		if (snap = App->scene_intro->snapActivated[i])	// The single "=" is on purpose, not a typo
+			break;
 
+	mat.Transpose();
+	ImGuizmo::Manipulate((float*)view.v, (float*)projection.v,
+		(ImGuizmo::OPERATION)App->scene_intro->toolMode, (ImGuizmo::MODE)App->scene_intro->handleRotationMode,
+		(float*)mat.v, NULL, snap ? App->scene_intro->snapTools.ptr() : NULL);
+
+	transform->globalTrs = mat.Transposed();
 	if (ImGuizmo::IsUsing())
 		transform->needsUpdateLocal = true;
 }

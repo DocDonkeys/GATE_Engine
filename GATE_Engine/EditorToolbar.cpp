@@ -20,8 +20,9 @@ void EditorToolbar::Update()
 	ImGui::RadioButton("Drag", &App->scene_intro->toolMode, (int)tool_mode::DRAG); ImGui::SameLine();
 	ImGui::RadioButton("Move", &App->scene_intro->toolMode, (int)tool_mode::TRANSLATE); ImGui::SameLine();
 	ImGui::RadioButton("Rotate", &App->scene_intro->toolMode, (int)tool_mode::ROTATE); ImGui::SameLine();
-	ImGui::RadioButton("Scale", &App->scene_intro->toolMode, (int)tool_mode::SCALE);/* ImGui::SameLine();
-	if (ImGui::RadioButton("Bounds", &App->scene_intro->toolMode, (int)tool_mode::BOUNDS))*/
+	ImGui::RadioButton("Scale", &App->scene_intro->toolMode, (int)tool_mode::SCALE); ImGui::SameLine(300.f);
+	/*ImGui::RadioButton("Bounds", &App->scene_intro->toolMode, (int)tool_mode::BOUNDS); ImGui::SameLine()*/
+	ImGui::Checkbox("Gizmos", &App->scene_intro->gizmos);
 
 	ImVec2 buttonSize = { 50.f, 20.f };		// IMPROVE: Image Buttons
 
@@ -54,7 +55,7 @@ void EditorToolbar::Update()
 	}
 	HoverTip("Tool Handle Rotation (X)", true);
 
-	ImGui::SameLine(); HoverTip("<--- Transform tools not implemented yet!");	//CHANGE/FIX: Remove this when implementation is done
+	ImGui::SameLine(); HoverTip("<--- Center/Pivot not in implemented yet.");	//CHANGE/FIX: Remove this when implementation is done
 
 	// Game Options
 	ImGui::SameLine(windowCenter - buttonSize.x * 1.7f);
@@ -102,5 +103,5 @@ void EditorToolbar::Update()
 
 		ImGui::EndPopup();
 	}
-	ImGui::SameLine(); HoverTip("The Engine is prepared to execute a GameUpdate on user command bound to the set speed using the given controls. The lack of scripting makes functionalities like speed and Tick unnoticeable, thought you can Play, change the scene, and reload on Stop.");
+	ImGui::SameLine(); HoverTip("Right Click to Reset.");
 }

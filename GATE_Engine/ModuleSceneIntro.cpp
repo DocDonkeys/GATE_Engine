@@ -303,7 +303,9 @@ int ModuleSceneIntro::CheckToolMode()
 {
 	int ret = toolMode;
 
-	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN || App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_IDLE
+		|| App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN)
+	{
 		ret = (int)tool_mode::DRAG;
 		lastToolMode = toolMode;
 	}

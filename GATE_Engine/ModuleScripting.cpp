@@ -376,7 +376,7 @@ Scripting::~Scripting()
 //Function that Lua will be able to call as LOG
 void Scripting::LogFromLua(const char * string)
 {
-	LOG(string);
+	LOG("[Script]: %s", string);
 }
 
 void Scripting::TestFunc()

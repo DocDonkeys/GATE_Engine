@@ -64,6 +64,11 @@ public:
 	uint instances_created = 0;
 
 	// Modes
+	bool gizmos = true;		// CHANGE/FIX: Save&Load
+	bool snapActivated[3] = { false, false, false };	//CHANGE/FIX: Add Save&Load
+	float3 snapTools = { 0.1f, 0.1f, 0.1f };	//CHANGE/FIX: Add Save&Load
+	float3 snapBackup = { 0.1f, 0.1f, 0.1f };
+
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
 	int lastToolMode = (int)tool_mode::DRAG;
 	int handlePositionMode = (int)handle_position::CENTER;	// CHANGE/FIX: Save&Load

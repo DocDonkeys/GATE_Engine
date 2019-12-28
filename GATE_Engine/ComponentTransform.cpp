@@ -202,6 +202,11 @@ bool ComponentTransform::SetLocalMat(float3& newPos, float3& newRot, float3& new
 		|| position.z != newPos.z) {
 		changed = true;
 	}
+	else if (scale.x != newScale.x
+		|| scale.y != newScale.y
+		|| scale.z != newScale.z) {
+		changed = true;
+	}
 	else if (rotation.x != newRot.x
 		|| rotation.y != newRot.y
 		|| rotation.z != newRot.z) {
@@ -209,11 +214,6 @@ bool ComponentTransform::SetLocalMat(float3& newPos, float3& newRot, float3& new
 
 		if (abs(rotation.x - newRot.x) < 0.000001 && abs(rotation.y - newRot.y) < 0.000001 && abs(rotation.z - newRot.z) < 0.000001)
 			changed = false;	//CHANGE/FIX: Mousepicking rotates the clicked obj by very small decimals (wtf), this avoids a transformation to happen because of it
-	}
-	else if (scale.x != newScale.x
-		|| scale.y != newScale.y
-		|| scale.z != newScale.z) {
-		changed = true;
 	}
 
 	if (changed) {
