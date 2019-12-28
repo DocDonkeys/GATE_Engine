@@ -3,6 +3,7 @@ local Functions = Debug.Scripting ()
 function	GetTablelua_tankcontrols ()
 local lua_table = {}
 lua_table["Functions"] = Debug.Scripting ()
+lua_table["Speed"] = 10
 
 function lua_table:Awake ()
 end

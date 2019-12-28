@@ -3,6 +3,8 @@
 
 #include "Component.h"
 class ResourceScript;
+
+
 class ComponentScript : public Component
 {
 public:

@@ -9,6 +9,7 @@
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
 #include "ModuleResources.h"
+#include "ScriptVar.h"
 #include "MemLeaks.h"
 #include <iterator>
 
@@ -172,6 +173,27 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 				luabridge::LuaRef table(ScriptGetTable());
 
 				script->my_table_class = table;
+
+				for (luabridge::Iterator iterator(script->my_table_class); !iterator.isNil(); ++iterator)
+				{
+					// Use iterator.key () and iterator.value() here
+					bool is_number = (*iterator).first.isNumber();
+					bool is_string = (*iterator).first.isString();
+					bool is_function = (*iterator).first.isFunction();
+					bool is_bool = (*iterator).first.isBool();
+
+
+					bool value_is_number = (*iterator).second.isNumber();
+					bool value_is_string = (*iterator).second.isString();
+					bool value_is_function = (*iterator).second.isFunction();
+					bool value_is_bool = (*iterator).second.isBool();
+
+					std::string str = (*iterator).first.tostring();
+
+					ScriptVar var = ScriptVar(true);
+
+					int test = 0;
+				}
 			}
 
 		}

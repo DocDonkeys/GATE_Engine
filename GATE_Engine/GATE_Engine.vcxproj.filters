@@ -186,6 +186,9 @@
     <ClCompile Include="ImporterScript.cpp">
       <Filter>Sources\Tools\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptVar.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -390,6 +393,9 @@
     </ClInclude>
     <ClInclude Include="ImporterScript.h">
       <Filter>Sources\Tools\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptVar.h">
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
