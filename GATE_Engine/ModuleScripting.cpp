@@ -336,9 +336,6 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 				else
 				{
 					(*current_script)->my_table_class["Update"]();	// Update is done on every iteration of the script as long as it remains active
-					int num = (*current_script)->my_table_class["position_x"];
-
-					int testwork = 0;
 				}
 		}
 	}
@@ -631,16 +628,29 @@ void Scripting::SetEulerRotation(float x, float y, float z, bool local)
 }
 
 // Others
-void Scripting::LookAt(float spotX, float spotY, float spotZ)
+void Scripting::LookAt(float spotX, float spotY, float spotZ, bool local)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->localTrs = trs->localTrs * float4x4::LookAt(trs->localTrs.WorldZ(), (float3(spotX, spotY, spotZ) - trs->globalTrs.TranslatePart()).Normalized(), trs->localTrs.WorldY(), float3::unitY);
-	trs->needsUpdateGlobal = true;
+	float3 dir;
+
+	if (local)
+		dir = (float3(spotX, spotY, spotZ) - trs->localTrs.TranslatePart());
+	else
+		dir = (float3(spotX, spotY, spotZ) - trs->globalTrs.TranslatePart());
+
+	LookTo(dir.x, dir.y, dir.z, local);
 }
 
-void Scripting::LookTo(float dirX, float dirY, float dirZ)
+void Scripting::LookTo(float dirX, float dirY, float dirZ, bool local)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->localTrs = trs->localTrs * float4x4::LookAt(trs->localTrs.WorldZ(), float3(dirX, dirY, dirZ), trs->localTrs.WorldY(), float3::unitY);
+
+	if (local)
+		trs->localTrs = trs->localTrs * float4x4::LookAt(trs->localTrs.WorldZ(), float3(dirX, dirY, dirZ).Normalized(), trs->localTrs.WorldY(), float3::unitY);
+	else {
+		trs->localTrs = trs->localTrs * float4x4::LookAt(trs->localTrs.WorldZ(), float3(dirX, dirY, dirZ).Normalized(), trs->localTrs.WorldY(), float3::unitY);
+		trs->localTrs = ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->parent->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.Inverted().RotatePart() * trs->localTrs;	// Maybe there's a simpler way, but this works and by God I'm not fucking touching it again for now
+	}
+
 	trs->needsUpdateGlobal = true;
 }

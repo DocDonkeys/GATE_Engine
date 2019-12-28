@@ -122,8 +122,8 @@ public:
 	void SetEulerRotation(float x, float y, float z, bool local);
 
 	// Others
-	void LookAt(float posX, float posY, float posZ);
-	void LookTo(float dirX, float dirY, float dirZ);
+	void LookAt(float posX, float posY, float posZ, bool local);
+	void LookTo(float dirX, float dirY, float dirZ, bool local);
 };
 
 #endif // !__MODULESCRIPTING_H__

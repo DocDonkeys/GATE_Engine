@@ -178,7 +178,7 @@ update_status ModuleSceneIntro::PreUpdate(float realDT)
 // Update
 update_status ModuleSceneIntro::Update(float realDT)
 {
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)	// Avoid conflicting with First Person controls
+	if (App->IsGamePlaying() || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_IDLE)	// IMPROVE: Define better the limitations of using tool/camera controls (Like a condition of being in Scene or Editor view)
 		toolMode = CheckToolMode();
 
 	root->Update(realDT);

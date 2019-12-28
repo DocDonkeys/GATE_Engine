@@ -176,7 +176,7 @@ update_status ModuleEditor::Update(float dt)
 	 using_menu = io->WantCaptureMouse;
 
 	 // ImGuizmo
-	 if (!App->IsGamePlaying() && App->scene_intro->selected_go != nullptr/*draw_guizmo && App->camera->background_camera->getFrustum()->type != math::FrustumType::OrthographicFrustum*/)
+	 if (/*!App->IsGamePlaying() && */App->scene_intro->selected_go != nullptr)	//NOTE: ImGuizmo doesn't work well with ortographic camera, careful if it's implemented!
 		 DrawImGuizmo();
 
 	return ret;
