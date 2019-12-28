@@ -491,8 +491,7 @@ void EditorInspector::DrawComponentScript(ComponentScript * script)
 	ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_SpanAvailWidth;
 
 	std::string name = script->script_name + "(Script)";
-	if (ImGui::TreeNodeEx(name.data(), base_flags))
-	{
+	if (ImGui::TreeNodeEx(name.data(), base_flags)) {
 		ImGui::Checkbox("Active", &script->active); ImGui::SameLine();
 		
 

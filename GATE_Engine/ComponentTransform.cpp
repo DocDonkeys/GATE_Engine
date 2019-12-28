@@ -95,7 +95,7 @@ float3 ComponentTransform::Translate(float3 movement, bool local)
 	}
 }
 
-float3 ComponentTransform::SetTranslation(float3 targetPos, bool local)
+float3 ComponentTransform::SetPosition(float3 targetPos, bool local)
 {
 	if (local) {
 		float3 origPos = position;

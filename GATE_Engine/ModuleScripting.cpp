@@ -268,19 +268,54 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 		.beginNamespace("Debug")
 		.beginClass <Scripting>("Scripting")
 		.addConstructor<void(*) (void)>()
+
+		// General
 		.addFunction("LOG", &Scripting::LogFromLua)
-		.addFunction("GetDT", &Scripting::GetDT)
-		.addFunction("KeyRepeat", &Scripting::KeyRepeat)
-		.addFunction("Translate", &Scripting::Translate)
-		.addFunction("Rotate", &Scripting::Rotate)
+		.addFunction("time", &Scripting::GetTime)
+		.addFunction("dt", &Scripting::GetDT)
+
+		// Input
+		.addFunction("KeyState", &Scripting::GetKeyState)
+		.addFunction("KeyDown", &Scripting::IsKeyDown)
+		.addFunction("KeyUp", &Scripting::IsKeyUp)
+		.addFunction("KeyRepeat", &Scripting::IsKeyRepeat)
 		.addCFunction("GetMouseRaycastHit", &Scripting::GetMouseRaycastHit)
+
+		// Script Data
+		.addFunction("Enable", &Scripting::Enable)
+		.addFunction("enabled", &Scripting::IsEnabled)
+
+		// Object Data
+		//.addFunction("gameObject", &Scripting::GetGameObject)
+		//.addFunction("GO_name", &Scripting::GetObjectName)
+		.addFunction("GO_Enable", &Scripting::ActivateObject)
+		.addFunction("go_enabled", &Scripting::IsObjectActivated)
+		.addFunction("Destroy", &Scripting::DestroySelf)
+
+		// Transform Position
+		.addFunction("position_x", &Scripting::GetPositionX)
+		.addFunction("position_y", &Scripting::GetPositionY)
+		.addFunction("position_z", &Scripting::GetPositionZ)
+		.addFunction("position", &Scripting::GetPosition)
+		.addFunction("Translate", &Scripting::Translate)
+		.addFunction("SetPosition", &Scripting::SetPosition)
+
+		// Transform Rotation
+		.addFunction("rotation_x", &Scripting::GetEulerX)
+		.addFunction("rotation_y", &Scripting::GetEulerY)
+		.addFunction("rotation_z", &Scripting::GetEulerZ)
+		.addFunction("rotation", &Scripting::GetEulerRotation)
+		.addFunction("Rotate", &Scripting::Rotate)
+		.addFunction("SetRotation", &Scripting::SetEulerRotation)
+
+		// Uility
 		.addFunction("LookAt", &Scripting::LookAt)
 		.addFunction("LookTo", &Scripting::LookTo)
+
 		.endClass()
 		.endNamespace();
 
 	Scripting Scripting;
-
 	//Building a class / Namespace so Lua can have this object to Call EngineLOG by calling
 	if (cannot_start == false && App->scene_intro->playing == true)
 	{
@@ -382,7 +417,7 @@ int Scripting::GetKeyState(const char* key) const
 		return -1;
 }
 
-bool Scripting::KeyDown(const char* key) const
+bool Scripting::IsKeyDown(const char* key) const
 {
 	SDL_Scancode code = SDL_GetScancodeFromName(key);
 	if (code != SDL_SCANCODE_UNKNOWN)
@@ -391,7 +426,7 @@ bool Scripting::KeyDown(const char* key) const
 		return false;
 }
 
-bool Scripting::KeyUp(const char* key) const
+bool Scripting::IsKeyUp(const char* key) const
 {
 	SDL_Scancode code = SDL_GetScancodeFromName(key);
 	if (code != SDL_SCANCODE_UNKNOWN)
@@ -400,7 +435,7 @@ bool Scripting::KeyUp(const char* key) const
 		return false;
 }
 
-bool Scripting::KeyRepeat(const char* key) const
+bool Scripting::IsKeyRepeat(const char* key) const
 {
 	SDL_Scancode code = SDL_GetScancodeFromName(key);
 	if (code != SDL_SCANCODE_UNKNOWN)
@@ -488,76 +523,111 @@ void Scripting::DestroySelf() const
 }
 
 // Position
-float Scripting::GetPositionX() const
+float Scripting::GetPositionX(bool local) const
 {
-	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.x;
+	if (local)
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.x;
+	else
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.TranslatePart().x;
 }
 
-float Scripting::GetPositionY() const
+float Scripting::GetPositionY(bool local) const
 {
-	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.y;
+	if (local)
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.y;
+	else
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.TranslatePart().y;
 }
 
-float Scripting::GetPositionZ() const
+float Scripting::GetPositionZ(bool local) const
 {
-	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.z;
+	if (local)
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.z;
+	else
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.TranslatePart().z;
 }
 
-void Scripting::GetPosition(float& x, float& y, float& z) const
+int Scripting::GetPosition(bool local, lua_State *L) const
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	x = trs->position.x;
-	y = trs->position.y;
-	z = trs->position.z;
+	float3 pos;
+
+	if (local)
+		pos = trs->position;
+	else
+		pos = trs->globalTrs.TranslatePart();
+
+	lua_pushnumber(L, pos.x);
+	lua_pushnumber(L, pos.y);
+	lua_pushnumber(L, pos.z);
+
+	return 3;
 }
 
-void Scripting::Translate(float x, float y, float z)
+void Scripting::Translate(float x, float y, float z, bool local)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->Translate(float3(x, y, z));
+	trs->Translate(float3(x, y, z), local);
 }
 
-void Scripting::SetPosition(float x, float y, float z)
+void Scripting::SetPosition(float x, float y, float z, bool local)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->SetTranslation(float3(x, y, z));
+	trs->SetPosition(float3(x, y, z), local);
 }
 
 // Rotation
-float Scripting::GetEulerX() const
+float Scripting::GetEulerX(bool local) const
 {
-	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.x;
+	if (local)
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.x);
+	else
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToEulerXYZ().x);
 }
 
-float Scripting::GetEulerY() const
+float Scripting::GetEulerY(bool local) const
 {
-	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.y;
+	if (local)
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.y);
+	else
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToEulerXYZ().y);
 }
 
-float Scripting::GetEulerZ() const
+float Scripting::GetEulerZ(bool local) const
 {
-	return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.z;
+	if (local)
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.z);
+	else
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToEulerXYZ().z);
 }
 
-void Scripting::GetEulerRotation(float& x, float& y, float& z) const
+int Scripting::GetEulerRotation(bool local, lua_State *L) const
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	float3 rot;
 
-	x = trs->rotation.x;
-	y = trs->rotation.y;
-	z = trs->rotation.z;
+	if (local)
+		rot = RadToDeg(trs->rotation);
+	else
+		rot = RadToDeg(trs->globalTrs.RotatePart().ToEulerXYZ());
+
+	lua_pushnumber(L, rot.x);
+	lua_pushnumber(L, rot.y);
+	lua_pushnumber(L, rot.z);
+
+	return 3;
 }
 
-void Scripting::Rotate(float x, float y, float z)
+void Scripting::Rotate(float x, float y, float z, bool local)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->Rotate(DegToRad(float3(x, y, z)));
+	trs->Rotate(DegToRad(float3(x, y, z)), local);
 }
 
-void Scripting::SetEulerRotation(float x, float y, float z)
+void Scripting::SetEulerRotation(float x, float y, float z, bool local)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	trs->SetRotation(float3(x, y, z));
+	trs->SetRotation(DegToRad(float3(x, y, z)), local);
 }
 
 // Others

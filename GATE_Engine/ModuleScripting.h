@@ -75,9 +75,9 @@ public:
 
 	// Input
 	int GetKeyState(const char* key) const;
-	bool KeyDown(const char* key) const;
-	bool KeyUp(const char* key) const;
-	bool KeyRepeat(const char* key) const;
+	bool IsKeyDown(const char* key) const;
+	bool IsKeyUp(const char* key) const;
+	bool IsKeyRepeat(const char* key) const;
 
 	int GetMouseRaycastHit(lua_State *L);
 
@@ -104,22 +104,22 @@ public:
 	void DestroySelf() const;
 
 	// Position
-	float GetPositionX() const;
-	float GetPositionY() const;
-	float GetPositionZ() const;
-	void GetPosition(float& x, float& y, float& z) const;
+	float GetPositionX(bool local) const;
+	float GetPositionY(bool local) const;
+	float GetPositionZ(bool local) const;
+	int GetPosition(bool local, lua_State *L) const;
 
-	void Translate(float x, float y, float z);
-	void SetPosition(float x, float y, float z);
+	void Translate(float x, float y, float z, bool local);
+	void SetPosition(float x, float y, float z, bool local);
 
 	// Rotation
-	float GetEulerX() const;	// Roll
-	float GetEulerY() const;	// Pitch
-	float GetEulerZ() const;	// Yaw
-	void GetEulerRotation(float& x, float& y, float& z) const;
+	float GetEulerX(bool local) const;	// Roll
+	float GetEulerY(bool local) const;	// Pitch
+	float GetEulerZ(bool local) const;	// Yaw
+	int GetEulerRotation(bool local, lua_State *L) const;
 
-	void Rotate(float x, float y, float z);
-	void SetEulerRotation(float x, float y, float z);
+	void Rotate(float x, float y, float z, bool local);
+	void SetEulerRotation(float x, float y, float z, bool local);
 
 	// Others
 	void LookAt(float posX, float posY, float posZ);

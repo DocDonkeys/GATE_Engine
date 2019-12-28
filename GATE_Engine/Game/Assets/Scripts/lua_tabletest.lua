@@ -20,7 +20,7 @@ function lua_table:Update ()
 	lua_table["Functions"]:LOG ("This Log was called from LUA testing a table on UPDATE")
 	lua_table["Functions"]:LOG ("Position X = " .. lua_table["position_x"])
 
-	dt = lua_table["Functions"]:GetDT ()
+	dt = lua_table["Functions"]:dt ()
 	lua_table["Functions"]:LOG ("GameDT = " .. dt)
 
 	if lua_table["Functions"]:KeyRepeat ("W") then lua_table["Functions"]:Translate (0.0, 0.0, 50.0 * dt) end
@@ -29,13 +29,13 @@ function lua_table:Update ()
 	if lua_table["Functions"]:KeyRepeat ("D") then lua_table["Functions"]:Rotate (0.0, -50.0 * dt, 0.0) end
 
 	hit_x, hit_y, hit_z = lua_table["Functions"]:GetMouseRaycastHit ();
-	if hit_x ~= nil then lua_table["Functions"]:LookAt (hit_x, hit_y, hit_z) else lua_table["Functions"]:LookAt (0.0, 0.0, 1.0) end
+	if hit_x ~= nil then lua_table["Functions"]:LookAt (hit_x, lua_table["Functions"]:position_y (false), hit_z) else lua_table["Functions"]:LookAt (0.0, 0.0, 1.0) end
 end
 
 return lua_table
 end
 
--- Old D�dac Code
+-- Old Didac Code
 --local LOG = Debug.Scripting ()
 --
 --function	GetTablelua_tabletest ()
