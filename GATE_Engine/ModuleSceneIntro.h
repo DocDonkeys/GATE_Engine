@@ -62,6 +62,7 @@ public:
 	bool requestTick = false;
 	float game_speed = 1.f;
 	float game_max_speed = 5.f;	//CHANGE/FIX: Save&Load
+	uint instances_created = 0;
 
 	// Modes
 	int toolMode = (int)tool_mode::DRAG;	// CHANGE/FIX: Save&Load
