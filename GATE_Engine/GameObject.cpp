@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleScripting.h"
 #include "Tree.h"
 
 #include "ComponentTransform.h"
@@ -244,6 +245,20 @@ void GameObject::UpdateStaticStatus(bool newVal, bool recursive)
 			children[i]->UpdateStaticStatus(newVal);
 }
 
+uint32 GameObject::ChangeRandomUID()
+{
+	uint32 ret = App->rng.RandInt<uint32_t>();
+
+	this->UID = ret;
+
+	for (int i = 0; i < this->children.size(); ++i)
+	{
+		this->children[i]->parent_UID = ret;
+	}
+
+	return ret;
+}
+
 
 Component * GameObject::CreateComponent(COMPONENT_TYPE type)
 {
@@ -334,15 +349,154 @@ void GOFunctions::ReParentGameObject(GameObject * child, GameObject * new_parent
 
 void GOFunctions::FillArrayWithChildren(std::vector<const GameObject*> &go_array, const GameObject * go, bool add_parent, uint count)
 {
-	if (count != 0)	//If we're not the parent that was called explicitly in the function
-		go_array.push_back(go);
-	else if (add_parent == true)		// In case we are the parent (Count == 0) & we want to include the parent
-		go_array.push_back(go);
-
-	count++;
-	if (go->children.size() > 0)
+	if (go != nullptr)
 	{
-		for (int i = 0; i < go->children.size(); ++i)
-		FillArrayWithChildren(go_array,go->children[i],add_parent,count);
+		if (count != 0)	//If we're not the parent that was called explicitly in the function
+			go_array.push_back(go);
+		else if (add_parent == true)		// In case we are the parent (Count == 0) & we want to include the parent
+			go_array.push_back(go);
+
+		count++;
+		if (go->children.size() > 0)
+		{
+			for (int i = 0; i < go->children.size(); ++i)
+				FillArrayWithChildren(go_array, go->children[i], add_parent, count);
+		}
 	}
 }
+
+void GOFunctions::FillArrayWithModifiableChildren(std::vector<GameObject*> &go_array, GameObject * go, bool add_parent, uint count)
+{
+	if (go != nullptr)
+	{
+		if (count != 0)	//If we're not the parent that was called explicitly in the function
+			go_array.push_back(go);
+		else if (add_parent == true)		// In case we are the parent (Count == 0) & we want to include the parent
+			go_array.push_back(go);
+
+		count++;
+		if (go->children.size() > 0)
+		{
+			for (int i = 0; i < go->children.size(); ++i)
+				FillArrayWithModifiableChildren(go_array, go->children[i], add_parent, count);
+		}
+	}
+}
+
+GameObject * GOFunctions::InstantiateGameObject(GameObject * go_to_instantiate)
+{
+	GameObject* ret = nullptr;
+
+	if (go_to_instantiate != nullptr)
+	{
+		App->scene_intro->instances_created++;
+		std::vector<GameObject*> gos;
+		FillArrayWithModifiableChildren(gos, go_to_instantiate, true);
+
+		std::vector<GameObject*> instance_gos;
+
+		//Copy all gameObjects in new GameOBjects, later on we will reparent them, change the ID and repeat the process for each GamObject Component
+		//We do this process in this way because we need to copy by value dereferencing each go and later on its components to change ID's and have a completely new copy without any trouble with the engine
+		for (int i = 0; i < gos.size(); ++i)
+		{
+			GameObject* new_go = new GameObject();
+			*new_go = *gos[i];	//Copy by reference the gameObject
+			new_go->children.clear(); //Don't keep any pointer! we will replenish this accordingly like we do with LoadScene!
+			new_go->components.clear();
+
+			std::vector<COMPONENT_TYPE> component_types;
+
+			for (int j = 0; j < gos[i]->components.size(); ++j)
+			{
+				ComponentTransform* trans;
+				ComponentMesh* mesh;
+				ComponentMaterial* material;
+				ComponentCamera* camera;
+				ComponentScript* script;
+
+				std::string actually = "this is no longer used so whatever, will remove after programming, time is pretty tight";
+
+				switch (gos[i]->components[j]->type)
+				{
+				case COMPONENT_TYPE::TRANSFORM:
+					trans = new ComponentTransform();
+					*trans = *(ComponentTransform*)gos[i]->components[j];
+					trans->my_go = new_go;
+					trans->UID = App->rng.RandInt<uint32_t>();
+					new_go->components.push_back(trans);
+					break;
+				case COMPONENT_TYPE::MESH:
+					mesh = new ComponentMesh();
+					*mesh = *(ComponentMesh*)gos[i]->components[j];
+					mesh->my_go = new_go;
+					mesh->UID = App->rng.RandInt<uint32_t>();
+					new_go->components.push_back(mesh);
+					break;
+				case COMPONENT_TYPE::MATERIAL:
+					material = new ComponentMaterial();
+					*material = *(ComponentMaterial*)gos[i]->components[j];
+					material->my_go = new_go;
+					material->UID = App->rng.RandInt<uint32_t>();
+					new_go->components.push_back(material);
+					break;
+				case COMPONENT_TYPE::CAMERA:
+					camera = new ComponentCamera();
+					*camera = *(ComponentCamera*)gos[i]->components[j];
+					camera->my_go = new_go;
+					camera->UID = App->rng.RandInt<uint32_t>();
+					new_go->components.push_back(camera);
+					break;
+				case COMPONENT_TYPE::SCRIPT:
+					script = new ComponentScript();
+					*script = *(ComponentScript*)gos[i]->components[j];
+					script->my_go = new_go;
+					script->UID = App->rng.RandInt<uint32_t>();
+					new_go->components.push_back(script);
+
+					//In the case of the script we have to do a couple of extra things, (getting a new instance in the virtual machine)
+					App->scripting->SendScriptToModule(script, actually);
+					break;
+				default:
+					break;
+				}
+
+			}
+			//Push back the gameObject
+			instance_gos.push_back(new_go);
+		}
+
+		for (int i = 0; i < instance_gos.size(); ++i)
+		{
+			if (i == 0)
+			{
+				GOFunctions::ReParentGameObject(instance_gos[i], App->scene_intro->root);
+			}
+			else
+			{
+				for (int j = 0; j < instance_gos.size(); ++j)
+				{
+					if (instance_gos[j]->UID == instance_gos[i]->parent_UID)
+					{
+						GOFunctions::ReParentGameObject(instance_gos[i], instance_gos[j]);
+						break;
+					}
+				}
+			}
+		}
+
+		//Now we will change the name to instance, remmeber an instance must only be made under gameplay, or else when trying to save & load the scene
+		// or prefab, we are just using name as parameter in the .json (no time to change it tu use UID's D: so components would get reeeeally fucked up)
+		//Change the GameObject's UIDS
+		
+		for (int i = 0; i < instance_gos.size(); ++i)
+		{
+			instance_gos[i]->name += "_instance_" + std::to_string(App->scene_intro->instances_created);
+			instance_gos[i]->ChangeRandomUID();
+		}
+
+		ret = instance_gos[0];
+	}
+	return ret;
+}
+
+

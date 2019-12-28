@@ -254,6 +254,11 @@ update_status ModuleScripting::Update(float realDT)
 	// 2. "App->IsGameFirstFrame()" marks the first frame a GameUpdate() will happen, if you want to do anything right before the game plays in preparation
 	// 3. Referring to your previous code, you expected DoHotReloading() to NOT run if the game is playing, I put the condition accordingly "!IsGamePlaying()"
 
+
+
+	//TEST FUNCTION DEFINETIVELY SHOULD NOT BE HERE
+	if (App->scene_intro->selected_go != nullptr && App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+		GameObject* returned = GOFunctions::InstantiateGameObject(App->scene_intro->selected_go);
 	return UPDATE_CONTINUE;
 }
 
