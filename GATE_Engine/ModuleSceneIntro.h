@@ -5,20 +5,19 @@
 #include "ImporterScene.h"
 
 enum class tool_mode {
-	DRAG,	//Q
-	MOVE,	//W
+	DRAG = -1,	//Q
+	TRANSLATE,	//W
 	ROTATE,	//E
 	SCALE,	//R
-	RECT,	//T
-	MULTI	//Y
+	BOUNDS	//T
 };
 
-enum class handle_position {
+enum class handle_position {	// Center = Center of AABB, Pivot = On object pivot position	
 	CENTER,
 	PIVOT
 };
 
-enum class handle_rotation {
+enum class handle_rotation {	// Local = Local Rotation as reference, Global = Global rotation as reference
 	LOCAL,
 	GLOBAL
 };

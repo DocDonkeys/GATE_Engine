@@ -87,6 +87,8 @@ public:
 	void TextureModeChange();
 	void ByteSizeModeChange();
 
+	void DrawImGuizmo();
+
 	void HoverText(const char* desc, bool hoverTarget = false)
 	{
 		if (!hoverTarget)

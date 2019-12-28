@@ -37,6 +37,10 @@ void ComponentTransform::PreUpdate(float realDT)
 		UpdateGlobalMat();
 		needsUpdateGlobal = false;
 	}
+	else if (needsUpdateLocal) {
+		UpdateLocalMat();
+		needsUpdateLocal = false;
+	}
 
 	/*if (needsUpdateLocal) {
 		UpdateLocalMat();
@@ -56,77 +60,136 @@ void ComponentTransform::UpdateGlobalMat()
 	}
 }
 
-//void ComponentTransform::UpdateLocalMat()
-//{
-//	ComponentTransform* parentTrs = (ComponentTransform*)my_go->parent->GetComponent(COMPONENT_TYPE::TRANSFORM);
-//	//globalTrs = parentTrs->globalTrs * localTrs;
-//	my_go->UpdateBoundingBox(globalTrs);
-//
-//	for (int i = 0; i < my_go->children.size(); i++) {
-//		ComponentTransform* childTrs = (ComponentTransform*)my_go->children[i]->GetComponent(COMPONENT_TYPE::TRANSFORM);
-//		childTrs->UpdateLocalMat();
-//	}
-//}
-
-float3 ComponentTransform::Translate(float3 movement)
+void ComponentTransform::UpdateLocalMat()
 {
-	float3 origPos = position;
-	localTrs = localTrs * float4x4::Translate(movement);
+	ComponentTransform* parentTrs = (ComponentTransform*)my_go->parent->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	localTrs = parentTrs->globalTrs.Inverted() * globalTrs;
+	my_go->UpdateBoundingBox();
+
 	position = localTrs.TranslatePart();
-	needsUpdateGlobal = true;
-
-	return position - origPos;
-}
-
-float3 ComponentTransform::SetTranslation(float3 targetPos)
-{
-	float3 origPos = position;
-	localTrs = localTrs.FromTRS(targetPos, localTrs.RotatePart(), scale);
-	position = localTrs.TranslatePart();
-	needsUpdateGlobal = true;
-
-	return position - origPos;
-}
-
-float3 ComponentTransform::Rotate(float3 rot)
-{
-	float3 origRot = rotation;
-	localTrs = localTrs * localTrs.RotateX(rot.x) * localTrs.RotateY(rot.y) * localTrs.RotateZ(rot.z);
 	rotation = localTrs.RotatePart().ToEulerXYZ();
-	needsUpdateGlobal = true;
+	scale = localTrs.GetScale();
 
-	return rotation - origRot;
+	for (int i = 0; i < my_go->children.size(); i++) {
+		ComponentTransform* childTrs = (ComponentTransform*)my_go->children[i]->GetComponent(COMPONENT_TYPE::TRANSFORM);
+		childTrs->UpdateGlobalMat();
+	}
 }
 
-float3 ComponentTransform::SetRotation(float3 targetRot)
+float3 ComponentTransform::Translate(float3 movement, bool local)
 {
-	float3 origRot = rotation;
-	localTrs = localTrs.FromTRS(position, Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z), scale);
-	rotation = localTrs.RotatePart().ToEulerXYZ();
-	needsUpdateGlobal = true;
+	if (local) {
+		float3 origPos = position;
+		localTrs = localTrs * float4x4::Translate(movement);
+		position = localTrs.TranslatePart();
+		needsUpdateGlobal = true;
 
-	return localTrs.RotatePart().ToEulerXYZ() - origRot;
+		return position - origPos;
+	}
+	else {
+		float3 origPos = globalTrs.TranslatePart();
+		globalTrs = globalTrs * float4x4::Translate(movement);
+		needsUpdateLocal = true;
+
+		return globalTrs.TranslatePart() - origPos;
+	}
 }
 
-float3 ComponentTransform::Scale(float3 scale)
+float3 ComponentTransform::SetTranslation(float3 targetPos, bool local)
 {
-	float3 origScale = this->scale;
-	localTrs.Scale(scale);
-	this->scale += scale;
+	if (local) {
+		float3 origPos = position;
+		localTrs = float4x4::FromTRS(targetPos, localTrs.RotatePart(), scale);
+		position = localTrs.TranslatePart();
+		needsUpdateGlobal = true;
 
-	needsUpdateGlobal = true;
-	return this->scale - origScale;
+		return position - origPos;
+	}
+	else {
+		float3 origPos = globalTrs.TranslatePart();;
+		globalTrs = float4x4::FromTRS(targetPos, globalTrs.RotatePart(), globalTrs.GetScale());
+		needsUpdateLocal = true;
+
+		return globalTrs.TranslatePart() - origPos;
+	}
 }
 
-float3 ComponentTransform::SetScale(float3 targetScale)
+float3 ComponentTransform::Rotate(float3 rot, bool local)
 {
-	float3 origScale = this->scale;
-	localTrs.Scale(float3(-this->scale.x, -this->scale.y, -this->scale.z));	// Scale to 0
-	localTrs.Scale(targetScale);
-	this->scale = targetScale;
+	if (local) {
+		float3 origRot = rotation;
+		localTrs = localTrs * float4x4::RotateX(rot.x) * float4x4::RotateY(rot.y) * float4x4::RotateZ(rot.z);
+		rotation = localTrs.RotatePart().ToEulerXYZ();
+		needsUpdateGlobal = true;
 
-	needsUpdateGlobal = true;
-	return this->scale - origScale;
+		return rotation - origRot;
+	}
+	else {
+		float3 origRot = globalTrs.RotatePart().ToEulerXYZ();
+		globalTrs = globalTrs * float4x4::RotateX(rot.x) * float4x4::RotateY(rot.y) * float4x4::RotateZ(rot.z);
+		needsUpdateLocal = true;
+
+		return globalTrs.RotatePart().ToEulerXYZ() - origRot;
+	}
+}
+
+float3 ComponentTransform::SetRotation(float3 targetRot, bool local)
+{
+	if (local) {
+		float3 origRot = rotation;
+		localTrs = float4x4::FromTRS(position, Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z), scale);
+		rotation = localTrs.RotatePart().ToEulerXYZ();
+		needsUpdateGlobal = true;
+
+		return localTrs.RotatePart().ToEulerXYZ() - origRot;
+	}
+	else {
+		float3 origRot = globalTrs.RotatePart().ToEulerXYZ();
+		globalTrs = float4x4::FromTRS(globalTrs.TranslatePart(), Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z), globalTrs.GetScale());
+		needsUpdateLocal = true;
+
+		return globalTrs.RotatePart().ToEulerXYZ() - origRot;
+	}
+}
+
+float3 ComponentTransform::Scale(float3 scale, bool local)
+{
+	if (local) {
+		float3 origScale = this->scale;
+		localTrs.Scale(scale);
+		this->scale += scale;
+
+		needsUpdateGlobal = true;
+		return this->scale - origScale;
+	}
+	else {
+		float3 origScale = globalTrs.GetScale();
+		globalTrs.Scale(scale);
+
+		needsUpdateLocal = true;
+		return globalTrs.GetScale() - origScale;
+	}
+}
+
+float3 ComponentTransform::SetScale(float3 targetScale, bool local)
+{
+	if (local) {
+		float3 origScale = this->scale;
+		localTrs.Scale(float3(-this->scale.x, -this->scale.y, -this->scale.z));	// Scale to 0
+		localTrs.Scale(targetScale);
+		this->scale = targetScale;
+
+		needsUpdateGlobal = true;
+		return this->scale - origScale;
+	}
+	else {
+		float3 origScale = globalTrs.GetScale();
+		globalTrs.Scale(float3(-this->scale.x, -this->scale.y, -this->scale.z));	// Scale to 0
+		globalTrs.Scale(targetScale);
+
+		needsUpdateLocal = true;
+		return globalTrs.GetScale() - origScale;
+	}
 }
 
 bool ComponentTransform::SetLocalMat(float3& newPos, float3& newRot, float3& newScale)

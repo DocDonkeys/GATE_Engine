@@ -3,6 +3,9 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleWindow.h"
+#include "ModuleInput.h"
+
+#include "libs/SDL/include/SDL_scancode.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -17,7 +20,7 @@ void EditorToolbar::Update()
 	if (ImGui::RadioButton("Drag", &App->scene_intro->toolMode, (int)tool_mode::DRAG)) {	//CHANGE/FIX: Do what's needed for tool change
 	
 	} ImGui::SameLine();
-	if (ImGui::RadioButton("Move", &App->scene_intro->toolMode, (int)tool_mode::MOVE)) {
+	if (ImGui::RadioButton("Move", &App->scene_intro->toolMode, (int)tool_mode::TRANSLATE)) {
 	
 	} ImGui::SameLine();
 	if (ImGui::RadioButton("Rotate", &App->scene_intro->toolMode, (int)tool_mode::ROTATE)) {
@@ -26,10 +29,7 @@ void EditorToolbar::Update()
 	if (ImGui::RadioButton("Scale", &App->scene_intro->toolMode, (int)tool_mode::SCALE)) {
 	
 	} ImGui::SameLine();
-	if (ImGui::RadioButton("Rect", &App->scene_intro->toolMode, (int)tool_mode::RECT)) {
-	
-	} ImGui::SameLine();
-	if (ImGui::RadioButton("Multi", &App->scene_intro->toolMode, (int)tool_mode::MULTI)) {
+	if (ImGui::RadioButton("Bounds", &App->scene_intro->toolMode, (int)tool_mode::BOUNDS)) {
 	
 	}
 
@@ -38,7 +38,7 @@ void EditorToolbar::Update()
 	// Tool Handles
 	ImGui::SameLine(400.f);
 	int& posHandle = App->scene_intro->handlePositionMode;
-	if (ImGui::Button(handlePositionStr[posHandle], buttonSize)) {
+	if (ImGui::Button(handlePositionStr[posHandle], buttonSize) || App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_IDLE && App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
 		switch (posHandle) {
 		case (int)handle_position::CENTER:
 			posHandle = (int)handle_position::PIVOT;
@@ -48,11 +48,11 @@ void EditorToolbar::Update()
 			break;
 		}
 	}
-	HoverTip("Tool Handle Position", true);
+	HoverTip("Tool Handle Position (Z)", true);
 
 	ImGui::SameLine();
 	int& rotHandle = App->scene_intro->handleRotationMode;
-	if (ImGui::Button(handleRotationStr[rotHandle], buttonSize)) {
+	if (ImGui::Button(handleRotationStr[rotHandle], buttonSize) || App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_IDLE && App->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN) {
 		switch (rotHandle) {
 		case (int)handle_rotation::LOCAL:
 			rotHandle = (int)handle_rotation::GLOBAL;
@@ -62,7 +62,7 @@ void EditorToolbar::Update()
 			break;
 		}
 	}
-	HoverTip("Tool Handle Rotation", true);
+	HoverTip("Tool Handle Rotation (X)", true);
 
 	ImGui::SameLine(); HoverTip("<--- Transform tools not implemented yet!");	//CHANGE/FIX: Remove this when implementation is done
 

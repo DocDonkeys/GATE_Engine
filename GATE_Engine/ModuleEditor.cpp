@@ -5,6 +5,7 @@
 #include "ModuleInput.h"
 #include "GeometryLoader.h"
 #include "ModuleSceneIntro.h"
+#include "ComponentTransform.h"
 
 // Windows
 #include "EditorConfiguration.h"
@@ -19,7 +20,7 @@
 // Elements
 #include "EditorMenuBar.h"
 
-// SDL
+#include "libs/ImGuizmo/ImGuizmo.h"
 #include "libs/Brofiler/Brofiler.h"
 
 // Memory Leak Detection
@@ -174,6 +175,10 @@ update_status ModuleEditor::Update(float dt)
 	//If we are using a Imgui Menu, we update the bool that indicates so
 	 using_menu = io->WantCaptureMouse;
 
+	 // ImGuizmo
+	 if (!App->IsGamePlaying() && App->scene_intro->selected_go != nullptr/*draw_guizmo && App->camera->background_camera->getFrustum()->type != math::FrustumType::OrthographicFrustum*/)
+		 DrawImGuizmo();
+
 	return ret;
 }
 
@@ -270,4 +275,30 @@ void ModuleEditor::ByteSizeModeChange()
 		byteText.assign("GB");
 		break;
 	}
+}
+
+void ModuleEditor::DrawImGuizmo()
+{
+	ImGuizmo::BeginFrame();
+	float4x4 projection;
+	float4x4 view;
+
+	glGetFloatv(GL_MODELVIEW_MATRIX, (float*)view.v);
+	glGetFloatv(GL_PROJECTION_MATRIX, (float*)projection.v);
+
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+
+	ComponentTransform* transform = (ComponentTransform*)App->scene_intro->selected_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	float4x4 mat = transform->globalTrs;
+
+	//if (App->scene_intro->handlePositionMode == (int)handle_position::CENTER)	//IMPROVE: Make rotation axis be in the AABB center (which should include all children?)
+	//	mat.SetTranslatePart(transform->my_go->aabb.CenterPoint());
+
+	mat.Transpose();
+	ImGuizmo::Manipulate((float*)view.v, (float*)projection.v, (ImGuizmo::OPERATION)App->scene_intro->toolMode, (ImGuizmo::MODE)App->scene_intro->handleRotationMode, (float*)mat.v);
+	transform->globalTrs = mat.Transposed();
+
+	if (ImGuizmo::IsUsing())
+		transform->needsUpdateLocal = true;
 }

@@ -18,21 +18,18 @@ public:
 	void PreUpdate(float realDT) override;
 
 public:
-	//void UpdateLocalMat();
+	void UpdateLocalMat();
 	void UpdateGlobalMat();
 
-	//void UpdateQuatByEuler(float3& newEuler);
-	//void UpdateEulerByQuat(Quat& q);
-
 	// Change
-	float3 Translate(float3 movement);
-	float3 SetTranslation(float3 targetPos);
+	float3 Translate(float3 movement, bool local = true);
+	float3 SetTranslation(float3 targetPos, bool local = true);
 
-	float3 Rotate(float3 rot);
-	float3 SetRotation(float3 targetRot);
+	float3 Rotate(float3 rot, bool local = true);
+	float3 SetRotation(float3 targetRot, bool local = true);
 
-	float3 Scale(float3 scale);
-	float3 SetScale(float3 targetScale);
+	float3 Scale(float3 scale, bool local = true);
+	float3 SetScale(float3 targetScale, bool local = true);
 
 	// Set
 	bool SetLocalMat(float3& pos, float3& rot, float3& scale);
@@ -55,7 +52,7 @@ public:
 	float3 rotation = float3::zero;
 	float3 scale = float3::one;
 
-	//bool needsUpdateLocal = false;
+	bool needsUpdateLocal = false;
 	bool needsUpdateGlobal = true;
 
 public:	//CHANGE/FIX: Should be private, only public currently because of Didac's import/export system

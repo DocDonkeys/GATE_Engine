@@ -317,15 +317,13 @@ int ModuleSceneIntro::CheckToolMode()
 		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
 			ret = (int)tool_mode::DRAG;
 		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
-			ret = (int)tool_mode::MOVE;
+			ret = (int)tool_mode::TRANSLATE;
 		else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 			ret = (int)tool_mode::ROTATE;
 		else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 			ret = (int)tool_mode::SCALE;
 		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
-			ret = (int)tool_mode::RECT;
-		else if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_IDLE)	// To avoid calling on Redo (CTRL+Y)
-			ret = (int)tool_mode::MULTI;
+			ret = (int)tool_mode::BOUNDS;
 	}
 
 	return ret;
