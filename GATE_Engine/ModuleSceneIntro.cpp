@@ -304,10 +304,8 @@ int ModuleSceneIntro::CheckToolMode()
 	int ret = toolMode;
 
 	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN || App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN) {
-		if (toolMode != (int)tool_mode::DRAG) {
-			ret = (int)tool_mode::DRAG;
-			lastToolMode = toolMode;
-		}
+		ret = (int)tool_mode::DRAG;
+		lastToolMode = toolMode;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_UP && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_IDLE
 		|| App->input->GetKey(SDL_SCANCODE_LALT) == KEY_IDLE && App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP) {
@@ -322,8 +320,8 @@ int ModuleSceneIntro::CheckToolMode()
 			ret = (int)tool_mode::ROTATE;
 		else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 			ret = (int)tool_mode::SCALE;
-		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
-			ret = (int)tool_mode::BOUNDS;
+		/*else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+			ret = (int)tool_mode::BOUNDS;*/
 	}
 
 	return ret;

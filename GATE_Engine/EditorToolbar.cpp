@@ -17,21 +17,11 @@ void EditorToolbar::Update()
 	float windowCenter = ImGui::GetWindowWidth() / 2;
 
 	// Tools
-	if (ImGui::RadioButton("Drag", &App->scene_intro->toolMode, (int)tool_mode::DRAG)) {	//CHANGE/FIX: Do what's needed for tool change
-	
-	} ImGui::SameLine();
-	if (ImGui::RadioButton("Move", &App->scene_intro->toolMode, (int)tool_mode::TRANSLATE)) {
-	
-	} ImGui::SameLine();
-	if (ImGui::RadioButton("Rotate", &App->scene_intro->toolMode, (int)tool_mode::ROTATE)) {
-	
-	} ImGui::SameLine();
-	if (ImGui::RadioButton("Scale", &App->scene_intro->toolMode, (int)tool_mode::SCALE)) {
-	
-	} ImGui::SameLine();
-	if (ImGui::RadioButton("Bounds", &App->scene_intro->toolMode, (int)tool_mode::BOUNDS)) {
-	
-	}
+	ImGui::RadioButton("Drag", &App->scene_intro->toolMode, (int)tool_mode::DRAG); ImGui::SameLine();
+	ImGui::RadioButton("Move", &App->scene_intro->toolMode, (int)tool_mode::TRANSLATE); ImGui::SameLine();
+	ImGui::RadioButton("Rotate", &App->scene_intro->toolMode, (int)tool_mode::ROTATE); ImGui::SameLine();
+	ImGui::RadioButton("Scale", &App->scene_intro->toolMode, (int)tool_mode::SCALE);/* ImGui::SameLine();
+	if (ImGui::RadioButton("Bounds", &App->scene_intro->toolMode, (int)tool_mode::BOUNDS))*/
 
 	ImVec2 buttonSize = { 50.f, 20.f };		// IMPROVE: Image Buttons
 
