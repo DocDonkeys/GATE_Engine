@@ -51,7 +51,13 @@ void ComponentTransform::PreUpdate(float realDT)
 void ComponentTransform::UpdateGlobalMat()
 {
 	ComponentTransform* parentTrs = (ComponentTransform*)my_go->parent->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	globalTrs = parentTrs->globalTrs * localTrs;
+
+	float4x4 newGlobal = parentTrs->globalTrs * localTrs;
+	globalTrs = newGlobal;
+	//globalTrs.SetTranslatePart(newGlobal.TranslatePart());
+	//globalTrs.SetRotatePart(globalQuat);
+	//globalTrs.Scale(newGlobal.GetScale() - globalTrs.GetScale());
+
 	my_go->UpdateBoundingBox();
 
 	for (int i = 0; i < my_go->children.size(); i++) {
@@ -63,11 +69,17 @@ void ComponentTransform::UpdateGlobalMat()
 void ComponentTransform::UpdateLocalMat()
 {
 	ComponentTransform* parentTrs = (ComponentTransform*)my_go->parent->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	localTrs = parentTrs->globalTrs.Inverted() * globalTrs;
+
+	float4x4 newLocal = parentTrs->globalTrs.Inverted() * globalTrs;
+	localTrs = newLocal;
+	//localTrs.SetTranslatePart(newLocal.TranslatePart());
+	//localTrs.SetRotatePart(localQuat);
+	//localTrs.Scale(newLocal.GetScale() - localTrs.GetScale());
+
 	my_go->UpdateBoundingBox();
 
 	position = localTrs.TranslatePart();
-	rotation = localTrs.RotatePart().ToEulerXYZ();
+	rotation = localTrs.ToEulerXYZ();
 	scale = localTrs.GetScale();
 
 	for (int i = 0; i < my_go->children.size(); i++) {
@@ -118,18 +130,18 @@ float3 ComponentTransform::Rotate(float3 rot, bool local)
 {
 	if (local) {
 		float3 origRot = rotation;
-		localTrs = localTrs * float4x4::RotateX(rot.x) * float4x4::RotateY(rot.y) * float4x4::RotateZ(rot.z);
-		rotation = localTrs.RotatePart().ToEulerXYZ();
+		localTrs = localTrs * Quat::RotateX(rot.x) * Quat::RotateY(rot.y) * Quat::RotateZ(rot.z);
+		rotation = localTrs.ToEulerXYZ();
 		needsUpdateGlobal = true;
 
 		return rotation - origRot;
 	}
 	else {
-		float3 origRot = globalTrs.RotatePart().ToEulerXYZ();
-		globalTrs = globalTrs * float4x4::RotateX(rot.x) * float4x4::RotateY(rot.y) * float4x4::RotateZ(rot.z);
+		float3 origRot = globalTrs.ToEulerXYZ();
+		globalTrs = globalTrs * Quat::RotateX(rot.x) * Quat::RotateY(rot.y) * Quat::RotateZ(rot.z);
 		needsUpdateLocal = true;
 
-		return globalTrs.RotatePart().ToEulerXYZ() - origRot;
+		return globalTrs.ToEulerXYZ() - origRot;
 	}
 }
 
@@ -137,18 +149,18 @@ float3 ComponentTransform::SetRotation(float3 targetRot, bool local)
 {
 	if (local) {
 		float3 origRot = rotation;
-		localTrs = float4x4::FromTRS(position, Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z), scale);
-		rotation = localTrs.RotatePart().ToEulerXYZ();
+		localTrs.SetRotatePart(Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z));
+		rotation = localTrs.ToEulerXYZ();
 		needsUpdateGlobal = true;
 
-		return localTrs.RotatePart().ToEulerXYZ() - origRot;
+		return localTrs.ToEulerXYZ() - origRot;
 	}
 	else {
-		float3 origRot = globalTrs.RotatePart().ToEulerXYZ();
-		globalTrs = float4x4::FromTRS(globalTrs.TranslatePart(), Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z), globalTrs.GetScale());
+		float3 origRot = globalTrs.ToEulerXYZ();
+		globalTrs.SetRotatePart(Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z));
 		needsUpdateLocal = true;
 
-		return globalTrs.RotatePart().ToEulerXYZ() - origRot;
+		return globalTrs.ToEulerXYZ() - origRot;
 	}
 }
 
@@ -251,52 +263,60 @@ bool ComponentTransform::SetLocalMat(float4x4& newMat)
 	return changed;
 }
 
-//bool ComponentTransform::SetGlobalMat(float3& newPos, float3& newRot, float3& newScale)
-//{
-//	bool changed = false;
-//
-//	if (position.x != newPos.x
-//		|| position.y != newPos.y
-//		|| position.z != newPos.z) {
-//		changed = true;
-//	}
-//	else if (rotation.x != newRot.x
-//		|| rotation.y != newRot.y
-//		|| rotation.z != newRot.z) {
-//		changed = true;
-//	}
-//	else if (scale.x != newScale.x
-//		|| scale.y != newScale.y
-//		|| scale.z != newScale.z) {
-//		changed = true;
-//	}
-//
-//	if (changed) {
-//		globalTrs = float4x4::FromTRS(newPos, float3x3::FromEulerXYZ(newRot.x, newRot.y, newRot.z), newScale);
-//		needsUpdateLocal = true;
-//	}
-//
-//	return changed;
-//}
-//
-//bool ComponentTransform::SetGlobalMat(float4x4& newMat)
-//{
-//	bool changed = false;
-//
-//	for (int i = 0; i < 4; i++)
-//		for (int j = 0; j < 4; j++)
-//			if (localTrs[i][j] != newMat[i][j]) {
-//				changed = true;
-//				break;
-//			}
-//
-//	if (changed) {
-//		globalTrs = newMat;
-//		needsUpdateLocal = true;
-//	}
-//
-//	return changed;
-//}
+bool ComponentTransform::SetGlobalMat(float3& newPos, float3& newRot, float3& newScale)
+{
+	bool changed = false;
+	bool mousePickFix = true;	// Removed when mouse picking bug is fixed
+
+	float3 oldPos = globalTrs.TranslatePart();
+	float3 oldRot = globalTrs.ToEulerXYZ();
+	float3 oldScale = globalTrs.GetScale();
+
+	if (oldPos.x != newPos.x
+		|| oldPos.y != newPos.y
+		|| oldPos.z != newPos.z) {
+		changed = true;
+	}
+	else if (oldScale.x != newScale.x
+		|| oldScale.y != newScale.y
+		|| oldScale.z != newScale.z) {
+		changed = true;
+	}
+	else if (oldRot.x != newRot.x
+		|| oldRot.y != newRot.y
+		|| oldRot.z != newRot.z) {
+		changed = true;
+
+		if (abs(oldRot.x - newRot.x) < 0.000001 && abs(oldRot.y - newRot.y) < 0.000001 && abs(oldRot.z - newRot.z) < 0.000001)
+			changed = false;	//CHANGE/FIX: Mousepicking rotates the clicked obj by very small decimals (wtf), this avoids a transformation to happen because of it
+	}
+
+	if (changed) {
+		globalTrs = float4x4::FromTRS(newPos, Quat::FromEulerXYZ(newRot.x, newRot.y, newRot.z), newScale);
+		needsUpdateLocal = true;
+	}
+
+	return changed;
+}
+
+bool ComponentTransform::SetGlobalMat(float4x4& newMat)
+{
+	bool changed = false;
+
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			if (globalTrs[i][j] != newMat[i][j]) {
+				changed = true;
+				break;
+			}
+
+	if (changed) {
+		globalTrs = newMat;
+		needsUpdateLocal = true;
+	}
+
+	return changed;
+}
 
 void ComponentTransform::GetLocalMat(float3& pos, float3& rot, float3& scale)
 {
@@ -331,7 +351,7 @@ void ComponentTransform::Import(float* local, float* global)
 		}
 
 	position = localTrs.TranslatePart();
-	rotation = localTrs.RotatePart().ToEulerXYZ();
+	rotation = localTrs.ToEulerXYZ();
 	scale = localTrs.GetScale();
 
 	k = 0;

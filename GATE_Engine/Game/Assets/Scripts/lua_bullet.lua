@@ -1,39 +1,20 @@
 local Functions = Debug.Scripting ()
 
-function	GetTablelua_aimturret ()
+function	GetTablelua_bullet ()
 local lua_table = {}
 lua_table["Functions"] = Debug.Scripting ()
 
 function lua_table:Awake ()
-	origBulletUID =  lua_table["Functions"]:FindUID ("Shell_")
 end
 
 function lua_table:Start ()
+	mustdie = false
+	startTime = lua_table["Functions"]:time ()
 end
 
 function lua_table:Update ()
-	hit_x, hit_y, hit_z = lua_table["Functions"]:GetMouseRaycastHit ();
-
-	if hit_x ~= nil
-	then
-	lua_table["Functions"]:LookAt (hit_x, lua_table["Functions"]:position_y (false), hit_z, false) lua_table["Functions"]:LOG ("Aiming")
-	else
-	lua_table["Functions"]:LookTo (0.0, 0.0, 1.0, true)
-	end
-
-	if
-	lua_table["Functions"]:MouseButtonDown ("Left")
-	then
-	--pos_x, pos_y, pos_z = lua_table["Functions"]:position (false)
-	--rot_x, rot_y, rot_z = lua_table["Functions"]:rotation (false)
-	pos_x = lua_table["Functions"]:position_x (false)
-	pos_y = 1.0 + lua_table["Functions"]:position_y (false)
-	pos_z = lua_table["Functions"]:position_z (false)
-
-	lua_table["Functions"]:rotation_y (false)
-	lua_table["Functions"]:InstantiateByUID (origBulletUID, pos_x, pos_y, pos_z, 0.0, lua_table["Functions"]:rotation_y (), 0.0, 1.0)
-	lua_table["Functions"]:LOG ("Open Fire!")
-	end
+	--if (lua_table["Functions"]:time () - startTime) > 5000 then --die end
+	lua_table["Functions"]:Translate (0.0, 0.0, 5.0 * lua_table["Functions"]:dt (), true)
 end
 
 return lua_table

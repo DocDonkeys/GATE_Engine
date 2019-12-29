@@ -71,6 +71,13 @@ namespace GOFunctions {
 	void FillArrayWithChildren(std::vector<const GameObject*> &go_array, const GameObject* go, bool add_parent = false, uint count = 0);
 	//Same as functin above but for non const purposes
 	void FillArrayWithModifiableChildren(std::vector<GameObject*> &go_array,GameObject* go, bool add_parent = false, uint count = 0);
+
+	const GameObject* FindGameObject(const char* name);
+	const GameObject* FindGameObject(uint32_t objUID);
+	GameObject* FindModifiableGameObject(const char* name);
+	GameObject* FindModifiableGameObject(uint32_t objUID);
+
+	//std::vector<const GameObject*> FindGameObjects();
 	GameObject* InstantiateGameObject(GameObject* go_to_instantiate);
 }
 #endif // !__GAMEOBJECT_H__

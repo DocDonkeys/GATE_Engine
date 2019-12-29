@@ -383,6 +383,54 @@ void GOFunctions::FillArrayWithModifiableChildren(std::vector<GameObject*> &go_a
 	}
 }
 
+const GameObject* GOFunctions::FindGameObject(const char* name)
+{
+	std::vector<const GameObject*> sceneObjects;
+	GOFunctions::FillArrayWithChildren(sceneObjects, App->scene_intro->root);
+
+	for (std::vector<const GameObject*>::iterator it = sceneObjects.begin(); it != sceneObjects.end(); ++it)
+		if ((*it)->name == name)
+			return (*it);
+
+	return nullptr;
+}
+
+const GameObject* GOFunctions::FindGameObject(uint32_t objectUID)
+{
+	std::vector<const GameObject*> sceneObjects;
+	GOFunctions::FillArrayWithChildren(sceneObjects, App->scene_intro->root);
+
+	for (std::vector<const GameObject*>::iterator it = sceneObjects.begin(); it != sceneObjects.end(); ++it)
+		if ((*it)->UID == objectUID)
+			return (*it);
+
+	return nullptr;
+}
+
+GameObject* GOFunctions::FindModifiableGameObject(const char* name)
+{
+	std::vector<GameObject*> sceneObjects;
+	GOFunctions::FillArrayWithModifiableChildren(sceneObjects, App->scene_intro->root);
+
+	for (std::vector<GameObject*>::iterator it = sceneObjects.begin(); it != sceneObjects.end(); ++it)
+		if ((*it)->name == name)
+			return (*it);
+
+	return nullptr;
+}
+
+GameObject* GOFunctions::FindModifiableGameObject(uint32_t objectUID)
+{
+	std::vector<GameObject*> sceneObjects;
+	GOFunctions::FillArrayWithModifiableChildren(sceneObjects, App->scene_intro->root);
+
+	for (std::vector<GameObject*>::iterator it = sceneObjects.begin(); it != sceneObjects.end(); ++it)
+		if ((*it)->UID == objectUID)
+			return (*it);
+
+	return nullptr;
+}
+
 GameObject * GOFunctions::InstantiateGameObject(GameObject * go_to_instantiate)
 {
 	GameObject* ret = nullptr;

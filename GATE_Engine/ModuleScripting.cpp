@@ -9,13 +9,14 @@
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
 #include "ModuleResources.h"
-#include "MemLeaks.h"
 #include <iterator>
 
-#include "libs/MathGeoLib/include/Math/float3x3.h"
+#include "libs/MathGeoLib/include/Math/float4.h"
 #include "libs/MathGeoLib/include/Math/float4x4.h"
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
+
 #include "libs/SDL/include/SDL_keyboard.h"
+#include "libs/SDL/include/SDL_mouse.h"
 
 extern "C"
 {
@@ -29,6 +30,9 @@ extern "C"
 
 //LUA lib
 #pragma comment(lib, "libs/lua-535/liblua53.a")
+
+//Memleaks
+#include "MemLeaks.h"
 
 ModuleScripting::ModuleScripting(Application * app, const char * name, bool start_enabled) : Module(app, name, start_enabled)
 {
@@ -275,11 +279,28 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 		.addFunction("dt", &Scripting::GetDT)
 
 		// Input
+		.addFunction("GetKey", &Scripting::GetKey)
 		.addFunction("KeyState", &Scripting::GetKeyState)
 		.addFunction("KeyDown", &Scripting::IsKeyDown)
 		.addFunction("KeyUp", &Scripting::IsKeyUp)
 		.addFunction("KeyRepeat", &Scripting::IsKeyRepeat)
+		.addFunction("KeyIdle", &Scripting::IsKeyIdle)
+
+		.addFunction("GetMouseButton", &Scripting::GetMouseButton)
+		.addFunction("MouseButtonState", &Scripting::GetMouseButtonState)
+		.addFunction("MouseButtonDown", &Scripting::IsMouseButtonDown)
+		.addFunction("MouseButtonUp", &Scripting::IsMouseButtonUp)
+		.addFunction("MouseButtonRepeat", &Scripting::IsMouseButtonRepeat)
+		.addFunction("MouseButtonIdle", &Scripting::IsMouseButtonIdle)
+
 		.addCFunction("GetMouseRaycastHit", &Scripting::GetMouseRaycastHit)
+
+		// GameObjects
+		.addFunction("Find", &Scripting::FindGameObject)
+		.addFunction("FindUID", &Scripting::FindGameObjectUID)
+		.addFunction("Instantiate", &Scripting::Instantiate)
+		.addFunction("InstantiateByUID", &Scripting::InstantiateByUID)
+		.addFunction("InstantiateByName", &Scripting::InstantiateByName)
 
 		// Script Data
 		.addFunction("Enable", &Scripting::Enable)
@@ -297,6 +318,7 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 		.addFunction("position_y", &Scripting::GetPositionY)
 		.addFunction("position_z", &Scripting::GetPositionZ)
 		.addFunction("position", &Scripting::GetPosition)
+
 		.addFunction("Translate", &Scripting::Translate)
 		.addFunction("SetPosition", &Scripting::SetPosition)
 
@@ -305,6 +327,13 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 		.addFunction("rotation_y", &Scripting::GetEulerY)
 		.addFunction("rotation_z", &Scripting::GetEulerZ)
 		.addFunction("rotation", &Scripting::GetEulerRotation)
+
+		.addFunction("quat_x", &Scripting::GetQuatX)
+		.addFunction("quat_y", &Scripting::GetQuatY)
+		.addFunction("quat_z", &Scripting::GetQuatZ)
+		.addFunction("quat_w", &Scripting::GetQuatW)
+		.addFunction("quat", &Scripting::GetQuatRotation)
+
 		.addFunction("Rotate", &Scripting::Rotate)
 		.addFunction("SetRotation", &Scripting::SetEulerRotation)
 
@@ -405,40 +434,102 @@ float Scripting::GetDT() const
 }
 
 // Input
+int Scripting::GetKey(const char* key) const
+{
+	SDL_Scancode code = SDL_GetScancodeFromName(key);
+	if (code != SDL_SCANCODE_UNKNOWN)
+		return code;
+	else {
+		LOG("[Script Error]: Unknown key passed as string.");
+		return -1;
+	}
+}
+
 int Scripting::GetKeyState(const char* key) const
 {
 	SDL_Scancode code = SDL_GetScancodeFromName(key);
 	if (code != SDL_SCANCODE_UNKNOWN)
 		return App->input->GetKey(code);
-	else
+	else {
+		LOG("[Script Error]: Unknown key passed as string.");
 		return -1;
+	}
 }
 
 bool Scripting::IsKeyDown(const char* key) const
 {
-	SDL_Scancode code = SDL_GetScancodeFromName(key);
-	if (code != SDL_SCANCODE_UNKNOWN)
-		return App->input->GetKey(code) == KEY_DOWN;
-	else
-		return false;
+	return GetKeyState(key) == KEY_DOWN;
 }
 
 bool Scripting::IsKeyUp(const char* key) const
 {
-	SDL_Scancode code = SDL_GetScancodeFromName(key);
-	if (code != SDL_SCANCODE_UNKNOWN)
-		return App->input->GetKey(code) == KEY_UP;
-	else
-		return false;
+	return GetKeyState(key) == KEY_UP;
 }
 
 bool Scripting::IsKeyRepeat(const char* key) const
 {
-	SDL_Scancode code = SDL_GetScancodeFromName(key);
-	if (code != SDL_SCANCODE_UNKNOWN)
-		return App->input->GetKey(code) == KEY_REPEAT;
-	else
-		return false;
+	return GetKeyState(key) == KEY_REPEAT;
+}
+
+bool Scripting::IsKeyIdle(const char* key) const
+{
+	return GetKeyState(key) == KEY_IDLE;
+}
+
+int Scripting::GetMouseButton(const char* button) const
+{
+	if (!std::strcmp("Left", button))
+		return SDL_BUTTON_LEFT;
+	else if (!std::strcmp("Middle", button))
+		return SDL_BUTTON_MIDDLE;
+	else if (!std::strcmp("Right", button))
+		return SDL_BUTTON_RIGHT;
+	else if (!std::strcmp("X1", button))
+		return SDL_BUTTON_X1;
+	else if (!std::strcmp("X2", button))
+		return SDL_BUTTON_X2;
+	else {
+		LOG("[Script Error]: Unknown MouseButton passed as string.");
+		return -1;
+	}
+}
+
+int Scripting::GetMouseButtonState(const char* button) const
+{
+	if (!strcmp("Left", button))
+		return App->input->GetMouseButton(SDL_BUTTON_LEFT);
+	else if (!std::strcmp("Middle", button))
+		return App->input->GetMouseButton(SDL_BUTTON_MIDDLE);
+	else if (!std::strcmp("Right", button))
+		return App->input->GetMouseButton(SDL_BUTTON_RIGHT);
+	else if (!std::strcmp("X1", button))
+		return App->input->GetMouseButton(SDL_BUTTON_X1);
+	else if (!std::strcmp("X2", button))
+		return App->input->GetMouseButton(SDL_BUTTON_X2);
+	else {
+		LOG("[Script Error]: Unknown MouseButton passed as string.");
+		return -1;
+	}
+}
+
+bool Scripting::IsMouseButtonDown(const char* button) const
+{
+	return GetMouseButtonState(button) == KEY_DOWN;
+}
+
+bool Scripting::IsMouseButtonUp(const char* button) const
+{
+	return GetMouseButtonState(button) == KEY_UP;
+}
+
+bool Scripting::IsMouseButtonRepeat(const char* button) const
+{
+	return GetMouseButtonState(button) == KEY_REPEAT;
+}
+
+bool Scripting::IsMouseButtonIdle(const char* button) const
+{
+	return GetMouseButtonState(button) == KEY_IDLE;
 }
 
 int Scripting::GetMouseRaycastHit(lua_State *L)
@@ -456,19 +547,50 @@ int Scripting::GetMouseRaycastHit(lua_State *L)
 }
 
 // GameObjects
-//const GameObject* Scripting::Find(const char* objName) const
+GameObject* Scripting::FindGameObject(const char* objName) const
+{
+	return GOFunctions::FindModifiableGameObject(objName);
+}
+
+uint32_t Scripting::FindGameObjectUID(const char* objName) const
+{
+	return GOFunctions::FindGameObject(objName)->UID;
+}
+
+GameObject* Scripting::Instantiate(GameObject* reference, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale)
+{
+	GameObject* new_go = GOFunctions::InstantiateGameObject(reference);
+
+	if (new_go != nullptr) {
+		ComponentTransform* trs = (ComponentTransform*)new_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+		float3 rotRad = DegToRad(float3(rot_x, rot_y, rot_z));
+		trs->SetGlobalMat(float4x4::FromTRS(float3(pos_x, pos_y, pos_z), Quat::FromEulerXYZ(rotRad.x, rotRad.y, rotRad.z), float3(scale)));
+	}
+	else
+		LOG("[Script Error]: GameObject referenced was not found in scene.");
+
+	return new_go;
+}
+
+uint32_t Scripting::InstantiateByUID(uint32_t objUID, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale)
+{
+	GameObject* reference = GOFunctions::FindModifiableGameObject(objUID);
+
+	if (reference != nullptr)
+		return Instantiate(reference, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, scale)->UID;
+	else
+		return -1;
+}
+
+GameObject* Scripting::InstantiateByName(const char* objName, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale)
+{
+	GameObject* reference = GOFunctions::FindModifiableGameObject(objName);
+	return Instantiate(reference, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, scale);
+}
+
+//GameObject* Destroy(const GameObject* target)
 //{
-//	const GameObject* ret = nullptr;
 //
-//	std::vector<const GameObject*> vec;
-//	GOFunctions::FillArrayWithChildren(vec, App->scene_intro->root);
-//	for (std::vector<const GameObject*>::iterator it = vec.begin(); it != vec.end(); ++it)
-//		if ((*it)->name == objName) {
-//			ret = (*it);
-//			break;
-//		}
-//
-//	return ret;
 //}
 
 void Scripting::Enable(bool state)
@@ -523,7 +645,7 @@ void Scripting::DestroySelf() const
 float Scripting::GetPositionX(bool local) const
 {
 	if (local)
-		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.x;
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.TranslatePart().x;
 	else
 		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.TranslatePart().x;
 }
@@ -531,7 +653,7 @@ float Scripting::GetPositionX(bool local) const
 float Scripting::GetPositionY(bool local) const
 {
 	if (local)
-		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.y;
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.TranslatePart().y;
 	else
 		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.TranslatePart().y;
 }
@@ -539,7 +661,7 @@ float Scripting::GetPositionY(bool local) const
 float Scripting::GetPositionZ(bool local) const
 {
 	if (local)
-		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->position.z;
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.TranslatePart().z;
 	else
 		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.TranslatePart().z;
 }
@@ -550,7 +672,7 @@ int Scripting::GetPosition(bool local, lua_State *L) const
 	float3 pos;
 
 	if (local)
-		pos = trs->position;
+		pos = trs->localTrs.TranslatePart();
 	else
 		pos = trs->globalTrs.TranslatePart();
 
@@ -577,7 +699,7 @@ void Scripting::SetPosition(float x, float y, float z, bool local)
 float Scripting::GetEulerX(bool local) const
 {
 	if (local)
-		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.x);
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.RotatePart().ToEulerXYZ().x);
 	else
 		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToEulerXYZ().x);
 }
@@ -585,15 +707,16 @@ float Scripting::GetEulerX(bool local) const
 float Scripting::GetEulerY(bool local) const
 {
 	if (local)
-		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.y);
-	else
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.RotatePart().ToEulerXYZ().y);
+	else {
 		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToEulerXYZ().y);
+	}
 }
 
 float Scripting::GetEulerZ(bool local) const
 {
 	if (local)
-		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->rotation.z);
+		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.RotatePart().ToEulerXYZ().z);
 	else
 		return RadToDeg(((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToEulerXYZ().z);
 }
@@ -604,7 +727,7 @@ int Scripting::GetEulerRotation(bool local, lua_State *L) const
 	float3 rot;
 
 	if (local)
-		rot = RadToDeg(trs->rotation);
+		rot = RadToDeg(trs->localTrs.RotatePart().ToEulerXYZ());
 	else
 		rot = RadToDeg(trs->globalTrs.RotatePart().ToEulerXYZ());
 
@@ -613,6 +736,63 @@ int Scripting::GetEulerRotation(bool local, lua_State *L) const
 	lua_pushnumber(L, rot.z);
 
 	return 3;
+}
+
+float Scripting::GetQuatX(bool local) const
+{
+	if (local)
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.RotatePart().ToQuat().x;
+	else {
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToQuat().x;
+	}
+		
+}
+
+float Scripting::GetQuatY(bool local) const
+{
+	if (local)
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.RotatePart().ToQuat().y;
+	else
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToQuat().y;
+}
+
+float Scripting::GetQuatZ(bool local) const
+{
+	if (local)
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.RotatePart().ToQuat().z;
+	else
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToQuat().z;
+}
+
+float Scripting::GetQuatW(bool local) const
+{
+	if (local)
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.RotatePart().ToQuat().w;
+	else
+		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToQuat().w;
+}
+
+int Scripting::GetQuatRotation(bool local, lua_State *L) const
+{
+	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+	float4 rot;
+	Quat q;
+
+	if (local) {
+		q = trs->localTrs.RotatePart().ToQuat();
+		rot = float4(q.x, q.y, q.z, q.w);
+	}
+	else {
+		q = trs->globalTrs.RotatePart().ToQuat();
+		rot = float4(q.x, q.y, q.z, q.w);
+	}
+
+	lua_pushnumber(L, rot.x);
+	lua_pushnumber(L, rot.y);
+	lua_pushnumber(L, rot.z);
+	lua_pushnumber(L, rot.w);
+
+	return 4;
 }
 
 void Scripting::Rotate(float x, float y, float z, bool local)
@@ -645,12 +825,12 @@ void Scripting::LookTo(float dirX, float dirY, float dirZ, bool local)
 {
 	ComponentTransform* trs = (ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 
-	if (local)
-		trs->localTrs = trs->localTrs * float4x4::LookAt(trs->localTrs.WorldZ(), float3(dirX, dirY, dirZ).Normalized(), trs->localTrs.WorldY(), float3::unitY);
-	else {
-		trs->localTrs = trs->localTrs * float4x4::LookAt(trs->localTrs.WorldZ(), float3(dirX, dirY, dirZ).Normalized(), trs->localTrs.WorldY(), float3::unitY);
-		trs->localTrs = ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->parent->GetComponent(COMPONENT_TYPE::TRANSFORM))->localTrs.Inverted().RotatePart() * trs->localTrs;	// Maybe there's a simpler way, but this works and by God I'm not fucking touching it again for now
+	if (local) {
+		trs->localTrs = trs->localTrs * Quat::RotateFromTo(trs->localTrs.WorldZ().Normalized(), float3(dirX, dirY, dirZ).Normalized());
+		trs->needsUpdateGlobal = true;
 	}
-
-	trs->needsUpdateGlobal = true;
+	else {
+		trs->globalTrs = trs->globalTrs * Quat::RotateFromTo(trs->globalTrs.WorldZ().Normalized(), float3(dirX, dirY, dirZ).Normalized());
+		trs->needsUpdateLocal = true;
+	}
 }

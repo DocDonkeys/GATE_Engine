@@ -34,8 +34,8 @@ public:
 	// Set
 	bool SetLocalMat(float3& pos, float3& rot, float3& scale);
 	bool SetLocalMat(float4x4& mat);
-	//bool SetGlobalMat(float3& pos, float3& rot, float3& scale);	//IMPROVE: We might need to arbitrarily set the global position, but what should we do with the children? Move them or update their data?
-	//bool SetGlobalMat(float4x4& mat);
+	bool SetGlobalMat(float3& pos, float3& rot, float3& scale);	//IMPROVE: We might need to arbitrarily set the global position, but what should we do with the children? Move them or update their data?
+	bool SetGlobalMat(float4x4& mat);
 
 	// Get
 	void GetLocalMat(float3& pos, float3& rot, float3& scale);
@@ -57,7 +57,9 @@ public:
 
 public:	//CHANGE/FIX: Should be private, only public currently because of Didac's import/export system
 	float4x4 localTrs = float4x4::identity;
+	//Quat localQuat = Quat::identity;
 	float4x4 globalTrs = float4x4::identity;
+	//Quat globalQuat = Quat::identity;
 };
 
 #endif // !__COMPONENTTRANSFORM_H__

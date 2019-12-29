@@ -74,17 +74,31 @@ public:
 	float GetDT() const;
 
 	// Input
+	int GetKey(const char* key) const;
 	int GetKeyState(const char* key) const;
+
 	bool IsKeyDown(const char* key) const;
 	bool IsKeyUp(const char* key) const;
 	bool IsKeyRepeat(const char* key) const;
+	bool IsKeyIdle(const char* key) const;
+
+	int GetMouseButton(const char* button) const;
+	int GetMouseButtonState(const char* button) const;
+
+	bool IsMouseButtonDown(const char* button) const;
+	bool IsMouseButtonUp(const char* button) const;
+	bool IsMouseButtonRepeat(const char* button) const;
+	bool IsMouseButtonIdle(const char* button) const;
 
 	int GetMouseRaycastHit(lua_State *L);
 
 	// GameObjects
-	//const GameObject* Find(const char* objName) const;
-	//const GameObject* Instantiate(Resource prefab);
-	//const GameObject* Destroy(const GameObject* target);
+	GameObject* FindGameObject(const char* objName) const;
+	uint32_t FindGameObjectUID(const char* objName) const;
+	GameObject* Instantiate(GameObject* reference, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale);
+	uint32_t InstantiateByUID(uint32_t objUID, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale);
+	GameObject* InstantiateByName(const char* objName, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale);
+	GameObject* Destroy(GameObject* target);
 
 	// SCRIPT TRANSLATOR
 	void Enable(bool state);
@@ -117,6 +131,12 @@ public:
 	float GetEulerY(bool local) const;	// Pitch
 	float GetEulerZ(bool local) const;	// Yaw
 	int GetEulerRotation(bool local, lua_State *L) const;
+	
+	float GetQuatX(bool local) const;
+	float GetQuatY(bool local) const;
+	float GetQuatZ(bool local) const;
+	float GetQuatW(bool local) const;
+	int GetQuatRotation(bool local, lua_State *L) const;
 
 	void Rotate(float x, float y, float z, bool local);
 	void SetEulerRotation(float x, float y, float z, bool local);
