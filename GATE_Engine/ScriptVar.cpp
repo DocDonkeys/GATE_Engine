@@ -14,12 +14,12 @@ ScriptVar::ScriptVar(bool value)
 	editor_value.as_boolean = value;
 }
 
-ScriptVar::ScriptVar(const char * value)
+ScriptVar::ScriptVar(const char* value)
 {
 	type = VarType::STRING;
 
-	script_defined_value.as_string = value;
-	editor_value.as_string = value;
+	strcpy(script_defined_value.as_string, value);
+	strcpy(editor_value.as_string, value);
 }
 
 ScriptVar::ScriptVar(double value)
@@ -50,7 +50,7 @@ void ScriptVar::ChangeEditorValue(const char * value)
 {
 	if (type == VarType::STRING)
 	{
-		editor_value.as_string = value;
+		strcpy(editor_value.as_string, value);
 		changed_value = true;
 	}
 	else

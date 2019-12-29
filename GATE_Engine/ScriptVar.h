@@ -14,7 +14,7 @@ enum class VarType
 union VarValue
 {
 	bool as_boolean;
-	const char* as_string;
+	char as_string[256] = "null";
 	double as_double_number;
 
 	//VarValue(const char str) { as_string = str; }

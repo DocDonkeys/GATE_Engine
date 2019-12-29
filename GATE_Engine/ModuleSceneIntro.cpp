@@ -6,6 +6,7 @@
 #include "ModuleInput.h"
 #include "TextureLoader.h"
 #include "GeometryLoader.h"
+#include "ModuleEditor.h"
 #include "ModuleFileSystem.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
@@ -184,8 +185,9 @@ update_status ModuleSceneIntro::PreUpdate(float realDT)
 // Update
 update_status ModuleSceneIntro::Update(float realDT)
 {
-	if (App->IsGamePlaying() || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_IDLE)	// IMPROVE: Define better the limitations of using tool/camera controls (Like a condition of being in Scene or Editor view)
-		toolMode = CheckToolMode();
+	if (!App->editor->using_menu)
+		if (App->IsGamePlaying() || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_IDLE)	// IMPROVE: Define better the limitations of using tool/camera controls (Like a condition of being in Scene or Editor view)
+			toolMode = CheckToolMode();
 
 	root->Update(realDT);
 

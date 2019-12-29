@@ -557,32 +557,42 @@ void EditorInspector::DrawComponentScript(ComponentScript * script)
 
 	std::string name = script->script_name + "(Script)";
 	if (ImGui::TreeNodeEx(name.data(), base_flags)) {
-		ImGui::Separator();
 		ImGui::Checkbox("Active", &script->active);
+
+		char auxBuffer[256];
 
 		//Display Variables
 		for (int i = 0; i < script->script_variables.size(); ++i)
 		{
-			ImGui::Text(script->script_variables[i].name.c_str());
+			std::string auxName = script->script_variables[i].name.c_str();
+			ImGui::Text(auxName.c_str()); ImGui::SameLine(200.f); ImGui::SetNextItemWidth(ImGui::GetWindowWidth() / 7.0f);
+			auxName.assign("##Var" + auxName);
+
 			VarType type = script->script_variables[i].type;
 			if (type == VarType::DOUBLE)
 			{
-				ImGui::SameLine(130.f);
-				std::string value = std::to_string(script->script_variables[i].editor_value.as_double_number);
-				if (ImGui::DragFloat(value.c_str(), (float*)&script->script_variables[i].editor_value.as_double_number, 0.05f,-32000.0f,32000.0f))
+				float auxVal(script->script_variables[i].editor_value.as_double_number);
+
+				if (ImGui::DragFloat(auxName.c_str(), &auxVal, 0.05f)) {
+					script->script_variables[i].editor_value.as_double_number = auxVal;
 					script->script_variables[i].changed_value = true;
+				}
+
 			}
 			else if (type == VarType::BOOLEAN)
 			{
-				ImGui::SameLine(130.f);
-				if(ImGui::Checkbox("", &script->script_variables[i].editor_value.as_boolean))
+				if(ImGui::Checkbox(auxName.c_str(), &script->script_variables[i].editor_value.as_boolean))
 					script->script_variables[i].changed_value = true;
 			}
 			else if (type == VarType::STRING)
 			{
-				ImGui::SameLine(130.f);
-				if (ImGui::InputText("##String", objNameBuffer, IM_ARRAYSIZE(objNameBuffer)))
-				{
+				strcpy(auxBuffer, script->script_variables[i].editor_value.as_string);
+
+				ImGui::InputText(auxName.c_str(), auxBuffer, IM_ARRAYSIZE(auxBuffer));
+
+				if (strcmp(script->script_variables[i].editor_value.as_string, auxBuffer) != 0) {
+					strcpy(script->script_variables[i].editor_value.as_string, auxBuffer);
+					script->script_variables[i].changed_value = true;
 				}
 			}
 

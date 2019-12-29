@@ -441,6 +441,22 @@ update_status ModuleScripting::GameUpdate(float gameDT)
 		{
 			current_script = class_instances[i];
 
+			for (std::vector<ScriptVar>::iterator it = current_script->my_component->script_variables.begin(); it != current_script->my_component->script_variables.end(); ++it)
+				if ((*it).changed_value) {
+					switch ((*it).type) {
+					case VarType::DOUBLE:
+						current_script->my_table_class[(*it).name.c_str()] = (*it).editor_value.as_double_number;
+						break;
+					case VarType::STRING:
+						current_script->my_table_class[(*it).name.c_str()] = (*it).editor_value.as_string;
+						break;
+					case VarType::BOOLEAN:
+						current_script->my_table_class[(*it).name.c_str()] = (*it).editor_value.as_boolean;
+						break;
+					}
+					(*it).changed_value = false;
+				}
+
 			if (current_script->awoken == false)
 			{
 				current_script->my_table_class["Awake"]();	// Awake is done first, regardless of the script being active or not
