@@ -285,6 +285,18 @@ void ModuleScripting::FillScriptInstanceComponentVars(ScriptInstance * script)
 	}
 }
 
+void ModuleScripting::DeleteScriptInstanceWithParentComponent(ComponentScript * script_component)
+{
+	for (int i = 0; i < class_instances.size(); ++i)
+	{
+		if (class_instances[i] != nullptr && class_instances[i]->my_component == script_component)
+		{
+			delete class_instances[i];
+			class_instances.erase(class_instances.begin() + i);
+		}
+	}
+}
+
 void ModuleScripting::ManageOrphanScript(std::string relative_path)
 {
 	//Create a new meta

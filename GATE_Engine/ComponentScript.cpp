@@ -12,6 +12,7 @@ ComponentScript::ComponentScript() : Component()
 
 ComponentScript::~ComponentScript() 
 {
+	App->scripting->DeleteScriptInstanceWithParentComponent(this);
 }
 
 void ComponentScript::Enable()
