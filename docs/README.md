@@ -82,7 +82,27 @@ Allows to change values of a gameobject in play time depending on conditions, fu
 The UI was done using ImGui and provides an editor to use and tweak all the facilities of the engine (from an engine user perspective).
 The module that manages the UI does so in a way that makes it incredibly easy to create new windows and elements in diferent files to keep code clean and readable.
 
-### Scripting subsystem
+## Scripting subsystem
+
+The engine features a module that allows scripting in Lua, to code in smalls scripts all the gameplay code.
+
+* Drag a script from the project window into a GameObject to attach a script component with the script.
+  Double click on a script to automatically open it with your prefered Code Editor for .lua files, so that you can use all the intellisense features and alike of your favorite IDE. If you have none defined, windows will ask you to define one. 
+  
+For Visual Studio, remember that you must set devenv.exe as the favorite editor if this window from windows pops-up. If you are using Visual Studio with Lua for the first time, we recommend you install [this plugin for visual studio](https://marketplace.visualstudio.com/items?itemName=Xizhi.NPLLuaLanguageService) or any plugin that suits your needs of coloring, autocompletion, intellisense and such. 
+  
+* When scripting you code a table as if it were a class that will be instantiated for each component, with its values independent from one another, allowing you to have various instances of the same script running in diferent components and with diferent values. Basically, the table is encapsulated inside a function that returns the table and we load them inside ScriptInstances in the engine.
+
+* Script Instances contain the class that is in its script, already compiled and loaded by the Lua Virtual Machine, and inside the engine we use it to call functions of the script from C++ and to obtain variable values to display them in the editor and change them from the engine editor itself.
+
+* If you define the functions Awake(), Start() and Update(), they will be called by the engine with the order and consistency of other game engines.
+
+* You can call a set of defined functions of the engine from the script in order to do things like moving a gameobject instantiating a gameobject etc.
+
+* The scripting system features Hot Reloading, meaning that files can be edited while the engine is open, and the changes made to the scripts will be recompiled and applied while the engine is running, although if you edit a script while playing, the Hot Reloading will be done after you stop playing.
+
+* The Engine sill notify you in the console if the scripts did or did not compile.
+
 
 
 ## Libraries Used
