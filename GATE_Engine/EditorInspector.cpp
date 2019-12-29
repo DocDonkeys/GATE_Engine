@@ -17,6 +17,7 @@
 #include "ResourceTexture.h"
 #include "ModuleResources.h"
 #include "ModuleFileSystem.h"
+#include "ResourceScript.h"
 
 #include "libs/MathGeoLib/include/Math/MathFunc.h"
 
@@ -557,7 +558,10 @@ void EditorInspector::DrawComponentScript(ComponentScript * script)
 
 	std::string name = script->script_name + "(Script)";
 	if (ImGui::TreeNodeEx(name.data(), base_flags)) {
-		ImGui::Checkbox("Active", &script->active);
+		ImGui::Checkbox("Active", &script->active); ImGui::SameLine();
+		if (ImGui::Button("Open Script File")) {
+			App->RequestBrowser(std::string(script->script->absolute_path).data());
+		}
 
 		char auxBuffer[256];
 
