@@ -249,7 +249,12 @@ void ModuleScripting::FillScriptInstanceComponentVars(ScriptInstance * script)
 		{
 			variable_type = VarType::BOOLEAN;
 			var_value = (*iterator).second.tostring();
-			bool val = (bool)std::stoi(var_value);
+			bool val = false;
+			std::string tru = "true";
+			if (!var_value.compare(tru))
+			{
+				val = true;
+			}
 			variable = ScriptVar(val);
 		}
 		else if ((*iterator).second.isFunction())
