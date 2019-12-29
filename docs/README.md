@@ -1,6 +1,55 @@
 ﻿# GATE by Doc Donkeys
 This is a university project made by [CITM](https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we made a 3D Game Engine in C & C++ during our 3rd year of Game Development Bachelor's Degree.
 
+## The Team: [Doc Donkeys](https://github.com/DocDonkeys)
+* Carles Homs 
+  * Role: Code
+  * Github: [ch0m5](https://github.com/ch0m5)
+
+* Dídac Romero
+  * Role: Code
+  * Github: [DídacRomero](https://github.com/DidacRomero)
+
+![DocDonkeys](https://github.com/DocDonkeys/GATE_Engine/blob/master/docs/DocDonkeys_members.png)
+
+
+Carles Homs (left) & Dídac Romero (right).
+
+## Tasks completed
+
+#### Carles Homs
+
+* Images Loading
+* Profiling with Brofiler
+* Engine UI display & structuring
+* Transformations
+* Space Partitioning (quadtree octree) & static objects partition accordingly
+* Camera & Culling
+* Mouse Picking
+* Play mode (Time Management)
+* Gizmos
+* Demo Scripts (Tank movement & shooting and others)
+* Engine Functions callable from LUA Scripts
+* Script files variables parsing & display
+
+
+#### Dídac Romero
+
+* ImGui integration
+* 3D Models loading 
+* GameObject & Components
+* Hierarchy
+* Own File Format
+* Serialization
+* Resource Manager
+* Scripting Class alike based Structure & functionalities
+* Script files variables parsing & display
+* Scripting Hot Reloading
+
+
+
+
+
 ## Libraries Used
 * [STL (C++11)](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
 * [SDL (v2.0.10)](https://www.libsdl.org/)
@@ -43,14 +92,7 @@ feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request and we might look into it. :D
 
-## The Team: [Doc Donkeys](https://github.com/DocDonkeys)
-* Carles Homs 
-  * Role: Code
-  * Github: [ch0m5](https://github.com/ch0m5)
 
-* Dídac Romero
-  * Role: Code
-  * Github: [DídacRomero](https://github.com/DidacRomero)
 
 ## License & Copyright 
 
