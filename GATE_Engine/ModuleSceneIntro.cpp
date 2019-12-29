@@ -130,15 +130,21 @@ void ModuleSceneIntro::CreateEmptyGameObject(int num_of_go)
 	}
 }
 
-void ModuleSceneIntro::DestroyGameObject(GameObject * go)
+void ModuleSceneIntro::DestroyGameObject(GameObject* go)
 {
 	//Set all possible references to the gaemObject to nullptr or out of the array
 	if (selected_go == go)
 		selected_go = nullptr;
 
-	GOFunctions::ReParentGameObject(go,nullptr);
+	GOFunctions::ReParentGameObject(go, nullptr);
 	RELEASE(go);
 	numObjects--;
+}
+
+void ModuleSceneIntro::MarkGameObjectDestruction(GameObject* go)
+{
+	if (go != nullptr)
+		go->mustDestroy = true;
 }
 
 bool ModuleSceneIntro::AddTextureToGameObject(GameObject * go, const char* path)
@@ -198,6 +204,16 @@ update_status ModuleSceneIntro::GameUpdate(float gameDT)
 update_status ModuleSceneIntro::PostUpdate(float realDT)
 {
 	root->PostUpdate(realDT);
+
+	std::vector<GameObject*> sceneObjects;
+	GOFunctions::FillArrayWithModifiableChildren(sceneObjects, root);
+
+	for (int i = sceneObjects.size() - 1; i >= 0; --i)
+		if (sceneObjects[i]->mustDestroy) {
+			GOFunctions::ReParentGameObject(sceneObjects[i], nullptr);
+			RELEASE(sceneObjects[i]);
+			numObjects--;
+		}
 
 	return UPDATE_CONTINUE;
 }

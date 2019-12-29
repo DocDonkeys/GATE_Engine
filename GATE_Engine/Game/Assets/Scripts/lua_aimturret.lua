@@ -3,6 +3,7 @@ local Functions = Debug.Scripting ()
 function	GetTablelua_aimturret ()
 local lua_table = {}
 lua_table["Functions"] = Debug.Scripting ()
+lua_table["Fire Mouse Button"] = "Left"
 
 function lua_table:Awake ()
 	origBulletUID =  lua_table["Functions"]:FindUID ("Shell_")
@@ -12,7 +13,7 @@ function lua_table:Start ()
 end
 
 function lua_table:Update ()
-	hit_x, hit_y, hit_z = lua_table["Functions"]:GetMouseRaycastHit ();
+	hit_x, hit_y, hit_z = lua_table["Functions"]:MouseRaycastHit ();
 
 	if hit_x ~= nil
 	then
@@ -22,7 +23,7 @@ function lua_table:Update ()
 	end
 
 	if
-	lua_table["Functions"]:MouseButtonDown ("Left")
+	lua_table["Functions"]:MouseInGame () and lua_table["Functions"]:MouseButtonDown (lua_table["Fire Mouse Button"]) 
 	then
 	--pos_x, pos_y, pos_z = lua_table["Functions"]:position (false)
 	--rot_x, rot_y, rot_z = lua_table["Functions"]:rotation (false)
@@ -30,8 +31,11 @@ function lua_table:Update ()
 	pos_y = 1.0 + lua_table["Functions"]:position_y (false)
 	pos_z = lua_table["Functions"]:position_z (false)
 
-	lua_table["Functions"]:rotation_y (false)
-	lua_table["Functions"]:InstantiateByUID (origBulletUID, pos_x, pos_y, pos_z, 0.0, lua_table["Functions"]:rotation_y (), 0.0, 1.0)
+	rot_x = lua_table["Functions"]:rotation_x (false);
+	rot_y = lua_table["Functions"]:rotation_y (false);
+	rot_z = lua_table["Functions"]:rotation_z (false);
+
+	lua_table["Functions"]:InstantiateByUID (origBulletUID, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, 1.0)
 	lua_table["Functions"]:LOG ("Open Fire!")
 	end
 end

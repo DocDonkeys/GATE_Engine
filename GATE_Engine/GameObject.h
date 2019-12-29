@@ -60,6 +60,8 @@ public: //Vars
 	AABB aabb;
 	OBB obb;
 	float3 size;
+
+	bool mustDestroy = false;
 };
 
 //Namespace to carry out operations related to Game Objects

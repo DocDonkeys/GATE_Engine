@@ -41,7 +41,7 @@ public:
 
 public:
 	ImporterScript ie_scripts;
-	std::vector<ScriptInstance*>::iterator current_script;
+	ScriptInstance* current_script;
 
 private:
 	// L is our Lua Virtual Machine, it's called L because its the common name it receives, so all programers can understand what this var is
@@ -93,19 +93,23 @@ public:
 	bool IsMouseButtonRepeat(const char* button) const;
 	bool IsMouseButtonIdle(const char* button) const;
 
+	bool IsMouseInGame() const;
 	int GetMouseRaycastHit(lua_State *L);
 
 	// GameObjects
 	GameObject* FindGameObject(const char* objName) const;
 	uint32_t FindGameObjectUID(const char* objName) const;
+
 	GameObject* Instantiate(GameObject* reference, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale);
 	uint32_t InstantiateByUID(uint32_t objUID, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale);
 	GameObject* InstantiateByName(const char* objName, float pos_x, float pos_y, float pos_z, float rot_x, float rot_y, float rot_z, float scale);
+
 	GameObject* Destroy(GameObject* target);
+	void DestroyByUID(uint32_t objUID);
 
 	// SCRIPT TRANSLATOR
-	void Enable(bool state);
-	bool IsEnabled() const;
+	void Activate(bool state);
+	bool IsActivated() const;
 
 	// OBJECT TRANSLATOR
 	// General
@@ -135,14 +139,18 @@ public:
 	float GetEulerZ(bool local) const;	// Yaw
 	int GetEulerRotation(bool local, lua_State *L) const;
 	
+	void RotateByEuler(float x, float y, float z, bool local);
+	void SetEulerRotation(float x, float y, float z, bool local);
+
+	//DON'T USE, quat methods need revision
 	float GetQuatX(bool local) const;
 	float GetQuatY(bool local) const;
 	float GetQuatZ(bool local) const;
 	float GetQuatW(bool local) const;
 	int GetQuatRotation(bool local, lua_State *L) const;
 
-	void Rotate(float x, float y, float z, bool local);
-	void SetEulerRotation(float x, float y, float z, bool local);
+	void RotateByQuat(float x, float y, float z, float w, bool local);
+	void SetQuatRotation(float x, float y, float z, float w, bool local);
 
 	// Others
 	void LookAt(float posX, float posY, float posZ, bool local);

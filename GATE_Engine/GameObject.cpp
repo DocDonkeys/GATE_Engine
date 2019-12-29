@@ -36,8 +36,10 @@ GameObject::~GameObject()
 {
 	if (children.size() > 0)
 	{
-		for (int i = 0; i < children.size(); ++i)
+		for (int i = 0; i < children.size(); ++i) {
 			RELEASE(children[i]);
+			--App->scene_intro->numObjects;
+		}
 
 		children.clear();
 	}

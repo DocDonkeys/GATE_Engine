@@ -26,7 +26,9 @@ public:
 	float3 SetPosition(float3 targetPos, bool local = true);
 
 	float3 Rotate(float3 rot, bool local = true);
+	float3 Rotate(Quat rot, bool local = true);
 	float3 SetRotation(float3 targetRot, bool local = true);
+	float3 SetRotation(Quat rot, bool local = true);
 
 	float3 Scale(float3 scale, bool local = true);
 	float3 SetScale(float3 targetScale, bool local = true);

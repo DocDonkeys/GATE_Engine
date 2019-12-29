@@ -22,6 +22,7 @@
 
 #include "libs/ImGuizmo/ImGuizmo.h"
 #include "libs/Brofiler/Brofiler.h"
+#include "libs/MathGeoLib/include/Math/MathFunc.h"
 
 // Memory Leak Detection
 #include "MemLeaks.h"
@@ -289,8 +290,7 @@ void ModuleEditor::DrawImGuizmo()	//IMPROVE: Add ImViewGizmo and Bounds
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 
-	ComponentTransform* transform = (ComponentTransform*)App->scene_intro->selected_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-	float4x4 mat = transform->globalTrs;
+	ComponentTransform* trs = (ComponentTransform*)App->scene_intro->selected_go->GetComponent(COMPONENT_TYPE::TRANSFORM);
 
 	//if (App->scene_intro->handlePositionMode == (int)handle_position::CENTER)	//IMPROVE: Make rotation axis be in the AABB center (which should include all children?)
 	//	mat.SetTranslatePart(transform->my_go->aabb.CenterPoint());
@@ -300,12 +300,14 @@ void ModuleEditor::DrawImGuizmo()	//IMPROVE: Add ImViewGizmo and Bounds
 		if (snap = App->scene_intro->snapActivated[i])	// The single "=" is on purpose, not a typo
 			break;
 
-	mat.Transpose();
+	float4x4 mat = trs->globalTrs.Transposed();
+
 	ImGuizmo::Manipulate((float*)view.v, (float*)projection.v,
 		(ImGuizmo::OPERATION)App->scene_intro->toolMode, (ImGuizmo::MODE)App->scene_intro->handleRotationMode,
-		(float*)mat.v, NULL, snap ? App->scene_intro->snapTools.ptr() : NULL);
+		(float*)mat.v, NULL, snap ? App->scene_intro->snapTools.ptr() : NULL);	//CHANGE/FIX: The resulting matrix suffers from Gimbal Lock!
 
-	transform->globalTrs = mat.Transposed();
+	trs->globalTrs = mat.Transposed();
+
 	if (ImGuizmo::IsUsing())
-		transform->needsUpdateLocal = true;
+		trs->needsUpdateLocal = true;
 }

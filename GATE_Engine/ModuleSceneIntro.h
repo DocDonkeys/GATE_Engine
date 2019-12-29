@@ -43,7 +43,9 @@ public:
 	GameObject* CreateEmptyGameObject(const char* name);
 	GameObject* CreateEmptyGameObject(COMPONENT_TYPE comp);
 	void CreateEmptyGameObject(int num_of_go);
+
 	void DestroyGameObject(GameObject* go);
+	void MarkGameObjectDestruction(GameObject* go);
 
 	bool  AddTextureToGameObject(GameObject* go, const char* path);
 

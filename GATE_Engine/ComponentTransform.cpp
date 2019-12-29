@@ -111,7 +111,7 @@ float3 ComponentTransform::SetPosition(float3 targetPos, bool local)
 {
 	if (local) {
 		float3 origPos = position;
-		localTrs = float4x4::FromTRS(targetPos, localTrs.RotatePart(), scale);
+		localTrs.SetTranslatePart(targetPos);
 		position = localTrs.TranslatePart();
 		needsUpdateGlobal = true;
 
@@ -119,7 +119,7 @@ float3 ComponentTransform::SetPosition(float3 targetPos, bool local)
 	}
 	else {
 		float3 origPos = globalTrs.TranslatePart();;
-		globalTrs = float4x4::FromTRS(targetPos, globalTrs.RotatePart(), globalTrs.GetScale());
+		globalTrs.SetTranslatePart(targetPos);
 		needsUpdateLocal = true;
 
 		return globalTrs.TranslatePart() - origPos;
@@ -130,7 +130,7 @@ float3 ComponentTransform::Rotate(float3 rot, bool local)
 {
 	if (local) {
 		float3 origRot = rotation;
-		localTrs = localTrs * Quat::RotateX(rot.x) * Quat::RotateY(rot.y) * Quat::RotateZ(rot.z);
+		localTrs = localTrs * Quat::RotateAxisAngle(localTrs.WorldX(), rot.x) * Quat::RotateAxisAngle(localTrs.WorldY(), rot.y) * Quat::RotateAxisAngle(localTrs.WorldZ(), rot.z);
 		rotation = localTrs.ToEulerXYZ();
 		needsUpdateGlobal = true;
 
@@ -145,12 +145,31 @@ float3 ComponentTransform::Rotate(float3 rot, bool local)
 	}
 }
 
+float3 ComponentTransform::Rotate(Quat rot, bool local)
+{
+	if (local) {
+		float3 origRot = rotation;
+		localTrs = localTrs * rot;
+		rotation = localTrs.ToEulerXYZ();
+		needsUpdateGlobal = true;
+
+		return rotation - origRot;
+	}
+	else {
+		float3 origRot = globalTrs.ToEulerXYZ();
+		globalTrs = globalTrs * rot;
+		needsUpdateLocal = true;
+
+		return globalTrs.ToEulerXYZ() - origRot;
+	}
+}
+
 float3 ComponentTransform::SetRotation(float3 targetRot, bool local)
 {
 	if (local) {
 		float3 origRot = rotation;
 		localTrs.SetRotatePart(Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z));
-		rotation = localTrs.ToEulerXYZ();
+		rotation = targetRot;
 		needsUpdateGlobal = true;
 
 		return localTrs.ToEulerXYZ() - origRot;
@@ -158,6 +177,25 @@ float3 ComponentTransform::SetRotation(float3 targetRot, bool local)
 	else {
 		float3 origRot = globalTrs.ToEulerXYZ();
 		globalTrs.SetRotatePart(Quat::FromEulerXYZ(targetRot.x, targetRot.y, targetRot.z));
+		needsUpdateLocal = true;
+
+		return globalTrs.ToEulerXYZ() - origRot;
+	}
+}
+
+float3 ComponentTransform::SetRotation(Quat targetRot, bool local)
+{
+	if (local) {
+		float3 origRot = rotation;
+		localTrs.SetRotatePart(targetRot);
+		rotation = targetRot.ToEulerXYZ();
+		needsUpdateGlobal = true;
+
+		return localTrs.ToEulerXYZ() - origRot;
+	}
+	else {
+		float3 origRot = globalTrs.ToEulerXYZ();
+		globalTrs.SetRotatePart(targetRot);
 		needsUpdateLocal = true;
 
 		return globalTrs.ToEulerXYZ() - origRot;
