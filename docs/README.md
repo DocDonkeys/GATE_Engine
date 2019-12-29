@@ -4,7 +4,9 @@ This is a university project made by [CITM](https://www.citm.upc.edu/ing/) Centr
 [Repository](https://github.com/DocDonkeys/GATE_Engine)
 
 [Releases](https://github.com/DocDonkeys/GATE_Engine/releases)
+
 [Last release direct download](https://github.com/DocDonkeys/GATE_Engine/releases/download/Assignment3.1/GATE_Engine.zip)
+
 [Last Release](https://github.com/DocDonkeys/GATE_Engine/releases/tag/Assignment3.1)
 
 ## The Team: [Doc Donkeys](https://github.com/DocDonkeys)
