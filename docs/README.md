@@ -4,8 +4,8 @@ This is a university project made by [CITM](https://www.citm.upc.edu/ing/) Centr
 [Repository](https://github.com/DocDonkeys/GATE_Engine)
 
 [Releases](https://github.com/DocDonkeys/GATE_Engine/releases)
-[Last release direct download](https://github.com/DocDonkeys/GATE_Engine/releases/download/Assignment3.0/GATE_Engine.zip)
-[Last Release](https://github.com/DocDonkeys/GATE_Engine/releases/tag/Assignment3.0)
+[Last release direct download](https://github.com/DocDonkeys/GATE_Engine/releases/download/Assignment3.1/GATE_Engine.zip)
+[Last Release](https://github.com/DocDonkeys/GATE_Engine/releases/tag/Assignment3.1)
 
 ## The Team: [Doc Donkeys](https://github.com/DocDonkeys)
 * Carles Homs 
@@ -41,7 +41,6 @@ Carles Homs (left) & Dídac Romero (right).
 
 #### Dídac Romero
 
-* ImGui integration
 * 3D Models loading 
 * GameObject & Components
 * Hierarchy
@@ -99,6 +98,17 @@ For Visual Studio, remember that you must set devenv.exe as the favorite editor 
   
 * When scripting you code a table as if it were a class that will be instantiated for each component, with its values independent from one another, allowing you to have various instances of the same script running in diferent components and with diferent values. Basically, the table is encapsulated inside a function that returns the table and we load them inside ScriptInstances in the engine.
 
+To create a script that will run in the engine first create a function with the name GetTable + the name of the script, if it's not exactly GetTable followed by the name of the script the script won't load. For example, for a file Move.lua, the function would be GetTableMove. inside the function create a local table, add all the values you want, and remember to return the local table at the end of the function. Code example:
+``` 
+function GetTableMove ()
+local lua_table = {}
+
+--Functions and variables here, you can look at any demo script used by the tank to get an idea on how to do this
+
+return lua_table
+end
+```
+
 * Script Instances contain the class that is in its script, already compiled and loaded by the Lua Virtual Machine, and inside the engine we use it to call functions of the script from C++ and to obtain variable values to display them in the editor and change them from the engine editor itself.
 
 * If you define the functions Awake(), Start() and Update(), they will be called by the engine with the order and consistency of other game engines.
@@ -108,6 +118,8 @@ For Visual Studio, remember that you must set devenv.exe as the favorite editor 
 * The scripting system features Hot Reloading, meaning that files can be edited while the engine is open, and the changes made to the scripts will be recompiled and applied while the engine is running, although if you edit a script while playing, the Hot Reloading will be done after you stop playing.
 
 * The Engine sill notify you in the console if the scripts did or did not compile.
+
+* In the script component of a file you can see the variables of a table and you can edit them from the editor itself
 
 Tank Gameplay demonstration.
 ![Tank Gameplay](Tank_Gameplay_demonstration.gif)
