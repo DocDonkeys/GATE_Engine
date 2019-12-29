@@ -1,6 +1,10 @@
 ﻿# GATE by Doc Donkeys
 This is a university project made by [CITM](https://www.citm.upc.edu/ing/) Centre de la Imatge i la Tecnologia Multimedia students of the TTC (Talent Tech Center) in Barcelona, in which we made a 3D Game Engine in C & C++ during our 3rd year of Game Development Bachelor's Degree.
 
+[Repository](https://github.com/DocDonkeys/GATE_Engine)
+
+[Releases](https://github.com/DocDonkeys/GATE_Engine/releases)
+
 ## The Team: [Doc Donkeys](https://github.com/DocDonkeys)
 * Carles Homs 
   * Role: Code
@@ -153,7 +157,7 @@ feature'`
 
 [MIT License](https://github.com/DocDonkeys/GATE/blob/master/LICENSE)
 
-Copyright (c) 2018 DocDonkeys
+Copyright (c) 2019 DocDonkeys
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
