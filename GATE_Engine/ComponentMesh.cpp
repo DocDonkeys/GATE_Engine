@@ -91,7 +91,7 @@ void ComponentMesh::Load(json & file)
 	//mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 	std::string full_path = file["Path"];
 	std::string error_case = "";
-	if (full_path.compare(error_case))
+	if (full_path.compare(error_case))  //If not going to crash, if the path comaprison is equal, returns 0, (false) and won't attempt to create a Resource which can't exist
 	{
 		//We get the resource UID from the name of the .mesh file
 		std::string file_UID;
