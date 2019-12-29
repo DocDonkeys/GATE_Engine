@@ -10,7 +10,7 @@ This is a university project made by [CITM](https://www.citm.upc.edu/ing/) Centr
   * Role: Code
   * Github: [DídacRomero](https://github.com/DidacRomero)
 
-![DocDonkeys](https://github.com/DocDonkeys/GATE_Engine/blob/master/docs/DocDonkeys_members.png)
+![DocDonkeys](docs/DocDonkeys_members.png)
 
 
 Carles Homs (left) & Dídac Romero (right).
