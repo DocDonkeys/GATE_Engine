@@ -17,11 +17,14 @@ public:
 	ModuleScripting(Application* app, const char* name = "null", bool start_enabled = true);
 	~ModuleScripting();
 
+public:
 	bool DoHotReloading();
 	bool JustCompile(std::string relative_path);
 	void CompileScriptTableClass(ScriptInstance* script);
 	void SendScriptToModule(ComponentScript* script_component, std::string full_file_path);
 	ScriptFile* AddScriptFile(ComponentScript* script_component, std::string full_file_path);
+	void FillScriptInstanceComponentVars(ScriptInstance* script);
+	void DeleteScriptInstanceWithParentComponent(ComponentScript* script_component);
 
 	//If a lua file doesn't have a meta
 	void ManageOrphanScript(std::string relative_path);

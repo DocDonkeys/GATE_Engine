@@ -39,6 +39,20 @@ bool ModuleResources::CleanUp()
 {
 	RELEASE(ie_material);
 	RELEASE(ie_scene);
+
+	std::map<uint32, Resource*>::iterator it;
+
+	for (it = resources.begin(); it != resources.end(); it++)
+	{
+		if ((*it).second != nullptr)
+		{
+			if((*it).second->GetType() == (Resource::Type::MESH || Resource::Type::MODEL ||
+				Resource::Type::SCENE || Resource::Type::SCRIPT || Resource::Type::TEXTURE || Resource::Type::UNKNOWN))
+			delete (*it).second;
+		}
+	}
+
+	resources.clear();
 	return false;
 }
 

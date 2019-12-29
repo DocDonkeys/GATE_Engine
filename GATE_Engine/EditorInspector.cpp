@@ -557,7 +557,36 @@ void EditorInspector::DrawComponentScript(ComponentScript * script)
 
 	std::string name = script->script_name + "(Script)";
 	if (ImGui::TreeNodeEx(name.data(), base_flags)) {
+		ImGui::Separator();
 		ImGui::Checkbox("Active", &script->active);
+
+		//Display Variables
+		for (int i = 0; i < script->script_variables.size(); ++i)
+		{
+			ImGui::Text(script->script_variables[i].name.c_str());
+			VarType type = script->script_variables[i].type;
+			if (type == VarType::DOUBLE)
+			{
+				ImGui::SameLine(130.f);
+				std::string value = std::to_string(script->script_variables[i].editor_value.as_double_number);
+				if (ImGui::DragFloat(value.c_str(), (float*)&script->script_variables[i].editor_value.as_double_number, 0.05f,-32000.0f,32000.0f))
+					script->script_variables[i].changed_value = true;
+			}
+			else if (type == VarType::BOOLEAN)
+			{
+				ImGui::SameLine(130.f);
+				if(ImGui::Checkbox("", &script->script_variables[i].editor_value.as_boolean))
+					script->script_variables[i].changed_value = true;
+			}
+			else if (type == VarType::STRING)
+			{
+				ImGui::SameLine(130.f);
+				if (ImGui::InputText("##String", objNameBuffer, IM_ARRAYSIZE(objNameBuffer)))
+				{
+				}
+			}
+
+		}
 		
 		ImGui::TreePop();
 	}

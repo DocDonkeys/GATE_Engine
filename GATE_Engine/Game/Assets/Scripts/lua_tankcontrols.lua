@@ -3,6 +3,9 @@ local Functions = Debug.Scripting ()
 function	GetTablelua_tankcontrols ()
 local lua_table = {}
 lua_table["Functions"] = Debug.Scripting ()
+lua_table["Speed"] = 10
+lua_table["Bool_test"] = true
+lua_table["String"] = "Test_String"
 
 function lua_table:Awake ()
 end

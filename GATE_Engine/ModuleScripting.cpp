@@ -9,6 +9,7 @@
 #include "ComponentScript.h"
 #include "ComponentTransform.h"
 #include "ModuleResources.h"
+#include "ScriptVar.h"
 #include <iterator>
 
 #include "libs/MathGeoLib/include/Math/float4.h"
@@ -176,6 +177,7 @@ void ModuleScripting::CompileScriptTableClass(ScriptInstance * script)
 				luabridge::LuaRef table(ScriptGetTable());
 
 				script->my_table_class = table;
+				FillScriptInstanceComponentVars(script);
 			}
 
 		}
@@ -219,6 +221,84 @@ ScriptFile* ModuleScripting::AddScriptFile(ComponentScript* script_component, st
 	ret = new_file;
 
 	return ret;
+}
+
+//FILL the ScriptVars of the component associated with this script
+void ModuleScripting::FillScriptInstanceComponentVars(ScriptInstance * script)
+{
+	for (luabridge::Iterator iterator(script->my_table_class); !iterator.isNil(); ++iterator)
+	{
+		//Declare necessary vars for intialization & get variable name
+		VarType variable_type = VarType::NONE;
+		std::string str = (*iterator).first.tostring();
+		ScriptVar variable;
+		std::string var_value;
+
+		// first == .key () and second == .value() in LUA
+		//Fill values
+		if ((*iterator).second.isNumber())
+		{
+			variable_type = VarType::DOUBLE;
+			var_value = (*iterator).second.tostring();
+			double val = std::stod(var_value);
+			variable = ScriptVar(val);
+		}
+		else if ((*iterator).second.isString())
+		{
+			variable_type = VarType::STRING;
+			var_value = (*iterator).second.tostring();
+			variable = ScriptVar(var_value.data());
+		}
+		else if ((*iterator).second.isBool())
+		{
+			variable_type = VarType::BOOLEAN;
+			var_value = (*iterator).second.tostring();
+			bool val = false;
+			std::string tru = "true";
+			if (!var_value.compare(tru))
+			{
+				val = true;
+			}
+			variable = ScriptVar(val);
+		}
+		else if ((*iterator).second.isFunction())
+			continue;
+
+		//ASSIGN name to variable and push it if compatible
+		variable.name = str;
+		if (variable_type != VarType::NONE)
+		{
+			int variable_index = script->my_component->ScriptVarAlreadyInComponent(variable.name);
+			if (variable_index > -1)  //If the var was already on the component (hot reloading cases)
+			{
+				//Check that the variable is still of the same type before changing any value
+				if (variable.type == script->my_component->script_variables[variable_index].type)
+				{
+					script->my_component->script_variables[variable_index].editor_value = variable.editor_value;
+				}
+				else   // The variable changed of type
+				{
+					script->my_component->script_variables[variable_index] = variable;
+				}
+			}
+			else
+			{
+				script->my_component->script_variables.push_back(variable);
+			}
+		}
+	}
+}
+
+void ModuleScripting::DeleteScriptInstanceWithParentComponent(ComponentScript * script_component)
+{
+	for (int i = 0; i < class_instances.size(); ++i)
+	{
+		if (class_instances[i] != nullptr && class_instances[i]->my_component == script_component)
+		{
+			//delete class_instances[i];
+			class_instances.erase(class_instances.begin() + i);
+		}
+	}
 }
 
 void ModuleScripting::ManageOrphanScript(std::string relative_path)
@@ -745,7 +825,7 @@ float Scripting::GetQuatX(bool local) const
 	else {
 		return ((ComponentTransform*)(*App->scripting->current_script)->my_component->my_go->GetComponent(COMPONENT_TYPE::TRANSFORM))->globalTrs.RotatePart().ToQuat().x;
 	}
-		
+
 }
 
 float Scripting::GetQuatY(bool local) const

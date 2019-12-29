@@ -20,6 +20,5 @@ struct ScriptInstance {
 	bool started = false;
 };
 
-
-#endif // !__SCRIPTDATA_H__
+#endif // __SCRIPTDATA_H__
 
