@@ -59,9 +59,9 @@ void FramerateManager::FrameEnd(bool tick)
 	}
 }
 
-void FramerateManager::AlterateTimeFlow(float multiplier)
+void FramerateManager::AlterateTimeFlow(float multiplier)	// Adding (+) To started_at = + lifetime, viceversa for -
 {
-	time_since_start.AlterateFlow(multiplier);
-	frame_time.AlterateFlow(multiplier);
-	sec_frame_time.AlterateFlow(multiplier);
+	float diff = frame_ms - frame_ms * App->game_speed;	//started_at is a uint, which makes this method unusable currently
+	time_since_start.DisplaceStart(diff);
+	sec_frame_time.DisplaceStart(diff);
 }

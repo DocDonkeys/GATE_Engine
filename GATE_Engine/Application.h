@@ -173,12 +173,15 @@ public:
 	std::vector<float>			fps_log;
 	int							max_FPS = -1;
 
+	float game_speed = 1.f;		//CHANGE/FIX: Save&Load
+	float game_max_speed = 5.f;	//CHANGE/FIX: Save&Load
 private:
 	//Framerate
 	FramerateManager	app_framerate;
 	int					capped_ms = -1;
 
 	FramerateManager	game_framerate;
+
 	std::string sceneBackupPath;
 	bool mustRunGame = true;
 	bool gameFirstFrame = false;

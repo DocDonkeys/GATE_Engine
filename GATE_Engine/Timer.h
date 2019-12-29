@@ -19,7 +19,7 @@ public:
 	uint Read() const;
 	float ReadSec() const;
 
-	float AlterateFlow(float multiplier);
+	float DisplaceStart(float multiplier);
 
 private:
 

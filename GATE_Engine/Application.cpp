@@ -210,7 +210,7 @@ void Application::PrepareUpdate()
 		mustRunGame = false;
 		
 	if (mustRunGame)
-		game_framerate.FrameStart(App->scene_intro->game_speed, gameTick);
+		game_framerate.FrameStart(game_speed, gameTick);
 
 	//Update Hardware info such as VRAM usage
 	GLint nTotalMemoryInKB = 0;
@@ -270,6 +270,11 @@ void Application::FinishUpdate()	//TODO: Separate in functions (Save&Load, Frame
 	if (gamePlaying) {
 		if (!gamePaused || gameTick) {
 			game_framerate.FrameEnd(gameTick);
+
+			//CHANGE/FIX: For different reasons this doesn't fully work, but there's progress made (longer life on slow-motion kinda works)
+			//if (game_speed != 1.f)
+			//	game_framerate.AlterateTimeFlow(game_speed);
+
 			gameTick = false;
 		}
 
@@ -371,10 +376,6 @@ update_status Application::UpdateModules()
 
 		if (ret == UPDATE_CONTINUE && mustRunGame) {
 			ret = (*item)->GameUpdate(game_framerate.dt);
-
-			//CHANGE/FIX: game_speed doesn't affect the flow of time of the game, only it's dt, it needs fixing
-			//if (scene_intro->game_speed != 1.f)
-			//	game_framerate.AlterateTimeFlow(scene_intro->game_speed);
 		}
 	}
 

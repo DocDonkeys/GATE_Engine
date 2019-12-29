@@ -92,12 +92,12 @@ void EditorToolbar::Update()
 	// Game Speed
 	ImGui::SameLine(windowCenter - buttonSize.x * -2.2f);
 	ImGui::SetNextItemWidth(100.f);
-	ImGui::SliderFloat("Speed", &App->scene_intro->game_speed, 0.1f, App->scene_intro->game_max_speed);
+	ImGui::SliderFloat("Speed", &App->game_speed, 0.1f, App->game_max_speed);
 
 	ImGui::OpenPopupOnItemClick("Speed", 1);
 	if (ImGui::BeginPopup("Speed")) {
 		if (ImGui::Button("Reset", buttonSize)) {
-			App->scene_intro->game_speed = 1.f;
+			App->game_speed = 1.f;
 			ImGui::CloseCurrentPopup();
 		}
 

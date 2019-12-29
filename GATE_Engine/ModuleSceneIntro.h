@@ -61,8 +61,6 @@ public:
 	bool playing = false;
 	bool paused = false;
 	bool requestTick = false;
-	float game_speed = 1.f;
-	float game_max_speed = 5.f;	//CHANGE/FIX: Save&Load
 	uint instances_created = 0;
 
 	// Modes
