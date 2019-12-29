@@ -291,7 +291,7 @@ void ModuleScripting::DeleteScriptInstanceWithParentComponent(ComponentScript * 
 	{
 		if (class_instances[i] != nullptr && class_instances[i]->my_component == script_component)
 		{
-			delete class_instances[i];
+			//delete class_instances[i];
 			class_instances.erase(class_instances.begin() + i);
 		}
 	}
