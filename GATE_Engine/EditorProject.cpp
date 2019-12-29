@@ -38,14 +38,18 @@ void EditorProject::Update()
 
 	ImGui::Text("Assets hierarchy");
 	ImGui::Separator();
+	
 	PrintAssetsHierarchy(App->resources->assets_dir, id);
+
 	
 	ImGui::NextColumn();
 
 	ImGui::Text("Assets");
 	ImGui::Separator();
 
+	ImGui::BeginChild("Assets child window");
 	DrawAssetsLayout(App->resources->selected_dir);
+	ImGui::EndChild();
 
 	if (!ImGui::IsMouseDragging())
 		dragndroping = false;
@@ -78,6 +82,8 @@ void EditorProject::DrawAssetsLayout(AbstractDir* selected_dir)
 
 		
 		ImGui::EndGroup();
+
+		if(!(i % 5 == 0 && i > 0))
 		ImGui::SameLine();
 	}
 
@@ -111,7 +117,9 @@ void EditorProject::DrawAssetsLayout(AbstractDir* selected_dir)
 
 		ImGui::TextWrapped(selected_dir->files[i].data());
 		ImGui::EndGroup();
-		ImGui::SameLine();
+
+		if (!(i % 5 == 0 && i > 0))
+			ImGui::SameLine();
 	}
 
 	
