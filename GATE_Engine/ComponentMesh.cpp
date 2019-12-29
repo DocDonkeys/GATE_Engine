@@ -90,25 +90,28 @@ void ComponentMesh::Load(json & file)
 {
 	//mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH);
 	std::string full_path = file["Path"];
-
-	//We get the resource UID from the name of the .mesh file
-	std::string file_UID;
-	App->file_system->SplitFilePath(full_path.data(), nullptr, &file_UID, nullptr);
-	file_UID = App->SubtractString(file_UID, ".", true, true);
-	file_UID = App->SubtractString(file_UID, "m", false, false);
-	uint32 uid = std::stoul(file_UID);
-
-	//If a resource with the same UID is already on resources
-	mesh = (ResourceMesh*)App->resources->Get(uid);
-	if (mesh != nullptr)
+	std::string error_case = "";
+	if (full_path.compare(error_case))  //If not going to crash, if the path comaprison is equal, returns 0, (false) and won't attempt to create a Resource which can't exist
 	{
-		mesh->AddReference();
+		//We get the resource UID from the name of the .mesh file
+		std::string file_UID;
+		App->file_system->SplitFilePath(full_path.data(), nullptr, &file_UID, nullptr);
+		file_UID = App->SubtractString(file_UID, ".", true, true);
+		file_UID = App->SubtractString(file_UID, "m", false, false);
+		uint32 uid = std::stoul(file_UID);
+
+		//If a resource with the same UID is already on resources
+		mesh = (ResourceMesh*)App->resources->Get(uid);
+		if (mesh != nullptr)
+		{
+			mesh->AddReference();
+		}
+		else
+		{
+			mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH, uid);
+			imp_exp.Load(full_path.data(), mesh);
+		}
+
+		ie_data.mesh = mesh;
 	}
-	else
-	{
-		mesh = (ResourceMesh*)App->resources->CreateNewResource(Resource::MESH, uid);
-		imp_exp.Load(full_path.data(), mesh);
-	}
-	
-	ie_data.mesh = mesh;
 }
