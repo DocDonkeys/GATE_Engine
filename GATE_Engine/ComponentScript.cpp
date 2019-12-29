@@ -39,6 +39,21 @@ void ComponentScript::AssignScript(std::string relative_path)
 	App->scripting->SendScriptToModule(this, absolute_path);
 }
 
+int ComponentScript::ScriptVarAlreadyInComponent(std::string name)
+{
+	int ret = -1;
+
+	for (int i = 0; i < script_variables.size(); ++i)
+	{
+		if (!name.compare(script_variables[i].name))
+		{
+			ret = i;
+			break;
+		}
+	}
+	return ret;
+}
+
 void ComponentScript::Save(json & file)
 {
 	file["UID"] = this->UID;

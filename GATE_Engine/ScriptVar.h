@@ -41,6 +41,7 @@ public:
 	VarValue editor_value;
 	VarValue script_defined_value;
 
+	std::string name;
 	//Bool to see if the value was changed in the editor
 	bool changed_value = false;
 };
