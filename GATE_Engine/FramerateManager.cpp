@@ -58,3 +58,10 @@ void FramerateManager::FrameEnd(bool tick)
 		Stop();
 	}
 }
+
+void FramerateManager::AlterateTimeFlow(float multiplier)
+{
+	time_since_start.AlterateFlow(multiplier);
+	frame_time.AlterateFlow(multiplier);
+	sec_frame_time.AlterateFlow(multiplier);
+}

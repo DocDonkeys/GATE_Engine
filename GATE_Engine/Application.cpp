@@ -371,6 +371,10 @@ update_status Application::UpdateModules()
 
 		if (ret == UPDATE_CONTINUE && mustRunGame) {
 			ret = (*item)->GameUpdate(game_framerate.dt);
+
+			//CHANGE/FIX: game_speed doesn't affect the flow of time of the game, only it's dt, it needs fixing
+			//if (scene_intro->game_speed != 1.f)
+			//	game_framerate.AlterateTimeFlow(scene_intro->game_speed);
 		}
 	}
 

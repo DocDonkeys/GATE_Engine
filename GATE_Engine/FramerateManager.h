@@ -14,6 +14,8 @@ public:
 	void FrameStart(float dtMultiplier = 1.f, bool tick = false);
 	void FrameEnd(bool tick = false);
 
+	void AlterateTimeFlow(float multiplier);
+
 public:
 	uint	frame_count = 0;			// Total frame count
 	Timer	time_since_start;			// Time since first execution (Overall time since start)

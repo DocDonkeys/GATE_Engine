@@ -19,6 +19,8 @@ public:
 	uint Read() const;
 	float ReadSec() const;
 
+	float AlterateFlow(float multiplier);
+
 private:
 
 	bool running;
