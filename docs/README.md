@@ -129,6 +129,9 @@ Tank Gameplay demonstration.
 Hot reloading and editor demonstration.
 ![Hot_Reloading](Hot_reloading_demonstration.gif)
 
+## Showcase Video
+<iframe width="768" height="432" src="https://www.youtube.com/embed/RLeXGrHI3Ww" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Libraries Used
 * [STL (C++11)](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
 * [SDL (v2.0.10)](https://www.libsdl.org/)
