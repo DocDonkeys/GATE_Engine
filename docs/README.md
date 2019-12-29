@@ -107,7 +107,8 @@ For Visual Studio, remember that you must set devenv.exe as the favorite editor 
 
 * The Engine sill notify you in the console if the scripts did or did not compile.
 
-
+Tank Gameplay demonstration
+![Tank Gameplay](Tank_Gameplay_demonstration.gif)
 
 ## Libraries Used
 * [STL (C++11)](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
