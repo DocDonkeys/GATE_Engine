@@ -87,7 +87,7 @@ bool ModuleWindow::Init()
 		}
 		else
 		{
-			SDL_SetWindowMinimumSize(window, max_width, max_height);
+			SDL_SetWindowMinimumSize(window, 1024, 768);
 
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);

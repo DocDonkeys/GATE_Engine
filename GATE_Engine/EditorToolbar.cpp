@@ -20,14 +20,14 @@ void EditorToolbar::Update()
 	ImGui::RadioButton("Drag", &App->scene_intro->toolMode, (int)tool_mode::DRAG); ImGui::SameLine();
 	ImGui::RadioButton("Move", &App->scene_intro->toolMode, (int)tool_mode::TRANSLATE); ImGui::SameLine();
 	ImGui::RadioButton("Rotate", &App->scene_intro->toolMode, (int)tool_mode::ROTATE); ImGui::SameLine();
-	ImGui::RadioButton("Scale", &App->scene_intro->toolMode, (int)tool_mode::SCALE); ImGui::SameLine(300.f);
+	ImGui::RadioButton("Scale", &App->scene_intro->toolMode, (int)tool_mode::SCALE); ImGui::SameLine(/*300.f*/);
 	/*ImGui::RadioButton("Bounds", &App->scene_intro->toolMode, (int)tool_mode::BOUNDS); ImGui::SameLine()*/
 	ImGui::Checkbox("Gizmos", &App->scene_intro->gizmos);
 
 	ImVec2 buttonSize = { 50.f, 20.f };		// IMPROVE: Image Buttons
 
 	// Tool Handles
-	ImGui::SameLine(400.f);
+	ImGui::SameLine(/*400.f*/);
 	int& posHandle = App->scene_intro->handlePositionMode;
 	if (ImGui::Button(handlePositionStr[posHandle], buttonSize) || App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_IDLE && App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
 		switch (posHandle) {
@@ -58,7 +58,7 @@ void EditorToolbar::Update()
 	ImGui::SameLine(); HoverTip("<--- Center/Pivot not in implemented yet.");	//CHANGE/FIX: Remove this when implementation is done
 
 	// Game Options
-	ImGui::SameLine(windowCenter - buttonSize.x * 1.7f);
+	ImGui::SameLine(/*windowCenter - buttonSize.x * 1.7f*/);
 	if (App->scene_intro->playing) {
 		if (ImGui::Button("Stop", buttonSize)) {
 			App->scene_intro->playing = false;
@@ -71,7 +71,7 @@ void EditorToolbar::Update()
 		}
 	}
 	
-	ImGui::SameLine(windowCenter - buttonSize.x * 0.5f);
+	ImGui::SameLine(/*windowCenter - buttonSize.x * 0.5f*/);
 	if (App->scene_intro->paused) {
 		if (ImGui::Button("Resume", buttonSize)) {
 			App->scene_intro->paused = false;
@@ -83,14 +83,14 @@ void EditorToolbar::Update()
 		}
 	}
 
-	ImGui::SameLine(windowCenter - buttonSize.x * -0.7f);
+	ImGui::SameLine(/*windowCenter - buttonSize.x * -0.7f*/);
 	if (ImGui::Button("Tick", buttonSize) && App->scene_intro->playing == true) {
 		App->scene_intro->requestTick = true;
 		App->scene_intro->paused = true;
 	}
 
 	// Game Speed
-	ImGui::SameLine(windowCenter - buttonSize.x * -2.2f);
+	ImGui::SameLine(/*windowCenter - buttonSize.x * -2.2f*/);
 	ImGui::SetNextItemWidth(100.f);
 	ImGui::SliderFloat("Speed", &App->game_speed, 0.1f, App->game_max_speed);
 

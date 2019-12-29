@@ -59,11 +59,11 @@
     "Brightness": 1.0,
     "Fullscreen": false,
     "FullscreenDesktop": false,
-    "Height": 1024,
-    "Max Height": 720,
-    "Max Width": 1280,
+    "Height": 768,
+    "Max Height": 864,
+    "Max Width": 1536,
     "Resizable": true,
     "Scale": 1,
-    "Width": 1280
+    "Width": 1024
   }
 }
